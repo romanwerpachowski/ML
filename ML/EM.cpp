@@ -1,26 +1,30 @@
-#include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <iostream>
 #include <limits>
 #include <numeric>
 #include <stdexcept>
 #include <Eigen/Cholesky>
+#include <Eigen/Dense>
 #include "EM.hpp"
+
+#define PI 3.14159265358979323846
 
 namespace ml
 {
-	EM::EM(const unsigned int number_components, const double absolute_tolerance, const double relative_tolerance)
-		: mixing_proportions_(number_components), means_(1, number_components_), covariances_(number_components_), absolute_tolerance_(absolute_tolerance), relative_tolerance_(relative_tolerance), number_components_(number_components)
+	EM::EM(const unsigned int number_components)
+		: mixing_probabilities_(number_components)
+		, means_(1, number_components)
+		, covariances_(number_components)
+		, absolute_tolerance_(1e-8)
+		, relative_tolerance_(1e-8)
+		, number_components_(number_components)
+		, maximum_steps_(1000)
+		, verbose_(false)
 	{
-		if (absolute_tolerance < 0) {
-			throw std::domain_error("Negative absolute tolerance");
-		}
-		if (relative_tolerance < 0) {
-			throw std::domain_error("Negative relative tolerance");
-		}
 		if (!number_components) {
 			throw std::invalid_argument("At least one component required");
-		}		
+		}
 	}	
 
 	void EM::set_seed(unsigned int seed)
@@ -28,7 +32,30 @@ namespace ml
 		prng_.seed(seed);
 	}
 
-	double EM::fit(const Eigen::MatrixXd& data)
+	void EM::set_absolute_tolerance(double absolute_tolerance)
+	{
+		if (absolute_tolerance < 0) {
+			throw std::domain_error("Negative absolute tolerance");
+		}
+		absolute_tolerance_ = absolute_tolerance;
+	}
+
+	void EM::set_relative_tolerance(double relative_tolerance)
+	{
+		if (relative_tolerance < 0) {
+			throw std::domain_error("Negative relative tolerance");
+		}
+		relative_tolerance_ = relative_tolerance;
+	}
+
+	const Eigen::MatrixXd& EM::covariance(unsigned int k) const {
+		if (k >= number_components_) {
+			throw std::invalid_argument("Bad component index");
+		}
+		return covariances_[k];
+	}
+
+	bool EM::fit(const Eigen::MatrixXd& data)
 	{
 		const auto number_dimensions = data.rows();
 		const auto sample_size = data.cols();
@@ -39,6 +66,7 @@ namespace ml
 			throw std::invalid_argument("Not enough data ");
 		}
 		means_.resize(number_dimensions, number_components_);
+		mixing_probabilities_.fill(1. / static_cast<double>(number_components_));
 		
 		if (sample_size == number_components_) {
 			// An exact deterministic fit is possible.
@@ -47,51 +75,88 @@ namespace ml
 				means_.col(i) = data.col(i);
 				covariances_[i].setZero(number_dimensions, number_dimensions);
 			}
-			return std::numeric_limits<double>::infinity();
+			return true;
 		}
-
-		std::fill(mixing_proportions_.begin(), mixing_proportions_.end(), 1. / static_cast<double>(number_components_));		
 
 		// Initialise means and covariances to sensible guesses.
 		std::vector<Eigen::Index> initial_means_indices(sample_datapoints_without_replacement(sample_size));
 		const Eigen::MatrixXd sample_covariance(calculate_sample_covariance(data));
+		assert(sample_covariance.rows() == number_dimensions);
+		assert(sample_covariance.cols() == number_dimensions);
 		for (unsigned int k = 0; k < number_components_; ++k) {
 			means_.col(k) = data.col(initial_means_indices[k]);
 			covariances_[k] = sample_covariance;
 		}
 
+		// Work variables.
 		Eigen::MatrixXd responsibilities(sample_size, number_components_);
-
-		// Temporary variables.
-		Eigen::MatrixXd inverse_covariance(number_components_, number_components_);
-		Eigen::VectorXd centred_point(number_components_);
-
+		Eigen::MatrixXd tmp_matrix(number_dimensions, number_dimensions);
+		Eigen::VectorXd centred_datapoint(number_dimensions);		
+		const Eigen::MatrixXd epsilon(1e-15 * Eigen::MatrixXd::Identity(number_dimensions, number_dimensions));
+		const auto log_likelihood_normalisation_constant = number_dimensions * std::log(2 * PI);
+		double old_log_likelihood = -std::numeric_limits<double>::infinity();
+		
 		// Main iteration loop.
-		while (true) {
+		for (unsigned int step = 0; step < maximum_steps_; ++step) {
 			//// Expectation stage. ////
 
 			// Calculate unnormalised responsibilities.
 			for (unsigned int k = 0; k < number_components_; ++k) {
-				// Add 1e-15 * I to make sure covariance matrix can be inverted.
-				inverse_covariance = invert_symmetric_positive_definite_matrix(covariances_[k] + 1e-15 * Eigen::MatrixXd::Identity(number_dimensions, number_dimensions));
+				// Add 1e-15 * I to avoid numerical issues.
+				tmp_matrix = invert_symmetric_positive_definite_matrix(covariances_[k] + epsilon);
 				const auto mean = means_.col(k);
-				auto kth_component_weights = responsibilities.col(k);
+				auto component_weights = responsibilities.col(k);
 				for (Eigen::Index i = 0; i < sample_size; ++i) {
-					centred_point = data.col(i) - mean;
-					kth_component_weights[i] = std::exp(-0.5 * centred_point.transpose() * inverse_covariance * centred_point);
+					centred_datapoint = data.col(i) - mean;
+					component_weights[i] = std::exp(-0.5 * centred_datapoint.transpose() * tmp_matrix * centred_datapoint);
+				}
+				component_weights *= mixing_probabilities_[k] / std::sqrt((covariances_[k] + epsilon).determinant());
+			}
+			log_likelihood_ = responsibilities.rowwise().sum().array().log().mean() - log_likelihood_normalisation_constant;
+			if (verbose_) {
+				std::cout << "Step " << step << ": log-likelihood == " << log_likelihood_ << std::endl;
+			}
+
+			if (step > 0) {
+				const double ll_change = std::abs(log_likelihood_ - old_log_likelihood);
+				if (ll_change < absolute_tolerance_ + relative_tolerance_ * std::max(std::abs(old_log_likelihood), std::abs(log_likelihood_))) {
+					return true;
 				}
 			}
-			// Normalise responsibilities.			
+			old_log_likelihood = log_likelihood_;
+
+			// Normalise responsibilities.
 			for (Eigen::Index i = 0; i < sample_size; ++i) {
-				const double sum_weights = responsibilities.row(i).sum();
-				responsibilities.row(i) /= sum_weights;
+				auto datapoint_responsibilities = responsibilities.row(i);
+				const double sum_weights = datapoint_responsibilities.sum();
+				datapoint_responsibilities /= sum_weights;
 			}
 
 			//// Maximisation stage. ////
+
+			// Calculate new means.
 			means_ = data * responsibilities;
+
+			// Calculate new covariances.
+			for (unsigned int k = 0; k < number_components_; ++k) {
+				auto& covariance = covariances_[k];
+				covariance.setZero();
+				const auto component_weights = responsibilities.col(k);
+				const auto mean = means_.col(k);
+				for (Eigen::Index i = 0; i < sample_size; ++i) {
+					centred_datapoint = data.col(i) - mean;
+					tmp_matrix = centred_datapoint * centred_datapoint.transpose();
+					covariance += component_weights[i] * tmp_matrix;
+				}
+				const auto sum_component_weights = component_weights.sum();
+				covariance /= sum_component_weights;
+				mixing_probabilities_[k] = sum_component_weights / static_cast<double>(sample_size);
+				assert(covariance.rows() == number_dimensions);
+				assert(covariance.cols() == number_dimensions);				
+			}			
 		}
 
-		return 0;
+		return false;
 	}
 
 	std::vector<Eigen::Index> EM::sample_datapoints_without_replacement(Eigen::Index sample_size)
@@ -106,13 +171,16 @@ namespace ml
 	Eigen::MatrixXd EM::calculate_sample_covariance(const Eigen::MatrixXd& data)
 	{
 		const Eigen::MatrixXd centred = data.colwise() - data.rowwise().mean();
-		return (centred.adjoint() * centred) / (static_cast<double>(data.cols() - 1));
+		const Eigen::MatrixXd covariance = (centred * centred.adjoint()) / (static_cast<double>(data.cols() - 1));
+		assert(covariance.rows() == covariance.cols());
+		assert(covariance.rows() == data.rows());
+		return covariance;
 	}
 
 	Eigen::MatrixXd EM::invert_symmetric_positive_definite_matrix(const Eigen::MatrixXd& m)
 	{
 		assert(m.rows() == m.cols());
-		// Assumes m is symmetric positive definite.
+		// Uses Cholesky algorithm. Assumes m is symmetric positive definite.
 		return m.llt().solve(Eigen::MatrixXd::Identity(m.rows(), m.cols()));
 	}
 }
