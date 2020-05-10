@@ -65,6 +65,7 @@ namespace ml
 		if (sample_size < number_components_) {
 			throw std::invalid_argument("Not enough data ");
 		}
+
 		means_.resize(number_dimensions, number_components_);
 		mixing_probabilities_.fill(1. / static_cast<double>(number_components_));
 		
@@ -113,8 +114,24 @@ namespace ml
 				component_weights *= mixing_probabilities_[k] / std::sqrt((covariances_[k] + epsilon).determinant());
 			}
 			log_likelihood_ = responsibilities.rowwise().sum().array().log().mean() - log_likelihood_normalisation_constant;
+
+			// Normalise responsibilities for each datapoint.
+			for (Eigen::Index i = 0; i < sample_size; ++i) {
+				auto datapoint_responsibilities = responsibilities.row(i);
+				const double sum_weights = datapoint_responsibilities.sum();
+				datapoint_responsibilities /= sum_weights;
+			}
+
 			if (verbose_) {
-				std::cout << "Step " << step << ": log-likelihood == " << log_likelihood_ << std::endl;
+				std::cout << "Step " << step << "\n";
+				std::cout << "Log-likelihood == " << log_likelihood_ << "\n";
+				std::cout << "Mixing probabilities == " << mixing_probabilities_.transpose() << "\n";
+				for (unsigned int k = 0; k < number_components_; ++k) {
+					std::cout << "Mean[" << k << "] == " << means_.col(k).transpose() << "\n";
+				}
+				std::cout << "Responsibilities (first 10 rows):\n";
+				std::cout << responsibilities.topRows(std::min(sample_size, static_cast<Eigen::Index>(10)));
+				std::cout << std::endl;
 			}
 
 			if (step > 0) {
@@ -125,35 +142,38 @@ namespace ml
 			}
 			old_log_likelihood = log_likelihood_;
 
-			// Normalise responsibilities.
-			for (Eigen::Index i = 0; i < sample_size; ++i) {
-				auto datapoint_responsibilities = responsibilities.row(i);
-				const double sum_weights = datapoint_responsibilities.sum();
-				datapoint_responsibilities /= sum_weights;
-			}
+			
 
 			//// Maximisation stage. ////
 
 			// Calculate new means.
-			means_ = data * responsibilities;
+			means_ = data * responsibilities; // Unnormalised!
+			assert(means_.rows() == number_dimensions);
+			assert(means_.cols() == number_components_);
 
 			// Calculate new covariances.
 			for (unsigned int k = 0; k < number_components_; ++k) {
 				auto& covariance = covariances_[k];
 				covariance.setZero();
 				const auto component_weights = responsibilities.col(k);
-				const auto mean = means_.col(k);
+				const auto sum_component_weights = component_weights.sum();
+
+				// Normalise the mean.
+				auto mean = means_.col(k);
+				mean /= sum_component_weights;
+
+				// Accumulate covariance.
 				for (Eigen::Index i = 0; i < sample_size; ++i) {
 					centred_datapoint = data.col(i) - mean;
 					tmp_matrix = centred_datapoint * centred_datapoint.transpose();
 					covariance += component_weights[i] * tmp_matrix;
 				}
-				const auto sum_component_weights = component_weights.sum();
+				
 				covariance /= sum_component_weights;
 				mixing_probabilities_[k] = sum_component_weights / static_cast<double>(sample_size);
 				assert(covariance.rows() == number_dimensions);
 				assert(covariance.cols() == number_dimensions);				
-			}			
+			}
 		}
 
 		return false;
