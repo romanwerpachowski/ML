@@ -64,7 +64,9 @@ namespace ml
 		Eigen::VectorXd mixing_probabilities_;
 		Eigen::MatrixXd means_;
 		Eigen::MatrixXd responsibilities_;
-		std::vector<Eigen::MatrixXd> covariances_;
+		Eigen::MatrixXd work_matrix_;
+		Eigen::VectorXd work_vector_;
+		std::vector<Eigen::MatrixXd> covariances_;		
 		double absolute_tolerance_;
 		double relative_tolerance_;
 		double log_likelihood_;
@@ -76,6 +78,8 @@ namespace ml
 
 		static Eigen::MatrixXd calculate_sample_covariance(const Eigen::MatrixXd& data);
 
-		static Eigen::MatrixXd invert_symmetric_positive_definite_matrix(const Eigen::MatrixXd& m);		
+		static Eigen::MatrixXd invert_symmetric_positive_definite_matrix(const Eigen::MatrixXd& m);
+
+		void maximisation_stage(const Eigen::MatrixXd& data);
 	};
 }

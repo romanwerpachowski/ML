@@ -74,14 +74,17 @@ namespace ml
 		}
 
 		means_.resize(number_dimensions, number_components_);
+		responsibilities_.resize(sample_size, number_components_);
 		mixing_probabilities_.fill(1. / static_cast<double>(number_components_));
 		
 		if (sample_size == number_components_) {
 			// An exact deterministic fit is possible.
 			// Center each Gaussian on a different sample point, and set variance to 0.
+			responsibilities_ = Eigen::MatrixXd::Identity(sample_size, sample_size);
 			for (Eigen::Index i = 0; i < sample_size; ++i) {
 				means_.col(i) = data.col(i);
 				covariances_[i].setZero(number_dimensions, number_dimensions);
+				log_likelihood_ = std::numeric_limits<double>::infinity();
 			}
 			return true;
 		}
@@ -97,9 +100,9 @@ namespace ml
 		}
 
 		// Work variables.
-		responsibilities_.resize(sample_size, number_components_);
-		Eigen::MatrixXd tmp_matrix(number_dimensions, number_dimensions);
-		Eigen::VectorXd centred_datapoint(number_dimensions);		
+		
+		work_matrix_.resize(number_dimensions, number_dimensions);
+		work_vector_.resize(number_dimensions);
 		const Eigen::MatrixXd epsilon(1e-15 * Eigen::MatrixXd::Identity(number_dimensions, number_dimensions));
 		const auto log_likelihood_normalisation_constant = number_dimensions * std::log(2 * PI);
 		double old_log_likelihood = -std::numeric_limits<double>::infinity();
@@ -111,12 +114,12 @@ namespace ml
 			// Calculate unnormalised responsibilities.
 			for (unsigned int k = 0; k < number_components_; ++k) {
 				// Add 1e-15 * I to avoid numerical issues.
-				tmp_matrix = invert_symmetric_positive_definite_matrix(covariances_[k] + epsilon);
+				work_matrix_ = invert_symmetric_positive_definite_matrix(covariances_[k] + epsilon);
 				const auto mean = means_.col(k);
 				auto component_weights = responsibilities_.col(k);
 				for (Eigen::Index i = 0; i < sample_size; ++i) {
-					centred_datapoint = data.col(i) - mean;
-					component_weights[i] = std::exp(-0.5 * centred_datapoint.transpose() * tmp_matrix * centred_datapoint);
+					work_vector_ = data.col(i) - mean;
+					component_weights[i] = std::exp(-0.5 * work_vector_.transpose() * work_matrix_ * work_vector_);
 				}
 				component_weights *= mixing_probabilities_[k] / std::sqrt((covariances_[k] + epsilon).determinant());
 			}
@@ -149,38 +152,7 @@ namespace ml
 			}
 			old_log_likelihood = log_likelihood_;
 
-			
-
-			//// Maximisation stage. ////
-
-			// Calculate new means.
-			means_ = data * responsibilities_; // Unnormalised!
-			assert(means_.rows() == number_dimensions);
-			assert(means_.cols() == number_components_);
-
-			// Calculate new covariances.
-			for (unsigned int k = 0; k < number_components_; ++k) {
-				auto& covariance = covariances_[k];
-				covariance.setZero();
-				const auto component_weights = responsibilities_.col(k);
-				const auto sum_component_weights = component_weights.sum();
-
-				// Normalise the mean.
-				auto mean = means_.col(k);
-				mean /= sum_component_weights;
-
-				// Accumulate covariance.
-				for (Eigen::Index i = 0; i < sample_size; ++i) {
-					centred_datapoint = data.col(i) - mean;
-					tmp_matrix = centred_datapoint * centred_datapoint.transpose();
-					covariance += component_weights[i] * tmp_matrix;
-				}
-				
-				covariance /= sum_component_weights;
-				mixing_probabilities_[k] = sum_component_weights / static_cast<double>(sample_size);
-				assert(covariance.rows() == number_dimensions);
-				assert(covariance.cols() == number_dimensions);				
-			}
+			maximisation_stage(data);
 		}
 
 		return false;
@@ -209,5 +181,42 @@ namespace ml
 		assert(m.rows() == m.cols());
 		// Uses Cholesky algorithm. Assumes m is symmetric positive definite.
 		return m.llt().solve(Eigen::MatrixXd::Identity(m.rows(), m.cols()));
+	}
+
+	void EM::maximisation_stage(const Eigen::MatrixXd& data)
+	{
+		const auto number_dimensions = data.rows();
+		assert(number_dimensions);
+		const auto sample_size = data.cols();
+		assert(sample_size >= number_components_);
+
+		// Calculate new means.
+		means_ = data * responsibilities_; // Unnormalised!
+		assert(means_.rows() == number_dimensions);
+		assert(means_.cols() == number_components_);
+
+		// Calculate new covariances.
+		for (unsigned int k = 0; k < number_components_; ++k) {
+			auto& covariance = covariances_[k];
+			covariance.setZero();
+			const auto component_weights = responsibilities_.col(k);
+			const auto sum_component_weights = component_weights.sum();
+
+			// Normalise the mean.
+			auto mean = means_.col(k);
+			mean /= sum_component_weights;
+
+			// Accumulate covariance.
+			for (Eigen::Index i = 0; i < sample_size; ++i) {
+				work_vector_ = data.col(i) - mean;
+				work_matrix_ = work_vector_ * work_vector_.transpose();
+				covariance += component_weights[i] * work_matrix_;
+			}
+
+			covariance /= sum_component_weights;
+			mixing_probabilities_[k] = sum_component_weights / static_cast<double>(sample_size);
+			assert(covariance.rows() == number_dimensions);
+			assert(covariance.cols() == number_dimensions);
+		}
 	}
 }
