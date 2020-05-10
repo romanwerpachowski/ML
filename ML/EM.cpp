@@ -14,7 +14,6 @@ namespace ml
 {
 	EM::EM(const unsigned int number_components)
 		: mixing_probabilities_(number_components)
-		, means_(1, number_components)
 		, covariances_(number_components)
 		, absolute_tolerance_(1e-8)
 		, relative_tolerance_(1e-8)
@@ -46,6 +45,14 @@ namespace ml
 			throw std::domain_error("Negative relative tolerance");
 		}
 		relative_tolerance_ = relative_tolerance;
+	}
+
+	void EM::set_maximum_steps(unsigned int maximum_steps)
+	{
+		if (maximum_steps < 2) {
+			throw std::invalid_argument("At least two steps required for convergence test");
+		}
+		maximum_steps_ = maximum_steps;
 	}
 
 	const Eigen::MatrixXd& EM::covariance(unsigned int k) const {
@@ -90,7 +97,7 @@ namespace ml
 		}
 
 		// Work variables.
-		Eigen::MatrixXd responsibilities(sample_size, number_components_);
+		responsibilities_.resize(sample_size, number_components_);
 		Eigen::MatrixXd tmp_matrix(number_dimensions, number_dimensions);
 		Eigen::VectorXd centred_datapoint(number_dimensions);		
 		const Eigen::MatrixXd epsilon(1e-15 * Eigen::MatrixXd::Identity(number_dimensions, number_dimensions));
@@ -106,18 +113,18 @@ namespace ml
 				// Add 1e-15 * I to avoid numerical issues.
 				tmp_matrix = invert_symmetric_positive_definite_matrix(covariances_[k] + epsilon);
 				const auto mean = means_.col(k);
-				auto component_weights = responsibilities.col(k);
+				auto component_weights = responsibilities_.col(k);
 				for (Eigen::Index i = 0; i < sample_size; ++i) {
 					centred_datapoint = data.col(i) - mean;
 					component_weights[i] = std::exp(-0.5 * centred_datapoint.transpose() * tmp_matrix * centred_datapoint);
 				}
 				component_weights *= mixing_probabilities_[k] / std::sqrt((covariances_[k] + epsilon).determinant());
 			}
-			log_likelihood_ = responsibilities.rowwise().sum().array().log().mean() - log_likelihood_normalisation_constant;
+			log_likelihood_ = responsibilities_.rowwise().sum().array().log().mean() - log_likelihood_normalisation_constant;
 
 			// Normalise responsibilities for each datapoint.
 			for (Eigen::Index i = 0; i < sample_size; ++i) {
-				auto datapoint_responsibilities = responsibilities.row(i);
+				auto datapoint_responsibilities = responsibilities_.row(i);
 				const double sum_weights = datapoint_responsibilities.sum();
 				datapoint_responsibilities /= sum_weights;
 			}
@@ -130,7 +137,7 @@ namespace ml
 					std::cout << "Mean[" << k << "] == " << means_.col(k).transpose() << "\n";
 				}
 				std::cout << "Responsibilities (first 10 rows):\n";
-				std::cout << responsibilities.topRows(std::min(sample_size, static_cast<Eigen::Index>(10)));
+				std::cout << responsibilities_.topRows(std::min(sample_size, static_cast<Eigen::Index>(10)));
 				std::cout << std::endl;
 			}
 
@@ -147,7 +154,7 @@ namespace ml
 			//// Maximisation stage. ////
 
 			// Calculate new means.
-			means_ = data * responsibilities; // Unnormalised!
+			means_ = data * responsibilities_; // Unnormalised!
 			assert(means_.rows() == number_dimensions);
 			assert(means_.cols() == number_components_);
 
@@ -155,7 +162,7 @@ namespace ml
 			for (unsigned int k = 0; k < number_components_; ++k) {
 				auto& covariance = covariances_[k];
 				covariance.setZero();
-				const auto component_weights = responsibilities.col(k);
+				const auto component_weights = responsibilities_.col(k);
 				const auto sum_component_weights = component_weights.sum();
 
 				// Normalise the mean.

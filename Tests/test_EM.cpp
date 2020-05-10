@@ -7,8 +7,6 @@ TEST(TestEM, two_gaussians)
 	std::default_random_engine rng;
 	std::uniform_real_distribution<double> u01(0, 1);
 	std::normal_distribution<double> standard_normal;
-	const double abs_tol = 1e-8;
-	const double rel_tol = 1e-8;
 	const unsigned int num_components = 2;
 	const unsigned int num_dimensions = 3;
 	const unsigned int sample_size = 400;
@@ -34,8 +32,9 @@ TEST(TestEM, two_gaussians)
 
 	ml::EM em(num_components);
 	ASSERT_EQ(num_components, em.number_components());
-	em.set_absolute_tolerance(abs_tol);
-	em.set_relative_tolerance(rel_tol);	
+	em.set_absolute_tolerance(1e-8);
+	em.set_relative_tolerance(1e-8);	
+	em.set_maximum_steps(10);
 	ASSERT_TRUE(em.fit(data)) << "EM did not converge";
 	ASSERT_EQ(num_components, em.mixing_probabilities().size());
 	ASSERT_EQ(num_components, em.means().cols());
@@ -65,4 +64,9 @@ TEST(TestEM, two_gaussians)
 	for (unsigned int k = 0; k < num_components; ++k) {
 		ASSERT_NEAR(0., (covariances[k] - em.covariance(k)).norm(), 1e-2) << "Covariance[" << k << "]:\n" << em.covariance(k);
 	}
+
+	ml::EM em1(1);
+	em1.fit(data);
+	ASSERT_LE(em1.log_likelihood(), em.log_likelihood()) << em1.log_likelihood();
+	ASSERT_NEAR(0., (data.rowwise().mean() - em1.means().col(0)).norm(), 1e-14);
 }

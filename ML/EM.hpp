@@ -23,6 +23,8 @@ namespace ml
 
 		CLASS_DECLSPEC void set_relative_tolerance(double relative_tolerance);
 
+		CLASS_DECLSPEC void set_maximum_steps(unsigned int maximum_steps);
+
 		/**
 		@param data Matrix with a data point in every column.
 		*/
@@ -46,6 +48,10 @@ namespace ml
 			return mixing_probabilities_;
 		}
 
+		const auto& responsibilities() const {
+			return responsibilities_;
+		}
+
 		double log_likelihood() const {
 			return log_likelihood_;
 		}
@@ -57,6 +63,7 @@ namespace ml
 		std::default_random_engine prng_;
 		Eigen::VectorXd mixing_probabilities_;
 		Eigen::MatrixXd means_;
+		Eigen::MatrixXd responsibilities_;
 		std::vector<Eigen::MatrixXd> covariances_;
 		double absolute_tolerance_;
 		double relative_tolerance_;
