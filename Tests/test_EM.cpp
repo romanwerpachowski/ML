@@ -28,7 +28,7 @@ TEST(TestEM, two_gaussians)
 		for (unsigned int l = 0; l < num_dimensions; ++l) {
 			data(l, i) = standard_normal(rng) * sigma_vec[l] + mean[l];
 		}
-	}	
+	}
 
 	ml::EM em(num_components);
 	ASSERT_EQ(num_components, em.number_components());

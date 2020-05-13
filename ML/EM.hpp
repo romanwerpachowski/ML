@@ -8,7 +8,7 @@ namespace ml
 {
 	/** Gaussian Expectation-Maximisation algorithm.
 
-	Iterates until 
+	Iterates until log-likelihood converges.
 	*/
 	class EM {
 	public:
@@ -30,33 +30,40 @@ namespace ml
 		*/
 		CLASS_DECLSPEC bool fit(const Eigen::MatrixXd& data);
 
-		auto number_components() const {
+		auto number_components() const
+		{
 			return number_components_;
 		}
 
-		const auto& means() const {
+		const auto& means() const 
+		{
 			return means_;
 		}
 
-		const auto& covariances() const {
+		const auto& covariances() const
+		{
 			return covariances_;
 		}
 
 		CLASS_DECLSPEC const Eigen::MatrixXd& covariance(unsigned int k) const;
 
-		const auto& mixing_probabilities() const {
+		const auto& mixing_probabilities() const 
+		{
 			return mixing_probabilities_;
 		}
 
-		const auto& responsibilities() const {
+		const auto& responsibilities() const 
+		{
 			return responsibilities_;
 		}
 
-		double log_likelihood() const {
+		double log_likelihood() const 
+		{
 			return log_likelihood_;
 		}
 
-		void set_verbose(bool verbose) {
+		void set_verbose(bool verbose) 
+		{
 			verbose_ = verbose;
 		}
 	private:
