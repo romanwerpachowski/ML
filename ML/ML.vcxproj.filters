@@ -24,12 +24,18 @@
     <ClInclude Include="DecisionTree.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Statistics.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DecisionTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Statistics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

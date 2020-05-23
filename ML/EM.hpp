@@ -15,20 +15,20 @@ namespace ml
 		/** Construct an EM ready to fit.
 		@param number_components Number of Gaussian components, > 0.
 		*/
-		CLASS_DECLSPEC EM(unsigned int number_components);
+		DLL_DECLSPEC EM(unsigned int number_components);
 
-		CLASS_DECLSPEC void set_seed(unsigned int seed);
+		DLL_DECLSPEC void set_seed(unsigned int seed);
 
-		CLASS_DECLSPEC void set_absolute_tolerance(double absolute_tolerance);
+		DLL_DECLSPEC void set_absolute_tolerance(double absolute_tolerance);
 
-		CLASS_DECLSPEC void set_relative_tolerance(double relative_tolerance);
+		DLL_DECLSPEC void set_relative_tolerance(double relative_tolerance);
 
-		CLASS_DECLSPEC void set_maximum_steps(unsigned int maximum_steps);
+		DLL_DECLSPEC void set_maximum_steps(unsigned int maximum_steps);
 
 		/**
 		@param data Matrix with a data point in every column.
 		*/
-		CLASS_DECLSPEC bool fit(const Eigen::MatrixXd& data);
+		DLL_DECLSPEC bool fit(const Eigen::MatrixXd& data);
 
 		auto number_components() const
 		{
@@ -45,7 +45,7 @@ namespace ml
 			return covariances_;
 		}
 
-		CLASS_DECLSPEC const Eigen::MatrixXd& covariance(unsigned int k) const;
+		DLL_DECLSPEC const Eigen::MatrixXd& covariance(unsigned int k) const;
 
 		const auto& mixing_probabilities() const 
 		{

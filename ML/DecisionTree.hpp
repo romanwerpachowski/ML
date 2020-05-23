@@ -253,13 +253,13 @@ namespace ml
 
 	/// Data points are in columns ///
 
-	CLASS_DECLSPEC std::pair<unsigned int, double> find_best_split_reg_1d(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y);
+	DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_reg_1d(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y);
 
 	/**
 	@param max_split_levels Maximum number of split nodes on the way to any leaf node.
 	@param min_sample_size Minimum sample size which can be split (at least 2).
 	*/
-	CLASS_DECLSPEC RegressionTree1D tree_regression_1d(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
+	DLL_DECLSPEC RegressionTree1D tree_regression_1d(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
 
 	template <typename Y> DecisionTree<Y> cost_complexity_prune(const DecisionTree<Y>& full_tree, const double alpha)
 	{
@@ -273,8 +273,8 @@ namespace ml
 		}
 		std::vector<DecisionTree<Y>> trees;
 		std::vector<double> cost_complexities;
-		trees.reserve(number_split_nodes + 1);
-		cost_complexities.reserve(number_split_nodes + 1);
+		trees.reserve(static_cast<size_t>(number_split_nodes) + 1);
+		cost_complexities.reserve(trees.capacity());
 		trees.push_back(full_tree);
 		cost_complexities.push_back(full_tree.cost_complexity(alpha));
 		for (unsigned int i = 0; i < number_split_nodes; ++i) {

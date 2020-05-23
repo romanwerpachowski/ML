@@ -1,28 +1,28 @@
 ----------------------------------------------------------------------
 Benchmark                            Time             CPU   Iterations
 ----------------------------------------------------------------------
-BM_tree_regression_1d/2           1881 ns         1883 ns       373333
-BM_tree_regression_1d/4          11986 ns        11963 ns        64000
-BM_tree_regression_1d/8          52245 ns        51563 ns        10000
-BM_tree_regression_1d/16        322958 ns       324693 ns         2358
-BM_tree_regression_1d/32       1954317 ns      1947464 ns          345
-BM_tree_regression_1d/64      13014680 ns     12834821 ns           56
-BM_tree_regression_1d/128     84113289 ns     85069444 ns            9
-BM_tree_regression_1d_BigO       40.26 N^3       40.70 N^3  
-BM_tree_regression_1d_RMS            7 %             6 %    
-BM_cost_complexity_prune/2        1825 ns         1800 ns       373333
-BM_cost_complexity_prune/4       18856 ns        18834 ns        37333
-BM_cost_complexity_prune/8      265071 ns       266841 ns         2635
-BM_cost_complexity_prune/16    4676306 ns      4612199 ns          166
-BM_cost_complexity_prune/32  117695483 ns    104166667 ns            6
-BM_cost_complexity_prune/64 1634833200 ns   1640625000 ns            1
-BM_cost_complexity_prune_BigO    6194.47 N^3     6209.87 N^3  
-BM_cost_complexity_prune_RMS         12 %            14 %    
-BM_calc_sse/10                    9.48 ns         9.42 ns     74666667
-BM_calc_sse/100                    152 ns          153 ns      4480000
-BM_calc_sse/1000                  1727 ns         1744 ns       448000
-BM_calc_sse/10000                17161 ns        17264 ns        40727
-BM_calc_sse/100000              171257 ns       172631 ns         4073
-BM_calc_sse/1000000            1695897 ns      1689189 ns          407
-BM_calc_sse_BigO                  1.70 N          1.69 N    
+BM_tree_regression_1d/2           1746 ns         1765 ns       407273
+BM_tree_regression_1d/4          10393 ns        10254 ns        64000
+BM_tree_regression_1d/8          47690 ns        47433 ns        11200
+BM_tree_regression_1d/16        296295 ns       291561 ns         2358
+BM_tree_regression_1d/32       1938835 ns      1902174 ns          345
+BM_tree_regression_1d/64      12490507 ns     12555804 ns           56
+BM_tree_regression_1d/128     81507544 ns     81597222 ns            9
+BM_tree_regression_1d_BigO       39.01 N^3       39.05 N^3  
+BM_tree_regression_1d_RMS            7 %             7 %    
+BM_cost_complexity_prune/2        1907 ns         1918 ns       407273
+BM_cost_complexity_prune/4       19055 ns        19252 ns        37333
+BM_cost_complexity_prune/8      283293 ns       282493 ns         2489
+BM_cost_complexity_prune/16    4601580 ns      4509228 ns          149
+BM_cost_complexity_prune/32   96267414 ns     98214286 ns            7
+BM_cost_complexity_prune/64 1596894700 ns   1609375000 ns            1
+BM_cost_complexity_prune_BigO    6041.95 N^3     6089.72 N^3  
+BM_cost_complexity_prune_RMS         15 %            15 %    
+BM_calc_sse/10                    10.6 ns         10.7 ns     64000000
+BM_calc_sse/100                    154 ns          153 ns      4480000
+BM_calc_sse/1000                  1630 ns         1611 ns       407273
+BM_calc_sse/10000                16372 ns        16392 ns        44800
+BM_calc_sse/100000              163825 ns       164958 ns         4073
+BM_calc_sse/1000000            1648829 ns      1650799 ns          407
+BM_calc_sse_BigO                  1.65 N          1.65 N    
 BM_calc_sse_RMS                      0 %             0 %    
