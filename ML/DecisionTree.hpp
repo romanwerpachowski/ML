@@ -259,7 +259,7 @@ namespace ml
 	/** Helper functions for decision trees. */
 	namespace DecisionTrees
 	{
-		template <typename T> using Range = std::pair<typename std::vector<T>::iterator, typename std::vector<T>::iterator>;
+		template <typename T> using IteratorRange = std::pair<typename std::vector<T>::iterator, typename std::vector<T>::iterator>;
 
 		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_reg_1d(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y);
 
