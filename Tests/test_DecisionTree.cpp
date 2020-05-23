@@ -139,7 +139,7 @@ TEST(DecisionTreeTest, find_best_split_reg_1d_constant_y)
 			y[k] = 0;
 		}
 	}
-	const auto split = ml::find_best_split_reg_1d(X, y);
+	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y);
 	ASSERT_EQ(-std::numeric_limits<double>::infinity(), split.second);	
 }
 
@@ -155,7 +155,7 @@ TEST(DecisionTreeTest, find_best_split_reg_1d_linear_in_x0)
 			y[k] = 0.2 * X(0, k) + 1.5;
 		}
 	}
-	const auto split = ml::find_best_split_reg_1d(X, y);
+	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y);
 	ASSERT_EQ(0, split.first);
 	ASSERT_NEAR(4.5, split.second, 1e-15);
 }
@@ -172,7 +172,7 @@ TEST(DecisionTreeTest, find_best_split_reg_1d_linear)
 			y[k] = 0.2 * X(0, k) + 0.01 * X(1, k) + 1.5;
 		}
 	}
-	const auto split = ml::find_best_split_reg_1d(X, y);
+	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y);
 	ASSERT_EQ(0, split.first);
 	ASSERT_NEAR(4.5, split.second, 1e-15);	
 }
@@ -189,7 +189,7 @@ TEST(DecisionTreeTest, find_best_split_reg_1d_const)
 			y[k] = 0;
 		}
 	}
-	const auto split = ml::find_best_split_reg_1d(X, y);
+	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y);
 	ASSERT_EQ(0, split.first);
 	ASSERT_EQ(-std::numeric_limits<double>::infinity(), split.second);
 }
@@ -219,8 +219,8 @@ TEST(DecisionTreeTest, stepwise)
 		}
 	}
 
-	ml::RegressionTree1D tree(ml::tree_regression_1d(X, y, 2, 10));
-	ml::RegressionTree1D tree1(ml::tree_regression_1d(X, y, 1, 10));
+	ml::RegressionTree1D tree(ml::DecisionTrees::tree_regression_1d(X, y, 2, 10));
+	ml::RegressionTree1D tree1(ml::DecisionTrees::tree_regression_1d(X, y, 1, 10));
 	ASSERT_EQ(tree1.original_error(), tree1.original_error());
 	ASSERT_EQ(7, tree.count_nodes());
 	ASSERT_EQ(3, tree1.count_nodes());
@@ -271,10 +271,10 @@ TEST(DecisionTreeTest, pruning)
 		}
 	}
 	// Grow a big tree.
-	ml::RegressionTree1D tree(ml::tree_regression_1d(X, y, 100, 2));
+	ml::RegressionTree1D tree(ml::DecisionTrees::tree_regression_1d(X, y, 100, 2));
 	ASSERT_EQ(n, tree.count_leaf_nodes());
 	ASSERT_NEAR(0, tree.total_leaf_error(), 1e-15);
-	const auto pruned_tree = ml::cost_complexity_prune(tree, 0.01);	
+	const auto pruned_tree = ml::DecisionTrees::cost_complexity_prune(tree, 0.01);
 	ASSERT_EQ(4, pruned_tree.count_leaf_nodes());
 	const auto pruned_sse = pruned_tree.total_leaf_error();
 	ASSERT_GE(pruned_sse, 0);

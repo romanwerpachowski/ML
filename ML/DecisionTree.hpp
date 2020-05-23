@@ -6,8 +6,12 @@
 #include <Eigen/Core>
 #include "dll.hpp"
 
-namespace ml 
+namespace ml
 {
+	/** Decision tree.
+
+	Data points are in columns.
+	*/
 	template <class Y> class DecisionTree
 	{
 	public:
@@ -39,8 +43,8 @@ namespace ml
 			/** Total number of leaf nodes reachable from this one, including itself. */
 			virtual unsigned int count_leaf_nodes() const = 0;
 
-			/** Total error of the training samples seen by the leaf nodes reachable from this node (including its own if leaf). 
-			
+			/** Total error of the training samples seen by the leaf nodes reachable from this node (including its own if leaf).
+
 			Has the invariant total_leaf_error() <= error.
 			*/
 			virtual double total_leaf_error() const = 0;
@@ -49,7 +53,7 @@ namespace ml
 			virtual Node* clone() const = 0;
 
 			/** Find the pointers to the weakest link and its parent in the part of tree beginning with this node (including itself).
-			
+
 			A "weakest link" is a split node which can be collapsed with the minimum increase of total_leaf_error().
 
 			@return Tuple of (pointer to weakest link, pointer to its parent, increase in total_leaf_error(), this->total_leaf_error()). Null pointer to weakest link means no such node could be found. Root node has a null parent. The 4th value is returned to avoid a double recursion.
@@ -148,10 +152,10 @@ namespace ml
 			std::tuple<SplitNode*, SplitNode*, double, double> find_weakest_link(SplitNode* parent) override
 			{
 				assert(lower);
-				assert(higher);				
+				assert(higher);
 				const auto weakest_link_lower = lower->find_weakest_link(this);
 				const auto weakest_link_higher = higher->find_weakest_link(this);
-				const auto weakest_link_child = std::get<2>(weakest_link_lower) < std::get<2>(weakest_link_higher) ? weakest_link_lower : weakest_link_higher;				
+				const auto weakest_link_child = std::get<2>(weakest_link_lower) < std::get<2>(weakest_link_higher) ? weakest_link_lower : weakest_link_higher;
 				const double total_leaf_error = std::get<3>(weakest_link_lower) + std::get<3>(weakest_link_higher);
 				const double increase = error - total_leaf_error;
 				// Prefer collapsing higher nodes in case of a tie.
@@ -209,7 +213,7 @@ namespace ml
 			return (*root_)(x);
 		}
 
-		unsigned int count_nodes() const 
+		unsigned int count_nodes() const
 		{
 			return 1 + root_->count_lower_nodes();
 		}
@@ -219,7 +223,7 @@ namespace ml
 			return root_->count_leaf_nodes();
 		}
 
-		double original_error() const 
+		double original_error() const
 		{
 			return root_->error;
 		}
@@ -246,65 +250,70 @@ namespace ml
 			return std::make_tuple(std::get<0>(weakest_link), std::get<1>(weakest_link), std::get<2>(weakest_link));
 		}
 	private:
-		std::unique_ptr<Node> root_;		
+		std::unique_ptr<Node> root_;
 	};
 
 	typedef DecisionTree<double> RegressionTree1D;
 
-	/// Data points are in columns ///
 
-	DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_reg_1d(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y);
-
-	/**
-	@param max_split_levels Maximum number of split nodes on the way to any leaf node.
-	@param min_sample_size Minimum sample size which can be split (at least 2).
-	*/
-	DLL_DECLSPEC RegressionTree1D tree_regression_1d(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
-
-	template <typename Y> DecisionTree<Y> cost_complexity_prune(const DecisionTree<Y>& full_tree, const double alpha)
+	/** Helper functions for decision trees. */
+	namespace DecisionTrees
 	{
-		if (alpha < 0) {
-			throw std::domain_error("Alpha cannot be negative");
-		}
-		const auto number_split_nodes = full_tree.count_nodes() - full_tree.count_leaf_nodes();
-		if (!number_split_nodes) {
-			// No pruning possible.
-			return full_tree;
-		}
-		std::vector<DecisionTree<Y>> trees;
-		std::vector<double> cost_complexities;
-		trees.reserve(static_cast<size_t>(number_split_nodes) + 1);
-		cost_complexities.reserve(trees.capacity());
-		trees.push_back(full_tree);
-		cost_complexities.push_back(full_tree.cost_complexity(alpha));
-		for (unsigned int i = 0; i < number_split_nodes; ++i) {
-			// Copy the last tree.
-			trees.push_back(trees.back());
-			// Prune the copy.
-			auto& pruned_tree = trees.back();
-			// Find the split node to remove.
-			const auto weakest_link = pruned_tree.find_weakest_link();
-			typename DecisionTree<Y>::SplitNode* removed_node = std::get<0>(weakest_link);
-			typename DecisionTree<Y>::SplitNode* removed_nodes_parent = std::get<1>(weakest_link);
-			assert(removed_node);
-			auto new_leaf = std::make_unique<typename DecisionTree<Y>::LeafNode>(removed_node->error, removed_node->value);
-			if (removed_nodes_parent) {
-				// Removing a non-root node from pruned tree.
-				if (removed_node == removed_nodes_parent->lower.get()) {
-					removed_nodes_parent->lower = std::move(new_leaf);
-				} else {
-					removed_nodes_parent->higher = std::move(new_leaf);
-				}
-			} else {
-				assert(trees.size() == trees.capacity());
-				// We removed the last split. Replace the pruned tree with the new leaf.
-				pruned_tree = DecisionTree<Y>(std::move(new_leaf));
+		template <typename T> using Range = std::pair<typename std::vector<T>::iterator, typename std::vector<T>::iterator>;
+
+		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_reg_1d(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y);
+
+		/**
+		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
+		@param min_sample_size Minimum sample size which can be split (at least 2).
+		*/
+		DLL_DECLSPEC RegressionTree1D tree_regression_1d(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
+
+		template <typename Y> DecisionTree<Y> cost_complexity_prune(const DecisionTree<Y>& full_tree, const double alpha)
+		{
+			if (alpha < 0) {
+				throw std::domain_error("Alpha cannot be negative");
 			}
-			cost_complexities.push_back(pruned_tree.cost_complexity(alpha));
+			const auto number_split_nodes = full_tree.count_nodes() - full_tree.count_leaf_nodes();
+			if (!number_split_nodes) {
+				// No pruning possible.
+				return full_tree;
+			}
+			std::vector<DecisionTree<Y>> trees;
+			std::vector<double> cost_complexities;
+			trees.reserve(static_cast<size_t>(number_split_nodes) + 1);
+			cost_complexities.reserve(trees.capacity());
+			trees.push_back(full_tree);
+			cost_complexities.push_back(full_tree.cost_complexity(alpha));
+			for (unsigned int i = 0; i < number_split_nodes; ++i) {
+				// Copy the last tree.
+				trees.push_back(trees.back());
+				// Prune the copy.
+				auto& pruned_tree = trees.back();
+				// Find the split node to remove.
+				const auto weakest_link = pruned_tree.find_weakest_link();
+				typename DecisionTree<Y>::SplitNode* removed_node = std::get<0>(weakest_link);
+				typename DecisionTree<Y>::SplitNode* removed_nodes_parent = std::get<1>(weakest_link);
+				assert(removed_node);
+				auto new_leaf = std::make_unique<typename DecisionTree<Y>::LeafNode>(removed_node->error, removed_node->value);
+				if (removed_nodes_parent) {
+					// Removing a non-root node from pruned tree.
+					if (removed_node == removed_nodes_parent->lower.get()) {
+						removed_nodes_parent->lower = std::move(new_leaf);
+					} else {
+						removed_nodes_parent->higher = std::move(new_leaf);
+					}
+				} else {
+					assert(trees.size() == trees.capacity());
+					// We removed the last split. Replace the pruned tree with the new leaf.
+					pruned_tree = DecisionTree<Y>(std::move(new_leaf));
+				}
+				cost_complexities.push_back(pruned_tree.cost_complexity(alpha));
+			}
+			assert(!cost_complexities.empty());
+			// Find the lowest cost complexity.
+			const auto best_it = std::min_element(cost_complexities.begin(), cost_complexities.end());
+			return trees[static_cast<size_t>(best_it - cost_complexities.begin())];
 		}
-		assert(!cost_complexities.empty());
-		// Find the lowest cost complexity.
-		const auto best_it = std::min_element(cost_complexities.begin(), cost_complexities.end());
-		return trees[static_cast<size_t>(best_it - cost_complexities.begin())];
 	}
 }
