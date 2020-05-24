@@ -77,7 +77,7 @@ namespace ml
 			: root_(other.root_->clone())
 		{}
 
-		DecisionTree<Y>& operator=(DecisionTree<Y>&& other)
+		DecisionTree<Y>& operator=(DecisionTree<Y>&& other) noexcept
 		{
 			if (this != &other) {
 				root_ = std::move(other.root_);

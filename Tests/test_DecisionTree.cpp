@@ -284,6 +284,14 @@ TEST(DecisionTreeTest, pruning)
 	}
 	// Grow a big tree.
 	ml::RegressionTree1D tree(ml::DecisionTrees::tree_regression_1d(X, y, 100, 2));
+
+	const auto weakest = tree.find_weakest_link();
+	ASSERT_NE(nullptr, std::get<0>(weakest));
+	ASSERT_NE(nullptr, std::get<1>(weakest));
+	ASSERT_GT(std::get<2>(weakest), 0);
+	ASSERT_EQ(0, std::get<0>(weakest)->lower->count_lower_nodes());
+	ASSERT_EQ(0, std::get<0>(weakest)->higher->count_lower_nodes());
+
 	ASSERT_EQ(n, tree.count_leaf_nodes());
 	ASSERT_NEAR(0, tree.total_leaf_error(), 1e-15);
 	const auto pruned_tree = ml::DecisionTrees::cost_complexity_prune(tree, 0.01);
