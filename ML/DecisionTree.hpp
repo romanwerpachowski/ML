@@ -259,9 +259,18 @@ namespace ml
 	/** Helper functions for decision trees. */
 	namespace DecisionTrees
 	{
+		/** Pair of vector iterators. */
 		template <typename T> using IteratorRange = std::pair<typename std::vector<T>::iterator, typename std::vector<T>::iterator>;
 
-		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_reg_1d(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y);
+		/** Used to sort features by value. */
+		typedef std::pair<Eigen::Index, double> IndexedFeatureValue;
+
+		template <typename T> IteratorRange<T> from_vector(std::vector<T>& v)
+		{
+			return std::make_pair(v.begin(), v.end());
+		}
+
+		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_reg_1d(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, IteratorRange<IndexedFeatureValue> features);
 
 		/**
 		@param max_split_levels Maximum number of split nodes on the way to any leaf node.

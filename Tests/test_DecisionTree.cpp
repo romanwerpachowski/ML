@@ -129,8 +129,9 @@ TEST(DecisionTreeTest, node_cloning)
 
 TEST(DecisionTreeTest, find_best_split_reg_1d_constant_y)
 {
-	Eigen::MatrixXd X(2, 100);
-	Eigen::VectorXd y(100);
+	const int sample_size = 100;
+	Eigen::MatrixXd X(2, sample_size);
+	Eigen::VectorXd y(sample_size);
 	for (int i = 0; i < 10; ++i) {
 		for (int j = 0; j < 10; ++j) {
 			const int k = i * 10 + j;
@@ -139,14 +140,16 @@ TEST(DecisionTreeTest, find_best_split_reg_1d_constant_y)
 			y[k] = 0;
 		}
 	}
-	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y);
+	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
+	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y, ml::DecisionTrees::from_vector(features));
 	ASSERT_EQ(-std::numeric_limits<double>::infinity(), split.second);	
 }
 
 TEST(DecisionTreeTest, find_best_split_reg_1d_linear_in_x0)
 {
-	Eigen::MatrixXd X(2, 100);
-	Eigen::VectorXd y(100);
+	const int sample_size = 100;
+	Eigen::MatrixXd X(2, sample_size);
+	Eigen::VectorXd y(sample_size);
 	for (int i = 0; i < 10; ++i) {
 		for (int j = 0; j < 10; ++j) {
 			const int k = i * 10 + j;
@@ -155,15 +158,17 @@ TEST(DecisionTreeTest, find_best_split_reg_1d_linear_in_x0)
 			y[k] = 0.2 * X(0, k) + 1.5;
 		}
 	}
-	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y);
+	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
+	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y, ml::DecisionTrees::from_vector(features));
 	ASSERT_EQ(0, split.first);
 	ASSERT_NEAR(4.5, split.second, 1e-15);
 }
 
 TEST(DecisionTreeTest, find_best_split_reg_1d_linear)
 {
-	Eigen::MatrixXd X(2, 100);
-	Eigen::VectorXd y(100);
+	const int sample_size = 100;
+	Eigen::MatrixXd X(2, sample_size);
+	Eigen::VectorXd y(sample_size);
 	for (int i = 0; i < 10; ++i) {
 		for (int j = 0; j < 10; ++j) {
 			const int k = i * 10 + j;
@@ -172,15 +177,17 @@ TEST(DecisionTreeTest, find_best_split_reg_1d_linear)
 			y[k] = 0.2 * X(0, k) + 0.01 * X(1, k) + 1.5;
 		}
 	}
-	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y);
+	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
+	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y, ml::DecisionTrees::from_vector(features));
 	ASSERT_EQ(0, split.first);
 	ASSERT_NEAR(4.5, split.second, 1e-15);	
 }
 
 TEST(DecisionTreeTest, find_best_split_reg_1d_const)
 {
-	Eigen::MatrixXd X(2, 100);
-	Eigen::VectorXd y(100);
+	const int sample_size = 100;
+	Eigen::MatrixXd X(2, sample_size);
+	Eigen::VectorXd y(sample_size);
 	for (int i = 0; i < 10; ++i) {
 		for (int j = 0; j < 10; ++j) {
 			const int k = i * 10 + j;
@@ -189,7 +196,8 @@ TEST(DecisionTreeTest, find_best_split_reg_1d_const)
 			y[k] = 0;
 		}
 	}
-	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y);
+	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
+	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y, ml::DecisionTrees::from_vector(features));
 	ASSERT_EQ(0, split.first);
 	ASSERT_EQ(-std::numeric_limits<double>::infinity(), split.second);
 }
@@ -279,4 +287,12 @@ TEST(DecisionTreeTest, pruning)
 	const auto pruned_sse = pruned_tree.total_leaf_error();
 	ASSERT_GE(pruned_sse, 0);
 	ASSERT_NEAR(n * sigma * sigma, pruned_sse, 1e-2);
+}
+
+TEST(DecisionTreeTest, from_vector)
+{
+	std::vector<double> v(4);
+	const auto iter_range = ml::DecisionTrees::from_vector(v);
+	ASSERT_EQ(v.begin(), iter_range.first);
+	ASSERT_EQ(v.end(), iter_range.second);
 }

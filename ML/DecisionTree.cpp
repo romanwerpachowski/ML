@@ -12,7 +12,7 @@ namespace ml
 
 		static const auto SORTED_FEATURE_COMPARATOR = [](const std::pair<Eigen::Index, double>& a, const std::pair<Eigen::Index, double>& b) { return a.second < b.second; };
 
-		std::pair<unsigned int, double> find_best_split_reg_1d(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y)
+		std::pair<unsigned int, double> find_best_split_reg_1d(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, IteratorRange<std::pair<Eigen::Index, double>> features)
 		{
 			const auto number_dimensions = X.rows();
 			const auto sample_size = y.size();
@@ -22,7 +22,6 @@ namespace ml
 			if (sample_size < 2) {
 				throw std::invalid_argument("Sample size must be at least 2 for splitting");
 			}
-			std::vector<std::pair<Eigen::Index, double>> features(sample_size);
 			std::vector<double> sorted_y(sample_size);
 			std::vector<double> sum_sse_for_feature_index(sample_size);
 			std::vector<double> sum_sse(number_dimensions);
@@ -36,30 +35,44 @@ namespace ml
 					thresholds[feature_index] = -std::numeric_limits<double>::infinity();
 					sum_sse[feature_index] = std::numeric_limits<double>::infinity();
 				} else {
-					for (Eigen::Index i = 0; i < sample_size; ++i) {
-						features[i] = std::make_pair(i, X_f[i]);
+					auto features_it = features.first;
+					for (Eigen::Index i = 0; i < sample_size; ++i, ++features_it) {
+						*features_it = std::make_pair(i, X_f[i]);
 					}
-					std::sort(features.begin(), features.end(), SORTED_FEATURE_COMPARATOR);
-					for (Eigen::Index i = 0; i < sample_size; ++i) {
-						sorted_y[i] = y(features[i].first);
+					assert(features_it == features.second);
+					std::sort(features.first, features.second, SORTED_FEATURE_COMPARATOR);
+					features_it = features.first;
+					for (Eigen::Index i = 0; i < sample_size; ++i, ++features_it) {
+						sorted_y[i] = y(features_it->first);
 					}
+					assert(features_it == features.second);
 					// i is the number of features below the threshold.
-					for (Eigen::Index i = 0; i < sample_size; ++i) {
-						// Only consider splits between different values of X_f.
-						if (!i || features[i - 1].second < features[i].second) {
-							sum_sse_for_feature_index[i] = Statistics::calc_sse(sorted_y.begin(), sorted_y.begin() + i) + Statistics::calc_sse(sorted_y.begin() + i, sorted_y.end());
+					sum_sse_for_feature_index.front() = Statistics::calc_sse(sorted_y.begin(), sorted_y.end());
+					features_it = features.first;
+					auto prev_feature = *features_it;
+					auto sum_sse_for_feature_index_it = sum_sse_for_feature_index.begin() + 1;
+					for (Eigen::Index i = 1; i < sample_size; ++i, ++sum_sse_for_feature_index_it) {
+						++features_it;
+						const auto next_feature = *features_it;
+						// Only consider splits between different values of X_f.						
+						if (prev_feature.second < next_feature.second) {
+							*sum_sse_for_feature_index_it = Statistics::calc_sse(sorted_y.begin(), sorted_y.begin() + i) + Statistics::calc_sse(sorted_y.begin() + i, sorted_y.end());
 						} else {
-							sum_sse_for_feature_index[i] = std::numeric_limits<double>::infinity();
+							*sum_sse_for_feature_index_it = std::numeric_limits<double>::infinity();
 						}
+						prev_feature = next_feature;
 					}
+					assert(++features_it == features.second);
 					const auto min_sse_it = std::min_element(sum_sse_for_feature_index.begin(), sum_sse_for_feature_index.end());
 					sum_sse[feature_index] = *min_sse_it;
 					const auto num_samples_below_threshold = static_cast<Eigen::Index>(min_sse_it - sum_sse_for_feature_index.begin());
 					if (!num_samples_below_threshold) {
 						thresholds[feature_index] = -std::numeric_limits<double>::infinity();
 					} else {
-						const auto lower_value = features[num_samples_below_threshold - 1].second;
-						thresholds[feature_index] = lower_value + 0.5 * (features[num_samples_below_threshold].second - lower_value);
+						features_it = features.first + (num_samples_below_threshold - 1);
+						const auto lower_value = features_it->second;
+						++features_it;
+						thresholds[feature_index] = lower_value + 0.5 * (features_it->second - lower_value);
 					}
 				}
 			}
@@ -76,7 +89,7 @@ namespace ml
 			if (!sse || !allowed_split_levels || sample_size < min_sample_size) {
 				return std::make_unique<RegressionTree1D::LeafNode>(sse, mean);
 			} else {
-				const auto split = find_best_split_reg_1d(X, y);
+				const auto split = find_best_split_reg_1d(X, y, features);
 				if (split.second == -std::numeric_limits<double>::infinity()) {
 					return std::make_unique<RegressionTree1D::LeafNode>(sse, mean);
 				} else {
