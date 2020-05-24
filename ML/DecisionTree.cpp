@@ -188,7 +188,6 @@ namespace ml
 							min_sample_size,
 							std::make_pair(features_it, features.second), 0);
 					}
-					const int num_leaves = static_cast<int>(split_node->lower->is_leaf()) + static_cast<int>(split_node->higher->is_leaf());
 					return split_node;
 				}
 			}

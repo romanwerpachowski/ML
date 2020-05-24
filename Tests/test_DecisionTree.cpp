@@ -234,8 +234,8 @@ TEST(DecisionTreeTest, stepwise)
 		}
 	}
 
-	ml::RegressionTree1D tree(ml::DecisionTrees::tree_regression_1d(X, y, 2, 10));
-	ml::RegressionTree1D tree1(ml::DecisionTrees::tree_regression_1d(X, y, 1, 10));
+	const ml::RegressionTree1D tree(ml::DecisionTrees::tree_regression_1d(X, y, 2, 10));
+	const ml::RegressionTree1D tree1(ml::DecisionTrees::tree_regression_1d(X, y, 1, 10));
 	ASSERT_EQ(tree1.original_error(), tree1.original_error());
 	ASSERT_EQ(7, tree.count_nodes());
 	ASSERT_EQ(3, tree1.count_nodes());
@@ -252,6 +252,9 @@ TEST(DecisionTreeTest, stepwise)
 	ASSERT_NEAR(sse1, tree1.total_leaf_error(), 1e-14);
 
 	ASSERT_EQ(2, tree.number_lowest_split_nodes());
+
+	const ml::RegressionTree1D tree_copy(tree);
+	ASSERT_EQ(2, tree_copy.number_lowest_split_nodes());
 }
 
 TEST(DecisionTreeTest, pruning)
