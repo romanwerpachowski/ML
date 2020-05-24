@@ -385,6 +385,11 @@ namespace ml
 		*/
 		DLL_DECLSPEC RegressionTree1D tree_regression_1d(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
 
+		/** Performs cost-complexity pruning.
+
+		@param alpha Cost of complexity per node.
+		@return Pruned tree.
+		*/
 		template <typename Y> DecisionTree<Y> cost_complexity_prune(DecisionTree<Y>& tree, const double alpha)
 		{
 			if (alpha < 0) {

@@ -89,3 +89,45 @@ static void BM_cost_complexity_prune(benchmark::State& state)
 }
 
 BENCHMARK(BM_cost_complexity_prune)->RangeMultiplier(2)->Range(2, 64)->Complexity();
+
+static void BM_tree_copy(benchmark::State& state)
+{
+	std::default_random_engine rng;
+	std::normal_distribution normal;
+	const auto m = static_cast<int>(state.range(0));
+	const int n = m * m;
+	const double sigma = 0.01;
+
+	Eigen::MatrixXd X(2, n);
+	Eigen::VectorXd y(n);
+	for (int i = 0; i < m; ++i) {
+		for (int j = 0; j < m; ++j) {
+			const int k = i * m + j;
+			X(0, k) = static_cast<double>(i);
+			X(1, k) = static_cast<double>(j);
+			if (i < 4) {
+				if (j < 2) {
+					y[k] = 0.2;
+				} else {
+					y[k] = 0.9;
+				}
+			} else {
+				if (j < 6) {
+					y[k] = 0.5;
+				} else {
+					y[k] = 0.25;
+				}
+			}
+			// Add noise.
+			y[k] += sigma * normal(rng);
+		}
+	}
+	const ml::RegressionTree1D tree(ml::DecisionTrees::tree_regression_1d(X, y, 100, 2));
+	// Benchmarked code.
+	for (auto _ : state) {
+		ml::RegressionTree1D copy(tree);
+	}
+	state.SetComplexityN(state.range(0));
+}
+
+BENCHMARK(BM_tree_copy)->RangeMultiplier(2)->Range(2, 64)->Complexity();
