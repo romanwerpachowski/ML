@@ -1,5 +1,6 @@
 #pragma once
 #include <cassert>
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <unordered_set>
@@ -25,9 +26,10 @@ namespace ml
 		{
 			double error; /**< Error of the training sample seen by this node. */
 			Y value; /**< Value which should be returned if we stop splitting at this node. */
+			SplitNode* parent; /**< Link to parent node. */
 
-			Node(double n_error, Y n_value)
-				: error(n_error), value(n_value)
+			Node(double n_error, Y n_value, SplitNode* n_parent)
+				: error(n_error), value(n_value), parent(n_parent)
 			{
 				if (error < 0) {
 					throw std::domain_error("Node error cannot be negative");
@@ -50,16 +52,11 @@ namespace ml
 			*/
 			virtual double total_leaf_error() const = 0;
 
-			/** Make a perfect copy of the node. */
-			virtual Node* clone() const = 0;
-
-			/** Find the pointers to the weakest link and its parent in the part of tree beginning with this node (including itself).
-
-			A "weakest link" is a split node which can be collapsed with the minimum increase of total_leaf_error().
-
-			@return Tuple of (pointer to weakest link, pointer to its parent, increase in total_leaf_error(), this->total_leaf_error()). Null pointer to weakest link means no such node could be found. Root node has a null parent. The 4th value is returned to avoid a double recursion.
+			/** Make a perfect copy of the node.
+			Function works recursively from root to leafs.
+			@param cloned_parent Pointer to already cloned parent.
 			*/
-			virtual std::tuple<SplitNode*, SplitNode*, double, double> find_weakest_link(SplitNode* parent) = 0;
+			virtual Node* clone(SplitNode* cloned_parent) const = 0;
 
 			/** Return true if node is a leaf. */
 			virtual bool is_leaf() const = 0;
@@ -74,6 +71,9 @@ namespace ml
 			if (!root_) {
 				throw std::invalid_argument("Null root");
 			}
+			if (root_->parent) {
+				throw std::invalid_argument("Root has no parent");
+			}
 			root_->collect_lowest_split_nodes(lowest_split_nodes_);
 		}
 
@@ -82,7 +82,7 @@ namespace ml
 		{}
 
 		DecisionTree(const DecisionTree<Y>& other)
-			: root_(other.root_->clone())
+			: root_(other.root_->clone(nullptr))
 		{
 			root_->collect_lowest_split_nodes(lowest_split_nodes_);
 		}
@@ -99,7 +99,8 @@ namespace ml
 		DecisionTree<Y>& operator=(const DecisionTree<Y>& other)
 		{
 			if (this != &other) {
-				root_.reset(other.root_->clone());
+				root_.reset(other.root_->clone(nullptr));
+				lowest_split_nodes_.clear();
 				root_->collect_lowest_split_nodes(lowest_split_nodes_);
 			}
 			return *this;
@@ -114,15 +115,18 @@ namespace ml
 
 			using Node::error;
 			using Node::value;
+			using Node::parent;
 
-			SplitNode(double n_error, Y n_value, double n_threshold, unsigned int n_feature_index)
-				: Node(n_error, n_value), threshold(n_threshold), feature_index(n_feature_index)
+			SplitNode(double n_error, Y n_value, SplitNode* n_parent, double n_threshold, unsigned int n_feature_index)
+				: Node(n_error, n_value, n_parent), threshold(n_threshold), feature_index(n_feature_index)
 			{}
 
 			Y operator()(arg_type x) const override
 			{
 				assert(lower);
 				assert(higher);
+				assert(this == lower->parent);
+				assert(this == higher->parent);
 				if (x[feature_index] < threshold) {
 					return (*lower)(x);
 				} else {
@@ -134,6 +138,8 @@ namespace ml
 			{
 				assert(lower);
 				assert(higher);
+				assert(this == lower->parent);
+				assert(this == higher->parent);
 				return 2 + lower->count_lower_nodes() + higher->count_lower_nodes();
 			}
 
@@ -141,6 +147,8 @@ namespace ml
 			{
 				assert(lower);
 				assert(higher);
+				assert(this == lower->parent);
+				assert(this == higher->parent);
 				return lower->count_leaf_nodes() + higher->count_leaf_nodes();
 			}
 
@@ -148,35 +156,22 @@ namespace ml
 			{
 				assert(lower);
 				assert(higher);
+				assert(this == lower->parent);
+				assert(this == higher->parent);
 				return lower->total_leaf_error() + higher->total_leaf_error();
 			}
 
-			SplitNode* clone() const override
+			SplitNode* clone(SplitNode* cloned_parent) const override
 			{
 				assert(lower);
 				assert(higher);
-				auto copy = std::make_unique<SplitNode>(error, value, threshold, feature_index);
-				copy->lower = std::unique_ptr<Node>(lower->clone());
-				copy->higher = std::unique_ptr<Node>(higher->clone());
+				assert(this == lower->parent);
+				assert(this == higher->parent);
+				auto copy = std::make_unique<SplitNode>(error, value, cloned_parent, threshold, feature_index);
+				copy->lower = std::unique_ptr<Node>(lower->clone(copy.get()));
+				copy->higher = std::unique_ptr<Node>(higher->clone(copy.get()));
 				return copy.release();
-			}
-
-			std::tuple<SplitNode*, SplitNode*, double, double> find_weakest_link(SplitNode* parent) override
-			{
-				assert(lower);
-				assert(higher);
-				const auto weakest_link_lower = lower->find_weakest_link(this);
-				const auto weakest_link_higher = higher->find_weakest_link(this);
-				const auto weakest_link_child = std::get<2>(weakest_link_lower) < std::get<2>(weakest_link_higher) ? weakest_link_lower : weakest_link_higher;
-				const double total_leaf_error = std::get<3>(weakest_link_lower) + std::get<3>(weakest_link_higher);
-				const double increase = error - total_leaf_error;
-				// Prefer collapsing higher nodes in case of a tie.
-				if (increase <= std::get<2>(weakest_link_child)) {
-					return std::make_tuple(this, parent, increase, total_leaf_error);
-				} else {
-					return std::make_tuple(std::get<0>(weakest_link_child), std::get<1>(weakest_link_child), std::get<2>(weakest_link_child), total_leaf_error);
-				}
-			}
+			}			
 
 			bool is_leaf() const override
 			{
@@ -187,12 +182,21 @@ namespace ml
 			{
 				assert(lower);
 				assert(higher);
+				assert(this == lower->parent);
+				assert(this == higher->parent);
+				int number_leaves = 0;
 				if (!lower->is_leaf()) {
 					lower->collect_lowest_split_nodes(s);
-				} else if (!higher->is_leaf()) {
+				} else {
+					++number_leaves;
+				}
+				if (!higher->is_leaf()) {
 					higher->collect_lowest_split_nodes(s);
 				} else {
-					assert(lower->is_leaf());
+					++number_leaves;
+				}
+				if (number_leaves == 2) {
+					assert(lower->is_leaf());					
 					assert(higher->is_leaf());
 					s.insert(this);
 				}
@@ -201,12 +205,13 @@ namespace ml
 
 		struct LeafNode : public Node
 		{
-			LeafNode(double n_error, Y n_value)
-				: Node(n_error, n_value)
+			LeafNode(double n_error, Y n_value, SplitNode* n_parent)
+				: Node(n_error, n_value, n_parent)
 			{}
 
 			using Node::error;
 			using Node::value;
+			using Node::parent;
 
 			double operator()(arg_type x) const override
 			{
@@ -228,15 +233,9 @@ namespace ml
 				return error;
 			}
 
-			LeafNode* clone() const override
+			LeafNode* clone(SplitNode* cloned_parent) const override
 			{
-				return new LeafNode(error, value);
-			}
-
-			std::tuple<SplitNode*, SplitNode*, double, double> find_weakest_link(SplitNode* parent) override
-			{
-				// A leaf node cannot be collapsed.
-				return std::tuple<SplitNode*, SplitNode*, double, double>(nullptr, parent, std::numeric_limits<double>::infinity(), error);
+				return new LeafNode(error, value, cloned_parent);
 			}
 
 			bool is_leaf() const override
@@ -244,7 +243,7 @@ namespace ml
 				return true;
 			}
 
-			void collect_lowest_split_nodes(std::unordered_set<SplitNode*>& s) override
+			void collect_lowest_split_nodes(std::unordered_set<SplitNode*>&) override
 			{}
 		};
 
@@ -278,20 +277,78 @@ namespace ml
 			return total_leaf_error() + alpha * static_cast<double>(count_leaf_nodes());
 		}
 
-		/** Find the pointers to the weakest link and its parent in the tree.
+		/** Find the weakest link and remove it, if the error does not increase too much.
 
 		A "weakest link" is a split node which can be collapsed with the minimum increase of total_leaf_error().
-
-		@return Triple of (pointer to weakest link, pointer to its parent, increase in total_leaf_error()). Null pointer to weakest link means no such node could be found. Root node has a null parent.
+		Only the lowest split node can be a weakest link.
+		@param max_allowed_error_increase Maximum allowed increase in total leaf error.
+		@return Whether a node was removed.
+		@throw std::domain_error If max_allowed_error_increase < 0.
 		*/
-		std::tuple<SplitNode*, SplitNode*, double> find_weakest_link()
+		bool remove_weakest_link(const double max_allowed_error_increase)
 		{
-			const auto weakest_link = root_->find_weakest_link(nullptr);
-			return std::make_tuple(std::get<0>(weakest_link), std::get<1>(weakest_link), std::get<2>(weakest_link));
+			if (max_allowed_error_increase < 0) {
+				throw std::domain_error("Maximum allowed error increase cannot be negative");
+			}
+			if (lowest_split_nodes_.empty()) {
+				return false;
+			}
+			double lowest_error_increase = std::numeric_limits<double>::infinity();
+			SplitNode* removed = nullptr;			
+			for (auto split_node_ptr : lowest_split_nodes_) {
+				assert(split_node_ptr);
+				const SplitNode& split_node = *split_node_ptr;
+				assert(split_node.lower);
+				assert(split_node.higher);
+				assert(split_node.lower->is_leaf());
+				assert(split_node.higher->is_leaf());
+				const double error_increase = split_node.error - (split_node.lower->error + split_node.higher->error);
+				if (error_increase <= lowest_error_increase) {
+					removed = split_node_ptr;
+					lowest_error_increase = error_increase;
+				}
+			}
+			assert(removed);
+			assert(lowest_error_increase >= 0);
+			if (lowest_error_increase > max_allowed_error_increase) {
+				return false;
+			}
+			SplitNode* const parent_of_removed = removed->parent;
+			auto new_leaf = std::make_unique<LeafNode>(removed->error, removed->value, parent_of_removed);
+			if (parent_of_removed) {
+				// Removing a non-root node from pruned tree.
+				bool other_is_leaf;
+				if (removed == parent_of_removed->lower.get()) {
+					parent_of_removed->lower = std::move(new_leaf);
+					other_is_leaf = parent_of_removed->higher->is_leaf();
+				} else {
+					assert(removed == parent_of_removed->higher.get());
+					parent_of_removed->higher = std::move(new_leaf);
+					other_is_leaf = parent_of_removed->lower->is_leaf();
+				}
+				// Update the set of lowest split nodes.
+				lowest_split_nodes_.erase(removed);
+				assert(!lowest_split_nodes_.count(removed));
+				if (other_is_leaf) {
+					lowest_split_nodes_.insert(parent_of_removed);
+					assert(lowest_split_nodes_.count(parent_of_removed));
+				}
+			} else {
+				// We removed the last split. Replace the pruned tree with the new leaf.
+				root_ = std::move(new_leaf);
+				lowest_split_nodes_.clear();
+			}
+			return true;
+		}
+
+		/** Returns number of lowest split nodes. */
+		unsigned int number_lowest_split_nodes() const
+		{
+			return static_cast<unsigned int>(lowest_split_nodes_.size());
 		}
 	private:
 		std::unique_ptr<Node> root_;
-		std::unordered_set<SplitNode*> lowest_split_nodes_;
+		std::unordered_set<SplitNode*> lowest_split_nodes_; /** Set of lowest split nodes. */
 	};
 
 	typedef DecisionTree<double> RegressionTree1D;
@@ -328,51 +385,14 @@ namespace ml
 		*/
 		DLL_DECLSPEC RegressionTree1D tree_regression_1d(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
 
-		template <typename Y> DecisionTree<Y> cost_complexity_prune(const DecisionTree<Y>& full_tree, const double alpha)
+		template <typename Y> DecisionTree<Y> cost_complexity_prune(DecisionTree<Y>& tree, const double alpha)
 		{
 			if (alpha < 0) {
 				throw std::domain_error("Alpha cannot be negative");
 			}
-			const auto number_split_nodes = full_tree.count_nodes() - full_tree.count_leaf_nodes();
-			if (!number_split_nodes) {
-				// No pruning possible.
-				return full_tree;
-			}
-			std::vector<DecisionTree<Y>> trees;
-			std::vector<double> cost_complexities;
-			trees.reserve(static_cast<size_t>(number_split_nodes) + 1);
-			cost_complexities.reserve(trees.capacity());
-			trees.push_back(full_tree);
-			cost_complexities.push_back(full_tree.cost_complexity(alpha));
-			for (unsigned int i = 0; i < number_split_nodes; ++i) {
-				// Copy the last tree.
-				trees.push_back(trees.back());
-				// Prune the copy.
-				auto& pruned_tree = trees.back();
-				// Find the split node to remove.
-				const auto weakest_link = pruned_tree.find_weakest_link();
-				typename DecisionTree<Y>::SplitNode* removed_node = std::get<0>(weakest_link);
-				typename DecisionTree<Y>::SplitNode* removed_nodes_parent = std::get<1>(weakest_link);
-				assert(removed_node);
-				auto new_leaf = std::make_unique<typename DecisionTree<Y>::LeafNode>(removed_node->error, removed_node->value);
-				if (removed_nodes_parent) {
-					// Removing a non-root node from pruned tree.
-					if (removed_node == removed_nodes_parent->lower.get()) {
-						removed_nodes_parent->lower = std::move(new_leaf);
-					} else {
-						removed_nodes_parent->higher = std::move(new_leaf);
-					}
-				} else {
-					assert(trees.size() == trees.capacity());
-					// We removed the last split. Replace the pruned tree with the new leaf.
-					pruned_tree = DecisionTree<Y>(std::move(new_leaf));
-				}
-				cost_complexities.push_back(pruned_tree.cost_complexity(alpha));
-			}
-			assert(!cost_complexities.empty());
-			// Find the lowest cost complexity.
-			const auto best_it = std::min_element(cost_complexities.begin(), cost_complexities.end());
-			return trees[static_cast<size_t>(best_it - cost_complexities.begin())];
+			// There can be only one minimum of cost complexity.
+			while (tree.remove_weakest_link(alpha)) {}
+			return tree;			
 		}
 	}
 }

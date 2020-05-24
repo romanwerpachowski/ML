@@ -6,28 +6,31 @@ TEST(DecisionTreeTest, nodes)
 {
 	typedef ml::DecisionTree<double> RegTree;
 
-	auto root = std::make_unique<RegTree::SplitNode>(2.4, -0.1, 0.5, 0);
+	auto root = std::make_unique<RegTree::SplitNode>(2.4, -0.1, nullptr, 0.5, 0);
 	ASSERT_EQ(2.4, root->error);
 	ASSERT_EQ(-0.1, root->value);
+	ASSERT_EQ(nullptr, root->parent);
 	ASSERT_EQ(0.5, root->threshold);
 	ASSERT_FALSE(root->is_leaf());
 	ASSERT_EQ(0, root->feature_index);
-	root->lower = std::make_unique<RegTree::LeafNode>(1, -1);
+	root->lower = std::make_unique<RegTree::LeafNode>(1, -1, root.get());
 	ASSERT_EQ(1, root->lower->error);
+	ASSERT_EQ(-1, root->lower->value);
+	ASSERT_EQ(root.get(), root->lower->parent);
 	ASSERT_EQ(1, root->lower->total_leaf_error());
 	ASSERT_EQ(0, root->lower->count_lower_nodes());
 	ASSERT_TRUE(root->lower->is_leaf());
 
-	auto next_split = std::make_unique<RegTree::SplitNode>(1.2, 0.4, 0.5, 1);
+	auto next_split = std::make_unique<RegTree::SplitNode>(1.2, 0.4, root.get(), 0.5, 1);
 	const auto next_split_ptr = next_split.get();
 	ASSERT_EQ(1.2, next_split->error);
 	ASSERT_EQ(0.4, next_split->value);
 	ASSERT_EQ(0.5, next_split->threshold);
 	ASSERT_EQ(1, next_split->feature_index);
-	next_split->lower = std::make_unique<RegTree::LeafNode>(0.5, 0);
+	next_split->lower = std::make_unique<RegTree::LeafNode>(0.5, 0, next_split_ptr);
 	ASSERT_EQ(0.5, next_split->lower->error);
 	ASSERT_EQ(0, next_split->lower->value);
-	next_split->higher = std::make_unique<RegTree::LeafNode>(0.5, 1);
+	next_split->higher = std::make_unique<RegTree::LeafNode>(0.5, 1, next_split_ptr);
 	ASSERT_EQ(0.5, next_split->higher->error);
 	ASSERT_EQ(1, next_split->higher->value);
 	ASSERT_EQ(2, next_split->count_lower_nodes());
@@ -46,23 +49,7 @@ TEST(DecisionTreeTest, nodes)
 	ASSERT_EQ(1, lowest_split_nodes.count(next_split_ptr));
 	lowest_split_nodes.clear();
 	root->lower->collect_lowest_split_nodes(lowest_split_nodes);
-	ASSERT_TRUE(lowest_split_nodes.empty());
-
-	auto weakest_link = root->find_weakest_link(nullptr);
-	ASSERT_EQ(root->higher.get(), std::get<0>(weakest_link));
-	ASSERT_EQ(root.get(), std::get<1>(weakest_link));
-	ASSERT_NEAR(0.2, std::get<2>(weakest_link), 1e-15);
-	ASSERT_NEAR(root->total_leaf_error(), std::get<3>(weakest_link), 1e-15);
-	weakest_link = root->higher->find_weakest_link(root.get());
-	ASSERT_EQ(root->higher.get(), std::get<0>(weakest_link));
-	ASSERT_EQ(root.get(), std::get<1>(weakest_link));
-	ASSERT_NEAR(0.2, std::get<2>(weakest_link), 1e-15);
-	ASSERT_NEAR(root->higher->total_leaf_error(), std::get<3>(weakest_link), 1e-15);
-	weakest_link = root->lower->find_weakest_link(root.get());
-	ASSERT_EQ(nullptr, std::get<0>(weakest_link));
-	ASSERT_EQ(root.get(), std::get<1>(weakest_link));
-	ASSERT_EQ(std::numeric_limits<double>::infinity(), std::get<2>(weakest_link));
-	ASSERT_EQ(1, std::get<3>(weakest_link));
+	ASSERT_TRUE(lowest_split_nodes.empty());	
 
 	Eigen::Vector2d x(0, 0);
 	ASSERT_EQ(-1, root->operator()(x));
@@ -87,16 +74,11 @@ TEST(DecisionTreeTest, nodes)
 
 	RegTree tree(std::move(root));
 	ASSERT_EQ(5, tree.count_nodes());
+	ASSERT_EQ(1, tree.number_lowest_split_nodes());
 	ASSERT_EQ(3, tree.count_leaf_nodes());
 	ASSERT_EQ(2.4, tree.original_error());
 	ASSERT_NEAR(2, tree.total_leaf_error(), 1e-15);
-	ASSERT_NEAR(2 + 0.3 * 3, tree.cost_complexity(0.3), 1e-15);
-	const auto weakest_link2 = tree.find_weakest_link();
-	ASSERT_NE(nullptr, std::get<0>(weakest_link2));
-	ASSERT_NE(nullptr, dynamic_cast<RegTree::SplitNode*>(std::get<0>(weakest_link2)));
-	ASSERT_NE(nullptr, std::get<1>(weakest_link2));	
-	ASSERT_NE(nullptr, dynamic_cast<RegTree::SplitNode*>(std::get<1>(weakest_link2)));
-	ASSERT_NEAR(0.2, std::get<2>(weakest_link2), 1e-15);
+	ASSERT_NEAR(2 + 0.3 * 3, tree.cost_complexity(0.3), 1e-15);	
 
 	x << 0, 0;
 	ASSERT_EQ(-1, tree.operator()(x));
@@ -123,24 +105,29 @@ TEST(DecisionTreeTest, nodes)
 TEST(DecisionTreeTest, node_cloning)
 {
 	typedef ml::DecisionTree<double> RegTree;
-	auto leaf_orig = std::make_unique<RegTree::LeafNode>(0.5, 0.25);
-	auto leaf_copy = std::unique_ptr<RegTree::LeafNode>(leaf_orig->clone());
+	auto leaf_orig = std::make_unique<RegTree::LeafNode>(0.5, 0.25, nullptr);
+	auto leaf_copy = std::unique_ptr<RegTree::LeafNode>(leaf_orig->clone(nullptr));
 	ASSERT_EQ(leaf_orig->error, leaf_copy->error);
 	ASSERT_EQ(leaf_orig->value, leaf_copy->value);
 	ASSERT_NE(leaf_orig.get(), leaf_copy.get());
-	const auto split_orig = std::make_unique<RegTree::SplitNode>(1.2, 0.21, 0.7, 2);
+	ASSERT_EQ(nullptr, leaf_copy->parent);
+	const auto split_orig = std::make_unique<RegTree::SplitNode>(1.2, 0.21, nullptr, 0.7, 2);
 	split_orig->lower = std::move(leaf_orig);
-	split_orig->higher = std::make_unique<RegTree::LeafNode>(0.6, 0.4);
-	const auto split_copy = std::unique_ptr<RegTree::SplitNode>(split_orig->clone());
+	split_orig->lower->parent = split_orig.get();
+	split_orig->higher = std::make_unique<RegTree::LeafNode>(0.6, 0.4, split_orig.get());
+	const auto split_copy = std::unique_ptr<RegTree::SplitNode>(split_orig->clone(nullptr));
 	ASSERT_NE(split_orig.get(), split_copy.get());
 	ASSERT_EQ(split_orig->error, split_copy->error);
 	ASSERT_EQ(split_orig->value, split_copy->value);
+	ASSERT_EQ(nullptr, split_copy->parent);
 	ASSERT_EQ(split_orig->threshold, split_copy->threshold);
 	ASSERT_EQ(split_orig->feature_index, split_copy->feature_index);
 	ASSERT_NE(split_orig->lower.get(), split_copy->lower.get());
 	ASSERT_NE(split_orig->higher.get(), split_copy->higher.get());
 	ASSERT_EQ(split_orig->lower->error, split_copy->lower->error);
 	ASSERT_EQ(split_orig->higher->error, split_copy->higher->error);
+	ASSERT_EQ(split_copy.get(), split_copy->lower->parent);
+	ASSERT_EQ(split_copy.get(), split_copy->higher->parent);
 }
 
 TEST(DecisionTreeTest, find_best_split_reg_1d_constant_y)
@@ -263,11 +250,14 @@ TEST(DecisionTreeTest, stepwise)
 	ASSERT_LE(sse1, tree.original_error());
 	ASSERT_NEAR(sse, tree.total_leaf_error(), 1e-15);
 	ASSERT_NEAR(sse1, tree1.total_leaf_error(), 1e-14);
+
+	ASSERT_EQ(2, tree.number_lowest_split_nodes());
 }
 
 TEST(DecisionTreeTest, pruning)
 {
 	std::default_random_engine rng;
+	rng.seed(3523423);
 	std::normal_distribution normal;
 	const int n_i = 10;
 	const int n_j = 10;
@@ -299,14 +289,7 @@ TEST(DecisionTreeTest, pruning)
 		}
 	}
 	// Grow a big tree.
-	ml::RegressionTree1D tree(ml::DecisionTrees::tree_regression_1d(X, y, 100, 2));
-
-	const auto weakest = tree.find_weakest_link();
-	ASSERT_NE(nullptr, std::get<0>(weakest));
-	ASSERT_NE(nullptr, std::get<1>(weakest));
-	ASSERT_GT(std::get<2>(weakest), 0);
-	ASSERT_EQ(0, std::get<0>(weakest)->lower->count_lower_nodes());
-	ASSERT_EQ(0, std::get<0>(weakest)->higher->count_lower_nodes());
+	ml::RegressionTree1D tree(ml::DecisionTrees::tree_regression_1d(X, y, 100, 2));	
 
 	ASSERT_EQ(n, tree.count_leaf_nodes());
 	ASSERT_NEAR(0, tree.total_leaf_error(), 1e-15);
