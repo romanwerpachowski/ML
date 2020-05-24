@@ -10,13 +10,16 @@ TEST(DecisionTreeTest, nodes)
 	ASSERT_EQ(2.4, root->error);
 	ASSERT_EQ(-0.1, root->value);
 	ASSERT_EQ(0.5, root->threshold);
+	ASSERT_FALSE(root->is_leaf());
 	ASSERT_EQ(0, root->feature_index);
 	root->lower = std::make_unique<RegTree::LeafNode>(1, -1);
 	ASSERT_EQ(1, root->lower->error);
 	ASSERT_EQ(1, root->lower->total_leaf_error());
 	ASSERT_EQ(0, root->lower->count_lower_nodes());
+	ASSERT_TRUE(root->lower->is_leaf());
 
 	auto next_split = std::make_unique<RegTree::SplitNode>(1.2, 0.4, 0.5, 1);
+	const auto next_split_ptr = next_split.get();
 	ASSERT_EQ(1.2, next_split->error);
 	ASSERT_EQ(0.4, next_split->value);
 	ASSERT_EQ(0.5, next_split->threshold);
@@ -32,6 +35,19 @@ TEST(DecisionTreeTest, nodes)
 	ASSERT_EQ(4, root->count_lower_nodes());
 	ASSERT_EQ(3, root->count_leaf_nodes());
 	ASSERT_NEAR(2, root->total_leaf_error(), 1e-15);
+
+	std::unordered_set<RegTree::SplitNode*> lowest_split_nodes;
+	root->collect_lowest_split_nodes(lowest_split_nodes);
+	ASSERT_EQ(1, lowest_split_nodes.size());
+	ASSERT_EQ(1, lowest_split_nodes.count(next_split_ptr));
+	lowest_split_nodes.clear();
+	root->higher->collect_lowest_split_nodes(lowest_split_nodes);
+	ASSERT_EQ(1, lowest_split_nodes.size());
+	ASSERT_EQ(1, lowest_split_nodes.count(next_split_ptr));
+	lowest_split_nodes.clear();
+	root->lower->collect_lowest_split_nodes(lowest_split_nodes);
+	ASSERT_TRUE(lowest_split_nodes.empty());
+
 	auto weakest_link = root->find_weakest_link(nullptr);
 	ASSERT_EQ(root->higher.get(), std::get<0>(weakest_link));
 	ASSERT_EQ(root.get(), std::get<1>(weakest_link));

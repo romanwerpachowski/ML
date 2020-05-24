@@ -2,6 +2,7 @@
 #include <cassert>
 #include <memory>
 #include <stdexcept>
+#include <unordered_set>
 #include <utility>
 #include <Eigen/Core>
 #include "dll.hpp"
@@ -59,6 +60,12 @@ namespace ml
 			@return Tuple of (pointer to weakest link, pointer to its parent, increase in total_leaf_error(), this->total_leaf_error()). Null pointer to weakest link means no such node could be found. Root node has a null parent. The 4th value is returned to avoid a double recursion.
 			*/
 			virtual std::tuple<SplitNode*, SplitNode*, double, double> find_weakest_link(SplitNode* parent) = 0;
+
+			/** Return true if node is a leaf. */
+			virtual bool is_leaf() const = 0;
+
+			/** Walk over this node and all below it, adding to s every split node which has only leaf nodes as children. */
+			virtual void collect_lowest_split_nodes(std::unordered_set<SplitNode*>& s) = 0;
 		};
 
 		DecisionTree(std::unique_ptr<Node>&& root)
@@ -67,20 +74,24 @@ namespace ml
 			if (!root_) {
 				throw std::invalid_argument("Null root");
 			}
+			root_->collect_lowest_split_nodes(lowest_split_nodes_);
 		}
 
 		DecisionTree(DecisionTree<Y>&& other)
-			: root_(std::move(other.root_))
+			: root_(std::move(other.root_)), lowest_split_nodes_(std::move(lowest_split_nodes_))
 		{}
 
 		DecisionTree(const DecisionTree<Y>& other)
 			: root_(other.root_->clone())
-		{}
+		{
+			root_->collect_lowest_split_nodes(lowest_split_nodes_);
+		}
 
 		DecisionTree<Y>& operator=(DecisionTree<Y>&& other) noexcept
 		{
 			if (this != &other) {
 				root_ = std::move(other.root_);
+				lowest_split_nodes_ = std::move(other.lowest_split_nodes_);
 			}
 			return *this;
 		}
@@ -89,6 +100,7 @@ namespace ml
 		{
 			if (this != &other) {
 				root_.reset(other.root_->clone());
+				root_->collect_lowest_split_nodes(lowest_split_nodes_);
 			}
 			return *this;
 		}
@@ -165,6 +177,26 @@ namespace ml
 					return std::make_tuple(std::get<0>(weakest_link_child), std::get<1>(weakest_link_child), std::get<2>(weakest_link_child), total_leaf_error);
 				}
 			}
+
+			bool is_leaf() const override
+			{
+				return false;
+			}
+
+			void collect_lowest_split_nodes(std::unordered_set<SplitNode*>& s) override
+			{
+				assert(lower);
+				assert(higher);
+				if (!lower->is_leaf()) {
+					lower->collect_lowest_split_nodes(s);
+				} else if (!higher->is_leaf()) {
+					higher->collect_lowest_split_nodes(s);
+				} else {
+					assert(lower->is_leaf());
+					assert(higher->is_leaf());
+					s.insert(this);
+				}
+			}
 		};
 
 		struct LeafNode : public Node
@@ -206,6 +238,14 @@ namespace ml
 				// A leaf node cannot be collapsed.
 				return std::tuple<SplitNode*, SplitNode*, double, double>(nullptr, parent, std::numeric_limits<double>::infinity(), error);
 			}
+
+			bool is_leaf() const override
+			{
+				return true;
+			}
+
+			void collect_lowest_split_nodes(std::unordered_set<SplitNode*>& s) override
+			{}
 		};
 
 		Y operator()(Eigen::Ref<Eigen::VectorXd> x) const
@@ -251,6 +291,7 @@ namespace ml
 		}
 	private:
 		std::unique_ptr<Node> root_;
+		std::unordered_set<SplitNode*> lowest_split_nodes_;
 	};
 
 	typedef DecisionTree<double> RegressionTree1D;
