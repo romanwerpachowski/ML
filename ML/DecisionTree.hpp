@@ -260,17 +260,27 @@ namespace ml
 	namespace DecisionTrees
 	{
 		/** Pair of vector iterators. */
-		template <typename T> using IteratorRange = std::pair<typename std::vector<T>::iterator, typename std::vector<T>::iterator>;
+		template <typename T> using VectorRange = std::pair<typename std::vector<T>::iterator, typename std::vector<T>::iterator>;
 
 		/** Used to sort features by value. */
 		typedef std::pair<Eigen::Index, double> IndexedFeatureValue;
 
-		template <typename T> IteratorRange<T> from_vector(std::vector<T>& v)
+		/** Creates an iterator pair containing begin() and end(). */
+		template <typename T> VectorRange<T> from_vector(std::vector<T>& v)
 		{
 			return std::make_pair(v.begin(), v.end());
 		}
 
-		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_reg_1d(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, IteratorRange<IndexedFeatureValue> features);
+		/** Finds the split on a single feature which minimises the sum of SSEs of split samples.
+
+		This function is not meant to be used directly. It's exposed for testing.
+		*/
+		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_reg_1d(
+			const Eigen::Ref<const Eigen::MatrixXd> X,
+			const Eigen::Ref<const Eigen::VectorXd> y,
+			VectorRange<std::pair<Eigen::Index, double>> features,
+			VectorRange<double> sorted_y,
+			VectorRange<double> sum_sse_for_feature_index);
 
 		/**
 		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
