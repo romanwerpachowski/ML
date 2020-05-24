@@ -1,28 +1,28 @@
-----------------------------------------------------------------------
-Benchmark                            Time             CPU   Iterations
-----------------------------------------------------------------------
-BM_tree_regression_1d/2            982 ns          977 ns       640000
-BM_tree_regression_1d/4           4450 ns         4450 ns       154483
-BM_tree_regression_1d/8          26094 ns        26228 ns        28000
-BM_tree_regression_1d/16        183058 ns       181370 ns         3446
-BM_tree_regression_1d/32       1418016 ns      1411898 ns          498
-BM_tree_regression_1d/64      10434788 ns     10253906 ns           64
-BM_tree_regression_1d/128     73480009 ns     73863636 ns           11
-BM_tree_regression_1d_BigO       35.11 N^3       35.28 N^3  
-BM_tree_regression_1d_RMS            4 %             3 %    
-BM_cost_complexity_prune/2        1328 ns         1318 ns       497778
-BM_cost_complexity_prune/4       20175 ns        19950 ns        34462
-BM_cost_complexity_prune/8      267753 ns       266841 ns         2635
-BM_cost_complexity_prune/16    4269978 ns      4199219 ns          160
-BM_cost_complexity_prune/32   92578414 ns     93750000 ns            7
-BM_cost_complexity_prune/64 1555194200 ns   1546875000 ns            1
-BM_cost_complexity_prune_BigO    5883.61 N^3     5852.91 N^3  
-BM_cost_complexity_prune_RMS         15 %            15 %    
-BM_calc_sse/10                    9.38 ns         9.42 ns     74666667
-BM_calc_sse/100                    151 ns          154 ns      4977778
-BM_calc_sse/1000                  1629 ns         1639 ns       448000
-BM_calc_sse/10000                16408 ns        16497 ns        40727
-BM_calc_sse/100000              163935 ns       163923 ns         4480
-BM_calc_sse/1000000            1650370 ns      1639230 ns          448
-BM_calc_sse_BigO                  1.65 N          1.64 N    
-BM_calc_sse_RMS                      0 %             0 %    
+------------------------------------------------------------------------------
+Benchmark                                    Time             CPU   Iterations
+------------------------------------------------------------------------------
+BM_tree_regression_1d/2/real_time         1766 ns         1769 ns       379768
+BM_tree_regression_1d/4/real_time         5338 ns         5319 ns       132193
+BM_tree_regression_1d/8/real_time        27167 ns        27369 ns        25691
+BM_tree_regression_1d/16/real_time      183873 ns        44747 ns         3841
+BM_tree_regression_1d/32/real_time     1455906 ns        32826 ns          476
+BM_tree_regression_1d/64/real_time    10227528 ns       919118 ns           68
+BM_tree_regression_1d/128/real_time   73005340 ns     10937500 ns           10
+BM_tree_regression_1d/real_time_BigO      34.88 N^3        5.19 N^3  
+BM_tree_regression_1d/real_time_RMS          4 %            10 %    
+BM_cost_complexity_prune/2                1807 ns         1800 ns       373333
+BM_cost_complexity_prune/4               22135 ns        21973 ns        32000
+BM_cost_complexity_prune/8              284865 ns       288771 ns         2489
+BM_cost_complexity_prune/16            4507518 ns      4565747 ns          154
+BM_cost_complexity_prune/32           94586600 ns     93750000 ns            7
+BM_cost_complexity_prune/64         1593563000 ns   1593750000 ns            1
+BM_cost_complexity_prune_BigO          6028.64 N^3     6028.95 N^3  
+BM_cost_complexity_prune_RMS                15 %            15 %    
+BM_calc_sse/10                            9.51 ns         9.42 ns     74666667
+BM_calc_sse/100                            151 ns          150 ns      4480000
+BM_calc_sse/1000                          1627 ns         1639 ns       448000
+BM_calc_sse/10000                        16772 ns        16741 ns        44800
+BM_calc_sse/100000                      169479 ns       170898 ns         4480
+BM_calc_sse/1000000                    1717357 ns      1689189 ns          407
+BM_calc_sse_BigO                          1.72 N          1.69 N    
+BM_calc_sse_RMS                              0 %             0 %    
