@@ -278,8 +278,8 @@ namespace ml
 		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_reg_1d(
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
+			Eigen::Ref<Eigen::VectorXd> sorted_y,
 			VectorRange<std::pair<Eigen::Index, double>> features,
-			VectorRange<double> sorted_y,
 			VectorRange<double> sum_sse_for_feature_index);
 
 		/**

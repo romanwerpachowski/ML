@@ -154,7 +154,6 @@
   <ItemGroup>
     <ClCompile Include="DecisionTree.cpp" />
     <ClCompile Include="EM.cpp" />
-    <ClCompile Include="Statistics.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

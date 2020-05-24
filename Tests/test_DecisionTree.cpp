@@ -141,10 +141,10 @@ TEST(DecisionTreeTest, find_best_split_reg_1d_constant_y)
 		}
 	}
 	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
-	std::vector<double> sorted_y(sample_size);
+	Eigen::VectorXd sorted_y(sample_size);
 	std::vector<double> sum_sse_for_feature_index(sample_size);
-	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y, ml::DecisionTrees::from_vector(features),
-		ml::DecisionTrees::from_vector(sorted_y), ml::DecisionTrees::from_vector(sum_sse_for_feature_index));
+	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y, sorted_y, ml::DecisionTrees::from_vector(features),
+		ml::DecisionTrees::from_vector(sum_sse_for_feature_index));
 	ASSERT_EQ(-std::numeric_limits<double>::infinity(), split.second);	
 }
 
@@ -162,10 +162,10 @@ TEST(DecisionTreeTest, find_best_split_reg_1d_linear_in_x0)
 		}
 	}
 	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
-	std::vector<double> sorted_y(sample_size);
+	Eigen::VectorXd sorted_y(sample_size);
 	std::vector<double> sum_sse_for_feature_index(sample_size);
-	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y, ml::DecisionTrees::from_vector(features),
-		ml::DecisionTrees::from_vector(sorted_y), ml::DecisionTrees::from_vector(sum_sse_for_feature_index));
+	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y, sorted_y, ml::DecisionTrees::from_vector(features),
+		ml::DecisionTrees::from_vector(sum_sse_for_feature_index));
 	ASSERT_EQ(0, split.first);
 	ASSERT_NEAR(4.5, split.second, 1e-15);
 }
@@ -184,10 +184,10 @@ TEST(DecisionTreeTest, find_best_split_reg_1d_linear)
 		}
 	}
 	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
-	std::vector<double> sorted_y(sample_size);
+	Eigen::VectorXd sorted_y(sample_size);
 	std::vector<double> sum_sse_for_feature_index(sample_size);
-	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y, ml::DecisionTrees::from_vector(features),
-		ml::DecisionTrees::from_vector(sorted_y), ml::DecisionTrees::from_vector(sum_sse_for_feature_index));
+	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y, sorted_y, ml::DecisionTrees::from_vector(features),
+		ml::DecisionTrees::from_vector(sum_sse_for_feature_index));
 	ASSERT_EQ(0, split.first);
 	ASSERT_NEAR(4.5, split.second, 1e-15);	
 }
@@ -206,10 +206,10 @@ TEST(DecisionTreeTest, find_best_split_reg_1d_const)
 		}
 	}
 	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
-	std::vector<double> sorted_y(sample_size);
+	Eigen::VectorXd sorted_y(sample_size);
 	std::vector<double> sum_sse_for_feature_index(sample_size);
-	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y, ml::DecisionTrees::from_vector(features),
-		ml::DecisionTrees::from_vector(sorted_y), ml::DecisionTrees::from_vector(sum_sse_for_feature_index));
+	const auto split = ml::DecisionTrees::find_best_split_reg_1d(X, y, sorted_y, ml::DecisionTrees::from_vector(features),
+		ml::DecisionTrees::from_vector(sum_sse_for_feature_index));
 	ASSERT_EQ(0, split.first);
 	ASSERT_EQ(-std::numeric_limits<double>::infinity(), split.second);
 }
