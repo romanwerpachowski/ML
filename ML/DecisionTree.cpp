@@ -16,8 +16,7 @@ namespace ml
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
-			const VectorRange<std::pair<Eigen::Index, double>> features,
-			const VectorRange<double> sum_sse_for_feature_index)
+			const VectorRange<std::pair<Eigen::Index, double>> features)
 		{
 			const auto number_dimensions = X.rows();
 			const auto sample_size = y.size();
@@ -25,10 +24,10 @@ namespace ml
 			assert(sample_size >= 2);
 			assert(y.size() == sorted_y.size());
 			assert(static_cast<ptrdiff_t>(sample_size) == std::distance(features.first, features.second));			
-			assert(static_cast<ptrdiff_t>(sample_size) == std::distance(sum_sse_for_feature_index.first, sum_sse_for_feature_index.second));
-			double lowest_sum_sse = std::numeric_limits<double>::infinity();
+			const double sse_whole_sample = Statistics::calc_sse(y.data(), y.data() + sample_size);
+			double lowest_sum_sse = sse_whole_sample;
 			double best_threshold = -std::numeric_limits<double>::infinity();
-			unsigned best_feature_index = 0;
+			unsigned best_feature_index = 0;			
 
 			// Find best threshold for each feature.
 			for (Eigen::Index feature_index = 0; feature_index < number_dimensions; ++feature_index) {
@@ -49,38 +48,34 @@ namespace ml
 					assert(features_it == features.second);
 					assert(sorted_y_it == sorted_y.data() + sample_size);
 					
-					auto sum_sse_for_feature_index_it = sum_sse_for_feature_index.first;
 					features_it = features.first;
 					const auto sorted_y_end = sorted_y.data() + sample_size;
-					*sum_sse_for_feature_index_it = Statistics::calc_sse(sorted_y.data(), sorted_y_end);
+					double lowest_sum_sse_for_feature = sse_whole_sample;
 					auto prev_feature = *features_it;
-					sorted_y_it = sorted_y.data() + 1;
-					// std::distance(sorted_y.first, sorted_y_it) == the number of features below the threshold.
-					for (Eigen::Index i = 1; i < sample_size; ++i, ++sorted_y_it) {
+					sorted_y_it = sorted_y.data() + 1;					
+					Eigen::Index best_num_samples_below_threshold = 0;
+					for (Eigen::Index num_samples_below_threshold = 1; num_samples_below_threshold < sample_size; ++num_samples_below_threshold, ++sorted_y_it) {
 						++features_it;
-						++sum_sse_for_feature_index_it;
 						const auto next_feature = *features_it;
 						// Only consider splits between different values of X_f.						
 						if (prev_feature.second < next_feature.second) {
-							*sum_sse_for_feature_index_it = Statistics::calc_sse(sorted_y.data(), sorted_y_it) + Statistics::calc_sse(sorted_y_it, sorted_y_end);
-						} else {
-							*sum_sse_for_feature_index_it = std::numeric_limits<double>::infinity();
+							const double sum_sse = Statistics::calc_sse(sorted_y.data(), sorted_y_it) + Statistics::calc_sse(sorted_y_it, sorted_y_end);
+							if (sum_sse < lowest_sum_sse_for_feature) {
+								lowest_sum_sse_for_feature = sum_sse;
+								best_num_samples_below_threshold = num_samples_below_threshold;
+							}
 						}
 						prev_feature = next_feature;
 					}
 					assert(sorted_y_it == sorted_y.data() + sample_size);
-					assert(++features_it == features.second);
-					assert(++sum_sse_for_feature_index_it == sum_sse_for_feature_index.second);
-					const auto min_sum_sse_it = std::min_element(sum_sse_for_feature_index.first, sum_sse_for_feature_index.second);
-					const double min_sum_sse = *min_sum_sse_it;
-					if (min_sum_sse < lowest_sum_sse) {
-						lowest_sum_sse = min_sum_sse;
-						const auto num_samples_below_threshold = static_cast<Eigen::Index>(min_sum_sse_it - sum_sse_for_feature_index.first);
+					assert(++features_it == features.second);					
+					if (lowest_sum_sse_for_feature < lowest_sum_sse) {
+						lowest_sum_sse = lowest_sum_sse_for_feature;
 						best_feature_index = static_cast<unsigned int>(feature_index);
-						if (!num_samples_below_threshold) {
+						if (!best_num_samples_below_threshold) {
 							best_threshold = -std::numeric_limits<double>::infinity();
 						} else {
-							features_it = features.first + (num_samples_below_threshold - 1);
+							features_it = features.first + (best_num_samples_below_threshold - 1);
 							const auto lower_value = features_it->second;
 							++features_it;
 							best_threshold = lower_value + 0.5 * (features_it->second - lower_value);
@@ -98,8 +93,7 @@ namespace ml
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
 			const unsigned int allowed_split_levels,
 			const unsigned int min_sample_size,
-			const VectorRange<std::pair<Eigen::Index, double>> features,
-			const VectorRange<double> sum_sse_for_feature_index)
+			const VectorRange<std::pair<Eigen::Index, double>> features)
 		{
 			const double mean = unsorted_y.mean();
 			const auto sse = (unsorted_y.array() - mean).square().sum();
@@ -111,7 +105,7 @@ namespace ml
 			if (!sse || !allowed_split_levels || sample_size < min_sample_size) {
 				return std::make_unique<RegressionTree1D::LeafNode>(sse, mean);
 			} else {
-				const auto split = find_best_split_reg_1d(unsorted_X, unsorted_y, sorted_y, features, sum_sse_for_feature_index);
+				const auto split = find_best_split_reg_1d(unsorted_X, unsorted_y, sorted_y, features);
 				if (split.second == -std::numeric_limits<double>::infinity()) {
 					return std::make_unique<RegressionTree1D::LeafNode>(sse, mean);
 				} else {
@@ -140,7 +134,6 @@ namespace ml
 					}
 					const Eigen::Index num_samples_below_threshold = std::distance(features.first, features_it);
 					assert(num_samples_below_threshold);
-					const auto sum_sse_for_feature_index_split = sum_sse_for_feature_index.first + num_samples_below_threshold;					
 					// sorted <-> unsorted
 					split_node->lower = tree_regression_1d_without_pruning(
 						sorted_X.leftCols(num_samples_below_threshold),
@@ -149,8 +142,7 @@ namespace ml
 						unsorted_y.head(num_samples_below_threshold),
 						allowed_split_levels - 1,
 						min_sample_size,
-						std::make_pair(features.first, features_it),						
-						std::make_pair(sum_sse_for_feature_index.first, sum_sse_for_feature_index_split));
+						std::make_pair(features.first, features_it));
 					split_node->higher = tree_regression_1d_without_pruning(
 						sorted_X.rightCols(sample_size - num_samples_below_threshold),
 						unsorted_X.rightCols(sample_size - num_samples_below_threshold),
@@ -158,8 +150,7 @@ namespace ml
 						unsorted_y.tail(sample_size - num_samples_below_threshold),
 						allowed_split_levels - 1,
 						min_sample_size,
-						std::make_pair(features_it, features.second),
-						std::make_pair(sum_sse_for_feature_index_split, sum_sse_for_feature_index.second));
+						std::make_pair(features_it, features.second));
 					return split_node;
 				}
 			}
@@ -183,10 +174,8 @@ namespace ml
 			Eigen::MatrixXd sorted_X(number_dimensions, sample_size);
 			Eigen::VectorXd sorted_y(sample_size);
 			std::vector<std::pair<Eigen::Index, double>> features(sample_size);			
-			std::vector<double> sum_sse_for_feature_index(sample_size);
 			return RegressionTree1D(tree_regression_1d_without_pruning(
-				unsorted_X, sorted_X, unsorted_y, sorted_y, max_split_levels, min_sample_size, from_vector(features),
-				from_vector(sum_sse_for_feature_index)));
+				unsorted_X, sorted_X, unsorted_y, sorted_y, max_split_levels, min_sample_size, from_vector(features)));
 		}
 	}
 }

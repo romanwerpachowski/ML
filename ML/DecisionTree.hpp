@@ -279,8 +279,7 @@ namespace ml
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
-			VectorRange<std::pair<Eigen::Index, double>> features,
-			VectorRange<double> sum_sse_for_feature_index);
+			VectorRange<std::pair<Eigen::Index, double>> features);
 
 		/**
 		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
