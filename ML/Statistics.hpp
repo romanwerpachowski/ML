@@ -30,11 +30,31 @@ namespace ml
 		/** Calculates the Gini index sum_{k=1}^K \hat{p}_k (1 - \hat{p}_k)
 		for \hat{p}_k being the frequency of occurrence of class k in data.
 		Takes as argument a range [begin, end) of class values from 0 to K - 1.
+		K value is detected from the data.
 		*/
 		template <typename Iter> double gini_index(const Iter begin, const Iter end)
 		{
-			const auto K = static_cast<unsigned int>(*std::max_element(begin, end));
+			const auto K = static_cast<unsigned int>(*std::max_element(begin, end)) + 1;
 			return gini_index(begin, end, K);
+		}
+
+		/** Calculates the Gini index sum_{k=1}^K \hat{p}_k (1 - \hat{p}_k)
+		for \hat{p}_k being the frequency of occurrence of class k in data.
+		Takes as argument a range [begin, end) of class values from 0 to K - 1.
+		*/
+		template <typename Iter> double gini_index(const Iter begin, const Iter end, const unsigned int K)
+		{
+			std::vector<double> counts(K, 0);
+			const auto N = static_cast<double>(std::distance(begin, end));
+			for (auto it = begin; it != end; ++it) {
+				++counts[static_cast<size_t>(*it)];
+			}
+			double gi = 0;
+			for (auto x : counts) {
+				const double p = x / N;
+				gi += p * (1 - p);
+			}			
+			return gi;
 		}
 	}	
 }
