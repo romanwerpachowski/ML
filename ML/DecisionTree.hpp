@@ -393,7 +393,7 @@ namespace ml
 		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
 		@param min_sample_size Minimum sample size which can be split (at least 2).
 		*/
-		DLL_DECLSPEC RegressionTree1D tree_regression_1d(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
+		DLL_DECLSPEC RegressionTree1D regression_tree_1d(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
 
 		/** Performs cost-complexity pruning.
 

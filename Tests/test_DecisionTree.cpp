@@ -2,10 +2,10 @@
 #include <random>
 #include "ML/DecisionTree.hpp"
 
+typedef ml::DecisionTree<double> RegTree;
+
 TEST(DecisionTreeTest, nodes)
 {
-	typedef ml::DecisionTree<double> RegTree;
-
 	auto root = std::make_unique<RegTree::SplitNode>(2.4, -0.1, nullptr, 0.5, 0);
 	ASSERT_EQ(2.4, root->error);
 	ASSERT_EQ(-0.1, root->value);
@@ -104,7 +104,6 @@ TEST(DecisionTreeTest, nodes)
 
 TEST(DecisionTreeTest, node_cloning)
 {
-	typedef ml::DecisionTree<double> RegTree;
 	auto leaf_orig = std::make_unique<RegTree::LeafNode>(0.5, 0.25, nullptr);
 	auto leaf_copy = std::unique_ptr<RegTree::LeafNode>(leaf_orig->clone(nullptr));
 	ASSERT_EQ(leaf_orig->error, leaf_copy->error);
@@ -234,8 +233,8 @@ TEST(DecisionTreeTest, stepwise)
 		}
 	}
 
-	const ml::RegressionTree1D tree(ml::DecisionTrees::tree_regression_1d(X, y, 2, 10));
-	const ml::RegressionTree1D tree1(ml::DecisionTrees::tree_regression_1d(X, y, 1, 10));
+	const RegTree tree(ml::DecisionTrees::regression_tree_1d(X, y, 2, 10));
+	const RegTree tree1(ml::DecisionTrees::regression_tree_1d(X, y, 1, 10));
 	ASSERT_EQ(tree1.original_error(), tree1.original_error());
 	ASSERT_EQ(7, tree.count_nodes());
 	ASSERT_EQ(3, tree1.count_nodes());
@@ -292,7 +291,7 @@ TEST(DecisionTreeTest, pruning)
 		}
 	}
 	// Grow a big tree.
-	ml::RegressionTree1D tree(ml::DecisionTrees::tree_regression_1d(X, y, 100, 2));	
+	RegTree tree(ml::DecisionTrees::regression_tree_1d(X, y, 100, 2));
 
 	ASSERT_EQ(n, tree.count_leaf_nodes());
 	ASSERT_NEAR(0, tree.total_leaf_error(), 1e-15);

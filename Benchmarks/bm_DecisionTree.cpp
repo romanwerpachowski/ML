@@ -36,7 +36,7 @@ static void BM_tree_regression_1d(benchmark::State& state)
 	}
 	// Benchmarked code.
 	for (auto _ : state) {
-		ml::RegressionTree1D tree(ml::DecisionTrees::tree_regression_1d(X, y, 100, 2));
+		ml::RegressionTree1D tree(ml::DecisionTrees::regression_tree_1d(X, y, 100, 2));
 	}
 	state.SetComplexityN(state.range(0));
 }
@@ -76,7 +76,7 @@ static void BM_cost_complexity_prune(benchmark::State& state)
 			y[k] += sigma * normal(rng);
 		}
 	}
-	const ml::RegressionTree1D tree(ml::DecisionTrees::tree_regression_1d(X, y, 100, 2));
+	const ml::RegressionTree1D tree(ml::DecisionTrees::regression_tree_1d(X, y, 100, 2));
 	// Benchmarked code.
 	for (auto _ : state) {
 		state.PauseTiming();
@@ -122,7 +122,7 @@ static void BM_tree_copy(benchmark::State& state)
 			y[k] += sigma * normal(rng);
 		}
 	}
-	const ml::RegressionTree1D tree(ml::DecisionTrees::tree_regression_1d(X, y, 100, 2));
+	const ml::RegressionTree1D tree(ml::DecisionTrees::regression_tree_1d(X, y, 100, 2));
 	// Benchmarked code.
 	for (auto _ : state) {
 		ml::RegressionTree1D copy(tree);
