@@ -257,11 +257,12 @@ TEST(DecisionTreeTest, stepwise)
 	ASSERT_EQ(2, tree_copy.number_lowest_split_nodes());
 }
 
-TEST(DecisionTreeTest, regression_with_pruning)
+TEST(DecisionTreeTest, univariate_regression_with_pruning)
 {
 	const int train_sample_size = 1000;
 	const int test_sample_size = 100;
 	const int num_dimensions = 2;
+	const double alpha = 0.001;
 	Eigen::MatrixXd train_X(num_dimensions, train_sample_size);
 	Eigen::VectorXd train_y(train_sample_size);
 	const auto f = [](double x, double y) {
@@ -279,7 +280,8 @@ TEST(DecisionTreeTest, regression_with_pruning)
 	RegTree tree(ml::DecisionTrees::univariate_regression_tree(train_X, train_y, 100, 2));
 	const double train_sse = tree.total_leaf_error();
 	const auto orig_num_modes = tree.count_nodes();
-	ASSERT_NEAR(0, train_sse, 0);
+	const auto orig_cost_complexity = tree.cost_complexity(alpha);
+	ASSERT_EQ(0, train_sse);
 	double test_sse = 0;
 	Eigen::MatrixXd test_X(num_dimensions, test_sample_size);
 	Eigen::VectorXd test_y(test_sample_size);	
@@ -293,9 +295,10 @@ TEST(DecisionTreeTest, regression_with_pruning)
 	ASSERT_GT(test_sse, train_sse + 0.01 * test_sample_size);
 	ASSERT_LE(test_sse, train_sse + 0.04 * test_sample_size);
 
-	ml::DecisionTrees::cost_complexity_prune(tree, 0.001);	
+	ml::DecisionTrees::cost_complexity_prune(tree, alpha);	
 	ASSERT_GT(tree.total_leaf_error(), train_sse);
 	ASSERT_LT(tree.count_nodes(), orig_num_modes);
+	ASSERT_LT(tree.cost_complexity(alpha), orig_cost_complexity);
 	double pruned_test_sse = 0;
 	for (int i = 0; i < test_sample_size; ++i) {
 		const double y_hat = tree(test_X.col(i));
@@ -345,8 +348,11 @@ TEST(DecisionTreeTest, pruning)
 
 	ASSERT_EQ(n, tree.count_leaf_nodes());
 	ASSERT_NEAR(0, tree.total_leaf_error(), 1e-15);
-	ml::DecisionTrees::cost_complexity_prune(tree, 0.01);
+	const double alpha = 0.01;
+	const double orig_cost_complexity = tree.cost_complexity(alpha);
+	ml::DecisionTrees::cost_complexity_prune(tree, alpha);
 	ASSERT_EQ(4, tree.count_leaf_nodes());
+	ASSERT_LT(tree.cost_complexity(alpha), orig_cost_complexity);
 	const auto tle_sse = tree.total_leaf_error();
 	ASSERT_GE(tle_sse, 0);
 	ASSERT_NEAR(n * sigma * sigma, tle_sse, 1e-2);
@@ -364,4 +370,76 @@ TEST(DecisionTreeTest, from_vector)
 	const auto iter_range = ml::DecisionTrees::from_vector(v);
 	ASSERT_EQ(v.begin(), iter_range.first);
 	ASSERT_EQ(v.end(), iter_range.second);
+}
+
+TEST(DecisionTreeTest, classification_with_pruning)
+{
+	const int train_sample_size = 1000;
+	const int test_sample_size = 100;
+	const int num_dimensions = 2;
+	const double alpha = 2;
+	Eigen::MatrixXd train_X(num_dimensions, train_sample_size);
+	Eigen::VectorXd train_y(train_sample_size);
+	const auto f = [](double x, double y) -> unsigned int {
+		const auto score = std::cos(x + y) * std::sin(2 * (x - y));
+		if (score < 0) {
+			return 0;
+		} else {
+			return 1;
+		}
+	};
+	std::default_random_engine rng;
+	rng.seed(3523423);
+	std::normal_distribution normal;	
+	for (int i = 0; i < train_sample_size; ++i) {
+		train_X(0, i) = normal(rng);
+		train_X(1, i) = normal(rng);
+		train_y[i] = f(train_X(0, i), train_X(1, i));
+	}
+	// Grow a big tree.
+	auto tree(ml::DecisionTrees::classification_tree(train_X, train_y, 100, 2));
+	const double train_gini_index = tree.total_leaf_error();	
+	const auto orig_num_modes = tree.count_nodes();
+	const auto orig_cost_complexity = tree.cost_complexity(alpha);
+	ASSERT_EQ(0, train_gini_index);
+	double train_accuracy = 0;
+	for (int i = 0; i < train_sample_size; ++i) {
+		const unsigned int y_hat = tree(train_X.col(i));
+		if (static_cast<double>(y_hat) == train_y[i]) {
+			++train_accuracy;
+		}
+	}
+	train_accuracy /= static_cast<double>(train_sample_size);
+	ASSERT_EQ(1, train_accuracy);	
+	Eigen::MatrixXd test_X(num_dimensions, test_sample_size);
+	Eigen::VectorXd test_y(test_sample_size);
+	double test_accuracy = 0;
+	for (int i = 0; i < test_sample_size; ++i) {
+		test_X(0, i) = normal(rng);
+		test_X(1, i) = normal(rng);
+		test_y[i] = f(test_X(0, i), test_X(1, i));
+		const unsigned int y_hat = tree(test_X.col(i));
+		if (static_cast<double>(y_hat) == test_y[i]) {
+			++test_accuracy;
+		}
+	}
+	test_accuracy /= static_cast<double>(test_sample_size);
+	ASSERT_LT(test_accuracy, train_accuracy);
+	ASSERT_GE(test_accuracy, 0.85);
+
+	ml::DecisionTrees::cost_complexity_prune(tree, alpha);
+	ASSERT_LT(tree.count_nodes(), orig_num_modes);
+	ASSERT_LT(tree.cost_complexity(alpha), orig_cost_complexity);
+	ASSERT_GT(tree.total_leaf_error(), train_gini_index);	
+	double pruned_test_accuracy = 0;
+	for (int i = 0; i < test_sample_size; ++i) {
+		const unsigned int y_hat = tree(test_X.col(i));
+		if (static_cast<double>(y_hat) == test_y[i]) {
+			++pruned_test_accuracy;
+		}
+	}
+	pruned_test_accuracy /= static_cast<double>(test_sample_size);
+	ASSERT_LT(test_accuracy, pruned_test_accuracy);
+	ASSERT_LT(pruned_test_accuracy, train_accuracy);
+	ASSERT_GE(pruned_test_accuracy, 0.9);
 }

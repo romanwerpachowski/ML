@@ -89,7 +89,17 @@ namespace ml
 		*/
 		template <typename Iter> double gini_index(const Iter begin, const Iter end, const unsigned int K)
 		{
-			return gini_index_and_mode(begin, end, K).first;
+			std::vector<unsigned int> counts(K, 0);
+			const auto N = static_cast<double>(std::distance(begin, end));
+			for (auto it = begin; it != end; ++it) {
+				++counts[static_cast<size_t>(*it)];
+			}
+			double gi = 0;
+			for (auto c : counts) {
+				const double p = static_cast<double>(c) / N;
+				gi += p * (1 - p);
+			}
+			return gi;
 		}
 
 		/** Calculates the Gini index sum_{k=1}^K \hat{p}_k (1 - \hat{p}_k)
@@ -99,7 +109,8 @@ namespace ml
 		*/
 		template <typename Iter> double gini_index(const Iter begin, const Iter end)
 		{
-			return gini_index_and_mode(begin, end).first;
+			const auto K = static_cast<unsigned int>(*std::max_element(begin, end)) + 1;
+			return gini_index(begin, end, K);
 		}
 	}	
 }
