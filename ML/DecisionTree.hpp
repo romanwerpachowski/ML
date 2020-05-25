@@ -373,7 +373,17 @@ namespace ml
 
 		This function is not meant to be used directly. It's exposed for testing.
 		*/
-		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_reg_1d(
+		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_regression_1d(
+			const Eigen::Ref<const Eigen::MatrixXd> X,
+			const Eigen::Ref<const Eigen::VectorXd> y,
+			Eigen::Ref<Eigen::VectorXd> sorted_y,
+			VectorRange<std::pair<Eigen::Index, double>> features);
+
+		/** Finds the split on a single feature which minimises the sum of Gini indices * size of split samples.
+
+		This function is not meant to be used directly. It's exposed for testing.
+		*/
+		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_classification_1d(
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,

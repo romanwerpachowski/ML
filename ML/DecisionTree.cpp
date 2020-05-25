@@ -16,7 +16,23 @@ namespace ml
 		constexpr Eigen::Index MIN_SAMPLE_SIZE_FOR_NEW_THREADS = 256;
 		constexpr unsigned int DEFAULT_MAX_NUM_THREADS = 2;
 
-		std::pair<unsigned int, double> find_best_split_reg_1d(
+		struct SSE
+		{
+			template <typename Iter> static double calc(Iter begin, Iter end)
+			{
+				return Statistics::sse(begin, end);
+			}
+		};
+
+		struct GiniIndex
+		{
+			template <typename Iter> static double calc(Iter begin, Iter end)
+			{
+				return static_cast<double>(std::distance(begin, end)) * Statistics::gini_index(begin, end);
+			}
+		};
+
+		template <typename Error> static std::pair<unsigned int, double> find_best_split_1d(
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
@@ -28,8 +44,8 @@ namespace ml
 			assert(sample_size >= 2);
 			assert(y.size() == sorted_y.size());
 			assert(static_cast<ptrdiff_t>(sample_size) == std::distance(features.first, features.second));			
-			const double sse_whole_sample = Statistics::sse(y.data(), y.data() + sample_size);
-			double lowest_sum_sse = sse_whole_sample;
+			const double error_whole_sample = Error::calc(y.data(), y.data() + sample_size);
+			double lowest_sum_errors = error_whole_sample;
 			double best_threshold = -std::numeric_limits<double>::infinity();
 			unsigned int best_feature_index = 0;
 
@@ -54,7 +70,7 @@ namespace ml
 					
 					features_it = features.first;
 					const auto sorted_y_end = sorted_y.data() + sample_size;
-					double lowest_sum_sse_for_feature = sse_whole_sample;
+					double lowest_sum_errors_for_feature = error_whole_sample;
 					auto prev_feature = *features_it;
 					sorted_y_it = sorted_y.data() + 1;					
 					Eigen::Index best_num_samples_below_threshold = 0;
@@ -63,9 +79,9 @@ namespace ml
 						const auto next_feature = *features_it;
 						// Only consider splits between different values of X_f.						
 						if (prev_feature.second < next_feature.second) {
-							const double sum_sse = Statistics::sse(sorted_y.data(), sorted_y_it) + Statistics::sse(sorted_y_it, sorted_y_end);
-							if (sum_sse < lowest_sum_sse_for_feature) {
-								lowest_sum_sse_for_feature = sum_sse;
+							const double sum_errors = Error::calc(sorted_y.data(), sorted_y_it) + Error::calc(sorted_y_it, sorted_y_end);
+							if (sum_errors < lowest_sum_errors_for_feature) {
+								lowest_sum_errors_for_feature = sum_errors;
 								best_num_samples_below_threshold = num_samples_below_threshold;
 							}
 						}
@@ -73,8 +89,8 @@ namespace ml
 					}
 					assert(sorted_y_it == sorted_y.data() + sample_size);
 					assert(++features_it == features.second);					
-					if (lowest_sum_sse_for_feature < lowest_sum_sse) {
-						lowest_sum_sse = lowest_sum_sse_for_feature;
+					if (lowest_sum_errors_for_feature < lowest_sum_errors) {
+						lowest_sum_errors = lowest_sum_errors_for_feature;
 						best_feature_index = static_cast<unsigned int>(feature_index);
 						if (!best_num_samples_below_threshold) {
 							best_threshold = -std::numeric_limits<double>::infinity();
@@ -88,6 +104,24 @@ namespace ml
 				}
 			}
 			return std::make_pair(best_feature_index, best_threshold);
+		}
+
+		std::pair<unsigned int, double> find_best_split_regression_1d(
+			const Eigen::Ref<const Eigen::MatrixXd> X,
+			const Eigen::Ref<const Eigen::VectorXd> y,
+			Eigen::Ref<Eigen::VectorXd> sorted_y,
+			const VectorRange<std::pair<Eigen::Index, double>> features)
+		{
+			return find_best_split_1d<SSE>(X, y, sorted_y, features);
+		}
+
+		std::pair<unsigned int, double> find_best_split_classification_1d(
+			const Eigen::Ref<const Eigen::MatrixXd> X,
+			const Eigen::Ref<const Eigen::VectorXd> y,
+			Eigen::Ref<Eigen::VectorXd> sorted_y,
+			const VectorRange<std::pair<Eigen::Index, double>> features)
+		{
+			return find_best_split_1d<GiniIndex>(X, y, sorted_y, features);
 		}
 
 		static std::unique_ptr<RegressionTree1D::Node> tree_regression_1d_without_pruning(
@@ -111,7 +145,7 @@ namespace ml
 			if (!sse || !allowed_split_levels || sample_size < min_sample_size) {
 				return std::make_unique<RegressionTree1D::LeafNode>(sse, mean, parent);
 			} else {
-				const auto split = find_best_split_reg_1d(unsorted_X, unsorted_y, sorted_y, features);
+				const auto split = find_best_split_regression_1d(unsorted_X, unsorted_y, sorted_y, features);
 				if (split.second == -std::numeric_limits<double>::infinity()) {
 					return std::make_unique<RegressionTree1D::LeafNode>(sse, mean, parent);
 				} else {
