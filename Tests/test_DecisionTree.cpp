@@ -1,4 +1,5 @@
 #include "pch.h"
+#include <cmath>
 #include <random>
 #include "ML/DecisionTree.hpp"
 
@@ -256,6 +257,55 @@ TEST(DecisionTreeTest, stepwise)
 	ASSERT_EQ(2, tree_copy.number_lowest_split_nodes());
 }
 
+TEST(DecisionTreeTest, regression_with_pruning)
+{
+	const int train_sample_size = 1000;
+	const int test_sample_size = 100;
+	const int num_dimensions = 2;
+	Eigen::MatrixXd train_X(num_dimensions, train_sample_size);
+	Eigen::VectorXd train_y(train_sample_size);
+	const auto f = [](double x, double y) {
+		return std::abs(std::cos(x + y) * std::sin(2 * (x - y))) - 1;
+	};
+	std::default_random_engine rng;
+	rng.seed(3523423);
+	std::normal_distribution normal;
+	for (int i = 0; i < train_sample_size; ++i) {
+		train_X(0, i) = normal(rng);
+		train_X(1, i) = normal(rng);
+		train_y[i] = f(train_X(0, i), train_X(1, i));
+	}	
+	// Grow a big tree.
+	RegTree tree(ml::DecisionTrees::univariate_regression_tree(train_X, train_y, 100, 2));
+	const double train_sse = tree.total_leaf_error();
+	const auto orig_num_modes = tree.count_nodes();
+	ASSERT_NEAR(0, train_sse, 0);
+	double test_sse = 0;
+	Eigen::MatrixXd test_X(num_dimensions, test_sample_size);
+	Eigen::VectorXd test_y(test_sample_size);	
+	for (int i = 0; i < test_sample_size; ++i) {
+		test_X(0, i) = normal(rng);
+		test_X(1, i) = normal(rng);
+		test_y[i] = f(test_X(0, i), test_X(1, i));
+		const double y_hat = tree(test_X.col(i));
+		test_sse += std::pow(test_y[i] - y_hat, 2);
+	}
+	ASSERT_GT(test_sse, train_sse + 0.01 * test_sample_size);
+	ASSERT_LE(test_sse, train_sse + 0.04 * test_sample_size);
+
+	ml::DecisionTrees::cost_complexity_prune(tree, 0.001);	
+	ASSERT_GT(tree.total_leaf_error(), train_sse);
+	ASSERT_LT(tree.count_nodes(), orig_num_modes);
+	double pruned_test_sse = 0;
+	for (int i = 0; i < test_sample_size; ++i) {
+		const double y_hat = tree(test_X.col(i));
+		pruned_test_sse += std::pow(test_y[i] - y_hat, 2);		
+	}
+	ASSERT_GT(test_sse, pruned_test_sse);
+	ASSERT_GT(pruned_test_sse, train_sse);	
+	ASSERT_GT(pruned_test_sse, train_sse + 0.01 * test_sample_size);
+}
+
 TEST(DecisionTreeTest, pruning)
 {
 	std::default_random_engine rng;
@@ -295,11 +345,17 @@ TEST(DecisionTreeTest, pruning)
 
 	ASSERT_EQ(n, tree.count_leaf_nodes());
 	ASSERT_NEAR(0, tree.total_leaf_error(), 1e-15);
-	const auto pruned_tree = ml::DecisionTrees::cost_complexity_prune(tree, 0.01);
-	ASSERT_EQ(4, pruned_tree.count_leaf_nodes());
-	const auto pruned_sse = pruned_tree.total_leaf_error();
-	ASSERT_GE(pruned_sse, 0);
-	ASSERT_NEAR(n * sigma * sigma, pruned_sse, 1e-2);
+	ml::DecisionTrees::cost_complexity_prune(tree, 0.01);
+	ASSERT_EQ(4, tree.count_leaf_nodes());
+	const auto tle_sse = tree.total_leaf_error();
+	ASSERT_GE(tle_sse, 0);
+	ASSERT_NEAR(n * sigma * sigma, tle_sse, 1e-2);
+	double pruned_sse = 0;
+	for (int i = 0; i < n; ++i) {
+		const auto y_hat = tree(X.col(i));
+		pruned_sse += std::pow(y[i] - y_hat, 2);
+	}
+	ASSERT_NEAR(pruned_sse, tle_sse, 1e-15);
 }
 
 TEST(DecisionTreeTest, from_vector)

@@ -115,8 +115,8 @@ namespace ml
 			assert(unsorted_X.cols() == sorted_X.cols());
 			assert(sorted_y.size() == sample_size);
 			const auto error_and_value = ErrorAndValue::calc(unsorted_y.data(), unsorted_y.data() + sample_size);
-			const auto error = error_and_value.first;
-			const auto value = error_and_value.second;
+			const double error = error_and_value.first;
+			const Y value = error_and_value.second;
 			if (!error || !allowed_split_levels || sample_size < min_sample_size) {
 				return std::make_unique<typename DecisionTree<Y>::LeafNode>(error, value, parent);
 			} else {
@@ -229,8 +229,8 @@ namespace ml
 		{
 			template <typename Iter> static std::pair<double, unsigned int> calc(Iter begin, Iter end)
 			{
-				const auto gini_and_mode = Statistics::gini_index(begin, end);
-				return std::make_pair(static_cast<double>(std::distance(begin, end))* gini_and_mode.first, gini_and_mode.second);
+				const auto gini_and_mode = Statistics::gini_index_and_mode(begin, end);
+				return std::make_pair(static_cast<double>(std::distance(begin, end)) * gini_and_mode.first, gini_and_mode.second);
 			}
 		};
 
@@ -254,6 +254,11 @@ namespace ml
 		UnivariateRegressionTree univariate_regression_tree(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size)
 		{
 			return tree_1d<double, SSEMean>(X, y, max_split_levels, min_sample_size);
+		}
+
+		ClassificationTree classification_tree(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size)
+		{
+			return tree_1d<unsigned int, ExtensiveGiniIndexAndMode>(X, y, max_split_levels, min_sample_size);
 		}
 	}
 }

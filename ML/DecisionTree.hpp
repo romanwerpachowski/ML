@@ -213,7 +213,7 @@ namespace ml
 			using Node::value;
 			using Node::parent;
 
-			double operator()(arg_type x) const override
+			Y operator()(arg_type x) const override
 			{
 				return value;
 			}
@@ -380,25 +380,30 @@ namespace ml
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
 			VectorRange<std::pair<Eigen::Index, double>> features);
 
-		/**
+		/** Generates an un-pruned tree.
 		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
 		@param min_sample_size Minimum sample size which can be split (at least 2).
 		*/
 		DLL_DECLSPEC UnivariateRegressionTree univariate_regression_tree(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
 
-		/** Performs cost-complexity pruning.
+		/** Generates an un-pruned tree.
+		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
+		@param min_sample_size Minimum sample size which can be split (at least 2).
+		*/
+		DLL_DECLSPEC ClassificationTree classification_tree(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
+
+		/** Performs cost-complexity pruning in-place.
 
 		@param alpha Cost of complexity per node.
-		@return Pruned tree.
+		@throw std::domain_error If alpha < 0.
 		*/
-		template <typename Y> DecisionTree<Y> cost_complexity_prune(DecisionTree<Y>& tree, const double alpha)
+		template <typename Y> void cost_complexity_prune(DecisionTree<Y>& tree, const double alpha)
 		{
 			if (alpha < 0) {
 				throw std::domain_error("Alpha cannot be negative");
 			}
 			// There can be only one minimum of cost complexity.
 			while (tree.remove_weakest_link(alpha)) {}
-			return tree;			
 		}
 	}
 }
