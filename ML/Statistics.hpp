@@ -1,5 +1,6 @@
 #pragma once
 #include <numeric>
+#include <Eigen/Core>
 #include "dll.hpp"
 
 namespace ml 
@@ -10,7 +11,7 @@ namespace ml
 		/** Calculates sum_i (x_i - average(x))^2 for given range.
 		@tparam Iter Iterator type.
 		*/
-		template <typename Iter> double calc_sse(const Iter begin, const Iter end)
+		template <typename Iter> double sse(const Iter begin, const Iter end)
 		{
 			if (begin == end) {
 				return 0;
@@ -24,6 +25,16 @@ namespace ml
 				}
 				return sse;
 			}
+		}
+
+		/** Calculates the Gini index sum_{k=1}^K \hat{p}_k (1 - \hat{p}_k)
+		for \hat{p}_k being the frequency of occurrence of class k in data.
+		Takes as argument a range [begin, end) of class values from 0 to K - 1.
+		*/
+		template <typename Iter> double gini_index(const Iter begin, const Iter end)
+		{
+			const auto K = static_cast<unsigned int>(*std::max_element(begin, end));
+			return gini_index(begin, end, K);
 		}
 	}	
 }

@@ -28,7 +28,7 @@ namespace ml
 			assert(sample_size >= 2);
 			assert(y.size() == sorted_y.size());
 			assert(static_cast<ptrdiff_t>(sample_size) == std::distance(features.first, features.second));			
-			const double sse_whole_sample = Statistics::calc_sse(y.data(), y.data() + sample_size);
+			const double sse_whole_sample = Statistics::sse(y.data(), y.data() + sample_size);
 			double lowest_sum_sse = sse_whole_sample;
 			double best_threshold = -std::numeric_limits<double>::infinity();
 			unsigned int best_feature_index = 0;
@@ -63,7 +63,7 @@ namespace ml
 						const auto next_feature = *features_it;
 						// Only consider splits between different values of X_f.						
 						if (prev_feature.second < next_feature.second) {
-							const double sum_sse = Statistics::calc_sse(sorted_y.data(), sorted_y_it) + Statistics::calc_sse(sorted_y_it, sorted_y_end);
+							const double sum_sse = Statistics::sse(sorted_y.data(), sorted_y_it) + Statistics::sse(sorted_y_it, sorted_y_end);
 							if (sum_sse < lowest_sum_sse_for_feature) {
 								lowest_sum_sse_for_feature = sum_sse;
 								best_num_samples_below_threshold = num_samples_below_threshold;

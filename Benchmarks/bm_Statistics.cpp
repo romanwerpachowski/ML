@@ -2,7 +2,7 @@
 #include <benchmark/benchmark.h>
 #include "ML/Statistics.hpp"
 
-static void BM_calc_sse(benchmark::State& state)
+static void BM_sse(benchmark::State& state)
 {
 	std::vector<double> data(state.range(0));
 	std::default_random_engine rng;
@@ -12,9 +12,9 @@ static void BM_calc_sse(benchmark::State& state)
 		x = normal(rng);
 	}
 	for (auto _ : state) {
-		benchmark::DoNotOptimize(ml::Statistics::calc_sse(data.begin(), data.end()));
+		benchmark::DoNotOptimize(ml::Statistics::sse(data.begin(), data.end()));
 	}
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(BM_calc_sse)->RangeMultiplier(10)->Range(10, 1000000)->Complexity();
+BENCHMARK(BM_sse)->RangeMultiplier(10)->Range(10, 1000000)->Complexity();

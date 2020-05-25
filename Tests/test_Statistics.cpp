@@ -2,13 +2,13 @@
 #include <random>
 #include "ML/Statistics.hpp"
 
-TEST(StatisticsTest, calc_sse)
+TEST(StatisticsTest, sse)
 {
 	std::vector<double> data({ -0.4, 0.6, 1.3 });
-	ASSERT_NEAR(0.9 * 0.9 + 0.1 * 0.1 + 0.8 * 0.8, ml::Statistics::calc_sse(data.begin(), data.end()), 1e-15);
-	ASSERT_EQ(0, ml::Statistics::calc_sse(data.begin(), data.begin() + 1));
-	ASSERT_EQ(0, ml::Statistics::calc_sse(data.begin(), data.begin()));
-	ASSERT_EQ(0, ml::Statistics::calc_sse(data.end(), data.end()));
+	ASSERT_NEAR(0.9 * 0.9 + 0.1 * 0.1 + 0.8 * 0.8, ml::Statistics::sse(data.begin(), data.end()), 1e-15);
+	ASSERT_EQ(0, ml::Statistics::sse(data.begin(), data.begin() + 1));
+	ASSERT_EQ(0, ml::Statistics::sse(data.begin(), data.begin()));
+	ASSERT_EQ(0, ml::Statistics::sse(data.end(), data.end()));
 }
 
 TEST(StatisticsTest, calc_sse_big_data)
@@ -26,5 +26,5 @@ TEST(StatisticsTest, calc_sse_big_data)
 	rng.seed(54523242);
 	std::shuffle(data.begin(), data.end(), rng);
 	const double expected = 26667066668000;
-	ASSERT_NEAR(expected, ml::Statistics::calc_sse(data.begin(), data.end()), 2e-14 * expected);
+	ASSERT_NEAR(expected, ml::Statistics::sse(data.begin(), data.end()), 2e-14 * expected);
 }
