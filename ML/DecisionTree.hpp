@@ -380,16 +380,6 @@ namespace ml
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
 			VectorRange<std::pair<Eigen::Index, double>> features);
 
-		/** Finds the split on a single feature which minimises the sum of Gini indices * size of split samples.
-
-		This function is not meant to be used directly. It's exposed for testing.
-		*/
-		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_classification(
-			const Eigen::Ref<const Eigen::MatrixXd> X,
-			const Eigen::Ref<const Eigen::VectorXd> y,
-			Eigen::Ref<Eigen::VectorXd> sorted_y,
-			VectorRange<std::pair<Eigen::Index, double>> features);
-
 		/**
 		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
 		@param min_sample_size Minimum sample size which can be split (at least 2).
