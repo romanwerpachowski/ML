@@ -351,7 +351,8 @@ namespace ml
 		std::unordered_set<SplitNode*> lowest_split_nodes_; /** Set of lowest split nodes. */
 	};
 
-	typedef DecisionTree<double> RegressionTree1D;
+	typedef DecisionTree<double> UnivariateRegressionTree;
+	typedef DecisionTree<unsigned int> ClassificationTree;
 
 
 	/** Helper functions for decision trees. */
@@ -373,7 +374,7 @@ namespace ml
 
 		This function is not meant to be used directly. It's exposed for testing.
 		*/
-		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_regression_1d(
+		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_univariate_regression(
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
@@ -383,7 +384,7 @@ namespace ml
 
 		This function is not meant to be used directly. It's exposed for testing.
 		*/
-		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_classification_1d(
+		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_classification(
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
@@ -393,7 +394,7 @@ namespace ml
 		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
 		@param min_sample_size Minimum sample size which can be split (at least 2).
 		*/
-		DLL_DECLSPEC RegressionTree1D regression_tree_1d(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
+		DLL_DECLSPEC UnivariateRegressionTree univariate_regression_tree(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
 
 		/** Performs cost-complexity pruning.
 

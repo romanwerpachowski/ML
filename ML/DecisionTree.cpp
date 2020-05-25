@@ -114,7 +114,7 @@ namespace ml
 			return std::make_pair(best_feature_index, best_threshold);
 		}
 
-		std::pair<unsigned int, double> find_best_split_regression_1d(
+		std::pair<unsigned int, double> find_best_split_univariate_regression(
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
@@ -123,7 +123,7 @@ namespace ml
 			return find_best_split_1d<SSE>(X, y, sorted_y, features);
 		}
 
-		std::pair<unsigned int, double> find_best_split_classification_1d(
+		std::pair<unsigned int, double> find_best_split_classification(
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
@@ -132,8 +132,8 @@ namespace ml
 			return find_best_split_1d<GiniIndex>(X, y, sorted_y, features);
 		}
 
-		static std::unique_ptr<RegressionTree1D::Node> regression_tree_1d_without_pruning(
-			RegressionTree1D::SplitNode* const parent,
+		static std::unique_ptr<UnivariateRegressionTree::Node> univariate_regression_tree_without_pruning(
+			UnivariateRegressionTree::SplitNode* const parent,
 			Eigen::Ref<Eigen::MatrixXd> unsorted_X,
 			Eigen::Ref<Eigen::MatrixXd> sorted_X,
 			Eigen::Ref<Eigen::VectorXd> unsorted_y,
@@ -151,13 +151,13 @@ namespace ml
 			assert(unsorted_X.cols() == sorted_X.cols());
 			assert(sorted_y.size() == sample_size);
 			if (!sse || !allowed_split_levels || sample_size < min_sample_size) {
-				return std::make_unique<RegressionTree1D::LeafNode>(sse, mean, parent);
+				return std::make_unique<UnivariateRegressionTree::LeafNode>(sse, mean, parent);
 			} else {
-				const auto split = find_best_split_regression_1d(unsorted_X, unsorted_y, sorted_y, features);
+				const auto split = find_best_split_univariate_regression(unsorted_X, unsorted_y, sorted_y, features);
 				if (split.second == -std::numeric_limits<double>::infinity()) {
-					return std::make_unique<RegressionTree1D::LeafNode>(sse, mean, parent);
+					return std::make_unique<UnivariateRegressionTree::LeafNode>(sse, mean, parent);
 				} else {
-					std::unique_ptr<RegressionTree1D::SplitNode> split_node(new RegressionTree1D::SplitNode(sse, mean, parent, split.second, split.first));
+					std::unique_ptr<UnivariateRegressionTree::SplitNode> split_node(new UnivariateRegressionTree::SplitNode(sse, mean, parent, split.second, split.first));
 					const auto X_f = unsorted_X.row(split.first);
 
 					auto features_it = features.first;
@@ -184,7 +184,7 @@ namespace ml
 					assert(num_samples_below_threshold);
 					if (USE_THREADS && sample_size >= MIN_SAMPLE_SIZE_FOR_NEW_THREADS && max_num_threads > 1) {
 						auto future_lower = std::async(std::launch::async, [&split_node, &sorted_X, &unsorted_X, &sorted_y, &unsorted_y, allowed_split_levels, min_sample_size, features, features_it, num_samples_below_threshold, max_num_threads]() {
-							return regression_tree_1d_without_pruning(
+							return univariate_regression_tree_without_pruning(
 								split_node.get(),
 								sorted_X.leftCols(num_samples_below_threshold),
 								unsorted_X.leftCols(num_samples_below_threshold),
@@ -196,7 +196,7 @@ namespace ml
 								max_num_threads / 2);
 							});
 						auto future_higher = std::async(std::launch::async, [&split_node, &sorted_X, &unsorted_X, &sorted_y, &unsorted_y, allowed_split_levels, min_sample_size, features, features_it, num_samples_below_threshold, sample_size, max_num_threads]() {
-							return regression_tree_1d_without_pruning(
+							return univariate_regression_tree_without_pruning(
 								split_node.get(),
 								sorted_X.rightCols(sample_size - num_samples_below_threshold),
 								unsorted_X.rightCols(sample_size - num_samples_below_threshold),
@@ -211,7 +211,7 @@ namespace ml
 						split_node->higher = std::move(future_higher.get());
 					} else {
 						// sorted <-> unsorted
-						split_node->lower = regression_tree_1d_without_pruning(
+						split_node->lower = univariate_regression_tree_without_pruning(
 							split_node.get(),
 							sorted_X.leftCols(num_samples_below_threshold),
 							unsorted_X.leftCols(num_samples_below_threshold),
@@ -220,7 +220,7 @@ namespace ml
 							allowed_split_levels - 1,
 							min_sample_size,
 							std::make_pair(features.first, features_it), 0);
-						split_node->higher = regression_tree_1d_without_pruning(
+						split_node->higher = univariate_regression_tree_without_pruning(
 							split_node.get(),
 							sorted_X.rightCols(sample_size - num_samples_below_threshold),
 							unsorted_X.rightCols(sample_size - num_samples_below_threshold),
@@ -235,7 +235,7 @@ namespace ml
 			}
 		}
 
-		RegressionTree1D regression_tree_1d(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size)
+		UnivariateRegressionTree univariate_regression_tree(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size)
 		{
 			if (min_sample_size < 2) {
 				throw std::invalid_argument("Minimum sample size for splitting must be >= 2");
@@ -254,7 +254,7 @@ namespace ml
 			Eigen::VectorXd sorted_y(sample_size);
 			std::vector<std::pair<Eigen::Index, double>> features(sample_size);			
 			const auto max_num_threads = std::min(std::thread::hardware_concurrency(), DEFAULT_MAX_NUM_THREADS);
-			return RegressionTree1D(regression_tree_1d_without_pruning(
+			return UnivariateRegressionTree(univariate_regression_tree_without_pruning(
 				nullptr, unsorted_X, sorted_X, unsorted_y, sorted_y, max_split_levels, min_sample_size, from_vector(features), max_num_threads ? max_num_threads : DEFAULT_MAX_NUM_THREADS));
 		}
 	}
