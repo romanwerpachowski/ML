@@ -17,6 +17,7 @@ namespace ml
 		constexpr unsigned int DEFAULT_MAX_NUM_THREADS = 2;		
 
 		template <typename Metrics> static std::pair<unsigned int, double> find_best_split_1d(
+			const Metrics metrics,
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
@@ -63,7 +64,7 @@ namespace ml
 						const auto next_feature = *features_it;
 						// Only consider splits between different values of X_f.						
 						if (prev_feature.second < next_feature.second) {
-							const double sum_errors = Metrics::error(sorted_y.data(), sorted_y_it) + Metrics::error(sorted_y_it, sorted_y_end);
+							const double sum_errors = metrics.error_for_splitting(sorted_y.data(), sorted_y_it) + metrics.error_for_splitting(sorted_y_it, sorted_y_end);
 							if (sum_errors < lowest_sum_errors_for_feature) {
 								lowest_sum_errors_for_feature = sum_errors;
 								best_num_samples_below_threshold = num_samples_below_threshold;
@@ -91,6 +92,7 @@ namespace ml
 		}
 
 		template <class Y, class Metrics> static std::unique_ptr<typename DecisionTree<Y>::Node> tree_1d_without_pruning(
+			const Metrics metrics,
 			typename DecisionTree<Y>::SplitNode* const parent,
 			Eigen::Ref<Eigen::MatrixXd> unsorted_X,
 			Eigen::Ref<Eigen::MatrixXd> sorted_X,
@@ -106,13 +108,14 @@ namespace ml
 			assert(unsorted_X.rows() == sorted_X.rows());
 			assert(unsorted_X.cols() == sorted_X.cols());
 			assert(sorted_y.size() == sample_size);
-			const auto error_and_value = Metrics::error_and_value(unsorted_y.data(), unsorted_y.data() + sample_size);
+			const auto unsorted_y_end = unsorted_y.data() + sample_size;
+			const auto error_and_value = metrics.error_and_value(unsorted_y.data(), unsorted_y_end);
 			const double error = error_and_value.first;
 			const Y value = error_and_value.second;
 			if (!error || !allowed_split_levels || sample_size < min_sample_size) {
 				return std::make_unique<typename DecisionTree<Y>::LeafNode>(error, value, parent);
 			} else {
-				const auto split = find_best_split_1d<Metrics>(unsorted_X, unsorted_y, sorted_y, error, features);
+				const auto split = find_best_split_1d(metrics, unsorted_X, unsorted_y, sorted_y, error, features);
 				if (split.second == -std::numeric_limits<double>::infinity()) {
 					return std::make_unique<typename DecisionTree<Y>::LeafNode>(error, value, parent);
 				} else {
@@ -142,8 +145,9 @@ namespace ml
 					const Eigen::Index num_samples_below_threshold = std::distance(features.first, features_it);
 					assert(num_samples_below_threshold);
 					if (USE_THREADS && sample_size >= MIN_SAMPLE_SIZE_FOR_NEW_THREADS && max_num_threads > 1) {
-						auto future_lower = std::async(std::launch::async, [&split_node, &sorted_X, &unsorted_X, &sorted_y, &unsorted_y, allowed_split_levels, min_sample_size, features, features_it, num_samples_below_threshold, max_num_threads]() {
-							return tree_1d_without_pruning<Y, Metrics>(
+						auto future_lower = std::async(std::launch::async, [&split_node, &sorted_X, &unsorted_X, &sorted_y, &unsorted_y, allowed_split_levels, min_sample_size, features, features_it, num_samples_below_threshold, max_num_threads, metrics]() {
+							return tree_1d_without_pruning<Y>(
+								metrics,
 								split_node.get(),
 								sorted_X.leftCols(num_samples_below_threshold),
 								unsorted_X.leftCols(num_samples_below_threshold),
@@ -154,8 +158,9 @@ namespace ml
 								std::make_pair(features.first, features_it),
 								max_num_threads / 2);
 							});
-						auto future_higher = std::async(std::launch::async, [&split_node, &sorted_X, &unsorted_X, &sorted_y, &unsorted_y, allowed_split_levels, min_sample_size, features, features_it, num_samples_below_threshold, sample_size, max_num_threads]() {
-							return tree_1d_without_pruning<Y, Metrics>(
+						auto future_higher = std::async(std::launch::async, [&split_node, &sorted_X, &unsorted_X, &sorted_y, &unsorted_y, allowed_split_levels, min_sample_size, features, features_it, num_samples_below_threshold, sample_size, max_num_threads, metrics]() {
+							return tree_1d_without_pruning<Y>(
+								metrics,
 								split_node.get(),
 								sorted_X.rightCols(sample_size - num_samples_below_threshold),
 								unsorted_X.rightCols(sample_size - num_samples_below_threshold),
@@ -170,7 +175,8 @@ namespace ml
 						split_node->higher = std::move(future_higher.get());
 					} else {
 						// sorted <-> unsorted
-						split_node->lower = tree_1d_without_pruning<Y, Metrics>(
+						split_node->lower = tree_1d_without_pruning<Y>(
+							metrics,
 							split_node.get(),
 							sorted_X.leftCols(num_samples_below_threshold),
 							unsorted_X.leftCols(num_samples_below_threshold),
@@ -179,7 +185,8 @@ namespace ml
 							allowed_split_levels - 1,
 							min_sample_size,
 							std::make_pair(features.first, features_it), 0);
-						split_node->higher = tree_1d_without_pruning<Y, Metrics>(
+						split_node->higher = tree_1d_without_pruning<Y>(
+							metrics,
 							split_node.get(),
 							sorted_X.rightCols(sample_size - num_samples_below_threshold),
 							unsorted_X.rightCols(sample_size - num_samples_below_threshold),
@@ -194,7 +201,7 @@ namespace ml
 			}
 		}
 
-		template <typename Y, typename Metrics> static DecisionTree<Y> tree_1d(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size)
+		template <typename Y, typename Metrics> static DecisionTree<Y> tree_1d(const Metrics metrics, const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size)
 		{
 			if (min_sample_size < 2) {
 				throw std::invalid_argument("Minimum sample size for splitting must be >= 2");
@@ -213,34 +220,50 @@ namespace ml
 			Eigen::VectorXd sorted_y(sample_size);
 			std::vector<std::pair<Eigen::Index, double>> features(sample_size);			
 			const auto max_num_threads = std::min(std::thread::hardware_concurrency(), DEFAULT_MAX_NUM_THREADS);
-			return DecisionTree<Y>(tree_1d_without_pruning<Y, Metrics>(
-				nullptr, unsorted_X, sorted_X, unsorted_y, sorted_y, max_split_levels, min_sample_size, from_vector(features), max_num_threads ? max_num_threads : DEFAULT_MAX_NUM_THREADS));
+			return DecisionTree<Y>(tree_1d_without_pruning<Y>(
+				metrics, nullptr, unsorted_X, sorted_X, unsorted_y, sorted_y, max_split_levels, min_sample_size, from_vector(features), max_num_threads ? max_num_threads : DEFAULT_MAX_NUM_THREADS));
 		}
 
 		struct ClassificationMetrics
 		{
-			template <typename Iter> static std::pair<double, unsigned int> error_and_value(Iter begin, Iter end)
+			unsigned int num_classes;
+
+			ClassificationMetrics(unsigned int K)
+				: num_classes(K)
+			{}
+
+			template <typename Iter> std::pair<double, unsigned int> error_and_value(Iter begin, Iter end) const
 			{
-				const auto gini_and_mode = Statistics::gini_index_and_mode(begin, end);
+				const auto gini_and_mode = Statistics::gini_index_and_mode(begin, end, num_classes);
 				return std::make_pair(static_cast<double>(std::distance(begin, end)) * gini_and_mode.first, gini_and_mode.second);
 			}
 
-			template <typename Iter> static double error(Iter begin, Iter end)
+			template <typename Iter> double error_for_splitting(Iter begin, Iter end) const
 			{
-				return error_and_value(begin, end).first;
+				return static_cast<double>(std::distance(begin, end))* Statistics::gini_index(begin, end, num_classes);
+			}
+
+			template <typename Iter> double error_for_splitting(Iter begin, Iter end, double /*error*/) const
+			{
+				return error_for_splitting(begin, end);
 			}
 		};
 
 		struct UnivariateRegressionMetrics
 		{
-			template <typename Iter> static std::pair<double, double> error_and_value(Iter begin, Iter end)
+			template <typename Iter> std::pair<double, double> error_and_value(Iter begin, Iter end) const
 			{
 				return Statistics::sse_and_mean(begin, end);
 			}
 
-			template <typename Iter> static double error(Iter begin, Iter end)
+			template <typename Iter> double error_for_splitting(Iter begin, Iter end) const
 			{
 				return error_and_value(begin, end).first;
+			}
+
+			template <typename Iter> double error_for_splitting(Iter, Iter, double error) const
+			{
+				return error;
 			}
 		};
 
@@ -250,18 +273,19 @@ namespace ml
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
 			const VectorRange<std::pair<Eigen::Index, double>> features)
 		{
-			const double error_whole_sample = UnivariateRegressionMetrics::error(y.data(), y.data() + y.size());
-			return find_best_split_1d<UnivariateRegressionMetrics>(X, y, sorted_y, error_whole_sample, features);
+			const UnivariateRegressionMetrics metrics;
+			const double error_whole_sample = metrics.error_for_splitting(y.data(), y.data() + y.size());
+			return find_best_split_1d(metrics, X, y, sorted_y, error_whole_sample, features);
 		}
 
 		UnivariateRegressionTree univariate_regression_tree(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size)
 		{
-			return tree_1d<double, UnivariateRegressionMetrics>(X, y, max_split_levels, min_sample_size);
+			return tree_1d<double>(UnivariateRegressionMetrics(), X, y, max_split_levels, min_sample_size);
 		}
 
 		ClassificationTree classification_tree(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size)
 		{
-			return tree_1d<unsigned int, ClassificationMetrics>(X, y, max_split_levels, min_sample_size);
+			return tree_1d<unsigned int>(ClassificationMetrics(static_cast<unsigned int>(y.maxCoeff()) + 1), X, y, max_split_levels, min_sample_size);
 		}
 	}
 }

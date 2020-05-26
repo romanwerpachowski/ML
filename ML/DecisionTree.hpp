@@ -24,7 +24,7 @@ namespace ml
 
 		struct Node
 		{
-			double error; /**< Error of the training sample seen by this node. */
+			double error; /**< Error of the training sample seen by this node, used for pruning. */
 			Y value; /**< Value which should be returned if we stop splitting at this node. */
 			SplitNode* parent; /**< Link to parent node. */
 
@@ -33,7 +33,7 @@ namespace ml
 			{
 				if (error < 0) {
 					throw std::domain_error("Node error cannot be negative");
-				}
+				}				
 			}
 
 			virtual ~Node() {}
@@ -209,7 +209,7 @@ namespace ml
 				: Node(n_error, n_value, n_parent)
 			{}
 
-			using Node::error;
+			using Node::error;			
 			using Node::value;
 			using Node::parent;
 

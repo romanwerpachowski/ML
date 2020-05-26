@@ -17,7 +17,7 @@ static void BM_sse(benchmark::State& state)
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(BM_sse)->RangeMultiplier(10)->Range(10, 1000000)->Complexity();
+BENCHMARK(BM_sse)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
 
 static void BM_sse_and_mean(benchmark::State& state)
 {
@@ -34,7 +34,7 @@ static void BM_sse_and_mean(benchmark::State& state)
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(BM_sse_and_mean)->RangeMultiplier(10)->Range(10, 1000000)->Complexity();
+BENCHMARK(BM_sse_and_mean)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
 
 template <typename T> static void BM_gini_index(benchmark::State& state)
 {
@@ -51,8 +51,8 @@ template <typename T> static void BM_gini_index(benchmark::State& state)
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(BM_gini_index, double)->RangeMultiplier(10)->Range(10, 1000000)->Complexity();
-BENCHMARK_TEMPLATE(BM_gini_index, int)->RangeMultiplier(10)->Range(10, 1000000)->Complexity();
+BENCHMARK_TEMPLATE(BM_gini_index, double)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
+BENCHMARK_TEMPLATE(BM_gini_index, int)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
 
 template <typename T> static void BM_gini_index_and_mode(benchmark::State& state)
 {
@@ -69,5 +69,5 @@ template <typename T> static void BM_gini_index_and_mode(benchmark::State& state
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(BM_gini_index_and_mode, double)->RangeMultiplier(10)->Range(10, 1000000)->Complexity();
-BENCHMARK_TEMPLATE(BM_gini_index_and_mode, int)->RangeMultiplier(10)->Range(10, 1000000)->Complexity();
+BENCHMARK_TEMPLATE(BM_gini_index_and_mode, double)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
+BENCHMARK_TEMPLATE(BM_gini_index_and_mode, int)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
