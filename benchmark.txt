@@ -1,76 +1,76 @@
 --------------------------------------------------------------------------------------
 Benchmark                                            Time             CPU   Iterations
 --------------------------------------------------------------------------------------
-BM_univariate_regression_tree/2/real_time         1965 ns         1961 ns       342608
-BM_univariate_regression_tree/4/real_time         5506 ns         5539 ns       126932
-BM_univariate_regression_tree/8/real_time        29284 ns        29428 ns        23893
-BM_univariate_regression_tree/16/real_time      194104 ns       195421 ns         3598
-BM_univariate_regression_tree/32/real_time     1455916 ns      1455745 ns          483
-BM_univariate_regression_tree/64/real_time    10613364 ns     10653409 ns           66
-BM_univariate_regression_tree/128/real_time   75779711 ns     74652778 ns            9
-BM_univariate_regression_tree/real_time_BigO      36.20 N^3       35.68 N^3  
-BM_univariate_regression_tree/real_time_RMS          3 %             4 %    
-BM_cost_complexity_prune/2                         706 ns          691 ns       746667
-BM_cost_complexity_prune/4                        2735 ns         2452 ns       235789
-BM_cost_complexity_prune/8                       12738 ns        12556 ns        56000
-BM_cost_complexity_prune/16                      98798 ns       100442 ns         7467
-BM_cost_complexity_prune/32                    1455504 ns      1464844 ns          448
-BM_cost_complexity_prune/64                   32882557 ns     32738095 ns           21
-BM_cost_complexity_prune_BigO                   124.17 N^3      123.63 N^3  
-BM_cost_complexity_prune_RMS                        19 %            19 %    
-BM_tree_copy/2                                     490 ns          488 ns      1120000
-BM_tree_copy/4                                    1834 ns         1842 ns       373333
-BM_tree_copy/8                                    9175 ns         9208 ns        74667
-BM_tree_copy/16                                  39391 ns        40178 ns        18667
-BM_tree_copy/32                                 143810 ns       144385 ns         4978
-BM_tree_copy/64                                 575926 ns       578125 ns         1000
-BM_tree_copy_BigO                               140.65 N^2      141.19 N^2  
-BM_tree_copy_RMS                                     1 %             1 %    
-BM_sse/10                                         9.40 ns         9.42 ns     74666667
-BM_sse/100                                         151 ns          150 ns      4480000
-BM_sse/1000                                       1635 ns         1639 ns       448000
-BM_sse/10000                                     16411 ns        16392 ns        44800
-BM_sse/100000                                   164102 ns       163923 ns         4480
-BM_sse/1000000                                 1647690 ns      1639230 ns          448
-BM_sse_BigO                                       1.65 N          1.64 N    
+BM_univariate_regression_tree/2/real_time         1968 ns         1952 ns       344174
+BM_univariate_regression_tree/4/real_time         5505 ns         5488 ns       128129
+BM_univariate_regression_tree/8/real_time        29265 ns        29100 ns        24162
+BM_univariate_regression_tree/16/real_time      194779 ns       194791 ns         3369
+BM_univariate_regression_tree/32/real_time     1408111 ns      1423330 ns          494
+BM_univariate_regression_tree/64/real_time    10339752 ns     10494403 ns           67
+BM_univariate_regression_tree/128/real_time   73625122 ns     74652778 ns            9
+BM_univariate_regression_tree/real_time_BigO      35.18 N^3       35.67 N^3  
+BM_univariate_regression_tree/real_time_RMS          4 %             4 %    
+BM_cost_complexity_prune/2                         714 ns          656 ns      1024000
+BM_cost_complexity_prune/4                        2763 ns         2490 ns       213333
+BM_cost_complexity_prune/8                       12750 ns        11928 ns        49778
+BM_cost_complexity_prune/16                      98127 ns       103237 ns         5600
+BM_cost_complexity_prune/32                    1467587 ns      1367188 ns          560
+BM_cost_complexity_prune/64                   33240205 ns     33593750 ns           20
+BM_cost_complexity_prune_BigO                   125.51 N^3      126.80 N^3  
+BM_cost_complexity_prune_RMS                        19 %            20 %    
+BM_tree_copy/2                                     500 ns          500 ns      1000000
+BM_tree_copy/4                                    1856 ns         1883 ns       373333
+BM_tree_copy/8                                    8818 ns         8789 ns        74667
+BM_tree_copy/16                                  39917 ns        39899 ns        17231
+BM_tree_copy/32                                 147764 ns       147524 ns         4978
+BM_tree_copy/64                                 575509 ns       571987 ns         1120
+BM_tree_copy_BigO                               140.78 N^2      139.96 N^2  
+BM_tree_copy_RMS                                     2 %             2 %    
+BM_sse/10                                         10.4 ns         10.3 ns     74666667
+BM_sse/100                                         153 ns          154 ns      4977778
+BM_sse/1000                                       1655 ns         1650 ns       407273
+BM_sse/10000                                     16622 ns        16497 ns        40727
+BM_sse/100000                                   165854 ns       168795 ns         4073
+BM_sse/1000000                                 1682140 ns      1689189 ns          407
+BM_sse_BigO                                       1.68 N          1.69 N    
 BM_sse_RMS                                           0 %             0 %    
-BM_sse_and_mean/10                                9.55 ns         9.63 ns     74666667
-BM_sse_and_mean/100                                152 ns          154 ns      4977778
-BM_sse_and_mean/1000                              1629 ns         1639 ns       448000
-BM_sse_and_mean/10000                            16516 ns        16497 ns        40727
-BM_sse_and_mean/100000                          164069 ns       164958 ns         4073
-BM_sse_and_mean/1000000                        1660605 ns      1674107 ns          448
-BM_sse_and_mean_BigO                              1.66 N          1.67 N    
+BM_sse_and_mean/10                                9.64 ns         9.63 ns     74666667
+BM_sse_and_mean/100                                152 ns          150 ns      4480000
+BM_sse_and_mean/1000                              1635 ns         1639 ns       448000
+BM_sse_and_mean/10000                            16786 ns        16881 ns        40727
+BM_sse_and_mean/100000                          165381 ns       163923 ns         4480
+BM_sse_and_mean/1000000                        1661854 ns      1650799 ns          407
+BM_sse_and_mean_BigO                              1.66 N          1.65 N    
 BM_sse_and_mean_RMS                                  0 %             0 %    
-BM_gini_index<double>/10                          71.5 ns         71.5 ns      8960000
-BM_gini_index<double>/100                          321 ns          315 ns      2133333
-BM_gini_index<double>/1000                        2838 ns         2783 ns       235789
-BM_gini_index<double>/10000                      28475 ns        28250 ns        24889
-BM_gini_index<double>/100000                    277146 ns       278700 ns         2635
-BM_gini_index<double>/1000000                  2789823 ns      2761044 ns          249
-BM_gini_index<double>_BigO                        2.79 N          2.76 N    
+BM_gini_index<double>/10                          75.1 ns         75.0 ns      8960000
+BM_gini_index<double>/100                          322 ns          322 ns      2133333
+BM_gini_index<double>/1000                        2822 ns         2825 ns       248889
+BM_gini_index<double>/10000                      27862 ns        28250 ns        24889
+BM_gini_index<double>/100000                    275020 ns       278700 ns         2635
+BM_gini_index<double>/1000000                  2785001 ns      2823795 ns          249
+BM_gini_index<double>_BigO                        2.78 N          2.82 N    
 BM_gini_index<double>_RMS                            0 %             0 %    
-BM_gini_index<int>/10                             62.2 ns         61.4 ns     11200000
-BM_gini_index<int>/100                             243 ns          246 ns      2986667
-BM_gini_index<int>/1000                           1961 ns         1950 ns       344615
-BM_gini_index<int>/10000                         19424 ns        19671 ns        37333
-BM_gini_index<int>/100000                       193319 ns       196725 ns         3733
-BM_gini_index<int>/1000000                     1931305 ns      1926944 ns          373
-BM_gini_index<int>_BigO                           1.93 N          1.93 N    
-BM_gini_index<int>_RMS                               0 %             0 %    
-BM_gini_index_and_mode<double>/10                 77.5 ns         76.7 ns      8960000
-BM_gini_index_and_mode<double>/100                 334 ns          330 ns      2036364
-BM_gini_index_and_mode<double>/1000               2893 ns         2849 ns       235789
-BM_gini_index_and_mode<double>/10000             28257 ns        28250 ns        24889
-BM_gini_index_and_mode<double>/100000           281984 ns       282493 ns         2489
-BM_gini_index_and_mode<double>/1000000         2845773 ns      2840909 ns          264
-BM_gini_index_and_mode<double>_BigO               2.85 N          2.84 N    
+BM_gini_index<int>/10                             61.7 ns         61.4 ns     11200000
+BM_gini_index<int>/100                             234 ns          235 ns      2986667
+BM_gini_index<int>/1000                           1923 ns         1925 ns       373333
+BM_gini_index<int>/10000                         19038 ns        18834 ns        37333
+BM_gini_index<int>/100000                       187485 ns       184168 ns         3733
+BM_gini_index<int>/1000000                     1873325 ns      1885054 ns          373
+BM_gini_index<int>_BigO                           1.87 N          1.88 N    
+BM_gini_index<int>_RMS                               0 %             1 %    
+BM_gini_index_and_mode<double>/10                 73.8 ns         73.2 ns      8960000
+BM_gini_index_and_mode<double>/100                 326 ns          322 ns      2133333
+BM_gini_index_and_mode<double>/1000               2816 ns         2825 ns       248889
+BM_gini_index_and_mode<double>/10000             27624 ns        27867 ns        26353
+BM_gini_index_and_mode<double>/100000           275303 ns       276215 ns         2489
+BM_gini_index_and_mode<double>/1000000         2764540 ns      2781723 ns          264
+BM_gini_index_and_mode<double>_BigO               2.76 N          2.78 N    
 BM_gini_index_and_mode<double>_RMS                   0 %             0 %    
-BM_gini_index_and_mode<int>/10                    66.4 ns         67.0 ns     11200000
-BM_gini_index_and_mode<int>/100                    250 ns          251 ns      2986667
-BM_gini_index_and_mode<int>/1000                  2012 ns         1995 ns       344615
-BM_gini_index_and_mode<int>/10000                19896 ns        20089 ns        37333
-BM_gini_index_and_mode<int>/100000              197550 ns       194972 ns         3446
-BM_gini_index_and_mode<int>/1000000            1977742 ns      1992754 ns          345
-BM_gini_index_and_mode<int>_BigO                  1.98 N          1.99 N    
+BM_gini_index_and_mode<int>/10                    63.9 ns         64.2 ns     11200000
+BM_gini_index_and_mode<int>/100                    235 ns          235 ns      2986667
+BM_gini_index_and_mode<int>/1000                  1929 ns         1904 ns       344615
+BM_gini_index_and_mode<int>/10000                18961 ns        18834 ns        37333
+BM_gini_index_and_mode<int>/100000              189131 ns       192540 ns         3733
+BM_gini_index_and_mode<int>/1000000            1904616 ns      1926944 ns          373
+BM_gini_index_and_mode<int>_BigO                  1.90 N          1.93 N    
 BM_gini_index_and_mode<int>_RMS                      0 %             0 %    

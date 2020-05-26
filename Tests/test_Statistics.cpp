@@ -1,6 +1,6 @@
-#include "pch.h" // must be on the top
 #include <cmath>
 #include <random>
+#include <gtest/gtest.h>
 #include "ML/Statistics.hpp"
 
 using namespace ml::Statistics;

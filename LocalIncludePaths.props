@@ -10,6 +10,9 @@
     <Link>
       <AdditionalLibraryDirectories>C:\Users\Roman\source\repos\benchmark\out\build\x64-Release\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Roman\source\repos\googletest\googletest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

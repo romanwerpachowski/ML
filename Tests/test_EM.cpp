@@ -1,5 +1,5 @@
-#include "pch.h"
 #include <random>
+#include <gtest/gtest.h>
 #include "ML/EM.hpp"
 
 TEST(TestEM, two_gaussians)
