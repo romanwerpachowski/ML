@@ -111,11 +111,12 @@ namespace ml
 			const auto unsorted_y_end = unsorted_y.data() + sample_size;
 			const auto error_and_value = metrics.error_and_value(unsorted_y.data(), unsorted_y_end);
 			const double error = error_and_value.first;
+			const double error_for_splitting = metrics.error_for_splitting(unsorted_y.data(), unsorted_y_end, error);
 			const Y value = error_and_value.second;
 			if (!error || !allowed_split_levels || sample_size < min_sample_size) {
 				return std::make_unique<typename DecisionTree<Y>::LeafNode>(error, value, parent);
 			} else {
-				const auto split = find_best_split_1d(metrics, unsorted_X, unsorted_y, sorted_y, error, features);
+				const auto split = find_best_split_1d(metrics, unsorted_X, unsorted_y, sorted_y, error_for_splitting, features);
 				if (split.second == -std::numeric_limits<double>::infinity()) {
 					return std::make_unique<typename DecisionTree<Y>::LeafNode>(error, value, parent);
 				} else {
@@ -232,10 +233,16 @@ namespace ml
 				: num_classes(K)
 			{}
 
-			template <typename Iter> std::pair<double, unsigned int> error_and_value(Iter begin, Iter end) const
+			template <typename Iter> std::pair<double, unsigned int> error_and_value(const Iter begin, const Iter end) const
 			{
-				const auto gini_and_mode = Statistics::gini_index_and_mode(begin, end, num_classes);
-				return std::make_pair(static_cast<double>(std::distance(begin, end)) * gini_and_mode.first, gini_and_mode.second);
+				const unsigned int mode = Statistics::mode(begin, end, num_classes);
+				size_t num_misclassified = 0;
+				for (auto it = begin; it != end; ++it) {
+					if (*it != mode) {
+						++num_misclassified;
+					}
+				}
+				return std::make_pair(static_cast<double>(num_misclassified), mode);
 			}
 
 			template <typename Iter> double error_for_splitting(Iter begin, Iter end) const

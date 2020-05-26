@@ -72,18 +72,6 @@ namespace ml
 		/** Calculates the Gini index sum_{k=1}^K \hat{p}_k (1 - \hat{p}_k)
 		for \hat{p}_k being the frequency of occurrence of class k in data.
 		Takes as argument a range [begin, end) of class values from 0 to K - 1.
-		K value is detected from the data.
-		@return Gini index and the most frequent class. If begin == end, mode == K.
-		*/
-		template <typename Iter> std::pair<double, unsigned int> gini_index_and_mode(const Iter begin, const Iter end)
-		{
-			const auto K = static_cast<unsigned int>(*std::max_element(begin, end)) + 1;
-			return gini_index_and_mode(begin, end, K);
-		}
-
-		/** Calculates the Gini index sum_{k=1}^K \hat{p}_k (1 - \hat{p}_k)
-		for \hat{p}_k being the frequency of occurrence of class k in data.
-		Takes as argument a range [begin, end) of class values from 0 to K - 1.
 		@param K Number of classes, positive.
 		@return Gini index.
 		*/
@@ -102,15 +90,24 @@ namespace ml
 			return gi;
 		}
 
-		/** Calculates the Gini index sum_{k=1}^K \hat{p}_k (1 - \hat{p}_k)
-		for \hat{p}_k being the frequency of occurrence of class k in data.
-		Takes as argument a range [begin, end) of class values from 0 to K - 1.
-		K value is detected from the data.
-		*/
-		template <typename Iter> double gini_index(const Iter begin, const Iter end)
+		template <typename Iter> unsigned int mode(const Iter begin, const Iter end, const unsigned int K)
 		{
-			const auto K = static_cast<unsigned int>(*std::max_element(begin, end)) + 1;
-			return gini_index(begin, end, K);
+			std::vector<unsigned int> counts(K, 0);
+			for (auto it = begin; it != end; ++it) {
+				++counts[static_cast<size_t>(*it)];
+			}
+			unsigned int mode = K;
+			unsigned int k = 0;
+			unsigned max_count = 0;
+			for (auto c : counts) {
+				if (c > max_count) {
+					mode = k;
+					max_count = c;
+				}
+				++k;
+			}
+			assert(mode < K);
+			return mode;
 		}
 	}	
 }
