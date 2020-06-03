@@ -294,5 +294,39 @@ namespace ml
 		{
 			return tree_1d<unsigned int>(ClassificationMetrics(static_cast<unsigned int>(y.maxCoeff()) + 1), X, y, max_split_levels, min_sample_size);
 		}
+
+		double univariate_regression_tree_mean_squared_error(const UnivariateRegressionTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
+		{
+			const auto sample_size = y.size();
+			if (!sample_size) {
+				return std::numeric_limits<double>::quiet_NaN();
+			}
+			if (X.cols() != sample_size) {
+				throw std::invalid_argument("Data size mismatch");
+			}
+			double mse = 0;
+			for (Eigen::Index i = 0; i < sample_size; ++i) {
+				mse += (std::pow(y[i] - tree(X.col(i)), 2) - mse) / static_cast<double>(i + 1);
+			}
+			return mse;
+		}
+
+		double classification_tree_accuracy(const ClassificationTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
+		{
+			const auto sample_size = y.size();
+			if (!sample_size) {
+				return std::numeric_limits<double>::quiet_NaN();
+			}
+			if (X.cols() != sample_size) {
+				throw std::invalid_argument("Data size mismatch");
+			}
+			int num_correctly_classified = 0;
+			for (Eigen::Index i = 0; i < sample_size; ++i) {
+				if (y[i] == tree(X.col(i))) {
+					++num_correctly_classified;
+				}
+			}
+			return static_cast<double>(num_correctly_classified) / static_cast<double>(sample_size);
+		}
 	}
 }

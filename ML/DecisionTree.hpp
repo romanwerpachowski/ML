@@ -247,7 +247,7 @@ namespace ml
 			{}
 		};
 
-		Y operator()(Eigen::Ref<Eigen::VectorXd> x) const
+		Y operator()(arg_type x) const
 		{
 			return (*root_)(x);
 		}
@@ -405,5 +405,11 @@ namespace ml
 			// There can be only one minimum of cost complexity.
 			while (tree.remove_weakest_link(alpha)) {}
 		}
+
+		/** Calculates tree mean squared error on (X, y) data. */
+		DLL_DECLSPEC double univariate_regression_tree_mean_squared_error(const UnivariateRegressionTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
+
+		/** Calculates tree accuracy on (X, y) data. */
+		DLL_DECLSPEC double classification_tree_accuracy(const ClassificationTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 	}
 }
