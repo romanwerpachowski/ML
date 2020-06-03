@@ -146,12 +146,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Crossvalidation.hpp" />
     <ClInclude Include="DecisionTree.hpp" />
     <ClInclude Include="dll.hpp" />
     <ClInclude Include="EM.hpp" />
     <ClInclude Include="Statistics.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Crossvalidation.cpp" />
     <ClCompile Include="DecisionTree.cpp" />
     <ClCompile Include="EM.cpp" />
   </ItemGroup>
