@@ -10,12 +10,26 @@ TEST(CrossvalidationTest, calc_fold_indices)
 	Crossvalidation::calc_fold_indices(10, 0, 5, i0, i1);
 	ASSERT_EQ(0, i0);
 	ASSERT_EQ(2, i1);
+	// Rounding down.
+	Crossvalidation::calc_fold_indices(10, 0, 3, i0, i1);
+	ASSERT_EQ(0, i0);
+	ASSERT_EQ(3, i1);
 	Crossvalidation::calc_fold_indices(10, 1, 3, i0, i1);
 	ASSERT_EQ(3, i0);
 	ASSERT_EQ(6, i1);
 	Crossvalidation::calc_fold_indices(10, 2, 3, i0, i1);
 	ASSERT_EQ(6, i0);
 	ASSERT_EQ(10, i1);
+	// Rounding up.
+	Crossvalidation::calc_fold_indices(5, 0, 3, i0, i1);
+	ASSERT_EQ(0, i0);
+	ASSERT_EQ(2, i1);
+	Crossvalidation::calc_fold_indices(5, 1, 3, i0, i1);
+	ASSERT_EQ(2, i0);
+	ASSERT_EQ(4, i1);
+	Crossvalidation::calc_fold_indices(5, 2, 3, i0, i1);
+	ASSERT_EQ(4, i0);
+	ASSERT_EQ(5, i1);
 }
 
 TEST(CrossvalidationTest, calc_fold_indices_throws)
@@ -42,6 +56,32 @@ TEST(CrossvalidationTest, only_kth_fold_1d_eigen)
 	ASSERT_EQ(Eigen::Vector3d(4, 5, 6 ), Crossvalidation::only_kth_fold_1d(data, 2, 3));
 }
 
+TEST(CrossvalidationTest, only_kth_fold_2d)
+{
+	Eigen::MatrixXd data(2, 5);
+	data << 0, 1, 2, 3, 4,
+		5, 6, 7, 8, 9;
+	Eigen::MatrixXd expected(2, 2);
+	expected << 3, 4,
+		8, 9;
+	ASSERT_EQ(expected, Crossvalidation::only_kth_fold_2d(data, 1, 2));
+	expected.resize(2, 3);
+	expected << 0, 1, 2,
+		5, 6, 7;
+	ASSERT_EQ(expected, Crossvalidation::only_kth_fold_2d(data, 0, 2));
+	expected.resize(2, 2);
+	expected << 0, 1,
+		5, 6;
+	ASSERT_EQ(expected, Crossvalidation::only_kth_fold_2d(data, 0, 3));
+	expected << 2, 3,
+		7, 8;
+	ASSERT_EQ(expected, Crossvalidation::only_kth_fold_2d(data, 1, 3));
+	expected.resize(2, 1);
+	expected << 4,
+		9;
+	ASSERT_EQ(expected, Crossvalidation::only_kth_fold_2d(data, 2, 3));
+}
+
 TEST(CrossvalidationTest, without_kth_fold_1d_stl)
 {
 	const std::vector<int> data({ 0, 1, 2, 3, 4, 5, 6 });
@@ -63,4 +103,23 @@ TEST(CrossvalidationTest, without_kth_fold_1d_eigen)
 	assert_vectors_equal(std::vector<double>({ 2, 3, 4, 5, 6 }), Crossvalidation::without_kth_fold_1d(data, 0, 3));
 	assert_vectors_equal(std::vector<double>({ 0, 1, 4, 5, 6 }), Crossvalidation::without_kth_fold_1d(data, 1, 3));
 	assert_vectors_equal(std::vector<double>({ 0, 1, 2, 3 }), Crossvalidation::without_kth_fold_1d(data, 2, 3));
+}
+
+TEST(CrossvalidationTest, without_kth_fold_2d)
+{
+	Eigen::MatrixXd data(2, 5);
+	data << 0, 1, 2, 3, 4,
+		5, 6, 7, 8, 9;
+	Eigen::MatrixXd expected(2, 2);
+	expected << 3, 4,
+		8, 9;
+	ASSERT_EQ(expected, Crossvalidation::without_kth_fold_2d(data, 0, 2));
+	expected.resize(2, 3);
+	expected << 0, 1, 2,
+		5, 6, 7;
+	ASSERT_EQ(expected, Crossvalidation::without_kth_fold_2d(data, 1, 2));
+	expected.resize(2, 3);
+	expected << 0, 1, 4,
+		5, 6, 9;
+	ASSERT_EQ(expected, Crossvalidation::without_kth_fold_2d(data, 1, 3));
 }

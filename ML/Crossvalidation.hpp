@@ -12,7 +12,7 @@ namespace ml
 		DLL_DECLSPEC void calc_fold_indices(size_t total_len, unsigned int k, unsigned int num_folds, size_t& i0, size_t& i1);
 
 		/** Return k-th fold column-wise (each column is a data point). */
-		Eigen::MatrixXd only_kth_fold_2d(Eigen::Ref<const Eigen::MatrixXd> data, unsigned int k, unsigned int num_folds);
+		DLL_DECLSPEC Eigen::MatrixXd only_kth_fold_2d(Eigen::Ref<const Eigen::MatrixXd> data, unsigned int k, unsigned int num_folds);
 		DLL_DECLSPEC Eigen::VectorXd only_kth_fold_1d(Eigen::Ref<const Eigen::VectorXd> data, unsigned int k, unsigned int num_folds);
 
 		template <class T> std::vector<T> only_kth_fold_1d(const std::vector<T>& data, const unsigned int k, const unsigned int num_folds) {
@@ -23,7 +23,7 @@ namespace ml
 		}
 
 		/** Return all except the k-th fold column-wise (each column is a data point). */
-		Eigen::MatrixXd without_kth_fold_2d(Eigen::Ref<const Eigen::MatrixXd> data, unsigned int k, unsigned int num_folds);
+		DLL_DECLSPEC Eigen::MatrixXd without_kth_fold_2d(Eigen::Ref<const Eigen::MatrixXd> data, unsigned int k, unsigned int num_folds);
 		DLL_DECLSPEC Eigen::VectorXd without_kth_fold_1d(Eigen::Ref<const Eigen::VectorXd> data, unsigned int k, unsigned int num_folds);
 
 		template <class T> std::vector<T> without_kth_fold_1d(const std::vector<T>& data, unsigned int k, unsigned int num_folds) {

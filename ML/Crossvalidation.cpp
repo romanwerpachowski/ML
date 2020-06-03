@@ -13,12 +13,12 @@ namespace ml
 			if (num_folds > total_len) {
 				throw std::invalid_argument("Too many folds requested");
 			}
-			const size_t fold_len = total_len / num_folds;
-			const size_t remainder = total_len % num_folds;
+			const size_t fold_len = static_cast<size_t>(std::round(static_cast<double>(total_len) / static_cast<double>(num_folds)));
 			i0 = k * fold_len;
-			i1 = i0 + fold_len;
-			if (k + 1 == num_folds) {
-				i1 += remainder;
+			if (k + 1 < num_folds) {
+				i1 = i0 + fold_len;
+			} else {
+				i1 = total_len;
 			}
 			assert(i1 <= total_len);
 		}
