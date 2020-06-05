@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="Crossvalidation.hpp" />
     <ClInclude Include="DecisionTree.hpp" />
+    <ClInclude Include="DecisionTreeNodes.hpp" />
     <ClInclude Include="dll.hpp" />
     <ClInclude Include="EM.hpp" />
     <ClInclude Include="Statistics.hpp" />

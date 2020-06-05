@@ -123,3 +123,21 @@ TEST(CrossvalidationTest, without_kth_fold_2d)
 		5, 6, 9;
 	ASSERT_EQ(expected, Crossvalidation::without_kth_fold_2d(data, 1, 3));
 }
+
+TEST(CrossvalidationTest, calc_test_error)
+{
+	const int sample_size = 100;
+	const int dim = 4;
+	const Eigen::MatrixXd X(Eigen::MatrixXd::Random(dim, sample_size));
+	const Eigen::VectorXd y(Eigen::VectorXd::Random(sample_size));
+	const int num_folds = 9;
+	const double error = Crossvalidation::calc_test_error(X, y,
+		[](const Eigen::MatrixXd& /*train_X*/, const Eigen::VectorXd& train_y) -> double {
+			return train_y.mean();
+		},
+		[](double model, const Eigen::MatrixXd& /*train_X*/, const Eigen::VectorXd& test_y) -> double {
+			return std::pow(test_y.mean() - model, 2) / static_cast<double>(test_y.size());
+		}, num_folds);
+	ASSERT_GE(error, 0);
+	ASSERT_LE(error, 0.01);
+}

@@ -322,11 +322,20 @@ namespace ml
 			}
 			int num_correctly_classified = 0;
 			for (Eigen::Index i = 0; i < sample_size; ++i) {
-				if (y[i] == tree(X.col(i))) {
+				if (y[i] == static_cast<double>(tree(X.col(i)))) {
 					++num_correctly_classified;
 				}
 			}
 			return static_cast<double>(num_correctly_classified) / static_cast<double>(sample_size);
+		}
+
+		template <class Y, class F> std::pair<double, double> find_best_alpha(const std::vector<double>& alphas, const DecisionTree<Y>& unpruned_tree, F test_error_function, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
+		{
+			double min_test_error = std::numeric_limits<double>::infinity();
+			for (double alpha : alphas) {
+				DecisionTree<Y> tree(unpruned_tree);
+				cost_complexity_prune(tree, alpha);				
+			}
 		}
 	}
 }

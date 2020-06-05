@@ -35,5 +35,20 @@ namespace ml
 			std::copy(data.begin() + i1, data.end(), remaining.begin() + i0);
 			return remaining;
 		}
+
+		template <class Train, class Test> double calc_test_error(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Train train_func, Test test_func, const unsigned int num_folds)
+		{
+			double sum_weighted_errors = 0;
+			for (unsigned int k = 0; k < num_folds; ++k) {
+				const Eigen::MatrixXd train_X(without_kth_fold_2d(X, k, num_folds));
+				const Eigen::VectorXd train_y(without_kth_fold_1d(y, k, num_folds));
+				const Eigen::MatrixXd test_X(only_kth_fold_2d(X, k, num_folds));
+				const Eigen::VectorXd test_y(only_kth_fold_1d(y, k, num_folds));
+				auto trained_model = train_func(train_X, train_y);
+				const double test_error = test_func(trained_model, test_X, test_y);
+				sum_weighted_errors += test_error * static_cast<double>(test_y.size());
+			}
+			return sum_weighted_errors / static_cast<double>(y.size());
+		}
 	}
 }
