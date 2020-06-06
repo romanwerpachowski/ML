@@ -3,6 +3,7 @@
 #include <iostream>
 #include <limits>
 #include <utility>
+#include "Crossvalidation.hpp"
 #include "DecisionTree.hpp"
 #include "Statistics.hpp"
 
@@ -329,13 +330,23 @@ namespace ml
 			return static_cast<double>(num_correctly_classified) / static_cast<double>(sample_size);
 		}
 
-		template <class Y, class F> std::pair<double, double> find_best_alpha(const std::vector<double>& alphas, const DecisionTree<Y>& unpruned_tree, F test_error_function, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
+		template <class Y, class Grow, class Test> std::pair<double, double> find_best_alpha(const std::vector<double>& alphas, Grow growing_function, Test test_error_function, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, const unsigned int num_folds)
 		{
-			double min_test_error = std::numeric_limits<double>::infinity();
+			double min_cv_test_error = std::numeric_limits<double>::infinity();
+			double best_alpha = -1;
 			for (double alpha : alphas) {
-				DecisionTree<Y> tree(unpruned_tree);
-				cost_complexity_prune(tree, alpha);				
+				auto train_func = [alpha, growing_function](const Eigen::MatrixXd& train_X, const Eigen::VectorXd& train_y) {
+					auto tree = growing_function(train_X, train_y);
+					cost_complexity_prune(tree, alpha);
+					return tree;
+				};
+				const double cv_test_error = Crossvalidation::calc_test_error(X, y, train_func, test_error_function, num_folds);
+				if (cv_test_error < min_cv_test_error) {
+					min_cv_test_error = cv_test_error;
+					best_alpha = alpha;
+				}
 			}
+			return std::make_pair(best_alpha, min_cv_test_error);
 		}
 	}
 }
