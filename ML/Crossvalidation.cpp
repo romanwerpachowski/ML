@@ -30,9 +30,7 @@ namespace ml
 			calc_fold_indices(total_size, k, num_folds, i0, i1);
 			const size_t taken_len = i1 - i0;
 			assert(taken_len);
-			Eigen::MatrixXd taken(data.rows(), taken_len);
-			taken = data.block(0, i0, data.rows(), taken_len);
-			return taken;
+			return data.block(0, i0, data.rows(), taken_len);
 		}
 
 		Eigen::VectorXd only_kth_fold_1d(Eigen::Ref<const Eigen::VectorXd, 0> data, const unsigned int k, const unsigned int num_folds)
@@ -43,8 +41,7 @@ namespace ml
 			const size_t taken_len = i1 - i0;
 			assert(taken_len);
 			Eigen::VectorXd taken(taken_len);
-			taken = data.segment(i0, taken_len);
-			return taken;
+			return data.segment(i0, taken_len);;
 		}
 
 		Eigen::MatrixXd without_kth_fold_2d(Eigen::Ref<const Eigen::MatrixXd> data, const unsigned int k, const unsigned int num_folds)

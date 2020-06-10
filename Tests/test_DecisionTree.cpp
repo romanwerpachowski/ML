@@ -205,7 +205,7 @@ TEST(DecisionTreeTest, univariate_regression_with_pruning)
 	const int train_sample_size = 1000;
 	const int test_sample_size = 100;
 	const int num_dimensions = 2;
-	const double alpha = 0.001;
+	
 	Eigen::MatrixXd train_X(num_dimensions, train_sample_size);
 	Eigen::VectorXd train_y(train_sample_size);
 	const auto f = [](double x, double y) {
@@ -219,20 +219,22 @@ TEST(DecisionTreeTest, univariate_regression_with_pruning)
 		train_X(1, i) = normal(rng);
 		train_y[i] = f(train_X(0, i), train_X(1, i));
 	}	
-	// Grow a big tree.
-	RegTree tree(ml::DecisionTrees::univariate_regression_tree(train_X, train_y, 100, 2));
-	const double train_sse = tree.total_leaf_error();
-	const auto orig_num_modes = tree.count_nodes();
-	const auto orig_cost_complexity = tree.cost_complexity(alpha);
-	ASSERT_EQ(0, train_sse);	
-	const double train_mse = train_sse / static_cast<double>(train_sample_size);
 	Eigen::MatrixXd test_X(num_dimensions, test_sample_size);
-	Eigen::VectorXd test_y(test_sample_size);	
+	Eigen::VectorXd test_y(test_sample_size);
 	for (int i = 0; i < test_sample_size; ++i) {
 		test_X(0, i) = normal(rng);
 		test_X(1, i) = normal(rng);
 		test_y[i] = f(test_X(0, i), test_X(1, i));
 	}
+	// Grow a big tree.
+	RegTree tree(ml::DecisionTrees::univariate_regression_tree(train_X, train_y, 100, 2));
+	const double train_sse = tree.total_leaf_error();
+	const auto orig_num_modes = tree.count_nodes();
+	const double alpha = 0.001;
+	const auto orig_cost_complexity = tree.cost_complexity(alpha);
+	ASSERT_EQ(0, train_sse);	
+	const double train_mse = train_sse / static_cast<double>(train_sample_size);
+	
 	const double test_mse = ml::DecisionTrees::univariate_regression_tree_mean_squared_error(tree, test_X, test_y);
 	ASSERT_GT(test_mse, train_mse + 0.01);
 	ASSERT_LE(test_mse, train_mse + 0.04);
@@ -245,6 +247,46 @@ TEST(DecisionTreeTest, univariate_regression_with_pruning)
 	ASSERT_GT(test_mse, pruned_test_mse);
 	ASSERT_GT(pruned_test_mse, train_sse);	
 	ASSERT_GT(pruned_test_mse, train_sse + 0.01);
+}
+
+TEST(DecisionTreeTest, univariate_regression_with_crossvalidation)
+{
+	const int train_sample_size = 1000;
+	const int test_sample_size = 100;
+	const int num_dimensions = 2;
+	Eigen::MatrixXd train_X(num_dimensions, train_sample_size);
+	Eigen::VectorXd train_y(train_sample_size);
+	const auto f = [](double x, double y) {
+		return (x > 0 ? 7 : 0) - (y > 0 ? 4 : -1);
+	};
+	std::default_random_engine rng;
+	rng.seed(3523423);	
+	const double noise_strength = 0.01;
+	std::normal_distribution normal;
+	const auto noise = [&normal, &rng]() {
+		return normal(rng);
+	};
+	for (int i = 0; i < train_sample_size; ++i) {
+		train_X(0, i) = normal(rng);
+		train_X(1, i) = normal(rng);
+		train_y[i] = f(train_X(0, i), train_X(1, i)) + noise_strength * noise();
+	}
+	Eigen::MatrixXd test_X(num_dimensions, test_sample_size);
+	Eigen::VectorXd test_y(test_sample_size);
+	for (int i = 0; i < test_sample_size; ++i) {
+		test_X(0, i) = normal(rng);
+		test_X(1, i) = normal(rng);
+		test_y[i] = f(test_X(0, i), test_X(1, i)) + noise_strength * noise();
+	}
+	const std::vector<double> alphas({ 3e-4, 1e-3, 3e-3, 1e-2 });
+	auto result = ml::DecisionTrees::univariate_regression_tree_auto_prune(train_X, train_y, 100, 2, alphas, 10);
+	const RegTree& tree = std::get<0>(result);
+	const auto alpha = std::get<1>(result);
+	ASSERT_GT(alpha, alphas.front());
+	const auto cv_test_error = std::get<2>(result);
+	ASSERT_NE(alphas.end(), std::find(alphas.begin(), alphas.end(), alpha));
+	const double test_error = ml::DecisionTrees::univariate_regression_tree_mean_squared_error(tree, test_X, test_y);
+	ASSERT_NEAR(test_error, noise_strength * noise_strength, 2e-5);	
 }
 
 TEST(DecisionTreeTest, pruning)
@@ -334,6 +376,13 @@ TEST(DecisionTreeTest, classification_with_pruning)
 		train_X(1, i) = normal(rng);
 		train_y[i] = f(train_X(0, i), train_X(1, i));
 	}
+	Eigen::MatrixXd test_X(num_dimensions, test_sample_size);
+	Eigen::VectorXd test_y(test_sample_size);
+	for (int i = 0; i < test_sample_size; ++i) {
+		test_X(0, i) = normal(rng);
+		test_X(1, i) = normal(rng);
+		test_y[i] = f(test_X(0, i), test_X(1, i));
+	}
 	// Grow a big tree.
 	auto tree(ml::DecisionTrees::classification_tree(train_X, train_y, 100, 2));
 	const double train_error = tree.total_leaf_error();
@@ -350,13 +399,6 @@ TEST(DecisionTreeTest, classification_with_pruning)
 	train_accuracy /= static_cast<double>(train_sample_size);
 	ASSERT_EQ(1, train_accuracy);
 	ASSERT_NEAR(1 - train_error, train_accuracy, 1e-15);
-	Eigen::MatrixXd test_X(num_dimensions, test_sample_size);
-	Eigen::VectorXd test_y(test_sample_size);
-	for (int i = 0; i < test_sample_size; ++i) {
-		test_X(0, i) = normal(rng);
-		test_X(1, i) = normal(rng);
-		test_y[i] = f(test_X(0, i), test_X(1, i));
-	}
 	const double test_accuracy = ml::DecisionTrees::classification_tree_accuracy(tree, test_X, test_y);
 	ASSERT_LT(test_accuracy, train_accuracy);
 	ASSERT_GE(test_accuracy, 0.875);

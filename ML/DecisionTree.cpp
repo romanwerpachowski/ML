@@ -307,8 +307,9 @@ namespace ml
 			}
 			double mse = 0;
 			for (Eigen::Index i = 0; i < sample_size; ++i) {
-				mse += (std::pow(y[i] - tree(X.col(i)), 2) - mse) / static_cast<double>(i + 1);
-			}
+				const double err_i = std::pow(y[i] - tree(X.col(i)), 2);
+				mse += (err_i - mse) / static_cast<double>(i + 1);
+			}			
 			return mse;
 		}
 
@@ -330,13 +331,13 @@ namespace ml
 			return static_cast<double>(num_correctly_classified) / static_cast<double>(sample_size);
 		}
 
-		template <class Y, class Grow, class Test> std::pair<double, double> find_best_alpha(const std::vector<double>& alphas, Grow growing_function, Test test_error_function, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, const unsigned int num_folds)
+		template <class Grow, class TestError> std::pair<double, double> find_best_alpha(const std::vector<double>& alphas, Grow grow_function, TestError test_error_function, const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int num_folds)
 		{
 			double min_cv_test_error = std::numeric_limits<double>::infinity();
 			double best_alpha = -1;
 			for (double alpha : alphas) {
-				auto train_func = [alpha, growing_function](const Eigen::MatrixXd& train_X, const Eigen::VectorXd& train_y) {
-					auto tree = growing_function(train_X, train_y);
+				auto train_func = [alpha, grow_function](const Eigen::Ref<const Eigen::MatrixXd> train_X, const Eigen::Ref<const Eigen::VectorXd> train_y) {
+					auto tree = grow_function(train_X, train_y);
 					cost_complexity_prune(tree, alpha);
 					return tree;
 				};
@@ -347,6 +348,37 @@ namespace ml
 				}
 			}
 			return std::make_pair(best_alpha, min_cv_test_error);
+		}
+
+		template <class Y, class Metrics, class TestError> std::tuple<DecisionTree<Y>, double, double> tree_1d_auto_prune(const Metrics metrics, TestError test_error_function, const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds)
+		{
+			double alpha = std::numeric_limits<double>::quiet_NaN();
+			double min_cv_test_error = std::numeric_limits<double>::quiet_NaN();
+			if (alphas.size() > 1) {
+				auto grow_function = [max_split_levels, min_sample_size, metrics](const Eigen::Ref<const Eigen::MatrixXd> train_X, const Eigen::Ref<const Eigen::VectorXd> train_y) {
+					return tree_1d<Y, Metrics>(metrics, train_X, train_y, max_split_levels, min_sample_size);
+				};
+				const auto best_alpha_and_min_cv_test_error = find_best_alpha(alphas, grow_function, test_error_function, X, y, num_folds);
+				alpha = best_alpha_and_min_cv_test_error.first;
+				min_cv_test_error = best_alpha_and_min_cv_test_error.second;
+			} else if (alphas.size() == 1) {
+				alpha = alphas.front();				
+			}
+			DecisionTree<Y> tree(tree_1d<Y, Metrics>(metrics, X, y, max_split_levels, min_sample_size));
+			if (!std::isnan(alpha)) {
+				cost_complexity_prune(tree, alpha);
+			}
+			return std::make_tuple(std::move(tree), alpha, min_cv_test_error);
+		}
+
+		std::tuple<UnivariateRegressionTree, double, double> univariate_regression_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds)
+		{
+			return tree_1d_auto_prune<double>(UnivariateRegressionMetrics(), univariate_regression_tree_mean_squared_error, X, y, max_split_levels, min_sample_size, alphas, num_folds);
+		}
+
+		std::tuple<ClassificationTree, double, double> classification_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds)
+		{
+			return tree_1d_auto_prune<unsigned int>(ClassificationMetrics(static_cast<unsigned int>(y.maxCoeff()) + 1), classification_tree_accuracy, X, y, max_split_levels, min_sample_size, alphas, num_folds);
 		}
 	}
 }

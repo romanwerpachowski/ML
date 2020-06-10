@@ -36,7 +36,7 @@ namespace ml
 			return remaining;
 		}
 
-		template <class Grow, class Test> double calc_test_error(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Grow train_func, Test test_func, const unsigned int num_folds)
+		template <class Grow, class TestError> double calc_test_error(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Grow train_func, TestError test_func, const unsigned int num_folds)
 		{
 			double sum_weighted_errors = 0;
 			for (unsigned int k = 0; k < num_folds; ++k) {
