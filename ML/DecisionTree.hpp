@@ -235,6 +235,12 @@ namespace ml
 		/** Calculates tree accuracy on (X, y) data. */
 		DLL_DECLSPEC double classification_tree_accuracy(const ClassificationTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
+		/** 1 - tree accuracy. */
+		inline double classification_tree_misclassification_rate(const ClassificationTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
+		{
+			return 1 - classification_tree_accuracy(tree, X, y);
+		}
+
 		/** Grows a univariate regression tree with pruning.
 		@param X Independent variables (column-wise).
 		@param y Dependent variable.

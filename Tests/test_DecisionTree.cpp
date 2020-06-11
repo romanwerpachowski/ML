@@ -278,11 +278,12 @@ TEST(DecisionTreeTest, univariate_regression_with_crossvalidation)
 		test_X(1, i) = normal(rng);
 		test_y[i] = f(test_X(0, i), test_X(1, i)) + noise_strength * noise();
 	}
-	const std::vector<double> alphas({ 3e-4, 1e-3, 3e-3, 1e-2 });
+	const std::vector<double> alphas({ 1e-3, 3e-3, 1e-2 });
 	auto result = ml::DecisionTrees::univariate_regression_tree_auto_prune(train_X, train_y, 100, 2, alphas, 10);
 	const RegTree& tree = std::get<0>(result);
 	const auto alpha = std::get<1>(result);
 	ASSERT_GT(alpha, alphas.front());
+	ASSERT_LT(alpha, alphas.back());
 	const auto cv_test_error = std::get<2>(result);
 	ASSERT_NE(alphas.end(), std::find(alphas.begin(), alphas.end(), alpha));
 	const double test_error = ml::DecisionTrees::univariate_regression_tree_mean_squared_error(tree, test_X, test_y);
@@ -411,4 +412,48 @@ TEST(DecisionTreeTest, classification_with_pruning)
 	// Pruning lowered accuracy.
 	ASSERT_LT(pruned_test_accuracy, train_accuracy);
 	ASSERT_GE(pruned_test_accuracy, 0.855);
+}
+
+TEST(DecisionTreeTest, classification_with_crossvalidation)
+{
+	const int train_sample_size = 1000;
+	const int test_sample_size = 100;
+	const int num_dimensions = 2;
+	Eigen::MatrixXd train_X(num_dimensions, train_sample_size);
+	Eigen::VectorXd train_y(train_sample_size);
+	std::default_random_engine rng;
+	rng.seed(3523423);
+	std::uniform_real_distribution<double> u01(0, 1);
+	const auto f = [&rng, &u01](double x, double /*y*/) -> unsigned int {
+		const double score = 2 * x;
+		const double p = 1 / (1 + std::exp(-score));
+		if (u01(rng) < p) {
+			return 0;
+		} else {
+			return 1;
+		}
+	};
+	for (int i = 0; i < train_sample_size; ++i) {
+		train_X(0, i) = 5 - 10 * u01(rng);
+		train_X(1, i) = 5 - 10 * u01(rng);
+		train_y[i] = f(train_X(0, i), train_X(1, i));
+	}
+	Eigen::MatrixXd test_X(num_dimensions, test_sample_size);
+	Eigen::VectorXd test_y(test_sample_size);
+	for (int i = 0; i < test_sample_size; ++i) {
+		test_X(0, i) = 5 - 10 * u01(rng);
+		test_X(1, i) = 5 - 10 * u01(rng);
+		test_y[i] = f(test_X(0, i), test_X(1, i));
+	}
+	const std::vector<double> alphas({ 1, 10, 100 });
+	auto result = ml::DecisionTrees::classification_tree_auto_prune(train_X, train_y, 100, 2, alphas, 10);
+	const auto& tree = std::get<0>(result);
+	ASSERT_EQ(3, tree.count_nodes());
+	const auto alpha = std::get<1>(result);
+	ASSERT_GT(alpha, alphas.front());
+	ASSERT_LT(alpha, alphas.back());
+	const auto cv_test_error = std::get<2>(result);
+	ASSERT_NE(alphas.end(), std::find(alphas.begin(), alphas.end(), alpha));
+	const double test_error = ml::DecisionTrees::classification_tree_misclassification_rate(tree, test_X, test_y);
+	ASSERT_GE(0.1, test_error);
 }

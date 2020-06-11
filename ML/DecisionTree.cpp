@@ -329,7 +329,7 @@ namespace ml
 				}
 			}
 			return static_cast<double>(num_correctly_classified) / static_cast<double>(sample_size);
-		}
+		}		
 
 		template <class Grow, class TestError> std::pair<double, double> find_best_alpha(const std::vector<double>& alphas, Grow grow_function, TestError test_error_function, const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int num_folds)
 		{
@@ -378,7 +378,7 @@ namespace ml
 
 		std::tuple<ClassificationTree, double, double> classification_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds)
 		{
-			return tree_1d_auto_prune<unsigned int>(ClassificationMetrics(static_cast<unsigned int>(y.maxCoeff()) + 1), classification_tree_accuracy, X, y, max_split_levels, min_sample_size, alphas, num_folds);
+			return tree_1d_auto_prune<unsigned int>(ClassificationMetrics(static_cast<unsigned int>(y.maxCoeff()) + 1), classification_tree_misclassification_rate, X, y, max_split_levels, min_sample_size, alphas, num_folds);
 		}
 	}
 }
