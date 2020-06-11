@@ -41,12 +41,13 @@ template <typename T> static void BM_gini_index(benchmark::State& state)
 	std::vector<T> data(state.range(0));
 	std::default_random_engine rng;
 	rng.seed(340934091);
-	std::uniform_int_distribution d(0, 9);
+	const unsigned int K = 10;
+	std::uniform_int_distribution<int> d(0, K - 1);
 	for (auto& x : data) {
 		x = d(rng);
 	}
 	for (auto _ : state) {
-		benchmark::DoNotOptimize(ml::Statistics::gini_index(data.begin(), data.end()));
+		benchmark::DoNotOptimize(ml::Statistics::gini_index(data.begin(), data.end(), K));
 	}
 	state.SetComplexityN(state.range(0));
 }
@@ -59,12 +60,13 @@ template <typename T> static void BM_gini_index_and_mode(benchmark::State& state
 	std::vector<T> data(state.range(0));
 	std::default_random_engine rng;
 	rng.seed(340934091);
-	std::uniform_int_distribution d(0, 9);
+	const unsigned int K = 10;
+	std::uniform_int_distribution<int> d(0, K - 1);
 	for (auto& x : data) {
 		x = d(rng);
 	}
 	for (auto _ : state) {
-		benchmark::DoNotOptimize(ml::Statistics::gini_index_and_mode(data.begin(), data.end()));
+		benchmark::DoNotOptimize(ml::Statistics::gini_index_and_mode(data.begin(), data.end(), K));
 	}
 	state.SetComplexityN(state.range(0));
 }
