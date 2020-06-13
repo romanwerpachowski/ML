@@ -12,8 +12,9 @@
 
 namespace ml
 {
-	EM::EM(const unsigned int number_components)
-		: mixing_probabilities_(number_components)
+	EM::EM(const unsigned int number_components, std::shared_ptr<const MeansInitialiser> means_initialiser)
+		: means_initialiser_(means_initialiser)
+		, mixing_probabilities_(number_components)
 		, covariances_(number_components)
 		, absolute_tolerance_(1e-8)
 		, relative_tolerance_(1e-8)
@@ -23,6 +24,9 @@ namespace ml
 	{
 		if (!number_components) {
 			throw std::invalid_argument("At least one component required");
+		}
+		if (!means_initialiser) {
+			throw std::invalid_argument("Null means initialiser");
 		}
 	}	
 
@@ -62,7 +66,7 @@ namespace ml
 		return covariances_[k];
 	}
 
-	bool EM::fit(const Eigen::MatrixXd& data)
+	bool EM::fit(const Eigen::Ref<const Eigen::MatrixXd> data)
 	{
 		const auto number_dimensions = data.rows();
 		const auto sample_size = data.cols();
@@ -90,12 +94,11 @@ namespace ml
 		}
 
 		// Initialise means and covariances to sensible guesses.
-		std::vector<Eigen::Index> initial_means_indices(sample_datapoints_without_replacement(sample_size));
+		means_initialiser_->choose(data, prng_, number_components_, means_);
 		const Eigen::MatrixXd sample_covariance(calculate_sample_covariance(data));
 		assert(sample_covariance.rows() == number_dimensions);
 		assert(sample_covariance.cols() == number_dimensions);
 		for (unsigned int k = 0; k < number_components_; ++k) {
-			means_.col(k) = data.col(initial_means_indices[k]);
 			covariances_[k] = sample_covariance;
 		}
 
@@ -111,26 +114,7 @@ namespace ml
 		for (unsigned int step = 0; step < maximum_steps_; ++step) {
 			//// Expectation stage. ////
 
-			// Calculate unnormalised responsibilities.
-			for (unsigned int k = 0; k < number_components_; ++k) {
-				// Add 1e-15 * I to avoid numerical issues.
-				work_matrix_ = invert_symmetric_positive_definite_matrix(covariances_[k] + epsilon);
-				const auto mean = means_.col(k);
-				auto component_weights = responsibilities_.col(k);
-				for (Eigen::Index i = 0; i < sample_size; ++i) {
-					work_vector_ = data.col(i) - mean;
-					component_weights[i] = std::exp(-0.5 * work_vector_.transpose() * work_matrix_ * work_vector_);
-				}
-				component_weights *= mixing_probabilities_[k] / std::sqrt((covariances_[k] + epsilon).determinant());
-			}
-			log_likelihood_ = responsibilities_.rowwise().sum().array().log().mean() - log_likelihood_normalisation_constant;
-
-			// Normalise responsibilities for each datapoint.
-			for (Eigen::Index i = 0; i < sample_size; ++i) {
-				auto datapoint_responsibilities = responsibilities_.row(i);
-				const double sum_weights = datapoint_responsibilities.sum();
-				datapoint_responsibilities /= sum_weights;
-			}
+			expectation_stage(data);
 
 			if (verbose_) {
 				std::cout << "Step " << step << "\n";
@@ -142,7 +126,9 @@ namespace ml
 				std::cout << "Responsibilities (first 10 rows):\n";
 				std::cout << responsibilities_.topRows(std::min(sample_size, static_cast<Eigen::Index>(10)));
 				std::cout << std::endl;
-			}
+			}			
+
+			maximisation_stage(data);
 
 			if (step > 0) {
 				const double ll_change = std::abs(log_likelihood_ - old_log_likelihood);
@@ -151,23 +137,12 @@ namespace ml
 				}
 			}
 			old_log_likelihood = log_likelihood_;
-
-			maximisation_stage(data);
 		}
 
 		return false;
 	}
 
-	std::vector<Eigen::Index> EM::sample_datapoints_without_replacement(Eigen::Index sample_size)
-	{
-		std::vector<Eigen::Index> all_indices(sample_size);
-		std::iota(all_indices.begin(), all_indices.end(), 0);
-		std::vector<Eigen::Index> sampled_indices;
-		std::sample(all_indices.begin(), all_indices.end(), std::back_inserter(sampled_indices), number_components_, prng_);
-		return sampled_indices;
-	}
-
-	Eigen::MatrixXd EM::calculate_sample_covariance(const Eigen::MatrixXd& data)
+	Eigen::MatrixXd EM::calculate_sample_covariance(Eigen::Ref<const Eigen::MatrixXd> data)
 	{
 		const Eigen::MatrixXd centred = data.colwise() - data.rowwise().mean();
 		const Eigen::MatrixXd covariance = (centred * centred.adjoint()) / (static_cast<double>(data.cols() - 1));
@@ -176,14 +151,47 @@ namespace ml
 		return covariance;
 	}
 
-	Eigen::MatrixXd EM::invert_symmetric_positive_definite_matrix(const Eigen::MatrixXd& m)
+	Eigen::MatrixXd EM::invert_symmetric_positive_definite_matrix(Eigen::Ref<const Eigen::MatrixXd> m)
 	{
 		assert(m.rows() == m.cols());
 		// Uses Cholesky algorithm. Assumes m is symmetric positive definite.
 		return m.llt().solve(Eigen::MatrixXd::Identity(m.rows(), m.cols()));
 	}
 
-	void EM::maximisation_stage(const Eigen::MatrixXd& data)
+	void EM::expectation_stage(Eigen::Ref<const Eigen::MatrixXd> data)
+	{
+		const auto number_dimensions = data.rows();
+		assert(number_dimensions);
+		const auto sample_size = data.cols();
+		assert(sample_size >= number_components_);
+
+		static constexpr double epsilon = 1e-15;
+		static const double log_2_pi = std::log(2 * PI);
+		const auto log_likelihood_normalisation_constant = number_dimensions * log_2_pi;
+
+		// Calculate unnormalised responsibilities.
+		for (unsigned int k = 0; k < number_components_; ++k) {
+			// Add epsilon * I to avoid numerical issues.
+			work_matrix_ = invert_symmetric_positive_definite_matrix(covariances_[k] + epsilon * Eigen::MatrixXd::Identity(number_dimensions, number_dimensions));
+			const auto mean = means_.col(k);
+			auto component_weights = responsibilities_.col(k);
+			for (Eigen::Index i = 0; i < sample_size; ++i) {
+				work_vector_ = data.col(i) - mean;
+				component_weights[i] = std::exp(-0.5 * work_vector_.transpose() * work_matrix_ * work_vector_);
+			}
+			component_weights *= mixing_probabilities_[k] / std::sqrt((covariances_[k] + epsilon * Eigen::MatrixXd::Identity(number_dimensions, number_dimensions)).determinant());
+		}
+		log_likelihood_ = responsibilities_.rowwise().sum().array().log().mean() - log_likelihood_normalisation_constant;
+
+		// Normalise responsibilities for each datapoint.
+		for (Eigen::Index i = 0; i < sample_size; ++i) {
+			auto datapoint_responsibilities = responsibilities_.row(i);
+			const double sum_weights = datapoint_responsibilities.sum();
+			datapoint_responsibilities /= sum_weights;
+		}
+	}
+
+	void EM::maximisation_stage(Eigen::Ref<const Eigen::MatrixXd> data)
 	{
 		const auto number_dimensions = data.rows();
 		assert(number_dimensions);
@@ -217,6 +225,57 @@ namespace ml
 			mixing_probabilities_[k] = sum_component_weights / static_cast<double>(sample_size);
 			assert(covariance.rows() == number_dimensions);
 			assert(covariance.cols() == number_dimensions);
+		}
+	}
+
+	EM::MeansInitialiser::~MeansInitialiser()
+	{}
+
+	void EM::Forgy::choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, const unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const
+	{
+		std::vector<Eigen::Index> all_indices(data.cols());
+		std::iota(all_indices.begin(), all_indices.end(), 0);
+		std::vector<Eigen::Index> sampled_indices;
+		std::sample(all_indices.begin(), all_indices.end(), std::back_inserter(sampled_indices), number_components, prng);
+		means.resize(data.rows(), number_components);
+		for (unsigned int i = 0; i < number_components; ++i) {
+			means.col(i) = data.col(sampled_indices[i]);
+		}
+	}
+
+	void EM::RandomPartition::choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, const unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const
+	{
+		means.resize(data.rows(), number_components);
+		means.setZero();
+		std::vector<unsigned int> counters(number_components, 0);
+		std::uniform_int_distribution<unsigned int> dist(0, number_components - 1);
+		for (Eigen::Index i = 0; i < data.cols(); ++i) {
+			const auto k = dist(prng);
+			means.col(k) += (data.col(i) - means.col(k)) / static_cast<double>(++counters[k]);
+		}
+		assert(std::accumulate(counters.begin(), counters.end(), 0) == data.cols());
+	}
+
+	void EM::KPP::choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, const unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const
+	{
+		means.resize(data.rows(), number_components);		
+		std::vector<double> weights(data.cols());
+		for (unsigned int n = 0; n < number_components; ++n) {
+			if (n) {
+				for (Eigen::Index i = 0; i < data.cols(); ++i) {
+					double min_distance_squared = std::numeric_limits<double>::infinity();
+					for (unsigned int k = 0; k < n; ++k) {
+						const double distance_squared = (data.col(i) - means.col(k)).squaredNorm();
+						min_distance_squared = std::min(min_distance_squared, distance_squared);
+					}
+					weights[i] = min_distance_squared;
+				}
+			} else {
+				std::fill(weights.begin(), weights.end(), 1);
+			}
+			std::discrete_distribution<Eigen::Index> dist(weights.begin(), weights.end());
+			const auto new_mean_idx = dist(prng);
+			means.col(n) = data.col(new_mean_idx);
 		}
 	}
 }

@@ -2,7 +2,8 @@
 #include <gtest/gtest.h>
 #include "ML/EM.hpp"
 
-TEST(TestEM, two_gaussians)
+
+static void test_two_gaussians(std::shared_ptr<const ml::EM::MeansInitialiser> means_initialiser)
 {
 	std::default_random_engine rng;
 	std::uniform_real_distribution<double> u01(0, 1);
@@ -30,10 +31,10 @@ TEST(TestEM, two_gaussians)
 		}
 	}
 
-	ml::EM em(num_components);
+	ml::EM em(num_components, means_initialiser);
 	ASSERT_EQ(num_components, em.number_components());
 	em.set_absolute_tolerance(1e-8);
-	em.set_relative_tolerance(1e-8);	
+	em.set_relative_tolerance(1e-8);
 	em.set_maximum_steps(10);
 	ASSERT_TRUE(em.fit(data)) << "EM did not converge";
 	ASSERT_EQ(num_components, em.mixing_probabilities().size());
@@ -59,14 +60,29 @@ TEST(TestEM, two_gaussians)
 		means.col(0).swap(means.col(1));
 		std::swap(covariances[0], covariances[1]);
 	}
-	ASSERT_NEAR(0., (mixing_probabilities - em.mixing_probabilities()).norm(), 1e-2) << em.mixing_probabilities();		
+	ASSERT_NEAR(0., (mixing_probabilities - em.mixing_probabilities()).norm(), 1e-2) << em.mixing_probabilities();
 	ASSERT_NEAR(0., (means - em.means()).norm(), 2e-2) << em.means();
 	for (unsigned int k = 0; k < num_components; ++k) {
 		ASSERT_NEAR(0., (covariances[k] - em.covariance(k)).norm(), 1e-2) << "Covariance[" << k << "]:\n" << em.covariance(k);
 	}
 
-	ml::EM em1(1);
+	ml::EM em1(1, means_initialiser);
 	em1.fit(data);
 	ASSERT_LE(em1.log_likelihood(), em.log_likelihood()) << em1.log_likelihood();
 	ASSERT_NEAR(0., (data.rowwise().mean() - em1.means().col(0)).norm(), 1e-14);
+}
+
+TEST(EMTest, two_gaussians_forgy)
+{
+	test_two_gaussians(std::make_shared<ml::EM::Forgy>());
+}
+
+TEST(EMTest, two_gaussians_random_partition)
+{
+	test_two_gaussians(std::make_shared<ml::EM::RandomPartition>());
+}
+
+TEST(EMTest, two_gaussians_kpp)
+{
+	test_two_gaussians(std::make_shared<ml::EM::KPP>());
 }

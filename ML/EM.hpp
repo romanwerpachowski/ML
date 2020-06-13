@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <random>
 #include <vector>
 #include <Eigen/Core>
@@ -12,10 +13,19 @@ namespace ml
 	*/
 	class EM {
 	public:
+		/** Chooses initial locations of means. */
+		struct MeansInitialiser
+		{
+			DLL_DECLSPEC virtual ~MeansInitialiser();
+
+			DLL_DECLSPEC virtual void choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const = 0;
+		};
+
 		/** Construct an EM ready to fit.
 		@param number_components Number of Gaussian components, > 0.
+		@param means_initialiser Pointer to MeansInitialiser implementation.
 		*/
-		DLL_DECLSPEC EM(unsigned int number_components);
+		DLL_DECLSPEC EM(unsigned int number_components, std::shared_ptr<const MeansInitialiser> means_initialiser);
 
 		DLL_DECLSPEC void set_seed(unsigned int seed);
 
@@ -28,7 +38,7 @@ namespace ml
 		/**
 		@param data Matrix with a data point in every column.
 		*/
-		DLL_DECLSPEC bool fit(const Eigen::MatrixXd& data);
+		DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data);
 
 		auto number_components() const
 		{
@@ -66,8 +76,27 @@ namespace ml
 		{
 			verbose_ = verbose;
 		}
+
+		/** Chooses random points as new means. */
+		struct Forgy : public MeansInitialiser
+		{
+			DLL_DECLSPEC void choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const override;
+		};
+
+		/** Assigns points to clusters randomly and then returns cluster means. */
+		struct RandomPartition : public MeansInitialiser
+		{
+			DLL_DECLSPEC void choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const override;
+		};
+
+		/** See https://en.wikipedia.org/wiki/K-means%2B%2B */
+		struct KPP : public MeansInitialiser
+		{
+			DLL_DECLSPEC void choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const override;
+		};
 	private:
 		std::default_random_engine prng_;
+		std::shared_ptr<const MeansInitialiser> means_initialiser_;
 		Eigen::VectorXd mixing_probabilities_;
 		Eigen::MatrixXd means_;
 		Eigen::MatrixXd responsibilities_;
@@ -81,12 +110,12 @@ namespace ml
 		unsigned int maximum_steps_;
 		bool verbose_;
 
-		std::vector<Eigen::Index> sample_datapoints_without_replacement(Eigen::Index sample_size);
+		static Eigen::MatrixXd calculate_sample_covariance(Eigen::Ref<const Eigen::MatrixXd> data);
 
-		static Eigen::MatrixXd calculate_sample_covariance(const Eigen::MatrixXd& data);
+		static Eigen::MatrixXd invert_symmetric_positive_definite_matrix(Eigen::Ref<const Eigen::MatrixXd> m);
 
-		static Eigen::MatrixXd invert_symmetric_positive_definite_matrix(const Eigen::MatrixXd& m);
+		void expectation_stage(Eigen::Ref<const Eigen::MatrixXd> data);
 
-		void maximisation_stage(const Eigen::MatrixXd& data);
+		void maximisation_stage(Eigen::Ref<const Eigen::MatrixXd> data);
 	};
 }
