@@ -14,10 +14,10 @@ void em_demo(void)
 	const unsigned int num_dimensions = 2;
 	const unsigned int sample_size = 1000;
 	const double face_radius = 1;
-	const double ear_radius = 0.2;
+	const double ear_radius = 0.3;
 	const unsigned int num_components = 3; // face, left ear, right ear
 	const std::vector<double> radii{ face_radius, ear_radius, ear_radius };
-	std::discrete_distribution<unsigned int> component_distr{ face_radius * face_radius, ear_radius * ear_radius, ear_radius * ear_radius }; // equal coverage
+	std::discrete_distribution<unsigned int> component_distr{ face_radius * face_radius, 2 * ear_radius * ear_radius, 2 * ear_radius * ear_radius };
 	const double ear_angle = 45 * PI / 180.; // how far is ear from top of head
 	std::vector<double> center_xs{ 0, -(face_radius + ear_radius) * std::sin(ear_angle), (face_radius + ear_radius) * std::sin(ear_angle) };
 	std::vector<double> center_ys{ 0, (face_radius + ear_radius) * std::cos(ear_angle), (face_radius + ear_radius) * std::cos(ear_angle) };
@@ -33,9 +33,11 @@ void em_demo(void)
 		data(1, i) = center_ys[k] + r * std::sin(phi);
 	}
 
-	ml::EM em(num_components, std::make_shared<ml::EM::RandomPartition>());
+	ml::EM em(num_components);
 	em.set_absolute_tolerance(1e-14);
 	em.set_relative_tolerance(1e-14);
+	em.set_means_initialiser(std::make_shared<ml::EM::Forgy>());
+	em.set_maximise_first(false);
 	const bool converged = em.fit(data);
 
 	std::cout << "Converged: " << converged << "\n";

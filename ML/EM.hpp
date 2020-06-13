@@ -14,18 +14,27 @@ namespace ml
 	class EM {
 	public:
 		/** Chooses initial locations of means. */
-		struct MeansInitialiser
+		class MeansInitialiser
 		{
+		public:
 			DLL_DECLSPEC virtual ~MeansInitialiser();
 
-			DLL_DECLSPEC virtual void choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const = 0;
+			DLL_DECLSPEC virtual void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const = 0;
+		};
+
+		/** Chooses initial responsibilities. */
+		class ResponsibilitiesInitialiser
+		{
+		public:
+			DLL_DECLSPEC virtual ~ResponsibilitiesInitialiser();
+
+			DLL_DECLSPEC virtual void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> responsibilities) const = 0;
 		};
 
 		/** Construct an EM ready to fit.
-		@param number_components Number of Gaussian components, > 0.
-		@param means_initialiser Pointer to MeansInitialiser implementation.
+		@param number_components Number of Gaussian components, > 0.		
 		*/
-		DLL_DECLSPEC EM(unsigned int number_components, std::shared_ptr<const MeansInitialiser> means_initialiser);
+		DLL_DECLSPEC EM(unsigned int number_components);
 
 		DLL_DECLSPEC void set_seed(unsigned int seed);
 
@@ -34,6 +43,26 @@ namespace ml
 		DLL_DECLSPEC void set_relative_tolerance(double relative_tolerance);
 
 		DLL_DECLSPEC void set_maximum_steps(unsigned int maximum_steps);
+
+		/**
+		@param means_initialiser Pointer to MeansInitialiser implementation.
+		*/
+		DLL_DECLSPEC void set_means_initialiser(std::shared_ptr<const MeansInitialiser> means_initialiser);
+
+		/**
+		@param means_initialiser Pointer to MeansInitialiser implementation.
+		*/
+		DLL_DECLSPEC void set_responsibilities_initialiser(std::shared_ptr<const ResponsibilitiesInitialiser> responsibilities_initialiser);
+
+		void set_verbose(bool verbose)
+		{
+			verbose_ = verbose;
+		}
+
+		void set_maximise_first(bool maximise_first)
+		{
+			maximise_first_ = maximise_first;
+		}
 
 		/**
 		@param data Matrix with a data point in every column.
@@ -70,33 +99,43 @@ namespace ml
 		double log_likelihood() const 
 		{
 			return log_likelihood_;
-		}
-
-		void set_verbose(bool verbose) 
-		{
-			verbose_ = verbose;
-		}
+		}		
 
 		/** Chooses random points as new means. */
-		struct Forgy : public MeansInitialiser
+		class Forgy : public MeansInitialiser
 		{
-			DLL_DECLSPEC void choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const override;
+		public:
+			DLL_DECLSPEC void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const override;
 		};
 
 		/** Assigns points to clusters randomly and then returns cluster means. */
-		struct RandomPartition : public MeansInitialiser
+		class RandomPartition : public MeansInitialiser
 		{
-			DLL_DECLSPEC void choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const override;
+		public:
+			DLL_DECLSPEC void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const override;
 		};
 
 		/** See https://en.wikipedia.org/wiki/K-means%2B%2B */
-		struct KPP : public MeansInitialiser
+		class KPP : public MeansInitialiser
 		{
-			DLL_DECLSPEC void choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const override;
+		public:
+			DLL_DECLSPEC void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const override;
+		};
+
+		/** Initialises means and then assigns the responsibility for each point to its closest mean. */
+		class ClosestMean : public ResponsibilitiesInitialiser
+		{
+		public:
+			ClosestMean(std::shared_ptr<const MeansInitialiser> means_initialiser);
+
+			void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> responsibilities) const override;
+		private:
+			std::shared_ptr<const MeansInitialiser> means_initialiser_;
 		};
 	private:
 		std::default_random_engine prng_;
 		std::shared_ptr<const MeansInitialiser> means_initialiser_;
+		std::shared_ptr<const ResponsibilitiesInitialiser> responsibilities_initialiser_;
 		Eigen::VectorXd mixing_probabilities_;
 		Eigen::MatrixXd means_;
 		Eigen::MatrixXd responsibilities_;
@@ -109,6 +148,7 @@ namespace ml
 		unsigned int number_components_;
 		unsigned int maximum_steps_;
 		bool verbose_;
+		bool maximise_first_;
 
 		static Eigen::MatrixXd calculate_sample_covariance(Eigen::Ref<const Eigen::MatrixXd> data);
 

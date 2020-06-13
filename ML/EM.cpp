@@ -12,8 +12,9 @@
 
 namespace ml
 {
-	EM::EM(const unsigned int number_components, std::shared_ptr<const MeansInitialiser> means_initialiser)
-		: means_initialiser_(means_initialiser)
+	EM::EM(const unsigned int number_components)
+		: means_initialiser_(std::make_shared<Forgy>())
+		, responsibilities_initialiser_(std::make_shared<ClosestMean>(means_initialiser_))
 		, mixing_probabilities_(number_components)
 		, covariances_(number_components)
 		, absolute_tolerance_(1e-8)
@@ -21,12 +22,10 @@ namespace ml
 		, number_components_(number_components)
 		, maximum_steps_(1000)
 		, verbose_(false)
+		, maximise_first_(false)
 	{
 		if (!number_components) {
 			throw std::invalid_argument("At least one component required");
-		}
-		if (!means_initialiser) {
-			throw std::invalid_argument("Null means initialiser");
 		}
 	}	
 
@@ -57,6 +56,22 @@ namespace ml
 			throw std::invalid_argument("At least two steps required for convergence test");
 		}
 		maximum_steps_ = maximum_steps;
+	}
+
+	void EM::set_means_initialiser(std::shared_ptr<const MeansInitialiser> means_initialiser)
+	{
+		if (!means_initialiser) {
+			throw std::invalid_argument("Null means initialiser");
+		}
+		means_initialiser_ = means_initialiser;
+	}
+
+	void EM::set_responsibilities_initialiser(std::shared_ptr<const ResponsibilitiesInitialiser> responsibilities_initialiser)
+	{
+		if (!responsibilities_initialiser) {
+			throw std::invalid_argument("Null responsibilities initialiser");
+		}
+		responsibilities_initialiser_ = responsibilities_initialiser;
 	}
 
 	const Eigen::MatrixXd& EM::covariance(unsigned int k) const {
@@ -93,28 +108,34 @@ namespace ml
 			return true;
 		}
 
-		// Initialise means and covariances to sensible guesses.
-		means_initialiser_->choose(data, prng_, number_components_, means_);
-		const Eigen::MatrixXd sample_covariance(calculate_sample_covariance(data));
-		assert(sample_covariance.rows() == number_dimensions);
-		assert(sample_covariance.cols() == number_dimensions);
-		for (unsigned int k = 0; k < number_components_; ++k) {
-			covariances_[k] = sample_covariance;
+		if (maximise_first_) {
+			responsibilities_initialiser_->init(data, prng_, number_components_, responsibilities_);
+			for (unsigned int k = 0; k < number_components_; ++k) {
+				covariances_[k].resize(number_dimensions, number_dimensions);
+			}
+			maximisation_stage(data);			
+		} else {
+			// Initialise means and covariances to sensible guesses.
+			means_initialiser_->init(data, prng_, number_components_, means_);
+			const Eigen::MatrixXd sample_covariance(calculate_sample_covariance(data));
+			assert(sample_covariance.rows() == number_dimensions);
+			assert(sample_covariance.cols() == number_dimensions);
+			for (unsigned int k = 0; k < number_components_; ++k) {
+				covariances_[k] = sample_covariance;
+			}
 		}
 
 		// Work variables.
-		
 		work_matrix_.resize(number_dimensions, number_dimensions);
 		work_vector_.resize(number_dimensions);
-		const Eigen::MatrixXd epsilon(1e-15 * Eigen::MatrixXd::Identity(number_dimensions, number_dimensions));
-		const auto log_likelihood_normalisation_constant = number_dimensions * std::log(2 * PI);
 		double old_log_likelihood = -std::numeric_limits<double>::infinity();
 		
 		// Main iteration loop.
-		for (unsigned int step = 0; step < maximum_steps_; ++step) {
-			//// Expectation stage. ////
+		for (unsigned int step = 0; step < maximum_steps_; ++step) {			
 
-			expectation_stage(data);
+			expectation_stage(data);			
+
+			maximisation_stage(data);
 
 			if (verbose_) {
 				std::cout << "Step " << step << "\n";
@@ -126,9 +147,7 @@ namespace ml
 				std::cout << "Responsibilities (first 10 rows):\n";
 				std::cout << responsibilities_.topRows(std::min(sample_size, static_cast<Eigen::Index>(10)));
 				std::cout << std::endl;
-			}			
-
-			maximisation_stage(data);
+			}
 
 			if (step > 0) {
 				const double ll_change = std::abs(log_likelihood_ - old_log_likelihood);
@@ -231,21 +250,19 @@ namespace ml
 	EM::MeansInitialiser::~MeansInitialiser()
 	{}
 
-	void EM::Forgy::choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, const unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const
+	void EM::Forgy::init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, const unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const
 	{
 		std::vector<Eigen::Index> all_indices(data.cols());
 		std::iota(all_indices.begin(), all_indices.end(), 0);
 		std::vector<Eigen::Index> sampled_indices;
 		std::sample(all_indices.begin(), all_indices.end(), std::back_inserter(sampled_indices), number_components, prng);
-		means.resize(data.rows(), number_components);
 		for (unsigned int i = 0; i < number_components; ++i) {
 			means.col(i) = data.col(sampled_indices[i]);
 		}
 	}
 
-	void EM::RandomPartition::choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, const unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const
+	void EM::RandomPartition::init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, const unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const
 	{
-		means.resize(data.rows(), number_components);
 		means.setZero();
 		std::vector<unsigned int> counters(number_components, 0);
 		std::uniform_int_distribution<unsigned int> dist(0, number_components - 1);
@@ -256,9 +273,8 @@ namespace ml
 		assert(std::accumulate(counters.begin(), counters.end(), 0) == data.cols());
 	}
 
-	void EM::KPP::choose(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, const unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const
+	void EM::KPP::init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, const unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const
 	{
-		means.resize(data.rows(), number_components);		
 		std::vector<double> weights(data.cols());
 		for (unsigned int n = 0; n < number_components; ++n) {
 			if (n) {
@@ -276,6 +292,36 @@ namespace ml
 			std::discrete_distribution<Eigen::Index> dist(weights.begin(), weights.end());
 			const auto new_mean_idx = dist(prng);
 			means.col(n) = data.col(new_mean_idx);
+		}
+	}
+
+	EM::ResponsibilitiesInitialiser::~ResponsibilitiesInitialiser()
+	{}
+
+	EM::ClosestMean::ClosestMean(std::shared_ptr<const MeansInitialiser> means_initialiser)
+		: means_initialiser_(means_initialiser)
+	{
+		if (!means_initialiser) {
+			throw std::invalid_argument("Null means initialiser");
+		}
+	}
+
+	void EM::ClosestMean::init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> responsibilities) const
+	{
+		Eigen::MatrixXd means(data.rows(), number_components);
+		means_initialiser_->init(data, prng, number_components, means);
+		responsibilities.setZero();
+		for (Eigen::Index i = 0; i < data.cols(); ++i) {
+			double min_distance_squared = (data.col(i) - means.col(0)).squaredNorm();
+			unsigned int closest_mean_index = 0;
+			for (unsigned int k = 1; k < number_components; ++k) {
+				const double distance_squared = (data.col(i) - means.col(k)).squaredNorm();
+				if (distance_squared < min_distance_squared) {
+					min_distance_squared = distance_squared;
+					closest_mean_index = k;
+				}				
+			}
+			responsibilities(i, closest_mean_index) = 1;
 		}
 	}
 }

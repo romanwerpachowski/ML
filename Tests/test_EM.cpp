@@ -3,7 +3,7 @@
 #include "ML/EM.hpp"
 
 
-static void test_two_gaussians(std::shared_ptr<const ml::EM::MeansInitialiser> means_initialiser)
+static void test_two_gaussians(std::shared_ptr<const ml::EM::MeansInitialiser> means_initialiser, bool maximise_first)
 {
 	std::default_random_engine rng;
 	std::uniform_real_distribution<double> u01(0, 1);
@@ -31,11 +31,15 @@ static void test_two_gaussians(std::shared_ptr<const ml::EM::MeansInitialiser> m
 		}
 	}
 
-	ml::EM em(num_components, means_initialiser);
+	ml::EM em(num_components);
 	ASSERT_EQ(num_components, em.number_components());
 	em.set_absolute_tolerance(1e-8);
 	em.set_relative_tolerance(1e-8);
 	em.set_maximum_steps(10);
+	if (means_initialiser) {
+		em.set_means_initialiser(means_initialiser);
+	}
+	em.set_maximise_first(maximise_first);
 	ASSERT_TRUE(em.fit(data)) << "EM did not converge";
 	ASSERT_EQ(num_components, em.mixing_probabilities().size());
 	ASSERT_EQ(num_components, em.means().cols());
@@ -66,7 +70,11 @@ static void test_two_gaussians(std::shared_ptr<const ml::EM::MeansInitialiser> m
 		ASSERT_NEAR(0., (covariances[k] - em.covariance(k)).norm(), 1e-2) << "Covariance[" << k << "]:\n" << em.covariance(k);
 	}
 
-	ml::EM em1(1, means_initialiser);
+	ml::EM em1(1);
+	if (means_initialiser) {
+		em1.set_means_initialiser(means_initialiser);
+	}
+	em1.set_maximise_first(maximise_first);
 	em1.fit(data);
 	ASSERT_LE(em1.log_likelihood(), em.log_likelihood()) << em1.log_likelihood();
 	ASSERT_NEAR(0., (data.rowwise().mean() - em1.means().col(0)).norm(), 1e-14);
@@ -74,15 +82,20 @@ static void test_two_gaussians(std::shared_ptr<const ml::EM::MeansInitialiser> m
 
 TEST(EMTest, two_gaussians_forgy)
 {
-	test_two_gaussians(std::make_shared<ml::EM::Forgy>());
+	test_two_gaussians(std::make_shared<ml::EM::Forgy>(), false);
 }
 
 TEST(EMTest, two_gaussians_random_partition)
 {
-	test_two_gaussians(std::make_shared<ml::EM::RandomPartition>());
+	test_two_gaussians(std::make_shared<ml::EM::RandomPartition>(), false);
 }
 
 TEST(EMTest, two_gaussians_kpp)
 {
-	test_two_gaussians(std::make_shared<ml::EM::KPP>());
+	test_two_gaussians(std::make_shared<ml::EM::KPP>(), false);
+}
+
+TEST(EMTest, two_gaussians_closest_mean)
+{
+	test_two_gaussians(nullptr, true);
 }
