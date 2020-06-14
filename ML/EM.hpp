@@ -101,6 +101,11 @@ namespace ml
 			return log_likelihood_;
 		}		
 
+		std::shared_ptr<const MeansInitialiser> means_initialiser() const
+		{
+			return means_initialiser_;
+		}
+
 		/** Chooses random points as new means. */
 		class Forgy : public MeansInitialiser
 		{
@@ -126,7 +131,7 @@ namespace ml
 		class ClosestMean : public ResponsibilitiesInitialiser
 		{
 		public:
-			ClosestMean(std::shared_ptr<const MeansInitialiser> means_initialiser);
+			DLL_DECLSPEC ClosestMean(std::shared_ptr<const MeansInitialiser> means_initialiser);
 
 			void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> responsibilities) const override;
 		private:
@@ -137,11 +142,11 @@ namespace ml
 		std::shared_ptr<const MeansInitialiser> means_initialiser_;
 		std::shared_ptr<const ResponsibilitiesInitialiser> responsibilities_initialiser_;
 		Eigen::VectorXd mixing_probabilities_;
-		Eigen::MatrixXd means_;
-		Eigen::MatrixXd responsibilities_;
+		Eigen::MatrixXd means_; /**< 2D matrix with size number_dimensions x number_components. */
+		Eigen::MatrixXd responsibilities_; /**< 2D matrix with size sample_size x number_components. */
 		Eigen::MatrixXd work_matrix_;
 		Eigen::VectorXd work_vector_;
-		std::vector<Eigen::MatrixXd> covariances_;		
+		std::vector<Eigen::MatrixXd> covariances_; /**< Vector of number_components 2D matrices with size number_dimensions x number_dimensions. */
 		double absolute_tolerance_;
 		double relative_tolerance_;
 		double log_likelihood_;

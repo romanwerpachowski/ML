@@ -36,7 +36,7 @@ void em_demo(void)
 	ml::EM em(num_components);
 	em.set_absolute_tolerance(1e-14);
 	em.set_relative_tolerance(1e-14);
-	em.set_means_initialiser(std::make_shared<ml::EM::Forgy>());
+	em.set_means_initialiser(std::make_shared<ml::EM::KPP>());
 	em.set_maximise_first(false);
 	const bool converged = em.fit(data);
 
