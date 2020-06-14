@@ -146,7 +146,7 @@ namespace ml
 					}
 					const Eigen::Index num_samples_below_threshold = std::distance(features.first, features_it);
 					assert(num_samples_below_threshold);
-					if (USE_THREADS && sample_size >= MIN_SAMPLE_SIZE_FOR_NEW_THREADS && max_num_threads > 1) {
+					if constexpr (USE_THREADS && sample_size >= MIN_SAMPLE_SIZE_FOR_NEW_THREADS && max_num_threads > 1) {
 						auto future_lower = std::async(std::launch::async, [&split_node, &sorted_X, &unsorted_X, &sorted_y, &unsorted_y, allowed_split_levels, min_sample_size, features, features_it, num_samples_below_threshold, max_num_threads, metrics]() {
 							return tree_1d_without_pruning<Y>(
 								metrics,

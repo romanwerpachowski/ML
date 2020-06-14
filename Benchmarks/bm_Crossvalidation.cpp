@@ -9,7 +9,7 @@ static void BM_calc_test_error(benchmark::State& state)
 	const Eigen::MatrixXd X(Eigen::MatrixXd::Random(dim, sample_size));
 	const Eigen::VectorXd y(Eigen::VectorXd::Random(sample_size));
 	const int num_folds = 10;
-	const auto train_func = [](const Eigen::MatrixXd& /*train_X*/, const Eigen::VectorXd& train_y) -> double {
+	const auto train_func = [](const Eigen::MatrixXd& /*train_X*/, const Eigen::VectorXd& /*train_y*/) -> double {
 		return 0;
 	};
 	const auto test_func = [](double model, const Eigen::MatrixXd& /*train_X*/, const Eigen::VectorXd& test_y) -> double {

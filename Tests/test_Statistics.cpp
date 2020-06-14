@@ -96,7 +96,7 @@ TEST(StatisticsTest, gini_index_and_mode_constant_class)
 	std::vector<unsigned int> data(100, 1);
 	auto actual = gini_index_and_mode(data.begin(), data.end(), 2);
 	ASSERT_EQ(0, actual.first);
-	ASSERT_EQ(1, actual.second);
+	ASSERT_EQ(1u, actual.second);
 }
 
 TEST(StatisticsTest, gini_index_and_mode_two_equal_classes)
@@ -108,7 +108,7 @@ TEST(StatisticsTest, gini_index_and_mode_two_equal_classes)
 	}
 	auto actual = gini_index_and_mode(data.begin(), data.end(), 3);
 	ASSERT_NEAR(0.5, actual.first, 1e-15);
-	ASSERT_EQ(0, actual.second);
+	ASSERT_EQ(0u, actual.second);
 }
 
 TEST(StatisticsTest, gini_index_and_mode_two_unequal_classes)
@@ -122,7 +122,7 @@ TEST(StatisticsTest, gini_index_and_mode_two_unequal_classes)
 	}
 	auto actual = gini_index_and_mode(data.begin(), data.end(), 2);
 	ASSERT_NEAR(3. / 8, actual.first, 1e-15);
-	ASSERT_EQ(1, actual.second);	
+	ASSERT_EQ(1u, actual.second);	
 }
 
 TEST(StatisticsTest, gini_index_and_mode_three_equal_classes)
@@ -135,12 +135,12 @@ TEST(StatisticsTest, gini_index_and_mode_three_equal_classes)
 	}
 	auto actual = gini_index_and_mode(data.begin(), data.end(), 3);
 	ASSERT_NEAR(2. / 3, actual.first, 1e-15);
-	ASSERT_EQ(0, actual.second);
+	ASSERT_EQ(0u, actual.second);
 }
 
 TEST(StatisticsTest, mode)
 {
 	std::vector<double> data({ 1, 0, 1, 1, 0, 0, 2, 2, 2, 1, 0, 1, 2, 1, 1, 1, 0, 1 });
 	const auto m = mode(data.begin(), data.end(), 3);
-	ASSERT_EQ(1, m);
+	ASSERT_EQ(1u, m);
 }
