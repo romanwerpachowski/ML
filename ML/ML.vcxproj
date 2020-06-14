@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Clustering.hpp" />
     <ClInclude Include="Crossvalidation.hpp" />
     <ClInclude Include="DecisionTree.hpp" />
     <ClInclude Include="DecisionTreeNodes.hpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Statistics.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Clustering.cpp" />
     <ClCompile Include="Crossvalidation.cpp" />
     <ClCompile Include="DecisionTree.cpp" />
     <ClCompile Include="EM.cpp" />

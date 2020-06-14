@@ -7,30 +7,18 @@
 
 namespace ml 
 {
+	namespace Clustering
+	{
+		class MeansInitialiser;
+		class ResponsibilitiesInitialiser;
+	}
+
 	/** Gaussian Expectation-Maximisation algorithm.
 
 	Iterates until log-likelihood converges.
 	*/
 	class EM {
-	public:
-		/** Chooses initial locations of means. */
-		class MeansInitialiser
-		{
-		public:
-			DLL_DECLSPEC virtual ~MeansInitialiser();
-
-			DLL_DECLSPEC virtual void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const = 0;
-		};
-
-		/** Chooses initial responsibilities. */
-		class ResponsibilitiesInitialiser
-		{
-		public:
-			DLL_DECLSPEC virtual ~ResponsibilitiesInitialiser();
-
-			DLL_DECLSPEC virtual void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> responsibilities) const = 0;
-		};
-
+	public:		
 		/** Construct an EM ready to fit.
 		@param number_components Number of Gaussian components, > 0.		
 		*/
@@ -47,12 +35,12 @@ namespace ml
 		/**
 		@param means_initialiser Pointer to MeansInitialiser implementation.
 		*/
-		DLL_DECLSPEC void set_means_initialiser(std::shared_ptr<const MeansInitialiser> means_initialiser);
+		DLL_DECLSPEC void set_means_initialiser(std::shared_ptr<const Clustering::MeansInitialiser> means_initialiser);
 
 		/**
 		@param means_initialiser Pointer to MeansInitialiser implementation.
 		*/
-		DLL_DECLSPEC void set_responsibilities_initialiser(std::shared_ptr<const ResponsibilitiesInitialiser> responsibilities_initialiser);
+		DLL_DECLSPEC void set_responsibilities_initialiser(std::shared_ptr<const Clustering::ResponsibilitiesInitialiser> responsibilities_initialiser);
 
 		void set_verbose(bool verbose)
 		{
@@ -101,46 +89,14 @@ namespace ml
 			return log_likelihood_;
 		}		
 
-		std::shared_ptr<const MeansInitialiser> means_initialiser() const
+		std::shared_ptr<const Clustering::MeansInitialiser> means_initialiser() const
 		{
 			return means_initialiser_;
-		}
-
-		/** Chooses random points as new means. */
-		class Forgy : public MeansInitialiser
-		{
-		public:
-			DLL_DECLSPEC void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const override;
-		};
-
-		/** Assigns points to clusters randomly and then returns cluster means. */
-		class RandomPartition : public MeansInitialiser
-		{
-		public:
-			DLL_DECLSPEC void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const override;
-		};
-
-		/** See https://en.wikipedia.org/wiki/K-means%2B%2B */
-		class KPP : public MeansInitialiser
-		{
-		public:
-			DLL_DECLSPEC void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> means) const override;
-		};
-
-		/** Initialises means and then assigns the responsibility for each point to its closest mean. */
-		class ClosestMean : public ResponsibilitiesInitialiser
-		{
-		public:
-			DLL_DECLSPEC ClosestMean(std::shared_ptr<const MeansInitialiser> means_initialiser);
-
-			void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> responsibilities) const override;
-		private:
-			std::shared_ptr<const MeansInitialiser> means_initialiser_;
-		};
+		}		
 	private:
 		std::default_random_engine prng_;
-		std::shared_ptr<const MeansInitialiser> means_initialiser_;
-		std::shared_ptr<const ResponsibilitiesInitialiser> responsibilities_initialiser_;
+		std::shared_ptr<const Clustering::MeansInitialiser> means_initialiser_;
+		std::shared_ptr<const Clustering::ResponsibilitiesInitialiser> responsibilities_initialiser_;
 		Eigen::VectorXd mixing_probabilities_;
 		Eigen::MatrixXd means_; /**< 2D matrix with size number_dimensions x number_components. */
 		Eigen::MatrixXd responsibilities_; /**< 2D matrix with size sample_size x number_components. */

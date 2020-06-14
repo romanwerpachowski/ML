@@ -1,4 +1,5 @@
 #include <cstring>
+#include "ML/Clustering.hpp"
 #include "ML/EM.hpp"
 #include "EM.h"
 
@@ -22,18 +23,18 @@ const char* em_fit(
 	ml::EM em(number_components);
 	if (means_initialiser) {
 		if (!strcmp(means_initialiser, "forgy")) {
-			em.set_means_initialiser(std::make_shared<ml::EM::Forgy>());
+			em.set_means_initialiser(std::make_shared<ml::Clustering::Forgy>());
 		} else if (!strcmp(means_initialiser, "random_partition")) {
-			em.set_means_initialiser(std::make_shared<ml::EM::RandomPartition>());
+			em.set_means_initialiser(std::make_shared<ml::Clustering::RandomPartition>());
 		} else if (!strcmp(means_initialiser, "kpp")) {
-			em.set_means_initialiser(std::make_shared<ml::EM::KPP>());
+			em.set_means_initialiser(std::make_shared<ml::Clustering::KPP>());
 		} else {
 			return "Unknown means initialiser";
 		}
 	}
 	if (responsibilities_initialiser) {
 		if (!strcmp(responsibilities_initialiser, "closest_mean")) {
-			em.set_responsibilities_initialiser(std::make_shared<ml::EM::ClosestMean>(em.means_initialiser()));
+			em.set_responsibilities_initialiser(std::make_shared<ml::Clustering::ClosestMean>(em.means_initialiser()));
 		} else {
 			return "Unknown responsibilities initialiser";
 		}
@@ -56,9 +57,9 @@ const char* em_fit(
 		memcpy(means, em.means().data(), sizeof(double) * number_components * sample_size);
 	}
 	if (covariances) {
-		const auto cov_len = sizeof(double) * number_dimensions * number_dimensions;
+		const auto cov_len = number_dimensions * number_dimensions;
 		for (unsigned int i = 0; i < number_components; ++i) {
-			memcpy(covariances + i * cov_len, em.covariances()[i].data(), cov_len);
+			memcpy(covariances + i * cov_len, em.covariances()[i].data(), sizeof(double) * cov_len);
 		}
 	}
 

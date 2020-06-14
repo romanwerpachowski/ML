@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <random>
+#include "ML/Clustering.hpp"
 #include "ML/EM.hpp"
 
 #define PI 3.14159265358979323846
@@ -36,7 +37,7 @@ void em_demo(void)
 	ml::EM em(num_components);
 	em.set_absolute_tolerance(1e-14);
 	em.set_relative_tolerance(1e-14);
-	em.set_means_initialiser(std::make_shared<ml::EM::KPP>());
+	em.set_means_initialiser(std::make_shared<ml::Clustering::KPP>());
 	em.set_maximise_first(false);
 	const bool converged = em.fit(data);
 

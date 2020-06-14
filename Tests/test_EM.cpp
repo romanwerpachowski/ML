@@ -1,9 +1,10 @@
 #include <random>
 #include <gtest/gtest.h>
+#include "ML/Clustering.hpp"
 #include "ML/EM.hpp"
 
 
-static void test_two_gaussians(std::shared_ptr<const ml::EM::MeansInitialiser> means_initialiser, bool maximise_first)
+static void test_two_gaussians(std::shared_ptr<const ml::Clustering::MeansInitialiser> means_initialiser, bool maximise_first)
 {
 	std::default_random_engine rng;
 	std::uniform_real_distribution<double> u01(0, 1);
@@ -82,17 +83,17 @@ static void test_two_gaussians(std::shared_ptr<const ml::EM::MeansInitialiser> m
 
 TEST(EMTest, two_gaussians_forgy)
 {
-	test_two_gaussians(std::make_shared<ml::EM::Forgy>(), false);
+	test_two_gaussians(std::make_shared<ml::Clustering::Forgy>(), false);
 }
 
 TEST(EMTest, two_gaussians_random_partition)
 {
-	test_two_gaussians(std::make_shared<ml::EM::RandomPartition>(), false);
+	test_two_gaussians(std::make_shared<ml::Clustering::RandomPartition>(), false);
 }
 
 TEST(EMTest, two_gaussians_kpp)
 {
-	test_two_gaussians(std::make_shared<ml::EM::KPP>(), false);
+	test_two_gaussians(std::make_shared<ml::Clustering::KPP>(), false);
 }
 
 TEST(EMTest, two_gaussians_closest_mean)

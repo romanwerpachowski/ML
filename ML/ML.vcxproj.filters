@@ -33,6 +33,9 @@
     <ClInclude Include="DecisionTreeNodes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Clustering.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EM.cpp">
@@ -42,6 +45,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Crossvalidation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Clustering.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
