@@ -5,11 +5,14 @@
 #include <Eigen/Core>
 #include "dll.hpp"
 
+// For Python API.
+using MatrixXdR = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+
 namespace ml 
 {
 	namespace Clustering
 	{
-		class MeansInitialiser;
+		class CentroidsInitialiser;
 		class ResponsibilitiesInitialiser;
 	}
 
@@ -24,6 +27,7 @@ namespace ml
 		*/
 		DLL_DECLSPEC EM(unsigned int number_components);
 
+		/** Set PRNG seed. */
 		DLL_DECLSPEC void set_seed(unsigned int seed);
 
 		DLL_DECLSPEC void set_absolute_tolerance(double absolute_tolerance);
@@ -35,7 +39,7 @@ namespace ml
 		/**
 		@param means_initialiser Pointer to MeansInitialiser implementation.
 		*/
-		DLL_DECLSPEC void set_means_initialiser(std::shared_ptr<const Clustering::MeansInitialiser> means_initialiser);
+		DLL_DECLSPEC void set_means_initialiser(std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser);
 
 		/**
 		@param means_initialiser Pointer to MeansInitialiser implementation.
@@ -53,9 +57,14 @@ namespace ml
 		}
 
 		/**
-		@param data Matrix with a data point in every column.
+		@param data Matrix (column-major order) with a data point in every column.
 		*/
 		DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data);
+
+		/**
+		@param data Matrix (row-major order) with a data point in every row.
+		*/
+		DLL_DECLSPEC bool fit_row_major(Eigen::Ref<const MatrixXdR> data);
 
 		auto number_components() const
 		{
@@ -89,13 +98,13 @@ namespace ml
 			return log_likelihood_;
 		}		
 
-		std::shared_ptr<const Clustering::MeansInitialiser> means_initialiser() const
+		std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser() const
 		{
 			return means_initialiser_;
 		}		
 	private:
 		std::default_random_engine prng_;
-		std::shared_ptr<const Clustering::MeansInitialiser> means_initialiser_;
+		std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser_;
 		std::shared_ptr<const Clustering::ResponsibilitiesInitialiser> responsibilities_initialiser_;
 		Eigen::VectorXd mixing_probabilities_;
 		Eigen::MatrixXd means_; /**< 2D matrix with size number_dimensions x number_components. */

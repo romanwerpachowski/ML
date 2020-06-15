@@ -34,7 +34,7 @@ const char* em_fit(
 	}
 	if (responsibilities_initialiser) {
 		if (!strcmp(responsibilities_initialiser, "closest_mean")) {
-			em.set_responsibilities_initialiser(std::make_shared<ml::Clustering::ClosestMean>(em.means_initialiser()));
+			em.set_responsibilities_initialiser(std::make_shared<ml::Clustering::ClosestCentroid>(em.means_initialiser()));
 		} else {
 			return "Unknown responsibilities initialiser";
 		}

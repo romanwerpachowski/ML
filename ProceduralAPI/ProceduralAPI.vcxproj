@@ -132,7 +132,7 @@
     <ClInclude Include="EM.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EMProc.cpp" />
+    <ClCompile Include="EM_proc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ML\ML.vcxproj">

@@ -4,7 +4,7 @@
 #include "ML/EM.hpp"
 
 
-static void test_two_gaussians(std::shared_ptr<const ml::Clustering::MeansInitialiser> means_initialiser, bool maximise_first)
+static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsInitialiser> means_initialiser, bool maximise_first)
 {
 	std::default_random_engine rng;
 	std::uniform_real_distribution<double> u01(0, 1);
@@ -36,15 +36,23 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::MeansInitia
 	ASSERT_EQ(num_components, em.number_components());
 	em.set_absolute_tolerance(1e-8);
 	em.set_relative_tolerance(1e-8);
-	em.set_maximum_steps(10);
+	em.set_maximum_steps(100);
 	if (means_initialiser) {
 		em.set_means_initialiser(means_initialiser);
 	}
 	em.set_maximise_first(maximise_first);
-	ASSERT_TRUE(em.fit(data)) << "EM did not converge";
+	const unsigned int seed = 63413131;
+	em.set_seed(seed);
+	ASSERT_TRUE(em.fit(data)) << "EM::fit did not converge";
 	ASSERT_EQ(num_components, em.mixing_probabilities().size());
 	ASSERT_EQ(num_components, em.means().cols());
 	ASSERT_EQ(num_dimensions, em.means().rows());
+	const Eigen::MatrixXd means_col_major(em.means());
+	em.set_seed(seed);
+	const Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> data_row_major(data.transpose());
+	ASSERT_TRUE(em.fit_row_major(data_row_major)) << "EM::fit_row_major did not converge";
+	const Eigen::MatrixXd means_row_major(em.means());
+	ASSERT_NEAR(0, (means_row_major - means_col_major).norm(), 1e-15);
 
 	std::vector<Eigen::MatrixXd> covariances(num_components);
 	for (unsigned int k = 0; k < num_components; ++k) {

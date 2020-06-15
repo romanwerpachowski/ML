@@ -44,9 +44,9 @@ TEST(DecisionTreeTest, tree)
 	ASSERT_EQ(1, root->operator()(x));
 
 	RegTree tree(std::move(root));
-	ASSERT_EQ(5, tree.count_nodes());
-	ASSERT_EQ(1, tree.number_lowest_split_nodes());
-	ASSERT_EQ(3, tree.count_leaf_nodes());
+	ASSERT_EQ(5u, tree.count_nodes());
+	ASSERT_EQ(1u, tree.number_lowest_split_nodes());
+	ASSERT_EQ(3u, tree.count_leaf_nodes());
 	ASSERT_EQ(2.4, tree.original_error());
 	ASSERT_NEAR(2, tree.total_leaf_error(), 1e-15);
 	ASSERT_NEAR(2 + 0.3 * 3, tree.cost_complexity(0.3), 1e-15);	
@@ -108,7 +108,7 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_linear_in_x0)
 	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
 	const auto split = ml::DecisionTrees::find_best_split_univariate_regression(X, y, sorted_y, ml::DecisionTrees::from_vector(features));
-	ASSERT_EQ(0, split.first);
+	ASSERT_EQ(0u, split.first);
 	ASSERT_NEAR(4.5, split.second, 1e-15);
 }
 
@@ -128,7 +128,7 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_linear)
 	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
 	const auto split = ml::DecisionTrees::find_best_split_univariate_regression(X, y, sorted_y, ml::DecisionTrees::from_vector(features));
-	ASSERT_EQ(0, split.first);
+	ASSERT_EQ(0u, split.first);
 	ASSERT_NEAR(4.5, split.second, 1e-15);	
 }
 
@@ -148,7 +148,7 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_const)
 	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
 	const auto split = ml::DecisionTrees::find_best_split_univariate_regression(X, y, sorted_y, ml::DecisionTrees::from_vector(features));
-	ASSERT_EQ(0, split.first);
+	ASSERT_EQ(0u, split.first);
 	ASSERT_EQ(-std::numeric_limits<double>::infinity(), split.second);
 }
 
@@ -180,8 +180,8 @@ TEST(DecisionTreeTest, stepwise)
 	const RegTree tree(ml::DecisionTrees::univariate_regression_tree(X, y, 2, 10));
 	const RegTree tree1(ml::DecisionTrees::univariate_regression_tree(X, y, 1, 10));
 	ASSERT_EQ(tree1.original_error(), tree1.original_error());
-	ASSERT_EQ(7, tree.count_nodes());
-	ASSERT_EQ(3, tree1.count_nodes());
+	ASSERT_EQ(7u, tree.count_nodes());
+	ASSERT_EQ(3u, tree1.count_nodes());
 	double sse = 0;
 	double sse1 = 0;
 	for (int i = 0; i < 100; ++i) {
@@ -194,10 +194,10 @@ TEST(DecisionTreeTest, stepwise)
 	ASSERT_NEAR(sse, tree.total_leaf_error(), 1e-15);
 	ASSERT_NEAR(sse1, tree1.total_leaf_error(), 1e-14);
 
-	ASSERT_EQ(2, tree.number_lowest_split_nodes());
+	ASSERT_EQ(2u, tree.number_lowest_split_nodes());
 
 	const ml::UnivariateRegressionTree tree_copy(tree);
-	ASSERT_EQ(2, tree_copy.number_lowest_split_nodes());
+	ASSERT_EQ(2u, tree_copy.number_lowest_split_nodes());
 }
 
 TEST(DecisionTreeTest, univariate_regression_with_pruning)
@@ -327,12 +327,12 @@ TEST(DecisionTreeTest, pruning)
 	// Grow a big tree.
 	RegTree tree(ml::DecisionTrees::univariate_regression_tree(X, y, 100, 2));
 
-	ASSERT_EQ(n, tree.count_leaf_nodes());
+	ASSERT_EQ(n, static_cast<int>(tree.count_leaf_nodes()));
 	ASSERT_NEAR(0, tree.total_leaf_error(), 1e-15);
 	const double alpha = 0.01;
 	const double orig_cost_complexity = tree.cost_complexity(alpha);
 	ml::DecisionTrees::cost_complexity_prune(tree, alpha);
-	ASSERT_EQ(4, tree.count_leaf_nodes());
+	ASSERT_EQ(4u, tree.count_leaf_nodes());
 	ASSERT_LT(tree.cost_complexity(alpha), orig_cost_complexity);
 	const auto tle_sse = tree.total_leaf_error();
 	ASSERT_GE(tle_sse, 0);
@@ -448,7 +448,7 @@ TEST(DecisionTreeTest, classification_with_crossvalidation)
 	const std::vector<double> alphas({ 1, 10, 100 });
 	auto result = ml::DecisionTrees::classification_tree_auto_prune(train_X, train_y, 100, 2, alphas, 10);
 	const auto& tree = std::get<0>(result);
-	ASSERT_EQ(3, tree.count_nodes());
+	ASSERT_EQ(3u, tree.count_nodes());
 	const auto alpha = std::get<1>(result);
 	ASSERT_GT(alpha, alphas.front());
 	ASSERT_LT(alpha, alphas.back());

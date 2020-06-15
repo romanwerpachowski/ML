@@ -15,7 +15,7 @@ namespace ml
 {
 	EM::EM(const unsigned int number_components)
 		: means_initialiser_(std::make_shared<Clustering::Forgy>())
-		, responsibilities_initialiser_(std::make_shared<Clustering::ClosestMean>(means_initialiser_))
+		, responsibilities_initialiser_(std::make_shared<Clustering::ClosestCentroid>(means_initialiser_))
 		, mixing_probabilities_(number_components)
 		, covariances_(number_components)
 		, absolute_tolerance_(1e-8)
@@ -26,7 +26,7 @@ namespace ml
 		, maximise_first_(false)
 	{
 		if (!number_components) {
-			throw std::invalid_argument("At least one component required");
+			throw std::invalid_argument("EM: At least one component required");
 		}
 	}	
 
@@ -38,7 +38,7 @@ namespace ml
 	void EM::set_absolute_tolerance(double absolute_tolerance)
 	{
 		if (absolute_tolerance < 0) {
-			throw std::domain_error("Negative absolute tolerance");
+			throw std::domain_error("EM: Negative absolute tolerance");
 		}
 		absolute_tolerance_ = absolute_tolerance;
 	}
@@ -46,7 +46,7 @@ namespace ml
 	void EM::set_relative_tolerance(double relative_tolerance)
 	{
 		if (relative_tolerance < 0) {
-			throw std::domain_error("Negative relative tolerance");
+			throw std::domain_error("EM: Negative relative tolerance");
 		}
 		relative_tolerance_ = relative_tolerance;
 	}
@@ -54,15 +54,15 @@ namespace ml
 	void EM::set_maximum_steps(unsigned int maximum_steps)
 	{
 		if (maximum_steps < 2) {
-			throw std::invalid_argument("At least two steps required for convergence test");
+			throw std::invalid_argument("EM: At least two steps required for convergence test");
 		}
 		maximum_steps_ = maximum_steps;
 	}
 
-	void EM::set_means_initialiser(std::shared_ptr<const Clustering::MeansInitialiser> means_initialiser)
+	void EM::set_means_initialiser(std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser)
 	{
 		if (!means_initialiser) {
-			throw std::invalid_argument("Null means initialiser");
+			throw std::invalid_argument("EM: Null means initialiser");
 		}
 		means_initialiser_ = means_initialiser;
 	}
@@ -70,14 +70,14 @@ namespace ml
 	void EM::set_responsibilities_initialiser(std::shared_ptr<const Clustering::ResponsibilitiesInitialiser> responsibilities_initialiser)
 	{
 		if (!responsibilities_initialiser) {
-			throw std::invalid_argument("Null responsibilities initialiser");
+			throw std::invalid_argument("EM: Null responsibilities initialiser");
 		}
 		responsibilities_initialiser_ = responsibilities_initialiser;
 	}
 
 	const Eigen::MatrixXd& EM::covariance(unsigned int k) const {
 		if (k >= number_components_) {
-			throw std::invalid_argument("Bad component index");
+			throw std::invalid_argument("EM: Bad component index");
 		}
 		return covariances_[k];
 	}
@@ -87,10 +87,10 @@ namespace ml
 		const auto number_dimensions = data.rows();
 		const auto sample_size = data.cols();
 		if (!number_dimensions) {
-			throw std::invalid_argument("At least one dimension required");
+			throw std::invalid_argument("EM: At least one dimension required");
 		}
 		if (sample_size < number_components_) {
-			throw std::invalid_argument("Not enough data ");
+			throw std::invalid_argument("EM: Not enough data ");
 		}
 
 		means_.resize(number_dimensions, number_components_);
@@ -160,6 +160,13 @@ namespace ml
 		}
 
 		return false;
+	}
+
+	bool EM::fit_row_major(Eigen::Ref<const MatrixXdR> data)
+	{
+		Eigen::Ref<const Eigen::MatrixXd> dataT = data.transpose();
+		assert(dataT.data() == data.data()); // No copying.
+		return fit(dataT);
 	}
 
 	Eigen::MatrixXd EM::calculate_sample_covariance(Eigen::Ref<const Eigen::MatrixXd> data)
