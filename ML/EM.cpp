@@ -194,7 +194,7 @@ namespace ml
 
 		static constexpr double epsilon = 1e-15;
 		static const double log_2_pi = std::log(2 * PI);
-		const auto log_likelihood_normalisation_constant = number_dimensions * log_2_pi;
+		const auto log_likelihood_normalisation_constant = number_dimensions * log_2_pi / 2;
 
 		// Calculate unnormalised responsibilities.
 		for (unsigned int k = 0; k < number_components_; ++k) {
