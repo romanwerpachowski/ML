@@ -2,7 +2,7 @@
 #include "ML/Crossvalidation.hpp"
 
 
-static void BM_calc_test_error(benchmark::State& state)
+static void calc_test_error(benchmark::State& state)
 {
 	const auto sample_size = state.range(0);
 	const int dim = 4;
@@ -22,4 +22,4 @@ static void BM_calc_test_error(benchmark::State& state)
 }
 
 
-BENCHMARK(BM_calc_test_error)->RangeMultiplier(10)->Range(100, 1000000)->Complexity();
+BENCHMARK(calc_test_error)->RangeMultiplier(10)->Range(100, 1000000)->Complexity();

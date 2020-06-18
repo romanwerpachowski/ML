@@ -122,8 +122,6 @@ namespace ml
 
 		static Eigen::MatrixXd calculate_sample_covariance(Eigen::Ref<const Eigen::MatrixXd> data);
 
-		static Eigen::MatrixXd invert_symmetric_positive_definite_matrix(Eigen::Ref<const Eigen::MatrixXd> m);
-
 		void expectation_stage(Eigen::Ref<const Eigen::MatrixXd> data);
 
 		void maximisation_stage(Eigen::Ref<const Eigen::MatrixXd> data);

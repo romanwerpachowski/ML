@@ -2,7 +2,7 @@
 #include <benchmark/benchmark.h>
 #include "ML/Statistics.hpp"
 
-static void BM_sse(benchmark::State& state)
+static void sse(benchmark::State& state)
 {
 	std::vector<double> data(state.range(0));
 	std::default_random_engine rng;
@@ -17,9 +17,9 @@ static void BM_sse(benchmark::State& state)
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(BM_sse)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
+BENCHMARK(sse)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
 
-static void BM_sse_and_mean(benchmark::State& state)
+static void sse_and_mean(benchmark::State& state)
 {
 	std::vector<double> data(state.range(0));
 	std::default_random_engine rng;
@@ -34,9 +34,9 @@ static void BM_sse_and_mean(benchmark::State& state)
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(BM_sse_and_mean)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
+BENCHMARK(sse_and_mean)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
 
-template <typename T> static void BM_gini_index(benchmark::State& state)
+template <typename T> static void gini_index(benchmark::State& state)
 {
 	std::vector<T> data(state.range(0));
 	std::default_random_engine rng;
@@ -52,10 +52,10 @@ template <typename T> static void BM_gini_index(benchmark::State& state)
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(BM_gini_index, double)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
-BENCHMARK_TEMPLATE(BM_gini_index, int)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
+BENCHMARK_TEMPLATE(gini_index, double)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
+BENCHMARK_TEMPLATE(gini_index, int)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
 
-template <typename T> static void BM_gini_index_and_mode(benchmark::State& state)
+template <typename T> static void gini_index_and_mode(benchmark::State& state)
 {
 	std::vector<T> data(state.range(0));
 	std::default_random_engine rng;
@@ -71,5 +71,5 @@ template <typename T> static void BM_gini_index_and_mode(benchmark::State& state
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(BM_gini_index_and_mode, double)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
-BENCHMARK_TEMPLATE(BM_gini_index_and_mode, int)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
+BENCHMARK_TEMPLATE(gini_index_and_mode, double)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
+BENCHMARK_TEMPLATE(gini_index_and_mode, int)->RangeMultiplier(10)->Range(10, 100000)->Complexity();

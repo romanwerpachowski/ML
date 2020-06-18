@@ -2,7 +2,7 @@
 #include <benchmark/benchmark.h>
 #include "ML/DecisionTree.hpp"
 
-static void BM_univariate_regression_tree(benchmark::State& state)
+static void univariate_regression_tree(benchmark::State& state)
 {
 	std::default_random_engine rng;
 	std::normal_distribution normal;
@@ -41,10 +41,10 @@ static void BM_univariate_regression_tree(benchmark::State& state)
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(BM_univariate_regression_tree)->RangeMultiplier(2)->Range(2, 64)->UseRealTime()->Complexity();
+BENCHMARK(univariate_regression_tree)->RangeMultiplier(2)->Range(2, 64)->UseRealTime()->Complexity();
 
 
-static void BM_classification_tree(benchmark::State& state)
+static void classification_tree(benchmark::State& state)
 {
 	std::default_random_engine rng;
 	std::uniform_real_distribution<double> u01(0, 1);
@@ -85,10 +85,10 @@ static void BM_classification_tree(benchmark::State& state)
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(BM_classification_tree)->RangeMultiplier(2)->Range(2, 64)->UseRealTime()->Complexity();
+BENCHMARK(classification_tree)->RangeMultiplier(2)->Range(2, 64)->UseRealTime()->Complexity();
 
 
-static void BM_cost_complexity_prune(benchmark::State& state)
+static void cost_complexity_prune(benchmark::State& state)
 {
 	std::default_random_engine rng;
 	std::normal_distribution normal;
@@ -132,9 +132,9 @@ static void BM_cost_complexity_prune(benchmark::State& state)
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(BM_cost_complexity_prune)->RangeMultiplier(2)->Range(2, 64)->Complexity();
+BENCHMARK(cost_complexity_prune)->RangeMultiplier(2)->Range(2, 64)->Complexity();
 
-static void BM_tree_copy(benchmark::State& state)
+static void tree_copy(benchmark::State& state)
 {
 	std::default_random_engine rng;
 	std::normal_distribution normal;
@@ -174,4 +174,4 @@ static void BM_tree_copy(benchmark::State& state)
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(BM_tree_copy)->RangeMultiplier(2)->Range(2, 64)->Complexity();
+BENCHMARK(tree_copy)->RangeMultiplier(2)->Range(2, 64)->Complexity();

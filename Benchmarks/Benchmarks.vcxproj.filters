@@ -27,5 +27,8 @@
     <ClCompile Include="bm_Crossvalidation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="bm_EM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

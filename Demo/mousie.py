@@ -40,7 +40,7 @@ def main():
         data[i, 0] = center_xs[k] + r * np.cos(phi)
         data[i, 1] = center_ys[k] + r * np.sin(phi)
 
-    abs_tol = 1e-8
+    abs_tol = 1e-6
     max_iter = 1000
     em = clustering.EM(num_components)
     em.set_seed(42)
@@ -49,7 +49,7 @@ def main():
     em.set_means_initialiser(clustering.KPP())
     em.set_maximum_steps(max_iter)
 
-    n_timing_iters = 100
+    n_timing_iters = 20
     
     pyml_report = pd.Series(index=["converged", "time", "log-likelihood"], dtype=float)
     t0 = time.process_time()

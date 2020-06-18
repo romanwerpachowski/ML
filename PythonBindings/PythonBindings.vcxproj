@@ -101,7 +101,7 @@
     <TargetName>PyML</TargetName>
     <OutDir>$(ProjectDir)PyML\</OutDir>
     <CopyLocalProjectReference>true</CopyLocalProjectReference>
-    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
