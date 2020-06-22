@@ -40,30 +40,30 @@ def main():
         data[i, 0] = center_xs[k] + r * np.cos(phi)
         data[i, 1] = center_ys[k] + r * np.sin(phi)
 
-    abs_tol = 1e-4
+    abs_tol = 1e-10
     max_iter = 1000
+    
+    n_timing_iters = 100
+    
+    pyml_report = pd.Series(index=["converged", "time", "log-likelihood"], dtype=float)
     em = clustering.EM(num_components)
     em.set_seed(42)
     em.set_absolute_tolerance(abs_tol)
     em.set_relative_tolerance(0)
     em.set_means_initialiser(clustering.KPP())
     em.set_maximum_steps(max_iter)
-
-    n_timing_iters = 100
-    
-    pyml_report = pd.Series(index=["converged", "time", "log-likelihood"], dtype=float)
     t0 = time.perf_counter()
-    for _ in range(n_timing_iters):
+    for _ in range(n_timing_iters):        
         converged = int(em.fit(data))
     pyml_report["converged"] = float(converged)
     t1 = time.perf_counter()
     pyml_report["time"] = (t1 - t0) / n_timing_iters
     pyml_report["log-likelihood"] = em.log_likelihood
 
-    sklearn_report = pd.Series(index=pyml_report.index, dtype=pyml_report.dtype)
+    sklearn_report = pd.Series(index=pyml_report.index, dtype=pyml_report.dtype)    
     gmm = sklearn.mixture.GaussianMixture(num_components, tol=abs_tol, max_iter=max_iter, random_state=999, n_init=1, reg_covar=1e-15)
     t0 = time.perf_counter()
-    for _ in range(n_timing_iters):
+    for _ in range(n_timing_iters):        
         gmm.fit(data)
     t1 = time.perf_counter()
     sklearn_report["converged"] = 1  # gmm raises a warning if not converged.

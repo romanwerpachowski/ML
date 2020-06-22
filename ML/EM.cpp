@@ -179,7 +179,6 @@ namespace ml
 	}
 
 	static inline double xTx(const Eigen::MatrixXd& T, const Eigen::VectorXd& x) {
-		//return x.transpose() * T * x;
 		assert(T.rows() == T.cols());
 		assert(x.size() == T.rows());
 		double sum = 0;
@@ -231,6 +230,22 @@ namespace ml
 		}
 	}
 
+	static void Txx(const Eigen::VectorXd& x, Eigen::MatrixXd& m)
+	{
+		//m.noalias() = x * x.transpose();
+		assert(m.rows() == m.cols());
+		assert(x.size() == m.rows());
+		for (Eigen::Index i = 0; i < x.size(); ++i) {
+			const auto x_i = x[i];
+			m(i, i) = x_i * x_i;
+			for (Eigen::Index j = 0; j < i; ++j) {
+				const auto x_i_x_j = x_i * x[j];
+				m(i, j) = x_i_x_j;
+				m(j, i) = x_i_x_j;
+			}
+		}
+	}
+
 	void EM::maximisation_stage(Eigen::Ref<const Eigen::MatrixXd> data)
 	{
 		const auto number_dimensions = data.rows();
@@ -257,7 +272,7 @@ namespace ml
 			// Accumulate covariance.
 			for (Eigen::Index i = 0; i < sample_size; ++i) {
 				work_vector_ = data.col(i) - mean;
-				work_matrix_.noalias() = work_vector_ * work_vector_.transpose();
+				Txx(work_vector_, work_matrix_);
 				covariance += component_weights[i] * work_matrix_;
 			}
 
