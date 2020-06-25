@@ -11,8 +11,9 @@ namespace ml
 {	
 	namespace DecisionTrees
 	{
+		typedef std::pair<Eigen::Index, double> IndexedFeatureValue;
 
-		static const auto SORTED_FEATURE_COMPARATOR = [](const std::pair<Eigen::Index, double>& a, const std::pair<Eigen::Index, double>& b) { return a.second < b.second; };
+		static const auto SORTED_FEATURE_COMPARATOR = [](const IndexedFeatureValue& a, const IndexedFeatureValue& b) { return a.second < b.second; };
 		constexpr bool USE_THREADS = false;
 		constexpr Eigen::Index MIN_SAMPLE_SIZE_FOR_NEW_THREADS = 256;
 		constexpr unsigned int DEFAULT_MAX_NUM_THREADS = 2;		
@@ -23,7 +24,7 @@ namespace ml
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
 			const double error_whole_sample,
-			const VectorRange<std::pair<Eigen::Index, double>> features)
+			const VectorRange<IndexedFeatureValue> features)
 		{
 			const auto number_dimensions = X.rows();
 			const auto sample_size = y.size();
@@ -101,7 +102,7 @@ namespace ml
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
 			const unsigned int allowed_split_levels,
 			const unsigned int min_sample_size,
-			const VectorRange<std::pair<Eigen::Index, double>> features,
+			const VectorRange<IndexedFeatureValue> features,
 			const unsigned int max_num_threads)
 		{
 			const auto sample_size = unsorted_y.size();
@@ -220,7 +221,7 @@ namespace ml
 			Eigen::VectorXd unsorted_y(y);
 			Eigen::MatrixXd sorted_X(number_dimensions, sample_size);
 			Eigen::VectorXd sorted_y(sample_size);
-			std::vector<std::pair<Eigen::Index, double>> features(sample_size);			
+			std::vector<IndexedFeatureValue> features(sample_size);			
 			const auto max_num_threads = std::min(std::thread::hardware_concurrency(), DEFAULT_MAX_NUM_THREADS);
 			return DecisionTree<Y>(tree_1d_without_pruning<Y>(
 				metrics, nullptr, unsorted_X, sorted_X, unsorted_y, sorted_y, max_split_levels, min_sample_size, from_vector(features), max_num_threads ? max_num_threads : DEFAULT_MAX_NUM_THREADS));
@@ -279,7 +280,7 @@ namespace ml
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
-			const VectorRange<std::pair<Eigen::Index, double>> features)
+			const VectorRange<IndexedFeatureValue> features)
 		{
 			const UnivariateRegressionMetrics metrics;
 			const double error_whole_sample = metrics.error_for_splitting(y.data(), y.data() + y.size());

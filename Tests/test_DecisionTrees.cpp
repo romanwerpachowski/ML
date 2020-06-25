@@ -5,6 +5,8 @@
 
 typedef ml::UnivariateRegressionTree RegTree;
 
+typedef std::pair<Eigen::Index, double> IndexedFeatureValue;
+
 TEST(DecisionTreeTest, tree)
 {
 	auto root = std::make_unique<RegTree::SplitNode>(2.4, -0.1, nullptr, 0.5, 0);
@@ -86,7 +88,7 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_constant_y)
 			y[k] = 0;
 		}
 	}
-	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
+	std::vector<IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
 	const auto split = ml::DecisionTrees::find_best_split_univariate_regression(X, y, sorted_y, ml::DecisionTrees::from_vector(features));
 	ASSERT_EQ(-std::numeric_limits<double>::infinity(), split.second);	
@@ -105,7 +107,7 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_linear_in_x0)
 			y[k] = 0.2 * X(0, k) + 1.5;
 		}
 	}
-	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
+	std::vector<IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
 	const auto split = ml::DecisionTrees::find_best_split_univariate_regression(X, y, sorted_y, ml::DecisionTrees::from_vector(features));
 	ASSERT_EQ(0u, split.first);
@@ -125,7 +127,7 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_linear)
 			y[k] = 0.2 * X(0, k) + 0.01 * X(1, k) + 1.5;
 		}
 	}
-	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
+	std::vector<IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
 	const auto split = ml::DecisionTrees::find_best_split_univariate_regression(X, y, sorted_y, ml::DecisionTrees::from_vector(features));
 	ASSERT_EQ(0u, split.first);
@@ -145,7 +147,7 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_const)
 			y[k] = 0;
 		}
 	}
-	std::vector<ml::DecisionTrees::IndexedFeatureValue> features(sample_size);
+	std::vector<IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
 	const auto split = ml::DecisionTrees::find_best_split_univariate_regression(X, y, sorted_y, ml::DecisionTrees::from_vector(features));
 	ASSERT_EQ(0u, split.first);

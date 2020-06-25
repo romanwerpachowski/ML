@@ -18,14 +18,27 @@ namespace ml
 		/** Pair of vector iterators. */
 		template <typename T> using VectorRange = std::pair<typename std::vector<T>::iterator, typename std::vector<T>::iterator>;
 
-		/** Used to sort features by value. */
-		typedef std::pair<Eigen::Index, double> IndexedFeatureValue;
+		/** Grows a univariate regression tree with pruning.
+		@param X Independent variables (column-wise).
+		@param y Dependent variable.
+		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
+		@param min_sample_size Minimum sample size which can be split (at least 2).
+		@param alphas Candidate alphas for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used.
+		@param num_folds Number of folds for cross-validation. Ignored if cross-validation is not done.
+		@return Tuple of: trained decision tree, chosen alpha (NaN if no pruning was done) and minimum cross-validation test error (NaN if no cross-validation was done).
+		*/
+		DLL_DECLSPEC std::tuple<UnivariateRegressionTree, double, double> univariate_regression_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds);
 
-		/** Creates an iterator pair containing begin() and end(). */
-		template <typename T> VectorRange<T> from_vector(std::vector<T>& v)
-		{
-			return std::make_pair(v.begin(), v.end());
-		}
+		/** Grows a classification tree with pruning.
+		@param X Features (column-wise).
+		@param y Class indices.
+		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
+		@param min_sample_size Minimum sample size which can be split (at least 2).
+		@param alphas Candidate alphas for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used.
+		@param num_folds Number of folds for cross-validation. Ignored if cross-validation is not done.
+		@return Tuple of: trained decision tree, chosen alpha (NaN if no pruning was done) and minimum cross-validation test error (NaN if no cross-validation was done).
+		*/
+		DLL_DECLSPEC std::tuple<ClassificationTree, double, double> classification_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds);		
 
 		/** Finds the split on a single feature which minimises the sum of SSEs of split samples.
 
@@ -79,26 +92,10 @@ namespace ml
 			return 1 - classification_tree_accuracy(tree, X, y);
 		}
 
-		/** Grows a univariate regression tree with pruning.
-		@param X Independent variables (column-wise).
-		@param y Dependent variable.
-		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
-		@param min_sample_size Minimum sample size which can be split (at least 2).
-		@param alphas Candidate alphas for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used.
-		@param num_folds Number of folds for cross-validation. Ignored if cross-validation is not done.
-		@return Tuple of: trained decision tree, chosen alpha (NaN if no pruning was done) and minimum cross-validation test error (NaN if no cross-validation was done).
-		*/
-		DLL_DECLSPEC std::tuple<UnivariateRegressionTree, double, double> univariate_regression_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds);
-
-		/** Grows a classification tree with pruning.
-		@param X Features (column-wise).
-		@param y Class indices.
-		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
-		@param min_sample_size Minimum sample size which can be split (at least 2).
-		@param alphas Candidate alphas for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used.
-		@param num_folds Number of folds for cross-validation. Ignored if cross-validation is not done.
-		@return Tuple of: trained decision tree, chosen alpha (NaN if no pruning was done) and minimum cross-validation test error (NaN if no cross-validation was done).
-		*/
-		DLL_DECLSPEC std::tuple<ClassificationTree, double, double> classification_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds);
+		/** Creates an iterator pair containing begin() and end(). */
+		template <typename T> VectorRange<T> from_vector(std::vector<T>& v)
+		{
+			return std::make_pair(v.begin(), v.end());
+		}
 	}
 }
