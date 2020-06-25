@@ -148,6 +148,7 @@
     <ClInclude Include="Crossvalidation.hpp" />
     <ClInclude Include="DecisionTree.hpp" />
     <ClInclude Include="DecisionTreeNodes.hpp" />
+    <ClInclude Include="DecisionTrees.hpp" />
     <ClInclude Include="dll.hpp" />
     <ClInclude Include="EM.hpp" />
     <ClInclude Include="Statistics.hpp" />
@@ -155,7 +156,7 @@
   <ItemGroup>
     <ClCompile Include="Clustering.cpp" />
     <ClCompile Include="Crossvalidation.cpp" />
-    <ClCompile Include="DecisionTree.cpp" />
+    <ClCompile Include="DecisionTrees.cpp" />
     <ClCompile Include="EM.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

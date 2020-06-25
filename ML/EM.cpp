@@ -270,6 +270,7 @@ namespace ml
 			mean /= sum_component_weights;
 
 			// Accumulate covariance.
+			work_matrix_.resize(number_dimensions, number_dimensions);
 			for (Eigen::Index i = 0; i < sample_size; ++i) {
 				work_vector_ = data.col(i) - mean;
 				Txx(work_vector_, work_matrix_);

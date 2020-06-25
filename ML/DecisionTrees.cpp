@@ -4,7 +4,7 @@
 #include <limits>
 #include <utility>
 #include "Crossvalidation.hpp"
-#include "DecisionTree.hpp"
+#include "DecisionTrees.hpp"
 #include "Statistics.hpp"
 
 namespace ml

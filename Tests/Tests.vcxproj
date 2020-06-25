@@ -49,7 +49,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClCompile Include="test_Crossvalidation.cpp" />
-    <ClCompile Include="test_DecisionTree.cpp" />
+    <ClCompile Include="test_DecisionTrees.cpp" />
     <ClCompile Include="test_DecisionTreeNodes.cpp" />
     <ClCompile Include="test_EM.cpp" />
     <ClCompile Include="test_Statistics.cpp" />

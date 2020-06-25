@@ -1,6 +1,6 @@
 #include <random>
 #include <benchmark/benchmark.h>
-#include "ML/DecisionTree.hpp"
+#include "ML/DecisionTrees.hpp"
 
 static void univariate_regression_tree(benchmark::State& state)
 {

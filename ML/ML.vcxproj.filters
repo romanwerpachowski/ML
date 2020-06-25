@@ -36,18 +36,21 @@
     <ClInclude Include="Clustering.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DecisionTrees.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EM.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DecisionTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Crossvalidation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Clustering.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DecisionTrees.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

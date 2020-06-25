@@ -1,7 +1,7 @@
 #include <cmath>
 #include <random>
 #include <gtest/gtest.h>
-#include "ML/DecisionTree.hpp"
+#include "ML/DecisionTrees.hpp"
 
 typedef ml::UnivariateRegressionTree RegTree;
 

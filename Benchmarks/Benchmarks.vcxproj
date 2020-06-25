@@ -150,7 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bm_Crossvalidation.cpp" />
-    <ClCompile Include="bm_DecisionTree.cpp" />
+    <ClCompile Include="bm_DecisionTrees.cpp" />
     <ClCompile Include="bm_EM.cpp" />
     <ClCompile Include="bm_Statistics.cpp" />
     <ClCompile Include="main.cpp" />
