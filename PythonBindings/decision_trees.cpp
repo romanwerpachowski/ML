@@ -21,6 +21,11 @@ template <class Y> static void init_decision_tree_class(py::module& m_dec_trees,
 		.doc() = docstring;
 }
 
+constexpr unsigned int DEFAULT_MAX_SPLIT_LEVELS = 100;
+constexpr unsigned int DEFAULT_MIN_SPLIT_SIZE = 10;
+static const std::vector<double> DEFAULT_ALPHAS = { 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100 };
+constexpr unsigned int DEFAULT_NUM_FOLDS = 10;
+
 
 void init_decision_trees(py::module& m) 
 {
@@ -30,7 +35,7 @@ void init_decision_trees(py::module& m)
 	init_decision_tree_class<unsigned int>(m_dec_trees, "ClassificationTree", "Classification tree");
 
 	m_dec_trees.def("univariate_regression_tree", &ml::DecisionTrees::univariate_regression_tree_auto_prune, py::arg("X"),
-		py::arg("y"), py::arg("max_split_levels"), py::arg("min_split_size"), py::arg("alphas"), py::arg("num_folds"),
+		py::arg("y"), py::arg("max_split_levels") = DEFAULT_MAX_SPLIT_LEVELS, py::arg("min_split_size") = DEFAULT_MIN_SPLIT_SIZE, py::arg("alphas") = DEFAULT_ALPHAS, py::arg("num_folds") = DEFAULT_NUM_FOLDS,
 		py::return_value_policy::move, R"(Grows a univariate regression tree with pruning.
 
 Args:
@@ -38,14 +43,14 @@ Args:
 	y: Dependent variable (vector).
 	max_split_levels: Maximum number of split nodes on the way to any leaf node.
 	min_split_size: Minimum sample size which can be split (at least 2).
-	alphas: Candidate alphas for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used.
+	alphas: Candidate alphas for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used. Defaults to [1E-6, 1E-5, ..., 10, 100].
 	num_folds: Number of folds for cross-validation. Ignored if cross-validation is not done.
 
 Returns:
 	Tuple of: trained decision tree, chosen alpha (NaN if no pruning was done) and minimum cross-validation test error (NaN if no cross-validation was done).)");
 
 	m_dec_trees.def("classification_tree", &ml::DecisionTrees::classification_tree_auto_prune, py::arg("X"),
-		py::arg("y"), py::arg("max_split_levels"), py::arg("min_split_size"), py::arg("alphas"), py::arg("num_folds"),
+		py::arg("y"), py::arg("max_split_levels") = DEFAULT_MAX_SPLIT_LEVELS, py::arg("min_split_size") = DEFAULT_MIN_SPLIT_SIZE, py::arg("alphas") = DEFAULT_ALPHAS, py::arg("num_folds") = DEFAULT_NUM_FOLDS,
 		py::return_value_policy::move, R"(Grows a classification tree with pruning.
 
 Args:
@@ -53,7 +58,7 @@ Args:
 	y: Dependent variable (vector).
 	max_split_levels: Maximum number of split nodes on the way to any leaf node.
 	min_split_size: Minimum sample size which can be split (at least 2).
-	alphas: Candidate alphas for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used.
+	alphas: Candidate alphas for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used. Defaults to [1E-6, 1E-5, ..., 10, 100].
 	num_folds: Number of folds for cross-validation. Ignored if cross-validation is not done.
 
 Returns:

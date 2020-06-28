@@ -145,6 +145,7 @@
     <ClInclude Include="em_demo.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="classification_tree.py" />
     <None Include="mousie.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

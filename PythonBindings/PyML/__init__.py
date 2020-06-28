@@ -3,3 +3,4 @@
 (C) Roman Werpachowski 2020
 """
 from .PyML import clustering
+from .PyML import decision_trees

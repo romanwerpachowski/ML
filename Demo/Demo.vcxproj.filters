@@ -31,5 +31,8 @@
     <None Include="mousie.py">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="classification_tree.py">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
