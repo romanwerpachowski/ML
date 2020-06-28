@@ -58,4 +58,26 @@ Args:
 
 Returns:
 	Tuple of: trained decision tree, chosen alpha (NaN if no pruning was done) and minimum cross-validation test error (NaN if no cross-validation was done).)");
+
+	m_dec_trees.def("univariate_regression_tree_mean_squared_error", &ml::DecisionTrees::univariate_regression_tree_mean_squared_error, py::arg("tree"), py::arg("X"), py::arg("y"),
+		R"(Calculates univariate regression tree mean squared error on (X, y) data.
+
+Args:
+	tree: Univariate regression tree instance.
+	X: Independent variables (column-wise).
+	y: Dependent variable (vector).
+
+Returns:
+	Mean squared error.)");
+
+	m_dec_trees.def("classification_tree_accuracy", &ml::DecisionTrees::classification_tree_accuracy, py::arg("tree"), py::arg("X"), py::arg("y"),
+		R"(Calculates classification tree accuracy on (X, y) data.
+
+Args:
+	tree: Classification tree instance.
+	X: Features (column-wise).
+	y: Classes (vector).
+
+Returns:
+	Classification accuracy.)");
 }
