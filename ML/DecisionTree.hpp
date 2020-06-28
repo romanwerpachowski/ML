@@ -89,12 +89,13 @@ namespace ml
 			return root_->total_leaf_error();
 		}
 
+		/** Calculates cost-complexity for given alpha. */
 		double cost_complexity(double alpha) const
 		{
 			return total_leaf_error() + alpha * static_cast<double>(count_leaf_nodes());
 		}
 
-		/** Find the weakest link and remove it, if the error does not increase too much.
+		/** Finds the weakest link and remove it, if the error does not increase too much.
 
 		A "weakest link" is a split node which can be collapsed with the minimum increase of total_leaf_error().
 		Only the lowest split node can be a weakest link.

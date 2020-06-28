@@ -18,6 +18,12 @@ namespace ml
 		constexpr Eigen::Index MIN_SAMPLE_SIZE_FOR_NEW_THREADS = 256;
 		constexpr unsigned int DEFAULT_MAX_NUM_THREADS = 2;		
 
+		/** Creates an iterator pair containing begin() and end(). */
+		template <typename T> VectorRange<T> from_vector(std::vector<T>& v)
+		{
+			return std::make_pair(v.begin(), v.end());
+		}
+
 		template <typename Metrics> static std::pair<unsigned int, double> find_best_split_1d(
 			const Metrics metrics,
 			const Eigen::Ref<const Eigen::MatrixXd> X,

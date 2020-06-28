@@ -27,6 +27,9 @@
     <ClCompile Include="PyML.cpp">
       <Filter>C++\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="decision_trees.cpp">
+      <Filter>C++\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="setup.py">

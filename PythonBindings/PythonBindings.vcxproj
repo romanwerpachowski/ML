@@ -92,8 +92,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.pyd</TargetExt>
-    <TargetName>PyMLdbg</TargetName>
-    <OutDir>$(ProjectDir)PyML\</OutDir>
+    <TargetName>PyML</TargetName>
+    <OutDir>$(ProjectDir)PyML\Debug\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -142,6 +142,10 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "$(SolutionDir)$(Platform)\$(Configuration)\ML.dll" "$(OutDir)"</Command>
+      <Message>Copy ML.dll to PyML\Debug</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -167,6 +171,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="clustering.cpp" />
+    <ClCompile Include="decision_trees.cpp" />
     <ClCompile Include="PyML.cpp" />
   </ItemGroup>
   <ItemGroup>

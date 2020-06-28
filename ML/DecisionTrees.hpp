@@ -40,16 +40,6 @@ namespace ml
 		*/
 		DLL_DECLSPEC std::tuple<ClassificationTree, double, double> classification_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds);		
 
-		/** Finds the split on a single feature which minimises the sum of SSEs of split samples.
-
-		This function is not meant to be used directly. It's exposed for testing.
-		*/
-		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_univariate_regression(
-			const Eigen::Ref<const Eigen::MatrixXd> X,
-			const Eigen::Ref<const Eigen::VectorXd> y,
-			Eigen::Ref<Eigen::VectorXd> sorted_y,
-			VectorRange<std::pair<Eigen::Index, double>> features);
-
 		/** Grows a univariate regression tree without pruning.
 		@param X Independent variables (column-wise).
 		@param y Dependent variable.
@@ -92,10 +82,14 @@ namespace ml
 			return 1 - classification_tree_accuracy(tree, X, y);
 		}
 
-		/** Creates an iterator pair containing begin() and end(). */
-		template <typename T> VectorRange<T> from_vector(std::vector<T>& v)
-		{
-			return std::make_pair(v.begin(), v.end());
-		}
+		/** Finds the split on a single feature which minimises the sum of SSEs of split samples.
+
+		This function is not meant to be used directly. It's exposed for testing.
+		*/
+		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_univariate_regression(
+			const Eigen::Ref<const Eigen::MatrixXd> X,
+			const Eigen::Ref<const Eigen::VectorXd> y,
+			Eigen::Ref<Eigen::VectorXd> sorted_y,
+			VectorRange<std::pair<Eigen::Index, double>> features);		
 	}
 }

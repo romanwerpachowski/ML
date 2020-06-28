@@ -7,7 +7,8 @@
 namespace py = pybind11;
 
 
-void init_clustering(py::module& m) {
+void init_clustering(py::module& m) 
+{
 	auto m_clustering = m.def_submodule("clustering", "Clustering algorithms.");
 
 	py::class_<ml::Clustering::CentroidsInitialiser, std::shared_ptr<ml::Clustering::CentroidsInitialiser>>(m_clustering, "CentroidsInitialiser")
