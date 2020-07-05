@@ -52,6 +52,7 @@
     <ClCompile Include="test_DecisionTrees.cpp" />
     <ClCompile Include="test_DecisionTreeNodes.cpp" />
     <ClCompile Include="test_EM.cpp" />
+    <ClCompile Include="test_LinearRegression.cpp" />
     <ClCompile Include="test_Statistics.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -39,6 +39,9 @@
     <ClInclude Include="DecisionTrees.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LinearRegression.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EM.cpp">
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DecisionTrees.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LinearRegression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

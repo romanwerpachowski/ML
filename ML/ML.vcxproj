@@ -151,6 +151,7 @@
     <ClInclude Include="DecisionTrees.hpp" />
     <ClInclude Include="dll.hpp" />
     <ClInclude Include="EM.hpp" />
+    <ClInclude Include="LinearRegression.hpp" />
     <ClInclude Include="Statistics.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +159,7 @@
     <ClCompile Include="Crossvalidation.cpp" />
     <ClCompile Include="DecisionTrees.cpp" />
     <ClCompile Include="EM.cpp" />
+    <ClCompile Include="LinearRegression.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
