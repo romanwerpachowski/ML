@@ -1,3 +1,4 @@
+#include <random>
 #include <gtest/gtest.h>
 #include "ML/LinearRegression.hpp"
 
@@ -73,4 +74,61 @@ TEST(LinearRegression, univariate_high_noise_regular)
 	EXPECT_NEAR(intercept, result.intercept, 2e-4 * noise_strength);
 	EXPECT_NEAR(0, result.correlation, 2e-4);
 	EXPECT_NEAR(0, result.r2, 5e-8);
+}
+
+TEST(LinearRegression, univariate_true_model)
+{
+	const double noise_std_dev = 0.96;
+	const double x_range = 5; // width of the X range
+	const double slope = -0.6;
+	const double intercept = 1.2;
+	const unsigned int n = 1000000;
+	std::default_random_engine rng(784957984);
+	std::normal_distribution<double> noise_dist(0, noise_std_dev);
+	std::uniform_real_distribution<double> x_dist(0, x_range);
+	Eigen::VectorXd x(n);
+	Eigen::VectorXd y(n);
+	for (unsigned int i = 0; i < n; ++i) {
+		x[i] = x_dist(rng);
+		y[i] = intercept + slope * x[i] + noise_dist(rng);
+	}
+	const auto result = univariate(x, y);
+	const double tol = 2e-3;
+	EXPECT_NEAR(intercept, result.intercept, tol);
+	EXPECT_NEAR(slope, result.slope, tol);	
+	const double x_var = x_range * x_range / 12;
+	const double noise_var = noise_std_dev * noise_std_dev;
+	const double y_var = x_var * slope * slope + noise_var;
+	const double xy_cov = slope * x_var;
+	const double xy_corr = xy_cov / std::sqrt(x_var * y_var);
+	EXPECT_NEAR(xy_corr, result.correlation, tol);
+	EXPECT_NEAR(xy_corr * xy_corr, result.r2, tol);
+}
+
+TEST(LinearRegression, univariate_true_model_regular)
+{
+	const double noise_std_dev = 0.96;
+	const double x_range = 5; // width of the X range
+	const double slope = -0.6;
+	const double intercept = 1.2;
+	const unsigned int n = 1000000;
+	const double dx = x_range / (n - 1);
+	const double x0 = 0;
+	std::default_random_engine rng(784957984);
+	std::normal_distribution<double> noise_dist(0, noise_std_dev);
+	Eigen::VectorXd y(n);
+	for (unsigned int i = 0; i < n; ++i) {
+		y[i] = intercept + slope * (x0 + i * dx) + noise_dist(rng);
+	}
+	const auto result = univariate(x0, dx, y);
+	const double tol = 5e-4;
+	EXPECT_NEAR(intercept, result.intercept, tol);
+	EXPECT_NEAR(slope, result.slope, tol);
+	const double x_var = x_range * x_range / 12;
+	const double noise_var = noise_std_dev * noise_std_dev;
+	const double y_var = x_var * slope * slope + noise_var;
+	const double xy_cov = slope * x_var;
+	const double xy_corr = xy_cov / std::sqrt(x_var * y_var);
+	EXPECT_NEAR(xy_corr, result.correlation, tol);
+	EXPECT_NEAR(xy_corr * xy_corr, result.r2, tol);
 }
