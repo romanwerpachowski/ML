@@ -29,7 +29,7 @@ namespace ml
 			result.correlation = sxy / std::sqrt(sxx * syy);
 			result.r2 = result.correlation * result.correlation;
 			if (n > 2) {
-				result.observation_variance_estimate = (y_centred - result.slope * x_centred).square().sum() / (n - 2);
+				result.observation_variance_estimate = std::max(0., (syy + result.slope * result.slope * sxx - 2 * result.slope * sxy) / (n - 2));
 			}
 			else {
 				result.observation_variance_estimate = std::numeric_limits<double>::quiet_NaN();
@@ -57,7 +57,7 @@ namespace ml
 			result.correlation = sxy / std::sqrt(sxx * syy);
 			result.r2 = result.correlation * result.correlation;
 			if (n > 2) {
-				result.observation_variance_estimate = (y_centred + result.slope * (half_width_x - dx * indices.array())).pow(2).sum() / (n - 2);
+				result.observation_variance_estimate = std::max(0., (syy + result.slope * result.slope * sxx - 2 * result.slope * sxy) / (n - 2));
 			}
 			else {
 				result.observation_variance_estimate = std::numeric_limits<double>::quiet_NaN();
