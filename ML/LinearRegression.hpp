@@ -17,7 +17,9 @@ namespace ml
 			double intercept;
 			double correlation; /**< Estimated linear correlation between Y and X. */
 			double r2; /**< R^2 coefficient = correlation^2. */
-			double observation_variance_estimate; /**< Estimated variance of observations y_i. */
+			/** The following assume independent Gaussian error terms (OLS). */
+			double var_y; /**< Estimated variance of observations y_i. */
+			double var_slope; /**< Estimated variance of the slope. */
 		};
 
 		/** Carry out univariate (aka simple) linear regression.
