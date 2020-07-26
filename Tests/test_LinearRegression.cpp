@@ -24,6 +24,7 @@ TEST(LinearRegression, univariate_two_points)
 	ASSERT_NEAR(0.7, result.intercept, 1e-15);
 	ASSERT_NEAR(-1, result.correlation, 1e-15);
 	ASSERT_NEAR(1, result.r2, 1e-15);
+	ASSERT_TRUE(std::isnan(result.observation_variance_estimate)) << result.observation_variance_estimate;
 }
 
 TEST(LinearRegression, univariate_two_points_regular)
@@ -34,6 +35,7 @@ TEST(LinearRegression, univariate_two_points_regular)
 	ASSERT_NEAR(.7, result.intercept, 1e-15);
 	ASSERT_NEAR(-1, result.correlation, 1e-15);
 	ASSERT_NEAR(1, result.r2, 1e-15);
+	ASSERT_TRUE(std::isnan(result.observation_variance_estimate)) << result.observation_variance_estimate;
 }
 
 TEST(LinearRegression, univariate_high_noise)
@@ -44,16 +46,20 @@ TEST(LinearRegression, univariate_high_noise)
 	const double slope = 0;
 	const double intercept = 1e-6;
 	const double noise_strength = 1e4;
+	std::default_random_engine rng(784957984);
+	std::uniform_int_distribution uniform(0, 1);
 	for (int i = 0; i < n; ++i) {
 		const double x_i = static_cast<double>(i);
 		x[i] = x_i;
-		y[i] = noise_strength * (0.5 - static_cast<double>(i % 2)) + intercept + slope * x_i;
+		y[i] = noise_strength * (0.5 - static_cast<double>(uniform(rng))) + intercept + slope * x_i;
 	}
 	const auto result = univariate(x, y);
-	EXPECT_NEAR(slope, result.slope, 5e-4);
-	EXPECT_NEAR(intercept, result.intercept, 2e-4 * noise_strength);
-	EXPECT_NEAR(0, result.correlation, 2e-4);
-	EXPECT_NEAR(0, result.r2, 5e-8);
+	EXPECT_NEAR(slope, result.slope, noise_strength * 1e-2);
+	EXPECT_NEAR(intercept, result.intercept, 2e-2 * noise_strength);
+	EXPECT_NEAR(0, result.correlation, 1e-2);
+	EXPECT_NEAR(0, result.r2, 1e-4);
+	const double expected_observation_variance = noise_strength * noise_strength / 4;
+	EXPECT_NEAR(expected_observation_variance, result.observation_variance_estimate, expected_observation_variance * 1e-3);
 }
 
 TEST(LinearRegression, univariate_high_noise_regular)
@@ -65,15 +71,19 @@ TEST(LinearRegression, univariate_high_noise_regular)
 	const double slope = 0;
 	const double intercept = 1e-6;
 	const double noise_strength = 1e4;
+	std::default_random_engine rng(784957984);
+	std::uniform_int_distribution uniform(0, 1);
 	for (int i = 0; i < n; ++i) {
 		const double x_i = x0 + static_cast<double>(i) * dx;
-		y[i] = noise_strength * (0.5 - static_cast<double>(i % 2)) + intercept + slope * x_i;
+		y[i] = noise_strength * (0.5 - static_cast<double>(uniform(rng))) + intercept + slope * x_i;
 	}
 	const auto result = univariate(x0, dx, y);
-	EXPECT_NEAR(slope, result.slope, 5e-4);
-	EXPECT_NEAR(intercept, result.intercept, 2e-4 * noise_strength);
-	EXPECT_NEAR(0, result.correlation, 2e-4);
-	EXPECT_NEAR(0, result.r2, 5e-8);
+	EXPECT_NEAR(slope, result.slope, noise_strength * 1e-2);
+	EXPECT_NEAR(intercept, result.intercept, 2e-2 * noise_strength);
+	EXPECT_NEAR(0, result.correlation, 1e-2);
+	EXPECT_NEAR(0, result.r2, 1e-4);
+	const double expected_observation_variance = noise_strength * noise_strength / 4;
+	EXPECT_NEAR(expected_observation_variance, result.observation_variance_estimate, expected_observation_variance * 1e-3);
 }
 
 TEST(LinearRegression, univariate_true_model)
@@ -103,6 +113,7 @@ TEST(LinearRegression, univariate_true_model)
 	const double xy_corr = xy_cov / std::sqrt(x_var * y_var);
 	EXPECT_NEAR(xy_corr, result.correlation, tol);
 	EXPECT_NEAR(xy_corr * xy_corr, result.r2, tol);
+	EXPECT_NEAR(noise_std_dev * noise_std_dev, result.observation_variance_estimate, tol);
 }
 
 TEST(LinearRegression, univariate_true_model_regular)
@@ -131,4 +142,5 @@ TEST(LinearRegression, univariate_true_model_regular)
 	const double xy_corr = xy_cov / std::sqrt(x_var * y_var);
 	EXPECT_NEAR(xy_corr, result.correlation, tol);
 	EXPECT_NEAR(xy_corr * xy_corr, result.r2, tol);
+	EXPECT_NEAR(noise_std_dev * noise_std_dev, result.observation_variance_estimate, 2e-3);
 }

@@ -1,4 +1,5 @@
 #include <cmath>
+#include <limits>
 #include <stdexcept>
 #include "LinearRegression.hpp"
 
@@ -26,7 +27,13 @@ namespace ml
 			result.slope = sxy / sxx;
 			result.intercept = my - result.slope * mx;
 			result.correlation = sxy / std::sqrt(sxx * syy);
-			result.r2 = sxy * sxy / (sxx * syy);
+			result.r2 = result.correlation * result.correlation;
+			if (n > 2) {
+				result.observation_variance_estimate = (y_centred - result.slope * x_centred).square().sum() / (n - 2);
+			}
+			else {
+				result.observation_variance_estimate = std::numeric_limits<double>::quiet_NaN();
+			}
 			return result;
 		}
 
@@ -36,7 +43,8 @@ namespace ml
 			if (n < 2) {
 				throw std::invalid_argument("Need at least 2 points for regresssion");
 			}
-			const auto mx = x0 + (n - 1) * dx / 2;
+			const auto half_width_x = (n - 1) * dx / 2;
+			const auto mx = x0 + half_width_x;
 			const auto my = y.mean();
 			const auto y_centred = y.array() - my;
 			const auto indices = Eigen::VectorXd::LinSpaced(y.size(), 0, n - 1);
@@ -48,6 +56,12 @@ namespace ml
 			result.intercept = my - result.slope * mx;
 			result.correlation = sxy / std::sqrt(sxx * syy);
 			result.r2 = result.correlation * result.correlation;
+			if (n > 2) {
+				result.observation_variance_estimate = (y_centred + result.slope * (half_width_x - dx * indices.array())).pow(2).sum() / (n - 2);
+			}
+			else {
+				result.observation_variance_estimate = std::numeric_limits<double>::quiet_NaN();
+			}
 			return result;
 		}
 	}

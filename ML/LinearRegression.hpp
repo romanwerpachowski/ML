@@ -7,13 +7,17 @@ namespace ml
 	/** Linear regression algorithms. */
 	namespace LinearRegression {
 
-		/** Result of 1D linear regression. */
+		/** Result of 1D linear regression. 
+
+		hat{y} = x * slope + intercept.
+		*/
 		struct UnivariateLinearRegressionResult
 		{
 			double slope;
 			double intercept;
-			double correlation;
-			double r2;
+			double correlation; /**< Estimated linear correlation between Y and X. */
+			double r2; /**< R^2 coefficient = correlation^2. */
+			double observation_variance_estimate; /**< Estimated variance of observations y_i. */
 		};
 
 		/** Carry out univariate (aka simple) linear regression.
