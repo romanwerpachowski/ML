@@ -1,7 +1,9 @@
 #pragma once
 #include <limits>
 #include <numeric>
+#include <stdexcept>
 #include <utility>
+#include <vector>
 #include <Eigen/Core>
 
 namespace ml 
@@ -13,7 +15,7 @@ namespace ml
 		@return Pair of (SSE, mean).
 		@tparam Iter Iterator type.
 		*/
-		template <typename Iter> std::pair<double, double> sse_and_mean(const Iter begin, const Iter end)
+		template <class Iter> std::pair<double, double> sse_and_mean(const Iter begin, const Iter end)
 		{
 			double sse = 0;
 			double mean;
@@ -33,7 +35,7 @@ namespace ml
 		/** Calculates sum_i (x_i - mean(x))^2 for given range.
 		@tparam Iter Iterator type.
 		*/
-		template <typename Iter> double sse(const Iter begin, const Iter end)
+		template <class Iter> double sse(const Iter begin, const Iter end)
 		{
 			return sse_and_mean(begin, end).first;
 		}		
@@ -44,7 +46,7 @@ namespace ml
 		@param K Number of classes, positive.
 		@return Gini index and the most frequent class. If begin == end, mode == K.
 		*/
-		template <typename Iter> std::pair<double, unsigned int> gini_index_and_mode(const Iter begin, const Iter end, const unsigned int K)
+		template <class Iter> std::pair<double, unsigned int> gini_index_and_mode(const Iter begin, const Iter end, const unsigned int K)
 		{			
 			std::vector<unsigned int> counts(K, 0);
 			const auto N = static_cast<double>(std::distance(begin, end));
@@ -74,7 +76,7 @@ namespace ml
 		@param K Number of classes, positive.
 		@return Gini index.
 		*/
-		template <typename Iter> double gini_index(const Iter begin, const Iter end, const unsigned int K)
+		template <class Iter> double gini_index(const Iter begin, const Iter end, const unsigned int K)
 		{
 			std::vector<unsigned int> counts(K, 0);
 			const auto N = static_cast<double>(std::distance(begin, end));
@@ -89,7 +91,7 @@ namespace ml
 			return gi;
 		}
 
-		template <typename Iter> unsigned int mode(const Iter begin, const Iter end, const unsigned int K)
+		template <class Iter> unsigned int mode(const Iter begin, const Iter end, const unsigned int K)
 		{
 			std::vector<unsigned int> counts(K, 0);
 			for (auto it = begin; it != end; ++it) {
@@ -107,6 +109,28 @@ namespace ml
 			}
 			assert(mode < K);
 			return mode;
+		}
+
+		/**! Calculates sample covariance of two vectors. */
+		template <class R> R covariance(const std::vector<R>& xs, const std::vector<R>& ys)
+		{			
+			if (xs.size() != ys.size()) {
+				throw std::invalid_argument("Length mismatch");
+			}			
+			const auto n = static_cast<R>(xs.size());
+			if (n < 2) {
+				return std::numeric_limits<double>::quiet_NaN();
+			}
+			const R sum_x = std::accumulate(xs.begin(), xs.end(), R(0));
+			const R sum_y = std::accumulate(ys.begin(), ys.end(), R(0));
+			const auto mean_x = sum_x / n;
+			const auto mean_y = sum_y / n;
+			auto it_x = xs.begin();			
+			R sum_xy(0);
+			for (auto it_y = ys.begin(); it_y != ys.end(); ++it_x, ++it_y) {
+				sum_xy += (*it_x - mean_x) * (*it_y - mean_y);
+			}
+			return sum_xy / (n - 1);
 		}
 	}	
 }

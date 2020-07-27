@@ -137,8 +137,10 @@ TEST(LinearRegression, univariate_true_model)
 	EXPECT_NEAR(slope_sse_and_mean.first / (n_samples - 1), result.var_slope, 1e-5);
 	EXPECT_NEAR(slope_sse_and_mean.second, result.slope, 3e-3);
 	const auto intercept_sse_and_mean = ml::Statistics::sse_and_mean(intercepts.begin(), intercepts.end());
-	EXPECT_NEAR(intercept_sse_and_mean.first / (n_samples - 1), result.var_intercept, 1e-3);
+	EXPECT_NEAR(intercept_sse_and_mean.first / (n_samples - 1), result.var_intercept, 5e-5);
 	EXPECT_NEAR(intercept_sse_and_mean.second, result.intercept, 2e-2);
+	const auto covariance = ml::Statistics::covariance(slopes, intercepts);
+	EXPECT_NEAR(covariance, result.cov_slope_intercept, 2e-5);
 }
 
 TEST(LinearRegression, univariate_true_model_regular)
@@ -184,6 +186,8 @@ TEST(LinearRegression, univariate_true_model_regular)
 	EXPECT_NEAR(slope_sse_and_mean.first / (n_samples - 1), result.var_slope, 2e-5);
 	EXPECT_NEAR(slope_sse_and_mean.second, result.slope, 1e-2);
 	const auto intercept_sse_and_mean = ml::Statistics::sse_and_mean(intercepts.begin(), intercepts.end());
-	EXPECT_NEAR(intercept_sse_and_mean.first / (n_samples - 1), result.var_intercept, 1e-3);
+	EXPECT_NEAR(intercept_sse_and_mean.first / (n_samples - 1), result.var_intercept, 1e-4);
 	EXPECT_NEAR(intercept_sse_and_mean.second, result.intercept, 1e-2);
+	const auto covariance = ml::Statistics::covariance(slopes, intercepts);
+	EXPECT_NEAR(covariance, result.cov_slope_intercept, 3e-5);
 }
