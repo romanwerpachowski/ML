@@ -27,6 +27,7 @@ TEST(LinearRegression, univariate_two_points)
 	ASSERT_NEAR(1, result.r2, 1e-15);
 	ASSERT_TRUE(std::isnan(result.var_y)) << result.var_y;
 	ASSERT_TRUE(std::isnan(result.var_slope)) << result.var_slope;
+	ASSERT_TRUE(std::isnan(result.var_intercept)) << result.var_intercept;
 }
 
 TEST(LinearRegression, univariate_two_points_regular)
@@ -39,6 +40,7 @@ TEST(LinearRegression, univariate_two_points_regular)
 	ASSERT_NEAR(1, result.r2, 1e-15);
 	ASSERT_TRUE(std::isnan(result.var_y)) << result.var_y;
 	ASSERT_TRUE(std::isnan(result.var_slope)) << result.var_slope;
+	ASSERT_TRUE(std::isnan(result.var_intercept)) << result.var_intercept;
 }
 
 TEST(LinearRegression, univariate_high_noise)
@@ -124,14 +126,19 @@ TEST(LinearRegression, univariate_true_model)
 
 	// Calculate sample statistics of estimators.
 	const unsigned int n_samples = 1000;
-	std::vector<double> slopes(n_samples);
+	std::vector<double> intercepts(n_samples);
+	std::vector<double> slopes(n_samples);	
 	for (unsigned int i = 0; i < n_samples; ++i) {
 		const auto result_i = sample_noise_and_run_regression();
-		slopes[i] = result_i.slope;
+		intercepts[i] = result_i.intercept;
+		slopes[i] = result_i.slope;		
 	}
 	const auto slope_sse_and_mean = ml::Statistics::sse_and_mean(slopes.begin(), slopes.end());
 	EXPECT_NEAR(slope_sse_and_mean.first / (n_samples - 1), result.var_slope, 1e-5);
 	EXPECT_NEAR(slope_sse_and_mean.second, result.slope, 3e-3);
+	const auto intercept_sse_and_mean = ml::Statistics::sse_and_mean(intercepts.begin(), intercepts.end());
+	EXPECT_NEAR(intercept_sse_and_mean.first / (n_samples - 1), result.var_intercept, 1e-3);
+	EXPECT_NEAR(intercept_sse_and_mean.second, result.intercept, 2e-2);
 }
 
 TEST(LinearRegression, univariate_true_model_regular)
@@ -166,12 +173,17 @@ TEST(LinearRegression, univariate_true_model_regular)
 
 	// Calculate sample statistics of estimators.
 	const unsigned int n_samples = 1000;
+	std::vector<double> intercepts(n_samples);
 	std::vector<double> slopes(n_samples);
 	for (unsigned int i = 0; i < n_samples; ++i) {
 		const auto result_i = sample_noise_and_run_regression();
+		intercepts[i] = result_i.intercept;
 		slopes[i] = result_i.slope;
 	}
 	const auto slope_sse_and_mean = ml::Statistics::sse_and_mean(slopes.begin(), slopes.end());
 	EXPECT_NEAR(slope_sse_and_mean.first / (n_samples - 1), result.var_slope, 2e-5);
 	EXPECT_NEAR(slope_sse_and_mean.second, result.slope, 1e-2);
+	const auto intercept_sse_and_mean = ml::Statistics::sse_and_mean(intercepts.begin(), intercepts.end());
+	EXPECT_NEAR(intercept_sse_and_mean.first / (n_samples - 1), result.var_intercept, 1e-3);
+	EXPECT_NEAR(intercept_sse_and_mean.second, result.intercept, 1e-2);
 }

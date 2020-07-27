@@ -20,6 +20,7 @@ namespace ml
 			/** The following assume independent Gaussian error terms (OLS). */
 			double var_y; /**< Estimated variance of observations y_i. */
 			double var_slope; /**< Estimated variance of the slope. */
+			double var_intercept; /**< Estimated variance of the intercept. */
 		};
 
 		/** Carry out univariate (aka simple) linear regression.

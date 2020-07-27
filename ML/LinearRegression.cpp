@@ -22,6 +22,7 @@ namespace ml
 				result.var_y = std::numeric_limits<double>::quiet_NaN();
 			}
 			result.var_slope = result.var_y / sxx;
+			result.var_intercept = (sxx + mx * mx) * result.var_y / sxx / n / (n - 2);
 			return result;
 		}
 
