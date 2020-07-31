@@ -7,30 +7,34 @@ namespace ml
 {
 	namespace LinearRegression
 	{
-		static UnivariateLinearRegressionResult calc_univariate_linear_regression_result(
-			double sxx, double sxy, double syy, double mx, double my, double n)
+		static UnivariateOLSResult calc_univariate_linear_regression_result(
+			double sxx, double sxy, double syy, double mx, double my, unsigned int n, bool with_intercept)
 		{
-			UnivariateLinearRegressionResult result;
+			UnivariateOLSResult result;
+			result.n = n;
+			const unsigned int num_params = with_intercept ? 2 : 1;
+			result.dof = n - num_params;
 			result.slope = sxy / sxx;
 			result.intercept = my - result.slope * mx;
-			result.correlation = sxy / std::sqrt(sxx * syy);
-			result.r2 = result.correlation * result.correlation;
-			if (n > 2) {
-				result.var_y = std::max(0., (syy + result.slope * result.slope * sxx - 2 * result.slope * sxy) / (n - 2));
+			const double sse = std::max(0., (syy + result.slope * result.slope * sxx - 2 * result.slope * sxy));
+			result.r2 = 1 - sse / syy;
+			if (n > num_params) {
+				result.var_y = sse / result.dof;
 			}
 			else {
 				result.var_y = std::numeric_limits<double>::quiet_NaN();
 			}
 			result.var_slope = result.var_y / sxx;
-			const double sum_x_squared = sxx + n * mx * mx;
-			result.var_intercept = sum_x_squared * result.var_y / sxx / n;
+			// sum_{i=1}^n x_i^2 = sxx + n * mx * mx;
+			// result.var_intercept = (sxx + n * mx * mx) * result.var_y / sxx / n;
+			result.var_intercept = result.var_y * (1. / n + mx * mx / sxx);
 			result.cov_slope_intercept = -mx * result.var_y / sxx;
 			return result;
 		}
 
-		UnivariateLinearRegressionResult univariate(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y)
+		UnivariateOLSResult univariate(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y)
 		{
-			const auto n = static_cast<double>(x.size());
+			const auto n = static_cast<unsigned int>(x.size());
 			if (n != y.size()) {
 				throw std::invalid_argument("X and Y vectors have different sizes");
 			}
@@ -44,12 +48,12 @@ namespace ml
 			const auto sxy = (x_centred * y_centred).sum();
 			const auto sxx = (x_centred * x_centred).sum();
 			const auto syy = (y_centred * y_centred).sum();
-			return calc_univariate_linear_regression_result(sxx, sxy, syy, mx, my, n);
+			return calc_univariate_linear_regression_result(sxx, sxy, syy, mx, my, n, true);
 		}
 
-		UnivariateLinearRegressionResult univariate(const double x0, const double dx, Eigen::Ref<const Eigen::VectorXd> y)
+		UnivariateOLSResult univariate(const double x0, const double dx, Eigen::Ref<const Eigen::VectorXd> y)
 		{
-			const auto n = static_cast<double>(y.size());
+			const auto n = static_cast<unsigned int>(y.size());
 			if (n < 2) {
 				throw std::invalid_argument("Need at least 2 points for regresssion");
 			}
@@ -59,9 +63,21 @@ namespace ml
 			const auto y_centred = y.array() - my;
 			const auto indices = Eigen::VectorXd::LinSpaced(y.size(), 0, n - 1);
 			const auto sxy = dx * (y_centred * indices.array()).sum();
-			const auto sxx = dx * dx * n * (n * n - 1) / 12;
+			const auto sxx = dx * dx * n * (n * n - 1) / 12.;
 			const auto syy = (y_centred * y_centred).sum();
-			return calc_univariate_linear_regression_result(sxx, sxy, syy, mx, my, n);
+			return calc_univariate_linear_regression_result(sxx, sxy, syy, mx, my, n, true);
+		}
+
+		UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y)
+		{
+			const auto n = static_cast<unsigned int>(y.size());
+			if (n < 1) {
+				throw std::invalid_argument("Need at least 2 points for regresssion");
+			}
+			const auto sxy = (x.array() * y.array()).sum();
+			const auto sxx = (x.array() * x.array()).sum();
+			const auto syy = (y.array() * y.array()).sum();
+			return calc_univariate_linear_regression_result(sxx, sxy, syy, 0, 0, n, false);
 		}
 	}
 }
