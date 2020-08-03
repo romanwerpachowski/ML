@@ -21,7 +21,7 @@ namespace ml
 		When fitting without the intercept:
 			- the R2 coefficient is calculated using a different method:
 				R2 = 1 - \sum_{i=1}^n (y_i - hat{y}_i)^2 / \sum_{i=1}^n (y_i)^2 != Corr(X, Y)^2.
-			- intercept, var_intercept and cov_slope_intercept are set to NaN.
+			- intercept , var_intercept and cov_slope_intercept are set to 0.
 		*/
 		struct UnivariateOLSResult: public Result
 		{
@@ -46,7 +46,7 @@ namespace ml
 		@param x0 First X value.
 		@param dx X increment.
 		@param y Y vector.
-		@throw std::invalid_argument If x and y have different sizes, or if their size is less than 2.
+		@throw std::invalid_argument If y.size is less than 2.
 		*/
 		DLL_DECLSPEC UnivariateOLSResult univariate(double x0, double dx, Eigen::Ref<const Eigen::VectorXd> y);
 

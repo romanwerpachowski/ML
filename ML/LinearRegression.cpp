@@ -8,7 +8,8 @@ namespace ml
 	namespace LinearRegression
 	{
 		static UnivariateOLSResult calc_univariate_linear_regression_result(
-			double sxx, double sxy, double syy, double mx, double my, unsigned int n, bool with_intercept)
+			const double sxx, const double sxy, const double syy, const double mx,
+			const double my, const unsigned int n, const bool with_intercept)
 		{
 			UnivariateOLSResult result;
 			result.n = n;
@@ -27,12 +28,17 @@ namespace ml
 			result.var_slope = result.var_y / sxx;
 			// sum_{i=1}^n x_i^2 = sxx + n * mx * mx;
 			// result.var_intercept = (sxx + n * mx * mx) * result.var_y / sxx / n;
-			result.var_intercept = result.var_y * (1. / n + mx * mx / sxx);
-			result.cov_slope_intercept = -mx * result.var_y / sxx;
+			if (with_intercept) {
+				result.var_intercept = result.var_y * (1. / n + mx * mx / sxx);
+				result.cov_slope_intercept = -mx * result.var_y / sxx;
+			}
+			else {
+				result.var_intercept = result.cov_slope_intercept = 0;
+			}			
 			return result;
 		}
 
-		UnivariateOLSResult univariate(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y)
+		UnivariateOLSResult univariate(const Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y)
 		{
 			const auto n = static_cast<unsigned int>(x.size());
 			if (n != y.size()) {
@@ -51,7 +57,7 @@ namespace ml
 			return calc_univariate_linear_regression_result(sxx, sxy, syy, mx, my, n, true);
 		}
 
-		UnivariateOLSResult univariate(const double x0, const double dx, Eigen::Ref<const Eigen::VectorXd> y)
+		UnivariateOLSResult univariate(const double x0, const double dx, const Eigen::Ref<const Eigen::VectorXd> y)
 		{
 			const auto n = static_cast<unsigned int>(y.size());
 			if (n < 2) {
@@ -68,11 +74,14 @@ namespace ml
 			return calc_univariate_linear_regression_result(sxx, sxy, syy, mx, my, n, true);
 		}
 
-		UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y)
+		UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y)
 		{
-			const auto n = static_cast<unsigned int>(y.size());
+			const auto n = static_cast<unsigned int>(x.size());
+			if (n != y.size()) {
+				throw std::invalid_argument("X and Y vectors have different sizes");
+			}
 			if (n < 1) {
-				throw std::invalid_argument("Need at least 2 points for regresssion");
+				throw std::invalid_argument("Need at least 1 point for regresssion without intercept");
 			}
 			const auto sxy = (x.array() * y.array()).sum();
 			const auto sxx = (x.array() * x.array()).sum();
