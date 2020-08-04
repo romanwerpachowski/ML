@@ -112,7 +112,7 @@ TEST(LinearRegression, univariate_true_model)
 	for (unsigned int i = 0; i < n; ++i) {
 		x[i] = x_dist(rng);
 	}
-	auto sample_noise_and_run_regression = [&]() -> ml::LinearRegression::UnivariateOLSResult {
+	auto sample_noise_and_run_regression = [&]() -> UnivariateOLSResult {
 		for (unsigned int i = 0; i < n; ++i) {
 			y[i] = intercept + slope * x[i] + noise_dist(rng);
 		}
@@ -162,7 +162,7 @@ TEST(LinearRegression, univariate_true_model_regular)
 	std::default_random_engine rng(784957984);
 	std::normal_distribution<double> noise_dist(0, noise_std_dev);
 	Eigen::VectorXd y(n);
-	auto sample_noise_and_run_regression = [&]() -> ml::LinearRegression::UnivariateOLSResult {
+	auto sample_noise_and_run_regression = [&]() -> UnivariateOLSResult {
 		for (unsigned int i = 0; i < n; ++i) {
 			y[i] = intercept + slope * (x0 + i * dx) + noise_dist(rng);
 		}
@@ -266,7 +266,7 @@ TEST(LinearRegression, univariate_without_intercept_true_model)
 	for (unsigned int i = 0; i < n; ++i) {
 		x[i] = x_dist(rng);
 	}
-	auto sample_noise_and_run_regression = [&]() -> ml::LinearRegression::UnivariateOLSResult {
+	auto sample_noise_and_run_regression = [&]() -> UnivariateOLSResult {
 		for (unsigned int i = 0; i < n; ++i) {
 			y[i] = slope * x[i] + noise_dist(rng);
 		}
@@ -290,4 +290,51 @@ TEST(LinearRegression, univariate_without_intercept_true_model)
 	const auto slope_sse_and_mean = ml::Statistics::sse_and_mean(slopes.begin(), slopes.end());
 	EXPECT_NEAR(slope_sse_and_mean.first / (n_samples - 1), result.var_slope, 2e-8);
 	EXPECT_NEAR(slope_sse_and_mean.second, result.slope, 2e-3);
+}
+
+TEST(LinearRegression, multivariate_error)
+{
+	Eigen::MatrixXd X(3, 10);
+	Eigen::VectorXd y(9);
+	ASSERT_THROW(multivariate(X, y), std::invalid_argument);
+	y.resize(2);
+	ASSERT_THROW(multivariate(X, y), std::invalid_argument);
+}
+
+TEST(LinearRegression, multivariate_exact_fit)
+{
+	Eigen::MatrixXd X(2, 2);
+	X << 0.1, 0.2,
+		1, 1;
+	Eigen::Vector2d y(0.5, 0.3);
+	const MultivariateOLSResult result = multivariate(X, y);
+	ASSERT_EQ(2u, result.n);
+	ASSERT_EQ(0u, result.dof);
+	ASSERT_NEAR(-2, result.beta[0], 2e-15);
+	ASSERT_NEAR(0.7, result.beta[1], 1e-15);
+	ASSERT_NEAR(1, result.r2, 1e-15);
+	ASSERT_TRUE(std::isnan(result.var_y)) << result.var_y;
+	for (int i = 0; i < 2; ++i) {
+		for (int j = 0; j < 2; ++j) {
+			ASSERT_TRUE(std::isnan(result.cov(i, j))) << "cov(" << i << ", " << j << ") == " << result.cov(i, j);
+		}
+	}
+}
+
+TEST(LinearRegression, add_intercept_error)
+{
+	Eigen::MatrixXd X(2, 0);
+	ASSERT_THROW(add_intercept(X), std::invalid_argument);
+}
+
+TEST(LinearRegression, add_intercept)
+{
+	Eigen::MatrixXd X(0, 2);
+	Eigen::MatrixXd actual(add_intercept(X));
+	ASSERT_EQ(Eigen::MatrixXd::Ones(1, 2), actual);
+	X.resize(1, 2);
+	X << 0.5, 0.3;
+	actual = add_intercept(X);
+	ASSERT_EQ(X, actual.topRows(1));
+	ASSERT_EQ(Eigen::MatrixXd::Ones(1, 2), actual.bottomRows(1));
 }

@@ -1,6 +1,7 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
+#include <Eigen/Cholesky>
 #include "LinearRegression.hpp"
 
 namespace ml
@@ -87,6 +88,44 @@ namespace ml
 			const auto sxx = (x.array() * x.array()).sum();
 			const auto syy = (y.array() * y.array()).sum();
 			return calc_univariate_linear_regression_result(sxx, sxy, syy, 0, 0, n, false);
+		}
+
+		MultivariateOLSResult multivariate(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y)
+		{
+			// X is an q x N matrix and y is a N-size vector.
+			const auto n = static_cast<unsigned int>(X.cols());
+			if (n != y.size()) {
+				throw std::invalid_argument("X matrix has different number of data points than Y has values");
+			}
+			const auto q = static_cast<unsigned int>(X.rows());
+			if (n < q) {
+				throw std::invalid_argument("Not enough data points for regression");
+			}
+			const Eigen::VectorXd b(X * y);
+			const Eigen::MatrixXd XXt(X * X.transpose());
+			MultivariateOLSResult result;
+			result.n = n;
+			result.dof = n - q;
+			Eigen::LLT<Eigen::MatrixXd> llt;
+			llt.compute(XXt);
+			result.beta = llt.solve(b);
+			result.var_y = (y - X * result.beta).squaredNorm() / result.dof;
+			result.cov = llt.solve(Eigen::MatrixXd::Identity(q, q)) * result.var_y;
+			const auto my = y.mean();
+			const auto y_centred = y.array() - my;
+			const auto syy = (y_centred * y_centred).sum();
+			return result;
+		}
+
+		Eigen::MatrixXd add_intercept(const Eigen::Ref<const Eigen::MatrixXd> X)
+		{
+			if (!X.cols()) {
+				throw std::invalid_argument("No data points in X");
+			}
+			Eigen::MatrixXd X_with_intercept(X.rows() + 1, X.cols());
+			X_with_intercept.topRows(X.rows()) = X;
+			X_with_intercept.bottomRows(1) = Eigen::RowVectorXd::Ones(X.cols());
+			return X_with_intercept;
 		}
 	}
 }

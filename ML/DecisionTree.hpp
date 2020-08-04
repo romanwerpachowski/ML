@@ -23,6 +23,7 @@ namespace ml
 		typedef DecisionTrees::SplitNode<Y> SplitNode;
 		typedef DecisionTrees::LeafNode<Y> LeafNode;
 
+		/** Constructs a decision tree by taking ownership of a root node. */
 		DecisionTree(std::unique_ptr<Node>&& root)
 			: root_(std::move(root))
 		{
