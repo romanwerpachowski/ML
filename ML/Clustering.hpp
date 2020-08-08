@@ -14,15 +14,29 @@ namespace ml
 		public:
 			DLL_DECLSPEC virtual ~CentroidsInitialiser();
 
+			/** Initialises location of centroids. 
+
+			@param data Data matrix with data points in columns.
+			@param prng Pseudo-random number generator.
+			@param number_components Number of centroids. Must be less or equal to data.cols().
+			@param[out] centroids Destination matrix for centroid locations, with data.rows() rows and number_components columns.
+			*/
 			DLL_DECLSPEC virtual void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> centroids) const = 0;
 		};
 
-		/** Chooses initial responsibilities. */
+		/** Chooses initial component responsibilities. */
 		class ResponsibilitiesInitialiser
 		{
 		public:
 			DLL_DECLSPEC virtual ~ResponsibilitiesInitialiser();
 
+			/** Initialises component responsibilities.
+
+			@param data Data matrix with data points in columns.
+			@param prng Pseudo-random number generator.
+			@param number_components Number of centroids. Must be less or equal to data.cols().
+			@param[out] responsibilities Destination matrix for component responsibilities, with data.cols() rows and number_components columns.
+			*/
 			DLL_DECLSPEC virtual void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> responsibilities) const = 0;
 		};
 

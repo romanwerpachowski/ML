@@ -11,14 +11,20 @@ namespace ml
 	{
 		template <class Y> struct SplitNode;
 
+		/** Tree node. Nodes are split (non-terminal) or leaf (terminal). */
 		template <class Y> struct Node
 		{
-			typedef Eigen::Ref<const Eigen::VectorXd> arg_type;
+			typedef Eigen::Ref<const Eigen::VectorXd> arg_type; /**< Type for feature vector. */;
 
 			double error; /**< Error of the training sample seen by this node, used for pruning. */
 			Y value; /**< Value which should be returned if we stop splitting at this node. */
 			SplitNode<Y>* parent; /**< Link to parent node. */
 
+			/** Constructor.
+			@param n_error Prediction error value on training data which reached this node.
+			@param n_value Prediction value assigned to this node.
+			@param n_parent Link to parent node.
+			*/
 			Node(double n_error, Y n_value, SplitNode<Y>* n_parent)
 				: error(n_error), value(n_value), parent(n_parent)
 			{
@@ -29,6 +35,7 @@ namespace ml
 
 			virtual ~Node() {}
 
+			/** Returns a prediction given a feature vector. */
 			virtual Y operator()(arg_type x) const = 0;
 
 			/** Total number of nodes reachable from this one. */
@@ -56,18 +63,26 @@ namespace ml
 			virtual void collect_lowest_split_nodes(std::unordered_set<SplitNode<Y>*>& s) = 0;
 		};
 
+		/** Non-terminal node, which splits data depending on a threshold value of some feature. */
 		template <class Y> struct SplitNode : public Node<Y>
 		{
 			std::unique_ptr<Node<Y>> lower; /**< Followed if x[feature_index] < threshold. */
 			std::unique_ptr<Node<Y>> higher; /**< Followed if x[feature_index] >= threshold. */
-			double threshold;
-			unsigned int feature_index;
+			double threshold; /**< Split threshold value. */
+			unsigned int feature_index; /**< Index of the feature on which this node splits data. */
 
 			using Node<Y>::arg_type;
 			using Node<Y>::error;
 			using Node<Y>::value;
 			using Node<Y>::parent;
 
+			/** Constructor.
+			@param n_error Prediction error value on training data which reached this node.
+			@param n_value Prediction value assigned to this node.
+			@param n_parent Link to parent node.
+			@param n_threshold Split threshold value.
+			@param n_feature_index Index of the feature on which this node splits data.
+			*/
 			SplitNode(double n_error, Y n_value, SplitNode<Y>* n_parent, double n_threshold, unsigned int n_feature_index)
 				: Node<Y>(n_error, n_value, n_parent), threshold(n_threshold), feature_index(n_feature_index)
 			{}
@@ -154,8 +169,14 @@ namespace ml
 			}
 		};
 
+		/** Terminal node, which returns a constant prediction value for features which ended up on it. */
 		template <class Y> struct LeafNode : public Node<Y>
 		{
+			/** Constructor.
+			@param n_error Prediction error value on training data which reached this node.
+			@param n_value Prediction value assigned to this node.
+			@param n_parent Link to parent node.
+			*/
 			LeafNode(double n_error, Y n_value, SplitNode<Y>* n_parent)
 				: Node<Y>(n_error, n_value, n_parent)
 			{}

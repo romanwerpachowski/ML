@@ -22,50 +22,56 @@ namespace ml
 	*/
 	class EM {
 	public:		
-		/** Construct an EM ready to fit.
+		/** Constructs an EM ready to fit.
 		@param number_components Number of Gaussian components, > 0.		
 		*/
 		DLL_DECLSPEC EM(unsigned int number_components);
 
-		/** Set PRNG seed. */
+		/** Sets PRNG seed. */
 		DLL_DECLSPEC void set_seed(unsigned int seed);
 
+		/** Sets absolute tolerance for convergence test. */
 		DLL_DECLSPEC void set_absolute_tolerance(double absolute_tolerance);
 
+		/** Sets relative tolerance for convergence test. */
 		DLL_DECLSPEC void set_relative_tolerance(double relative_tolerance);
 
+		/** Sets maximum number of E-M steps. */
 		DLL_DECLSPEC void set_maximum_steps(unsigned int maximum_steps);
 
-		/**
+		/** Sets means initialiser.
 		@param means_initialiser Pointer to MeansInitialiser implementation.
 		*/
 		DLL_DECLSPEC void set_means_initialiser(std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser);
 
-		/**
-		@param means_initialiser Pointer to MeansInitialiser implementation.
+		/** Sets responsibilities initialiser.
+		@param responsibilities_initialiser Pointer to ResponsibilitiesInitialiser implementation.
 		*/
 		DLL_DECLSPEC void set_responsibilities_initialiser(std::shared_ptr<const Clustering::ResponsibilitiesInitialiser> responsibilities_initialiser);
 
+		/** Switches between verbose and quiet mode. */
 		void set_verbose(bool verbose)
 		{
 			verbose_ = verbose;
 		}
 
+		/** Switches between starting with E or M step first. */
 		void set_maximise_first(bool maximise_first)
 		{
 			maximise_first_ = maximise_first;
 		}
 
-		/**
+		/** Fits the model.
 		@param data Matrix (column-major order) with a data point in every column.
 		*/
 		DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data);
 
-		/**
+		/** Fits the model to data in row-major order.
 		@param data Matrix (row-major order) with a data point in every row.
 		*/
 		DLL_DECLSPEC bool fit_row_major(Eigen::Ref<const MatrixXdR> data);
 
+		/** Returns the number of components. */
 		auto number_components() const
 		{
 			return number_components_;
