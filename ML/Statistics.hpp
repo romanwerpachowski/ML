@@ -8,7 +8,7 @@
 
 namespace ml 
 {
-	/** All sorts of statistical functions. */
+	/** Statistical functions. */
 	namespace Statistics
 	{
 		/** Calculates mean(x) and sum_i (x_i - mean(x))^2 for given range.
@@ -91,6 +91,7 @@ namespace ml
 			return gi;
 		}
 
+		/** Calculates the mode (most frequent value) of a sample containing values from 0 to K - 1. */
 		template <class Iter> unsigned int mode(const Iter begin, const Iter end, const unsigned int K)
 		{
 			std::vector<unsigned int> counts(K, 0);

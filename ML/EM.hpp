@@ -77,33 +77,40 @@ namespace ml
 			return number_components_;
 		}
 
+		/** Returns a const reference to fitted component means. */
 		const auto& means() const 
 		{
 			return means_;
 		}
 
+		/** Returns a const reference to fitted component covariance matrices. */
 		const auto& covariances() const
 		{
 			return covariances_;
 		}
 
+		/** Returns a const reference to fitted k-th component's covariance matrix. */
 		DLL_DECLSPEC const Eigen::MatrixXd& covariance(unsigned int k) const;
 
+		/** Returns a const reference to fitted component mixing probabilities. */
 		const auto& mixing_probabilities() const 
 		{
 			return mixing_probabilities_;
 		}
 
+		/** Returns a const reference to resulting component responsibilities. */
 		const auto& responsibilities() const 
 		{
 			return responsibilities_;
 		}
 
+		/** Returns a const reference to maximised log-likelihood of training data. */
 		double log_likelihood() const 
 		{
 			return log_likelihood_;
 		}		
 
+		/** Returns a shared pointer to means initialiser implementation. */
 		std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser() const
 		{
 			return means_initialiser_;

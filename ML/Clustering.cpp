@@ -13,8 +13,8 @@ namespace ml
 		{
 			std::vector<Eigen::Index> all_indices(data.cols());
 			std::iota(all_indices.begin(), all_indices.end(), 0);
-			std::vector<Eigen::Index> sampled_indices;
-			std::sample(all_indices.begin(), all_indices.end(), std::back_inserter(sampled_indices), number_components, prng);
+			std::vector<Eigen::Index> sampled_indices;			
+			std::sample(all_indices.begin(), all_indices.end(), std::back_inserter(sampled_indices), number_components, prng); // Sample without repetitions.
 			for (unsigned int i = 0; i < number_components; ++i) {
 				centroids.col(i) = data.col(sampled_indices[i]);
 			}
@@ -22,7 +22,7 @@ namespace ml
 
 		void RandomPartition::init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, const unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> centroids) const
 		{
-			centroids.setZero();
+			centroids.setZero(); // Assume size is correct.
 			std::vector<unsigned int> counters(number_components, 0);
 			std::uniform_int_distribution<unsigned int> dist(0, number_components - 1);
 			for (Eigen::Index i = 0; i < data.cols(); ++i) {
