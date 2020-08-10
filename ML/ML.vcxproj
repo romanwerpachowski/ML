@@ -161,6 +161,7 @@
     <ClCompile Include="DecisionTrees.cpp" />
     <ClCompile Include="EM.cpp" />
     <ClCompile Include="LinearRegression.cpp" />
+    <ClCompile Include="Statistics.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

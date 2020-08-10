@@ -59,5 +59,8 @@
     <ClCompile Include="LinearRegression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Statistics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

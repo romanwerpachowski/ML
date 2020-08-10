@@ -5,6 +5,7 @@
 #include <utility>
 #include <vector>
 #include <Eigen/Core>
+#include "dll.hpp"
 
 namespace ml 
 {
@@ -133,5 +134,8 @@ namespace ml
 			}
 			return sum_xy / (n - 1);
 		}
+
+		/**! Calculates sample covariance of two vectors. */
+		DLL_DECLSPEC double covariance(Eigen::Ref<const Eigen::VectorXd> xs, Eigen::Ref<const Eigen::VectorXd> ys);
 	}	
 }

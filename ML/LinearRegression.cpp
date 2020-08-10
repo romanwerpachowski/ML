@@ -1,3 +1,4 @@
+#include <cassert>
 #include <cmath>
 #include <limits>
 #include <stdexcept>
@@ -102,18 +103,29 @@ namespace ml
 				throw std::invalid_argument("Not enough data points for regression");
 			}
 			const Eigen::VectorXd b(X * y);
+			assert(b.size() == X.rows());
 			const Eigen::MatrixXd XXt(X * X.transpose());
+			assert(XXt.rows() == XXt.cols());
+			assert(XXt.rows() == X.rows());
 			MultivariateOLSResult result;
 			result.n = n;
 			result.dof = n - q;
 			Eigen::LLT<Eigen::MatrixXd> llt;
 			llt.compute(XXt);
 			result.beta = llt.solve(b);
-			result.var_y = (y - X * result.beta).squaredNorm() / result.dof;
+			assert(result.beta.size() == X.rows());
+			const double sse = (y - X.transpose() * result.beta).squaredNorm();
+			if (result.dof) {
+				result.var_y = sse / result.dof;
+			}
+			else {
+				result.var_y = std::numeric_limits<double>::quiet_NaN();
+			}
 			result.cov = llt.solve(Eigen::MatrixXd::Identity(q, q)) * result.var_y;
 			const auto my = y.mean();
 			const auto y_centred = y.array() - my;
 			const auto syy = (y_centred * y_centred).sum();
+			result.r2 = 1 - sse / syy;
 			return result;
 		}
 
