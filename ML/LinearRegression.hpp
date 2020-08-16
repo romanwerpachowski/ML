@@ -36,7 +36,7 @@ namespace ml
 			Eigen::MatrixXd cov; /**< Covariance matrix of beta coefficients. */
 		};
 
-		/** Carries out univariate (aka simple) linear regression.
+		/** Carries out univariate (aka simple) linear regression with intercept.
 
 		R2 coefficient is calculated w/r to a model returning average Y, and is equal to Corr(X, Y)^2:
 			R2 = 1 - \sum_{i=1}^n (y_i - hat{y}_i)^2 / \sum_{i=1}^n (y_i - avg(Y))^2.
@@ -47,7 +47,7 @@ namespace ml
 		*/
 		DLL_DECLSPEC UnivariateOLSResult univariate(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y);
 
-		/** Carries out univariate (aka simple) linear regression on regularly spaced points.
+		/** Carries out univariate (aka simple) linear regression with intercept on regularly spaced points.
 
 		R2 coefficient is calculated w/r to a model returning average Y, and is equal to Corr(X, Y)^2:
 			R2 = 1 - \sum_{i=1}^n (y_i - hat{y}_i)^2 / \sum_{i=1}^n (y_i - avg(Y))^2.
@@ -61,7 +61,7 @@ namespace ml
 
 		/** Carries out univariate (aka simple) linear regression without intercept.
 
-		The R2 coefficient is calculated w/r to a model returning 0 and is therefore not equal to Corr(X, Y)^2:
+		R2 coefficient is calculated w/r to a model returning 0 and is therefore not equal to Corr(X, Y)^2:
 			R2 = 1 - \sum_{i=1}^n (y_i - hat{y}_i)^2 / \sum_{i=1}^n (y_i)^2.
 		
 		Intercept , var_intercept and cov_slope_intercept are set to 0.

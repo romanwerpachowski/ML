@@ -172,6 +172,7 @@
   <ItemGroup>
     <ClCompile Include="clustering.cpp" />
     <ClCompile Include="decision_trees.cpp" />
+    <ClCompile Include="linear_regression.cpp" />
     <ClCompile Include="PyML.cpp" />
   </ItemGroup>
   <ItemGroup>

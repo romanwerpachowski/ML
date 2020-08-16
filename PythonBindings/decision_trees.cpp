@@ -27,7 +27,7 @@ static const std::vector<double> DEFAULT_ALPHAS = { 1e-6, 1e-5, 1e-4, 1e-3, 1e-2
 constexpr unsigned int DEFAULT_NUM_FOLDS = 10;
 
 
-void init_decision_trees(py::module& m) 
+void init_decision_trees(py::module& m)
 {
 	auto m_dec_trees = m.def_submodule("decision_trees", "Decision tree algorithms.");
 
