@@ -5,8 +5,6 @@
 #include <Eigen/Core>
 #include "dll.hpp"
 
-// For Python API.
-using MatrixXdR = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
 namespace ml 
 {
@@ -64,12 +62,7 @@ namespace ml
 		/** Fits the model.
 		@param data Matrix (column-major order) with a data point in every column.
 		*/
-		DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data);
-
-		/** Fits the model to data in row-major order.
-		@param data Matrix (row-major order) with a data point in every row.
-		*/
-		DLL_DECLSPEC bool fit_row_major(Eigen::Ref<const MatrixXdR> data);
+		DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data);		
 
 		/** Returns the number of components. */
 		auto number_components() const

@@ -1,10 +1,31 @@
+#include <cassert>
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 #include "ML/Clustering.hpp"
 #include "ML/EM.hpp"
+#include "types.hpp"
 
 
 namespace py = pybind11;
+
+
+namespace ml
+{
+	/** Version of ml::EM adapted for Python bindings. */
+	class EMPy : public EM
+	{
+	public:
+		/** Fits the model to data in row-major order.
+		@param data Matrix (row-major order) with a data point in every row.
+		*/
+		bool fit_row_major(Eigen::Ref<const MatrixXdR> data)
+		{
+			Eigen::Ref<const Eigen::MatrixXd> dataT = data.transpose();
+			assert(dataT.data() == data.data()); // No copying.
+			return fit(dataT);
+		}
+	};
+}
 
 
 void init_clustering(py::module& m) 
@@ -33,21 +54,21 @@ void init_clustering(py::module& m)
 		.def(py::init<std::shared_ptr<ml::Clustering::CentroidsInitialiser>>(), py::arg("centroids_initialiser"))
 		.doc() = "Assigns points to closest centroid.";
 
-	py::class_<ml::EM, std::shared_ptr<ml::EM>>(m_clustering, "EM")
+	py::class_<ml::EMPy, std::shared_ptr<ml::EMPy>>(m_clustering, "EM")
 		.def(py::init<unsigned int>(), py::arg("number_components"), R"(Constructor.
 
 Args:
 	number_components: Number of Gaussian components to fit.
 )")
-		.def("set_seed", &ml::EM::set_seed, py::arg("seed"), "Sets PRNG seed.")
-		.def("set_absolute_tolerance", &ml::EM::set_absolute_tolerance, py::arg("absolute_tolerance"), "Sets absolute tolerance.")
-		.def("set_relative_tolerance", &ml::EM::set_relative_tolerance, py::arg("relative_tolerance"), "Sets relative tolerance.")
-		.def("set_maximum_steps", &ml::EM::set_maximum_steps, py::arg("maximum_steps"), "Sets maximum number of iterations.")
-		.def("set_means_initialiser", &ml::EM::set_means_initialiser, py::arg("means_initialiser"), "Sets the algorithm to initialise component means.")
-		.def("set_responsibilities_initialiser", &ml::EM::set_responsibilities_initialiser, py::arg("responsibilities_initialiser"), "Sets the algorithm to initialise responsibilities for data points.")
-		.def("set_verbose", &ml::EM::set_verbose, py::arg("verbose"), "Turns on/off the verbose mode.")
-		.def("set_maximise_first", &ml::EM::set_maximise_first, py::arg("maximise_first"), "Turns on/off doing an initial maximisation step before the E-M iterations.")
-		.def("fit", &ml::EM::fit_row_major, py::arg("data").noconvert(), 
+		.def("set_seed", &ml::EMPy::set_seed, py::arg("seed"), "Sets PRNG seed.")
+		.def("set_absolute_tolerance", &ml::EMPy::set_absolute_tolerance, py::arg("absolute_tolerance"), "Sets absolute tolerance.")
+		.def("set_relative_tolerance", &ml::EMPy::set_relative_tolerance, py::arg("relative_tolerance"), "Sets relative tolerance.")
+		.def("set_maximum_steps", &ml::EMPy::set_maximum_steps, py::arg("maximum_steps"), "Sets maximum number of iterations.")
+		.def("set_means_initialiser", &ml::EMPy::set_means_initialiser, py::arg("means_initialiser"), "Sets the algorithm to initialise component means.")
+		.def("set_responsibilities_initialiser", &ml::EMPy::set_responsibilities_initialiser, py::arg("responsibilities_initialiser"), "Sets the algorithm to initialise responsibilities for data points.")
+		.def("set_verbose", &ml::EMPy::set_verbose, py::arg("verbose"), "Turns on/off the verbose mode.")
+		.def("set_maximise_first", &ml::EMPy::set_maximise_first, py::arg("maximise_first"), "Turns on/off doing an initial maximisation step before the E-M iterations.")
+		.def("fit", &ml::EMPy::fit_row_major, py::arg("data").noconvert(), 
 			R"(Fits the components to the data.
 
 Args:
@@ -56,12 +77,12 @@ Args:
 Returns:
 	True if EM algorithm converged.)"
 		)
-		.def_property_readonly("number_components", &ml::EM::number_components, "Number of Gaussian components.")
-		.def_property_readonly("means", &ml::EM::means, "Fitted means.")
-		.def_property_readonly("responsibilities", &ml::EM::responsibilities, "Fitted responsibilities.")
-		.def_property_readonly("log_likelihood", &ml::EM::log_likelihood, "Maximised log-likelihood.")
-		.def_property_readonly("mixing_probabilities", &ml::EM::mixing_probabilities, "Mixing probabilities of components.")
-		.def("covariance", &ml::EM::covariance, py::arg("k"), R"(Returns k-th covariance matrix.
+		.def_property_readonly("number_components", &ml::EMPy::number_components, "Number of Gaussian components.")
+		.def_property_readonly("means", &ml::EMPy::means, "Fitted means.")
+		.def_property_readonly("responsibilities", &ml::EMPy::responsibilities, "Fitted responsibilities.")
+		.def_property_readonly("log_likelihood", &ml::EMPy::log_likelihood, "Maximised log-likelihood.")
+		.def_property_readonly("mixing_probabilities", &ml::EMPy::mixing_probabilities, "Mixing probabilities of components.")
+		.def("covariance", &ml::EMPy::covariance, py::arg("k"), R"(Returns k-th covariance matrix.
 
 Args:
 	k: Gaussian component index.

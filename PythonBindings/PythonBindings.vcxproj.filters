@@ -42,4 +42,9 @@
       <Filter>Python</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="types.hpp">
+      <Filter>C++\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

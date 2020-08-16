@@ -184,6 +184,9 @@
     <None Include="PyML\__init__.py" />
     <None Include="setup.py" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="types.hpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

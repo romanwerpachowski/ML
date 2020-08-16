@@ -49,10 +49,6 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsIn
 	ASSERT_EQ(num_dimensions, em.means().rows());
 	const Eigen::MatrixXd means_col_major(em.means());
 	em.set_seed(seed);
-	const Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> data_row_major(data.transpose());
-	ASSERT_TRUE(em.fit_row_major(data_row_major)) << "EM::fit_row_major did not converge";
-	const Eigen::MatrixXd means_row_major(em.means());
-	ASSERT_NEAR(0, (means_row_major - means_col_major).norm(), 1e-15);
 
 	std::vector<Eigen::MatrixXd> covariances(num_components);
 	for (unsigned int k = 0; k < num_components; ++k) {

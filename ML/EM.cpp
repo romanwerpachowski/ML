@@ -160,14 +160,7 @@ namespace ml
 		}
 
 		return false;
-	}
-
-	bool EM::fit_row_major(Eigen::Ref<const MatrixXdR> data)
-	{
-		Eigen::Ref<const Eigen::MatrixXd> dataT = data.transpose();
-		assert(dataT.data() == data.data()); // No copying.
-		return fit(dataT);
-	}
+	}	
 
 	Eigen::MatrixXd EM::calculate_sample_covariance(Eigen::Ref<const Eigen::MatrixXd> data)
 	{
