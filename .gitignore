@@ -343,9 +343,13 @@ healthchecksdb
 /PythonBindings/dist
 /PythonBindings/PyML.egg-info
 /PythonBindings/PyML/ML.dll
+/PythonBindings/PyML/ML-Release.dll
+/PythonBindings/PyML/ML-Debug.dll
 /PythonBindings/PyML/PyML.exp
 /PythonBindings/PyML/PyML.lib
 /PythonBindings/PyML/PyML.pyd
+/PythonBindings/PyML/PyML-Release.pyd
+/PythonBindings/PyML/PyML-Debug.pyd
 /PythonBindings/PyML/PyMLdbg.exp
 /PythonBindings/PyML/PyMLdbg.lib
 /PythonBindings/PyML/PyMLdbg.pyd
