@@ -92,16 +92,17 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.pyd</TargetExt>
-    <TargetName>PyML</TargetName>
-    <OutDir>$(ProjectDir)PyML\Debug\</OutDir>
+    <TargetName>PyML-Debug</TargetName>
+    <OutDir>$(ProjectDir)PyML\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.pyd</TargetExt>
-    <TargetName>PyML</TargetName>
-    <OutDir>$(ProjectDir)PyML\</OutDir>
+    <TargetName>PyML-Release</TargetName>
+    <OutDir>$(ProjectDir)PyML\Release\</OutDir>
     <CopyLocalProjectReference>true</CopyLocalProjectReference>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>
+    </PostBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -143,8 +144,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(SolutionDir)$(Platform)\$(Configuration)\ML.dll" "$(OutDir)"</Command>
-      <Message>Copy ML.dll to PyML\Debug</Message>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -163,10 +166,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(SolutionDir)$(Platform)\$(Configuration)\ML.dll" "$(OutDir)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>Copy ML.dll to PyML</Message>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -183,6 +188,7 @@
   <ItemGroup>
     <None Include="PyML\__init__.py" />
     <None Include="setup.py" />
+    <None Include="tests\test_linear_regression.py" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="types.hpp" />

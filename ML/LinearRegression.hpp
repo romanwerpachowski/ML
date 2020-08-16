@@ -28,7 +28,7 @@ namespace ml
 			double cov_slope_intercept; /**< Estimated covariance of the slope and the intercept. */
 
 			/** Represent result as string. */
-			std::string to_string() const;
+			DLL_DECLSPEC std::string to_string() const;
 		};
 
 		/** Result of multivariate Ordinary Least Squares regression.		
@@ -40,7 +40,7 @@ namespace ml
 			Eigen::MatrixXd cov; /**< Covariance matrix of beta coefficients. */
 
 			/** Represent result as string. */
-			std::string to_string() const;
+			DLL_DECLSPEC std::string to_string() const;
 		};
 
 		/** Carries out univariate (aka simple) linear regression with intercept.

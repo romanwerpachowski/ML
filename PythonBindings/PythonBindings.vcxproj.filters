@@ -19,6 +19,9 @@
     <Filter Include="Python">
       <UniqueIdentifier>{071b28cf-a39e-4275-867a-0f6ee855ab02}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Python\tests">
+      <UniqueIdentifier>{e13969ba-b991-45fa-afd2-c86ee2e048d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="clustering.cpp">
@@ -40,6 +43,9 @@
     </None>
     <None Include="PyML\__init__.py">
       <Filter>Python</Filter>
+    </None>
+    <None Include="tests\test_linear_regression.py">
+      <Filter>Python\tests</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

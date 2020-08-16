@@ -13,20 +13,20 @@ namespace ml
 		std::string UnivariateOLSResult::to_string() const
 		{
 			std::stringstream s;
-			s << "UnivariateOLSResult(\n";
-			s << "n=" << n << ", dof=" << dof << ", r2=" << r2 << ", var_y=" << var_y << ",\n";
-			s << "slope=" << slope << ", intercept=" << intercept << ",\n";
-			s << "var_slope=" << var_slope << ", var_intercept=" << var_intercept << ", cov_slope_intercept=" << cov_slope_intercept << ")\n";
+			s << "UnivariateOLSResult(";
+			s << "n=" << n << ", dof=" << dof << ", r2=" << r2 << ", var_y=" << var_y;
+			s << ", slope=" << slope << ", intercept=" << intercept;
+			s << ", var_slope=" << var_slope << ", var_intercept=" << var_intercept << ", cov_slope_intercept=" << cov_slope_intercept << ")";
 			return s.str();
 		}
 
 		std::string MultivariateOLSResult::to_string() const
 		{
 			std::stringstream s;
-			s << "MultivariateOLSResult(\n";
-			s << "n=" << n << ", dof=" << dof << ", r2=" << r2 << ", var_y=" << var_y << ",\n";
-			s << "beta=" << beta << ",\n";
-			s << "cov=" << cov << ")\n";
+			s << "MultivariateOLSResult(";
+			s << "n=" << n << ", dof=" << dof << ", r2=" << r2 << ", var_y=" << var_y;
+			s << ", beta=" << beta;
+			s << ", cov=" << cov << ")";
 			return s.str();
 		}
 

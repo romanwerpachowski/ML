@@ -1,3 +1,4 @@
+"""Demo program for clustering module."""
 import time
 import warnings
 

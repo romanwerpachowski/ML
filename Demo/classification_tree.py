@@ -1,3 +1,4 @@
+"""Demo program for decision_trees module."""
 import time
 import warnings
 
