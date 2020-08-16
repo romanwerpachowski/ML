@@ -2,6 +2,7 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
+#include <sstream>
 #include <Eigen/Cholesky>
 #include "LinearRegression.hpp"
 
@@ -9,6 +10,26 @@ namespace ml
 {
 	namespace LinearRegression
 	{
+		std::string UnivariateOLSResult::to_string() const
+		{
+			std::stringstream s;
+			s << "UnivariateOLSResult(\n";
+			s << "n=" << n << ", dof=" << dof << ", r2=" << r2 << ", var_y=" << var_y << ",\n";
+			s << "slope=" << slope << ", intercept=" << intercept << ",\n";
+			s << "var_slope=" << var_slope << ", var_intercept=" << var_intercept << ", cov_slope_intercept=" << cov_slope_intercept << ")\n";
+			return s.str();
+		}
+
+		std::string MultivariateOLSResult::to_string() const
+		{
+			std::stringstream s;
+			s << "MultivariateOLSResult(\n";
+			s << "n=" << n << ", dof=" << dof << ", r2=" << r2 << ", var_y=" << var_y << ",\n";
+			s << "beta=" << beta << ",\n";
+			s << "cov=" << cov << ")\n";
+			return s.str();
+		}
+
 		static UnivariateOLSResult calc_univariate_linear_regression_result(
 			const double sxx, const double sxy, const double syy, const double mx,
 			const double my, const unsigned int n, const bool with_intercept)

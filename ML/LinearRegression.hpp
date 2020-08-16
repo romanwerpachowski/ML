@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <Eigen/Core>
 #include "dll.hpp"
 
@@ -25,6 +26,9 @@ namespace ml
 			double var_slope; /**< Estimated variance of the slope. */			
 			double var_intercept; /**< Estimated variance of the intercept. */
 			double cov_slope_intercept; /**< Estimated covariance of the slope and the intercept. */
+
+			/** Represent result as string. */
+			std::string to_string() const;
 		};
 
 		/** Result of multivariate Ordinary Least Squares regression.		
@@ -34,6 +38,9 @@ namespace ml
 			Eigen::VectorXd beta; /**< Fitted coefficients of the model y_i = beta^T X_i. */
 			/** The following assume independent Gaussian error terms. */
 			Eigen::MatrixXd cov; /**< Covariance matrix of beta coefficients. */
+
+			/** Represent result as string. */
+			std::string to_string() const;
 		};
 
 		/** Carries out univariate (aka simple) linear regression with intercept.
@@ -86,6 +93,7 @@ namespace ml
 
 		/** Add another row with 1s in every column to X.
 		@throw std::invalid_argument If X.cols() == 0.
+		@return New matrix with a row filled with 1's added at the end.
 		*/
 		DLL_DECLSPEC Eigen::MatrixXd add_ones(Eigen::Ref<const Eigen::MatrixXd> X);
 	}

@@ -11,16 +11,18 @@ namespace ml
 {
 	namespace LinearRegression
 	{
-		static MultivariateOLSResult multivariate_row_major(const Eigen::Ref<const MatrixXdR> X, const Eigen::Ref<const Eigen::VectorXd> y, bool add_ones)
+		static MultivariateOLSResult multivariate_row_major(const Eigen::Ref<const MatrixXdR> X, const Eigen::Ref<const Eigen::VectorXd> y/*, bool add_ones*/)
 		{
 			Eigen::Ref<const Eigen::MatrixXd> XT = X.transpose();
 			assert(XT.data() == X.data()); // No copying.
-			if (!add_ones) {
+			//if (!add_ones) {
 				return multivariate(XT, y);
-			}
+			/*}
 			else {
-				return multivariate(LinearRegression::add_ones(XT), y);
-			}
+				// TODO: doesn't work now. Fix it.
+				const auto XT_with_ones = LinearRegression::add_ones(XT);
+				return multivariate(XT_with_ones, y);
+			}*/
 		}
 	}	
 }
@@ -31,6 +33,7 @@ void init_linear_regression(py::module& m)
 	auto m_lin_reg = m.def_submodule("linear_regression", "Linear regression algorithms.");
 
 	py::class_<ml::LinearRegression::UnivariateOLSResult>(m_lin_reg, "UnivariateOLSResult")
+		.def("__repr__", &ml::LinearRegression)
 		.def_readonly("n", &ml::LinearRegression::UnivariateOLSResult::n, "Number of data points.")
 		.def_readonly("dof", &ml::LinearRegression::UnivariateOLSResult::dof, "Number of degrees of freedom.")
 		.def_readonly("var_y", &ml::LinearRegression::UnivariateOLSResult::var_y, "Estimated variance of observations Y.")
@@ -98,16 +101,15 @@ Returns:
 	Instance of `UnivariateOLSResult` with `intercept`, `var_intercept` and `cov_slope_intercept` set to 0.
 )");
 
-	m_lin_reg.def("multivariate", &ml::LinearRegression::multivariate_row_major, py::arg("X"), py::arg("y"), py::arg("add_ones") = false,
+	m_lin_reg.def("multivariate", &ml::LinearRegression::multivariate_row_major, py::arg("X"), py::arg("y"),/* py::arg("add_ones") = false,*/
 		R"(Carries out multivariate linear regression.
 
 R2 is always calculated w/r to model returning average Y.
-If fitting with intercept is desired, include a row of 1's in the X values or set `add_ones` to True.
+If fitting with intercept is desired, include a row of 1's in the X values.
 
 Args:
-	X: X matrix (shape D x N, with D <= N), with data points in columns.
+	X: X matrix (shape N x D, with D <= N), with data points in rows.
 	y: Y vector with length N.
-	add_ones: Whether to add a column of 1's to X (default: False).
 
 Returns:
 	Instance of `MultivariateOLSResult`.
