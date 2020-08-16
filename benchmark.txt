@@ -1,102 +1,130 @@
 -------------------------------------------------------------------------------------
 Benchmark                                           Time             CPU   Iterations
 -------------------------------------------------------------------------------------
-calc_test_error/100                              6861 ns         6801 ns        89600
-calc_test_error/1000                            33708 ns        32698 ns        20070
-calc_test_error/10000                          301753 ns       304813 ns         2358
-calc_test_error/100000                       12703833 ns     12451172 ns           64
-calc_test_error/1000000                     173486825 ns    171875000 ns            4
-calc_test_error_BigO                             8.70 NlgN       8.62 NlgN 
-calc_test_error_RMS                                 2 %             2 %    
-univariate_regression_tree/2/real_time           2220 ns         2234 ns       328759
-univariate_regression_tree/4/real_time           6000 ns         6038 ns       116441
-univariate_regression_tree/8/real_time          31760 ns        30402 ns        22100
-univariate_regression_tree/16/real_time        207688 ns       210895 ns         3334
-univariate_regression_tree/32/real_time       1530404 ns      1466976 ns          458
-univariate_regression_tree/64/real_time      11388387 ns     11014344 ns           61
-univariate_regression_tree/real_time_BigO       43.50 N^3       42.06 N^3  
+calc_test_error/100                              6333 ns         6417 ns       112000
+calc_test_error/1000                            30495 ns        29994 ns        22400
+calc_test_error/10000                          368606 ns       353202 ns         1858
+calc_test_error/100000                        9349817 ns      9375000 ns           75
+calc_test_error/1000000                     139119450 ns    138020833 ns            6
+calc_test_error_BigO                             6.97 NlgN       6.92 NlgN 
+calc_test_error_RMS                                 3 %             3 %    
+univariate_regression_tree/2/real_time           2144 ns         2119 ns       331779
+univariate_regression_tree/4/real_time           6596 ns         6530 ns       100494
+univariate_regression_tree/8/real_time          32397 ns        31949 ns        22497
+univariate_regression_tree/16/real_time        207078 ns       208586 ns         3296
+univariate_regression_tree/32/real_time       1461705 ns      1444892 ns          465
+univariate_regression_tree/64/real_time      10951611 ns     10817308 ns           65
+univariate_regression_tree/real_time_BigO       41.82 N^3       41.31 N^3  
 univariate_regression_tree/real_time_RMS            2 %             2 %    
-classification_tree/2/real_time                  1467 ns         1488 ns       483078
-classification_tree/4/real_time                  4965 ns         4936 ns       142456
-classification_tree/8/real_time                 22241 ns        22037 ns        31197
-classification_tree/16/real_time               132935 ns       132941 ns         5289
-classification_tree/32/real_time              1160809 ns      1175794 ns          598
-classification_tree/64/real_time              7699570 ns      7472826 ns           92
-classification_tree/real_time_BigO              29.47 N^3       28.62 N^3  
-classification_tree/real_time_RMS                   5 %             7 %    
-cost_complexity_prune/2                           761 ns          823 ns      1120000
-cost_complexity_prune/4                          2861 ns         2790 ns       280000
-cost_complexity_prune/8                         12944 ns        11091 ns        74667
-cost_complexity_prune/16                        98874 ns       104632 ns         8960
-cost_complexity_prune/32                      1476433 ns      1380522 ns          498
-cost_complexity_prune/64                     33808450 ns     34375000 ns           20
-cost_complexity_prune_BigO                     127.65 N^3      129.74 N^3  
-cost_complexity_prune_RMS                          19 %            20 %    
-tree_copy/2                                       531 ns          531 ns      1000000
-tree_copy/4                                      2040 ns         2051 ns       373333
-tree_copy/8                                     10306 ns        10045 ns        74667
-tree_copy/16                                    42936 ns        43316 ns        16593
-tree_copy/32                                   153087 ns       153802 ns         4978
-tree_copy/64                                   623935 ns       599888 ns         1120
-tree_copy_BigO                                 152.22 N^2      146.76 N^2  
-tree_copy_RMS                                       1 %             2 %    
-em_mousie/100                                 1142509 ns      1123047 ns          640
-em_mousie/1000                               35822185 ns     35937500 ns           20
-em_mousie/10000                             152076275 ns    152343750 ns            4
-em_mousie/100000                           1453339400 ns   1453125000 ns            1
-em_mousie_BigO                               14542.17 N      14540.33 N    
-em_mousie_RMS                                       3 %             3 %    
-univariate_linear_regression/10                  43.7 ns         43.9 ns     16000000
-univariate_linear_regression/100                 91.8 ns         92.4 ns      8960000
-univariate_linear_regression/1000                 577 ns          572 ns      1120000
-univariate_linear_regression/10000               5901 ns         5938 ns       100000
-univariate_linear_regression_BigO                0.59 N          0.59 N    
-univariate_linear_regression_RMS                    2 %             2 %    
-univariate_linear_regression_regular/10          48.3 ns         48.1 ns     14933333
-univariate_linear_regression_regular/100         85.3 ns         85.4 ns      8960000
-univariate_linear_regression_regular/1000         485 ns          476 ns      1445161
-univariate_linear_regression_regular/10000       4563 ns         4590 ns       160000
-univariate_linear_regression_regular_BigO        0.46 N          0.46 N    
-univariate_linear_regression_regular_RMS            3 %             2 %    
-sse/10                                           10.2 ns         9.77 ns     64000000
-sse/100                                           165 ns          161 ns      4072727
-sse/1000                                         1751 ns         1765 ns       407273
-sse/10000                                       17752 ns        17578 ns        37333
-sse/100000                                     177035 ns       177874 ns         4480
-sse_BigO                                         1.77 N          1.78 N    
+classification_tree/2/real_time                  1402 ns         1414 ns       508250
+classification_tree/4/real_time                  4599 ns         4522 ns       152026
+classification_tree/8/real_time                 21028 ns        21079 ns        33356
+classification_tree/16/real_time               126835 ns       127438 ns         5640
+classification_tree/32/real_time              1107309 ns      1096919 ns          641
+classification_tree/64/real_time              7246917 ns      7324219 ns           96
+classification_tree/real_time_BigO              27.74 N^3       28.03 N^3  
+classification_tree/real_time_RMS                   6 %             5 %    
+cost_complexity_prune/2                           725 ns          691 ns       746667
+cost_complexity_prune/4                          2800 ns         3013 ns       280000
+cost_complexity_prune/8                         12227 ns        12556 ns        44800
+cost_complexity_prune/16                        93003 ns        92188 ns        10000
+cost_complexity_prune/32                      1420746 ns      1440430 ns          640
+cost_complexity_prune/64                     33609285 ns     33593750 ns           20
+cost_complexity_prune_BigO                     126.88 N^3      126.83 N^3  
+cost_complexity_prune_RMS                          19 %            19 %    
+tree_copy/2                                       512 ns          516 ns      1000000
+tree_copy/4                                      2353 ns         2354 ns       298667
+tree_copy/8                                      9466 ns         9417 ns        74667
+tree_copy/16                                    41016 ns        41433 ns        16593
+tree_copy/32                                   147353 ns       147524 ns         4978
+tree_copy/64                                   598744 ns       599888 ns         1120
+tree_copy_BigO                                 146.10 N^2      146.37 N^2  
+tree_copy_RMS                                       1 %             1 %    
+em_mousie/100                                 1091409 ns      1074219 ns          640
+em_mousie/1000                               33216755 ns     32812500 ns           20
+em_mousie/10000                             145587900 ns    143750000 ns            5
+em_mousie/100000                           1391304800 ns   1390625000 ns            1
+em_mousie_BigO                               13921.35 N      13912.76 N    
+em_mousie_RMS                                       3 %             2 %    
+univariate_linear_regression/10                  42.7 ns         42.6 ns     17230769
+univariate_linear_regression/100                 80.5 ns         80.2 ns      8960000
+univariate_linear_regression/1000                 573 ns          578 ns      1000000
+univariate_linear_regression/10000               5732 ns         5720 ns       112000
+univariate_linear_regression_BigO                0.57 N          0.57 N    
+univariate_linear_regression_RMS                    1 %             1 %    
+univariate_linear_regression_regular/10          47.7 ns         47.6 ns     14451613
+univariate_linear_regression_regular/100         76.8 ns         76.7 ns      8960000
+univariate_linear_regression_regular/1000         480 ns          481 ns      1493333
+univariate_linear_regression_regular/10000       4228 ns         4248 ns       154483
+univariate_linear_regression_regular_BigO        0.42 N          0.43 N    
+univariate_linear_regression_regular_RMS            3 %             3 %    
+multivariate_linear_regression_1d/10              671 ns          670 ns      1120000
+multivariate_linear_regression_1d/100            1104 ns         1123 ns       640000
+multivariate_linear_regression_1d/1000           5340 ns         5313 ns       100000
+multivariate_linear_regression_1d/10000         49282 ns        49734 ns        14452
+multivariate_linear_regression_1d_BigO           4.93 N          4.98 N    
+multivariate_linear_regression_1d_RMS               3 %             3 %    
+multivariate_linear_regression_2d/10              898 ns          900 ns       746667
+multivariate_linear_regression_2d/100            1587 ns         1604 ns       448000
+multivariate_linear_regression_2d/1000           9502 ns         9417 ns        74667
+multivariate_linear_regression_2d/10000         89434 ns        87887 ns         7467
+multivariate_linear_regression_2d_BigO           8.95 N          8.80 N    
+multivariate_linear_regression_2d_RMS               2 %             3 %    
+multivariate_linear_regression_5d/10             1293 ns         1287 ns       497778
+multivariate_linear_regression_5d/100            2153 ns         2148 ns       320000
+multivariate_linear_regression_5d/1000          10667 ns        10742 ns        64000
+multivariate_linear_regression_5d/10000         98627 ns        98349 ns         7467
+multivariate_linear_regression_5d_BigO           9.87 N          9.85 N    
+multivariate_linear_regression_5d_RMS               3 %             3 %    
+multivariate_linear_regression_10d/100           4418 ns         4349 ns       154483
+multivariate_linear_regression_10d/1000         25102 ns        25112 ns        28000
+multivariate_linear_regression_10d/10000       243486 ns       240626 ns         2987
+multivariate_linear_regression_10d_BigO         24.36 N         24.07 N    
+multivariate_linear_regression_10d_RMS              1 %             1 %    
+multivariate_linear_regression_50d/100          69726 ns        69754 ns        11200
+multivariate_linear_regression_50d/1000        332893 ns       336967 ns         2133
+multivariate_linear_regression_50d/10000      2944238 ns      2929688 ns          224
+multivariate_linear_regression_50d_BigO        294.84 N        293.44 N    
+multivariate_linear_regression_50d_RMS              3 %             3 %    
+sse/10                                           9.81 ns         9.84 ns     74666667
+sse/100                                           156 ns          153 ns      4072727
+sse/1000                                         1704 ns         1709 ns       448000
+sse/10000                                       17296 ns        17264 ns        40727
+sse/100000                                     172418 ns       172631 ns         4073
+sse_BigO                                         1.72 N          1.73 N    
 sse_RMS                                             0 %             0 %    
-sse_and_mean/10                                  10.1 ns         10.0 ns     74666667
-sse_and_mean/100                                  161 ns          160 ns      4480000
-sse_and_mean/1000                                1756 ns         1744 ns       448000
-sse_and_mean/10000                              17935 ns        17578 ns        37333
-sse_and_mean/100000                            176497 ns       175797 ns         3733
-sse_and_mean_BigO                                1.77 N          1.76 N    
+sse_and_mean/10                                  9.79 ns         9.84 ns     74666667
+sse_and_mean/100                                  156 ns          157 ns      4480000
+sse_and_mean/1000                                1714 ns         1726 ns       407273
+sse_and_mean/10000                              17371 ns        17648 ns        40727
+sse_and_mean/100000                            174843 ns       176467 ns         4073
+sse_and_mean_BigO                                1.75 N          1.76 N    
 sse_and_mean_RMS                                    0 %             0 %    
-gini_index<double>/10                            61.2 ns         61.4 ns     11200000
-gini_index<double>/100                            131 ns          131 ns      5600000
-gini_index<double>/1000                           791 ns          774 ns       746667
-gini_index<double>/10000                         7538 ns         7499 ns        89600
-gini_index<double>/100000                       73763 ns        73940 ns        11200
-gini_index<double>_BigO                          0.74 N          0.74 N    
-gini_index<double>_RMS                              1 %             0 %    
-gini_index<int>/10                               71.0 ns         68.4 ns     11200000
-gini_index<int>/100                               145 ns          144 ns      4977778
-gini_index<int>/1000                              595 ns          572 ns      1120000
-gini_index<int>/10000                            4653 ns         4653 ns       154483
-gini_index<int>/100000                          46003 ns        46039 ns        14933
-gini_index<int>_BigO                             0.46 N          0.46 N    
-gini_index<int>_RMS                                 1 %             1 %    
-gini_index_and_mode<double>/10                   62.9 ns         62.8 ns     11200000
-gini_index_and_mode<double>/100                   149 ns          132 ns      4977778
-gini_index_and_mode<double>/1000                  838 ns          837 ns       896000
-gini_index_and_mode<double>/10000                8228 ns         7673 ns        89600
-gini_index_and_mode<double>/100000              79336 ns        80218 ns         8960
-gini_index_and_mode<double>_BigO                 0.79 N          0.80 N    
+gini_index<double>/10                            61.5 ns         61.4 ns     11200000
+gini_index<double>/100                            127 ns          128 ns      5600000
+gini_index<double>/1000                           765 ns          767 ns       896000
+gini_index<double>/10000                         7151 ns         7254 ns       112000
+gini_index<double>/100000                       73038 ns        73242 ns         8960
+gini_index<double>_BigO                          0.73 N          0.73 N    
+gini_index<double>_RMS                              0 %             0 %    
+gini_index<int>/10                               57.4 ns         55.8 ns     11200000
+gini_index<int>/100                               102 ns          103 ns      7466667
+gini_index<int>/1000                              505 ns          516 ns      1000000
+gini_index<int>/10000                            4509 ns         4551 ns       154483
+gini_index<int>/100000                          45178 ns        45516 ns        15448
+gini_index<int>_BigO                             0.45 N          0.46 N    
+gini_index<int>_RMS                                 0 %             0 %    
+gini_index_and_mode<double>/10                   62.0 ns         61.4 ns     11200000
+gini_index_and_mode<double>/100                   135 ns          135 ns      4977778
+gini_index_and_mode<double>/1000                  914 ns          900 ns       746667
+gini_index_and_mode<double>/10000                8034 ns         8022 ns        89600
+gini_index_and_mode<double>/100000              77492 ns        76730 ns         8960
+gini_index_and_mode<double>_BigO                 0.78 N          0.77 N    
 gini_index_and_mode<double>_RMS                     1 %             1 %    
-gini_index_and_mode<int>/10                      60.2 ns         60.0 ns     11200000
-gini_index_and_mode<int>/100                      104 ns          103 ns      7466667
-gini_index_and_mode<int>/1000                     558 ns          558 ns      1120000
-gini_index_and_mode<int>/10000                   4771 ns         4855 ns       154483
-gini_index_and_mode<int>/100000                 47633 ns        44993 ns        14933
-gini_index_and_mode<int>_BigO                    0.48 N          0.45 N    
-gini_index_and_mode<int>_RMS                        0 %             2 %    
+gini_index_and_mode<int>/10                      58.1 ns         57.2 ns     11200000
+gini_index_and_mode<int>/100                     99.3 ns          100 ns      7466667
+gini_index_and_mode<int>/1000                     504 ns          500 ns      1000000
+gini_index_and_mode<int>/10000                   4503 ns         4551 ns       154483
+gini_index_and_mode<int>/100000                 44854 ns        44922 ns        16000
+gini_index_and_mode<int>_BigO                    0.45 N          0.45 N    
+gini_index_and_mode<int>_RMS                        0 %             0 %    

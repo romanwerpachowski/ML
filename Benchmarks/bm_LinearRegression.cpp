@@ -27,3 +27,27 @@ static void univariate_linear_regression_regular(benchmark::State& state)
 }
 
 BENCHMARK(univariate_linear_regression_regular)->RangeMultiplier(10)->Range(10, 10000)->Complexity();
+
+
+template <unsigned int D> static void multivariate_linear_regression(benchmark::State& state)
+{
+	const auto sample_size = state.range(0);
+	const Eigen::MatrixXd X(Eigen::MatrixXd::Random(D, sample_size));
+	const Eigen::VectorXd y(Eigen::VectorXd::Random(sample_size));
+	for (auto _ : state) {
+		ml::LinearRegression::multivariate(X, y);
+	}
+	state.SetComplexityN(state.range(0));
+}
+
+constexpr auto multivariate_linear_regression_1d = multivariate_linear_regression<1>;
+constexpr auto multivariate_linear_regression_2d = multivariate_linear_regression<2>;
+constexpr auto multivariate_linear_regression_5d = multivariate_linear_regression<5>;
+constexpr auto multivariate_linear_regression_10d = multivariate_linear_regression<10>;
+constexpr auto multivariate_linear_regression_50d = multivariate_linear_regression<50>;
+
+BENCHMARK(multivariate_linear_regression_1d)->RangeMultiplier(10)->Range(10, 10000)->Complexity();
+BENCHMARK(multivariate_linear_regression_2d)->RangeMultiplier(10)->Range(10, 10000)->Complexity();
+BENCHMARK(multivariate_linear_regression_5d)->RangeMultiplier(10)->Range(10, 10000)->Complexity();
+BENCHMARK(multivariate_linear_regression_10d)->RangeMultiplier(10)->Range(100, 10000)->Complexity();
+BENCHMARK(multivariate_linear_regression_50d)->RangeMultiplier(10)->Range(100, 10000)->Complexity();
