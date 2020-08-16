@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ProfilingTarget xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <StandaloneTarget>
+    <PythonInterpreter>
+      <Id>CondaEnv|CondaEnv|Anaconda3</Id>
+    </PythonInterpreter>
+    <WorkingDirectory>C:\Users\Roman\source\repos\ML\PythonBindings\tests</WorkingDirectory>
+    <Script>C:\Users\Roman\source\repos\ML\PythonBindings\tests\test_linear_regression.py</Script>
+    <Arguments />
+  </StandaloneTarget>
+  <UseVTune>false</UseVTune>
+</ProfilingTarget>

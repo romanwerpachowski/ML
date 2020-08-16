@@ -1,3 +1,4 @@
+#include <iostream>
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 #include "ML/LinearRegression.hpp"
@@ -19,10 +20,9 @@ namespace ml
 				return multivariate(XT, y);
 			}
 			else {
-				// TODO: doesn't work now. Fix it.
 				const auto XT_with_ones = LinearRegression::add_ones(XT);
 				return multivariate(XT_with_ones, y);
-			}
+			}			
 		}
 	}	
 }
@@ -48,6 +48,7 @@ void init_linear_regression(py::module& m)
 The following properties assume independent Gaussian error terms: `var_slope`, `var_intercept` and `cov_slope_intercept`.)";
 
 	py::class_<ml::LinearRegression::MultivariateOLSResult>(m_lin_reg, "MultivariateOLSResult")
+		.def("__repr__", &ml::LinearRegression::MultivariateOLSResult::to_string)
 		.def_readonly("n", &ml::LinearRegression::MultivariateOLSResult::n, "Number of data points.")
 		.def_readonly("dof", &ml::LinearRegression::MultivariateOLSResult::dof, "Number of degrees of freedom.")
 		.def_readonly("var_y", &ml::LinearRegression::MultivariateOLSResult::var_y, "Estimated variance of observations Y.")
@@ -101,7 +102,8 @@ Returns:
 	Instance of `UnivariateOLSResult` with `intercept`, `var_intercept` and `cov_slope_intercept` set to 0.
 )");
 
-	m_lin_reg.def("multivariate", &ml::LinearRegression::multivariate_row_major, py::arg("X"), py::arg("y"), py::arg("add_ones") = false,
+	m_lin_reg.def("multivariate", &ml::LinearRegression::multivariate_row_major,
+		py::arg("X"), py::arg("y"), py::arg("add_ones") = false,
 		R"(Carries out multivariate linear regression.
 
 R2 is always calculated w/r to model returning average Y.

@@ -1,5 +1,6 @@
 #include <cassert>
 #include <cmath>
+#include <iostream>
 #include <limits>
 #include <stdexcept>
 #include <sstream>
@@ -25,10 +26,13 @@ namespace ml
 			std::stringstream s;
 			s << "MultivariateOLSResult(";
 			s << "n=" << n << ", dof=" << dof << ", r2=" << r2 << ", var_y=" << var_y;
-			s << ", beta=" << beta;
-			s << ", cov=" << cov << ")";
+			s << ", beta=[" << beta.transpose() << "]";
+			s << ", cov=[" << cov << "])";
 			return s.str();
 		}
+
+		MultivariateOLSResult::~MultivariateOLSResult()
+		{}
 
 		static UnivariateOLSResult calc_univariate_linear_regression_result(
 			const double sxx, const double sxy, const double syy, const double mx,

@@ -1,3 +1,8 @@
+/* Main source for the PyML extension.
+
+IMPORTANT: compile it with the same optimisation options as ML.dll!
+*/
+
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;

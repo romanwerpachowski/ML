@@ -41,6 +41,8 @@ namespace ml
 
 			/** Represent result as string. */
 			DLL_DECLSPEC std::string to_string() const;
+
+			DLL_DECLSPEC ~MultivariateOLSResult();
 		};
 
 		/** Carries out univariate (aka simple) linear regression with intercept.

@@ -68,7 +68,7 @@ class LinearRegressionTest(unittest.TestCase):
         n = 25
         d = 4
         X = np.random.randn(n, d)
-        y = -0.5 * X[:, 0] + 0.1 * X[:, 1] - X[:, 3] + 4 + 0.2 * np.random.randn(n)
+        y = -0.5 * X[:, 0] + 0.1 * X[:, 1] - X[:, 3] + 4 + 0.2 * np.random.randn(n)        
         result = linear_regression.multivariate(X, y, True)
         self.assertEqual(n, result.n)
         self.assertEqual(n - d - 1, result.dof)
@@ -89,6 +89,8 @@ class LinearRegressionTest(unittest.TestCase):
         lr = linear_model.LinearRegression(fit_intercept=False)  # Force lr not to add another column with 1's.
         lr.fit(X, y)
         np.testing.assert_array_almost_equal(result.beta, lr.coef_, decimal=14)
+        
 
 if __name__ == "__main__": 
     unittest.main()
+    print("Done!")
