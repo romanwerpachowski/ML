@@ -367,24 +367,30 @@ TEST(LinearRegression, multivariate_true_model)
 		for (unsigned int j = 0; j < dim; ++j) {
 			const double cov_ij = ml::Statistics::covariance(betas.col(i), betas.col(j));
 			EXPECT_NEAR(cov_ij, result.cov(i, j), 2e-6) << i << " " << j;
+			if (i != j) {
+				EXPECT_NEAR(result.cov(i, j), result.cov(j, i), 1e-15) << i << " " << j;
+			}
+			else {
+				EXPECT_GE(result.cov(i, i), 0) << i;
+			}
 		}
 	}	
 }
 
-TEST(LinearRegression, add_intercept_error)
+TEST(LinearRegression, add_ones_error)
 {
 	Eigen::MatrixXd X(2, 0);
-	ASSERT_THROW(add_intercept(X), std::invalid_argument);
+	ASSERT_THROW(add_ones(X), std::invalid_argument);
 }
 
-TEST(LinearRegression, add_intercept)
+TEST(LinearRegression, add_ones)
 {
 	Eigen::MatrixXd X(0, 2);
-	Eigen::MatrixXd actual(add_intercept(X));
+	Eigen::MatrixXd actual(add_ones(X));
 	ASSERT_EQ(Eigen::MatrixXd::Ones(1, 2), actual);
 	X.resize(1, 2);
 	X << 0.5, 0.3;
-	actual = add_intercept(X);
+	actual = add_ones(X);
 	ASSERT_EQ(X, actual.topRows(1));
 	ASSERT_EQ(Eigen::MatrixXd::Ones(1, 2), actual.bottomRows(1));
 }

@@ -12,7 +12,7 @@ namespace ml
 		{
 			unsigned int n; /**< Number of data points. */
 			unsigned int dof; /**< Number of degrees of freedom. */
-			double var_y; /**< Estimated variance of observations y_i. */
+			double var_y; /**< Estimated variance of observations Y. */
 			double r2; /**< R2 = 1 - fraction of variance unexplained relative to a "base model". */
 		};
 
@@ -80,13 +80,13 @@ namespace ml
 
 		@param X X matrix, with data points in columns.
 		@param y Y vector.
-		@throw std::invalid_argument If y.size() != X.cols() or y.size() < X.rows().
+		@throw std::invalid_argument If y.size() != X.cols() or X.cols() < X.rows().
 		*/
 		DLL_DECLSPEC MultivariateOLSResult multivariate(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
 		/** Add another row with 1s in every column to X.
 		@throw std::invalid_argument If X.cols() == 0.
 		*/
-		DLL_DECLSPEC Eigen::MatrixXd add_intercept(Eigen::Ref<const Eigen::MatrixXd> X);
+		DLL_DECLSPEC Eigen::MatrixXd add_ones(Eigen::Ref<const Eigen::MatrixXd> X);
 	}
 }

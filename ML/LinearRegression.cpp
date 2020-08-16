@@ -129,7 +129,7 @@ namespace ml
 			return result;
 		}
 
-		Eigen::MatrixXd add_intercept(const Eigen::Ref<const Eigen::MatrixXd> X)
+		Eigen::MatrixXd add_ones(const Eigen::Ref<const Eigen::MatrixXd> X)
 		{
 			if (!X.cols()) {
 				throw std::invalid_argument("No data points in X");
