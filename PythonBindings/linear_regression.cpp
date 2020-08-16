@@ -11,18 +11,18 @@ namespace ml
 {
 	namespace LinearRegression
 	{
-		static MultivariateOLSResult multivariate_row_major(const Eigen::Ref<const MatrixXdR> X, const Eigen::Ref<const Eigen::VectorXd> y/*, bool add_ones*/)
+		static MultivariateOLSResult multivariate_row_major(const Eigen::Ref<const MatrixXdR> X, const Eigen::Ref<const Eigen::VectorXd> y, bool add_ones)
 		{
 			Eigen::Ref<const Eigen::MatrixXd> XT = X.transpose();
 			assert(XT.data() == X.data()); // No copying.
-			//if (!add_ones) {
+			if (!add_ones) {
 				return multivariate(XT, y);
-			/*}
+			}
 			else {
 				// TODO: doesn't work now. Fix it.
 				const auto XT_with_ones = LinearRegression::add_ones(XT);
 				return multivariate(XT_with_ones, y);
-			}*/
+			}
 		}
 	}	
 }
@@ -101,7 +101,7 @@ Returns:
 	Instance of `UnivariateOLSResult` with `intercept`, `var_intercept` and `cov_slope_intercept` set to 0.
 )");
 
-	m_lin_reg.def("multivariate", &ml::LinearRegression::multivariate_row_major, py::arg("X"), py::arg("y"),/* py::arg("add_ones") = false,*/
+	m_lin_reg.def("multivariate", &ml::LinearRegression::multivariate_row_major, py::arg("X"), py::arg("y"), py::arg("add_ones") = false,
 		R"(Carries out multivariate linear regression.
 
 R2 is always calculated w/r to model returning average Y.

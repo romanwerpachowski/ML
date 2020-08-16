@@ -99,7 +99,7 @@
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.pyd</TargetExt>
     <TargetName>PyML-Release</TargetName>
-    <OutDir>$(ProjectDir)PyML\Release\</OutDir>
+    <OutDir>$(ProjectDir)PyML\</OutDir>
     <CopyLocalProjectReference>true</CopyLocalProjectReference>
     <PostBuildEventUseInBuild>
     </PostBuildEventUseInBuild>
