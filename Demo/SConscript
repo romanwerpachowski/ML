@@ -1,0 +1,7 @@
+Import('env')
+Import('ML')
+sources = Glob('*.cpp')
+penv = env.Clone()
+penv.Append(LIBS=['benchmark'])
+Benchmarks = penv.Program('Benchmarks', sources + ML)
+Return('Benchmarks')
