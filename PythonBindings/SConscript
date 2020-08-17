@@ -1,7 +1,8 @@
 Import('env')
+Import('MLObjs')
 penv = env.Clone()
 # pybind11 include directory should be under this:
 penv.Append(CXXFLAGS=['-isystem/usr/include/python3.6/'])
 penv['SHLIBPREFIX'] = ''  # We need PyML.so, not libPyML.so
-PyML = penv.SharedLibrary('PyML', Glob('*.cpp'))
+PyML = penv.SharedLibrary('PyML', Glob('*.cpp') + MLObjs)
 Return('PyML')

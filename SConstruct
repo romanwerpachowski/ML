@@ -62,10 +62,11 @@ def call(subdir, name='SConscript'):
     return SConscript(os.path.join(subdir, name), variant_dir = os.path.join(subdir, BUILD_DIR), duplicate = 0)
 
 # Build libraries.
-ML = call('ML')
+ML, MLObjs = call('ML')
 Export('ML')
+Export('MLObjs')
 call('Demo')
-PyML = call('PythonBindings')
+call('PythonBindings')
 
 if build_mode == 'debug':
     top_dir = Dir('#').abspath   

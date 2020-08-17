@@ -1,3 +1,5 @@
 Import('env')
-ML = env.SharedLibrary('ML', Glob('*.cpp'))
-Return('ML')
+sources = Glob('*.cpp')
+MLObjs = env.SharedObject(sources)
+ML = env.SharedLibrary('ML', MLObjs)
+Return('ML', 'MLObjs')

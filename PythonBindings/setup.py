@@ -25,23 +25,22 @@ BASE_DIRECTORY = os.path.abspath(os.path.join(SETUP_DIRNAME, ".."))
 
 # Filenames and paths of binary files needed.
 if os.name == "posix":
-    ML_FILENAME = "libML.so"
     PYML_FILENAME = "PyML.so"
-    ML_PATH = os.path.join(BASE_DIRECTORY, "ML", "build", CPP_BUILD_MODE, ML_FILENAME)
     PYML_PATH = os.path.join(BASE_DIRECTORY, "PythonBindings", "build", CPP_BUILD_MODE, PYML_FILENAME)
+    BINARY_FILENAMES = [PYML_FILENAME]
+    SRC_PATHS = [PYML_PATH]
 else:
     ML_FILENAME = "ML.dll"
     PYML_FILENAME = "PyML.pyd"
     BINARY_DIRECTORY = os.path.join(BASE_DIRECTORY, "x64", CPP_BUILD_MODE)
     ML_PATH = os.path.join(BINARY_DIRECTORY, ML_FILENAME)
     PYML_PATH = os.path.join(BINARY_DIRECTORY, PYML_FILENAME)
-BINARY_FILENAMES = [ML_FILENAME, PYML_FILENAME]
+    BINARY_FILENAMES = [ML_FILENAME, PYML_FILENAME]
+    SRC_PATHS = [ML_PATH, PYML_PATH]
 
 def setup_binary_files():
     package_dirname = os.path.join(SETUP_DIRNAME, NAME)
-    src_paths = [ML_PATH, PYML_PATH]
-    dst_filenames = BINARY_FILENAMES 
-    for src_path, dst_filename in zip(src_paths, dst_filenames):
+    for src_path, dst_filename in zip(SRC_PATHS, BINARY_FILENAMES):
         dst_path = os.path.join(package_dirname, dst_filename)
         shutil.copyfile(src_path, dst_path)
         print("Copied %s to %s" % (src_path, dst_path))
