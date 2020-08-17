@@ -47,6 +47,7 @@
     <None Include="tests\test_linear_regression.py">
       <Filter>Python\tests</Filter>
     </None>
+    <None Include="SConscript" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="types.hpp">

@@ -6,15 +6,15 @@ import SCons
 
 
 # Get the mode flag from the command line.
-mymode = ARGUMENTS.get('mode', 'debug')
-Export('mymode')
+build_mode = ARGUMENTS.get('mode', 'debug')
+Export('build_mode')
 
 # Only 'debug' or 'release' allowed.
-if not (mymode in ['debug', 'release']):
-    print("Error: expected 'debug' or 'release' for 'mymode' parameter, found: " + mymode)
+if not (build_mode in ['debug', 'release']):
+    print("Error: expected 'debug' or 'release' for 'build_mode' parameter, found: " + build_mode)
     Exit(1)
    
-print('**** Compiling in %s mode ****' % mymode)
+print('**** Compiling in %s mode ****' % build_mode)
 
 # Extra compile flags for debug mode.
 debugcflags = ['-g']
@@ -32,8 +32,8 @@ arch_switch = '-m64'
 c_flags.append(arch_switch)
 linkflags.append(arch_switch)
 flags = ["-std=c++17"] + c_flags
-BUILD_DIR = 'scons_build/%s' % mymode
-if mymode == 'debug':
+BUILD_DIR = 'build/%s' % build_mode.capitalize()
+if build_mode == 'debug':
     flags += debugcflags
 else:
     flags += releasecflags
@@ -67,7 +67,7 @@ Export('ML')
 call('Demo')
 PyML = call('PythonBindings')
 
-if mymode == 'debug':
+if build_mode == 'debug':
     top_dir = Dir('#').abspath   
     env.Append(CXXFLAGS=['-isystem' + os.path.join(top_dir, 'googletest/include')])
     gtest = call('googletest', 'SConscript-gtest')

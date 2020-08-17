@@ -111,8 +111,10 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Message>Copy ML.dll to PythonBindings\PyML as ML-Debug.dll</Message>
-      <Command>copy /Y "$(SolutionDir)$(Platform)\$(Configuration)\ML.dll" "$(SolutionDir)\PythonBindings\PyML\ML-Debug.dll"</Command>
+      <Message>
+      </Message>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -147,8 +149,10 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Message>Copy ML.dll to PythonBindings\PyML as ML-Release.dll</Message>
-      <Command>copy /Y "$(SolutionDir)$(Platform)\$(Configuration)\ML.dll" "$(SolutionDir)\PythonBindings\PyML\ML-Release.dll"</Command>
+      <Message>
+      </Message>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>

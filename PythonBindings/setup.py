@@ -11,28 +11,40 @@ import shutil
 # Whether to install a Debug version of the binary files.
 DEBUG_BINARIES = False
 
+# Name of the C++ build mode.
+CPP_BUILD_MODE = "Debug" if DEBUG_BINARIES else "Release"
+
 # Package name.
 NAME = "PyML"
 
-# Filename templates for required binary files.
+# Directory where setup.py is located.
+SETUP_DIRNAME = os.path.dirname(__file__)
+
+# Base directory of the whole project.
+BASE_DIRECTORY = os.path.abspath(os.path.join(SETUP_DIRNAME, ".."))
+
+# Filenames and paths of binary files needed.
 if os.name == "posix":
-    BINARY_FILES_TEMPLATES = ["PyML%s.pyd", "libML%s.so"]
+    ML_FILENAME = "libML.so"
+    PYML_FILENAME = "PyML.so"
+    ML_PATH = os.path.join(BASE_DIRECTORY, "ML", "build", CPP_BUILD_MODE, ML_FILENAME)
+    PYML_PATH = os.path.join(BASE_DIRECTORY, "PythonBindings", "build", CPP_BUILD_MODE, PYML_FILENAME)
 else:
-    BINARY_FILES_TEMPLATES = ["PyML%s.pyd", "ML%s.dll"]
-
-# Names of required binary files.
-BINARY_FILES = [tmpl % "" for tmpl in BINARY_FILES_TEMPLATES]
-
+    ML_FILENAME = "ML.dll"
+    PYML_FILENAME = "PyML.pyd"
+    BINARY_DIRECTORY = os.path.join(BASE_DIRECTORY, "x64", CPP_BUILD_MODE)
+    ML_PATH = os.path.join(BINARY_DIRECTORY, ML_FILENAME)
+    PYML_PATH = os.path.join(BINARY_DIRECTORY, PYML_FILENAME)
+BINARY_FILENAMES = [ML_FILENAME, PYML_FILENAME]
 
 def setup_binary_files():
-    setup_dirname = os.path.dirname(__file__)
-    package_dirname = os.path.join(setup_dirname, NAME)
-    suffix = "-Debug" if DEBUG_BINARIES else "-Release"
-    for tmpl, dst_name in zip(BINARY_FILES_TEMPLATES, BINARY_FILES):
-        src = os.path.join(package_dirname, tmpl % suffix)
-        dst = os.path.join(package_dirname, dst_name)
-        shutil.copyfile(src, dst)
-        print("Copied %s to %s" % (src, dst))
+    package_dirname = os.path.join(SETUP_DIRNAME, NAME)
+    src_paths = [ML_PATH, PYML_PATH]
+    dst_filenames = BINARY_FILENAMES 
+    for src_path, dst_filename in zip(src_paths, dst_filenames):
+        dst_path = os.path.join(package_dirname, dst_filename)
+        shutil.copyfile(src_path, dst_path)
+        print("Copied %s to %s" % (src_path, dst_path))
 
 setup_binary_files()
 
@@ -46,5 +58,5 @@ setup(
     url="https://github.com/romanwerpachowski/ML",
     author_email="roman.werpachowski@gmail.com",
     description="Efficient implementations of selected ML algorithms for Python.",
-    package_data={NAME: BINARY_FILES}
+    package_data={NAME: BINARY_FILENAMES}
 )

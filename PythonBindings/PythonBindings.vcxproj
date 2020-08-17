@@ -92,14 +92,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.pyd</TargetExt>
-    <TargetName>PyML-Debug</TargetName>
-    <OutDir>$(ProjectDir)PyML\</OutDir>
+    <TargetName>PyML</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.pyd</TargetExt>
-    <TargetName>PyML-Release</TargetName>
-    <OutDir>$(ProjectDir)PyML\</OutDir>
+    <TargetName>PyML</TargetName>
     <CopyLocalProjectReference>true</CopyLocalProjectReference>
     <PostBuildEventUseInBuild>
     </PostBuildEventUseInBuild>
@@ -187,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PyML\__init__.py" />
+    <None Include="SConscript" />
     <None Include="setup.py" />
     <None Include="tests\test_linear_regression.py" />
   </ItemGroup>

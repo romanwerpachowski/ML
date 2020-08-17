@@ -345,6 +345,7 @@ healthchecksdb
 /PythonBindings/PyML/*.exp
 /PythonBindings/PyML/*.lib
 /PythonBindings/PyML/*.pyd
+/PythonBindings/PyML/*.so
 /Demo/mousie.pdf
 /Demo/mousie.csv
 /mousie.csv
