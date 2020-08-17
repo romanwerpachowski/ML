@@ -11,7 +11,7 @@ static void em_mousie(benchmark::State& state)
 	std::uniform_real_distribution<double> u01(0, 1);
 
 	const unsigned int num_dimensions = 2;
-	const auto sample_size = state.range(0);
+	const int sample_size = state.range(0);
 	const double face_radius = 1;
 	const double ear_radius = 0.3;
 	const unsigned int num_components = 3; // face, left ear, right ear
@@ -23,7 +23,7 @@ static void em_mousie(benchmark::State& state)
 
 	Eigen::MatrixXd data(num_dimensions, sample_size);
 	std::vector<unsigned int> classes(sample_size);
-	for (unsigned int i = 0; i < sample_size; ++i) {
+	for (int i = 0; i < sample_size; ++i) {
 		const unsigned int k = component_distr(rng);
 		classes[i] = k;
 		const double phi = 2 * PI * u01(rng);

@@ -73,4 +73,6 @@ if mymode == 'debug':
     Export('gtest')
     GTEST_LIBS = ['pthread']
     Export('GTEST_LIBS')
-    call('Tests')
+    call('Tests')    
+else:
+    call('Benchmarks')
