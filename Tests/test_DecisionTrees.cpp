@@ -245,15 +245,13 @@ TEST(DecisionTreeTest, univariate_regression_with_pruning)
 	
 	const double test_mse = ml::DecisionTrees::univariate_regression_tree_mean_squared_error(tree, test_X, test_y);
 	ASSERT_GT(test_mse, train_mse + 0.01);
-	ASSERT_LE(test_mse, train_mse + 0.04);
+	ASSERT_LE(test_mse, train_mse + 0.035);
 
 	ml::DecisionTrees::cost_complexity_prune(tree, alpha);	
 	ASSERT_GT(tree.total_leaf_error(), train_sse);
 	ASSERT_LT(tree.count_nodes(), orig_num_modes);
 	ASSERT_LT(tree.cost_complexity(alpha), orig_cost_complexity);
 	const double pruned_test_mse = ml::DecisionTrees::univariate_regression_tree_mean_squared_error(tree, test_X, test_y);
-	ASSERT_GT(test_mse, pruned_test_mse);
-	ASSERT_GT(pruned_test_mse, train_sse);	
 	ASSERT_GT(pruned_test_mse, train_sse + 0.01);
 }
 
@@ -293,9 +291,11 @@ TEST(DecisionTreeTest, univariate_regression_with_crossvalidation)
 	ASSERT_GT(alpha, alphas.front());
 	ASSERT_LT(alpha, alphas.back());
 	const auto cv_test_error = std::get<2>(result);
+	ASSERT_GT(cv_test_error, 0);
 	ASSERT_NE(alphas.end(), std::find(alphas.begin(), alphas.end(), alpha));
 	const double test_error = ml::DecisionTrees::univariate_regression_tree_mean_squared_error(tree, test_X, test_y);
 	ASSERT_NEAR(test_error, noise_strength * noise_strength, 2e-5);	
+	ASSERT_GT(cv_test_error, test_error);
 }
 
 TEST(DecisionTreeTest, pruning)
@@ -410,7 +410,7 @@ TEST(DecisionTreeTest, classification_with_pruning)
 	ASSERT_NEAR(1 - train_error, train_accuracy, 1e-15);
 	const double test_accuracy = ml::DecisionTrees::classification_tree_accuracy(tree, test_X, test_y);
 	ASSERT_LT(test_accuracy, train_accuracy);
-	ASSERT_GE(test_accuracy, 0.875);
+	ASSERT_GE(test_accuracy, 0.87);
 
 	ml::DecisionTrees::cost_complexity_prune(tree, alpha);
 	ASSERT_LT(tree.count_nodes(), orig_num_modes);
@@ -461,7 +461,9 @@ TEST(DecisionTreeTest, classification_with_crossvalidation)
 	ASSERT_GT(alpha, alphas.front());
 	ASSERT_LT(alpha, alphas.back());
 	const auto cv_test_error = std::get<2>(result);
+	ASSERT_GT(cv_test_error, 0);
 	ASSERT_NE(alphas.end(), std::find(alphas.begin(), alphas.end(), alpha));
 	const double test_error = ml::DecisionTrees::classification_tree_misclassification_rate(tree, test_X, test_y);
-	ASSERT_GE(0.1, test_error);
+	ASSERT_GE(0.071, test_error);
+	ASSERT_GE(cv_test_error + 0.01, test_error);
 }

@@ -1,0 +1,3 @@
+Import('env')
+ML = env.SharedLibrary('ML', Glob('*.cpp'))
+Return('ML')

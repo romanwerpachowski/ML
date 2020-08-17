@@ -69,7 +69,7 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsIn
 		means.col(0).swap(means.col(1));
 		std::swap(covariances[0], covariances[1]);
 	}
-	ASSERT_NEAR(0., (mixing_probabilities - em.mixing_probabilities()).norm(), 1e-2) << em.mixing_probabilities();
+	ASSERT_NEAR(0., (mixing_probabilities - em.mixing_probabilities()).norm(), 2e-2) << em.mixing_probabilities();
 	ASSERT_NEAR(0., (means - em.means()).norm(), 2e-2) << em.means();
 	for (unsigned int k = 0; k < num_components; ++k) {
 		ASSERT_NEAR(0., (covariances[k] - em.covariance(k)).norm(), 1e-2) << "Covariance[" << k << "]:\n" << em.covariance(k);

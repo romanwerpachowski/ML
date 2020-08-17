@@ -193,8 +193,8 @@ namespace ml
 		const auto sample_size = data.cols();
 		assert(sample_size >= number_components_);
 		
-		static const double log_2_pi = std::log(2 * PI);
-		const auto log_likelihood_normalisation_constant = number_dimensions * log_2_pi / 2;		
+		static const double log_2_pi = std::log(2. * PI);
+		const auto log_likelihood_normalisation_constant = static_cast<double>(number_dimensions) * log_2_pi / 2;
 		Eigen::LLT<Eigen::MatrixXd> llt;
 
 		// Calculate unnormalised responsibilities.

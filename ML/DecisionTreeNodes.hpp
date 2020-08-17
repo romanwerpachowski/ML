@@ -14,7 +14,7 @@ namespace ml
 		/** Tree node. Nodes are split (non-terminal) or leaf (terminal). */
 		template <class Y> struct Node
 		{
-			typedef Eigen::Ref<const Eigen::VectorXd> arg_type; /**< Type for feature vector. */;
+			typedef Eigen::Ref<const Eigen::VectorXd> arg_type; /**< Type for feature vector. */
 
 			double error; /**< Error of the training sample seen by this node, used for pruning. */
 			Y value; /**< Value which should be returned if we stop splitting at this node. */
@@ -71,7 +71,7 @@ namespace ml
 			double threshold; /**< Split threshold value. */
 			unsigned int feature_index; /**< Index of the feature on which this node splits data. */
 
-			using Node<Y>::arg_type;
+			using arg_type = typename Node<Y>::arg_type;
 			using Node<Y>::error;
 			using Node<Y>::value;
 			using Node<Y>::parent;
@@ -181,12 +181,12 @@ namespace ml
 				: Node<Y>(n_error, n_value, n_parent)
 			{}
 
-			using Node<Y>::arg_type;
+			using arg_type = typename Node<Y>::arg_type;
 			using Node<Y>::error;
 			using Node<Y>::value;
 			using Node<Y>::parent;
 
-			Y operator()(arg_type x) const override
+			Y operator()(arg_type) const override
 			{
 				return value;
 			}

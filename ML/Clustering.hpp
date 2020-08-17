@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <random>
 #include <Eigen/Core>
 #include "dll.hpp"

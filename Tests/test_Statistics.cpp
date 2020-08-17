@@ -49,7 +49,7 @@ TEST(StatisticsTest, calc_sse_big_data)
 	ASSERT_NEAR(expected, sse(data.begin(), data.end()), 2e-14 * expected);
 	const auto actual = sse_and_mean(data.begin(), data.end());
 	ASSERT_NEAR(expected, actual.first, 2e-14 * expected);
-	ASSERT_NEAR(0, actual.second, 5e-14);
+	ASSERT_NEAR(0, actual.second, 2e-13);
 }
 
 TEST(StatisticsTest, gini_index_constant_class)

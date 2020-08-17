@@ -48,6 +48,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="test_Crossvalidation.cpp" />
     <ClCompile Include="test_DecisionTrees.cpp" />
     <ClCompile Include="test_DecisionTreeNodes.cpp" />
