@@ -347,3 +347,5 @@ healthchecksdb
 /PythonBindings/PyML/*.pyd
 /Demo/mousie.pdf
 /Demo/mousie.csv
+/mousie.csv
+/.sconsign.dblite

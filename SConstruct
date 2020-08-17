@@ -65,6 +65,7 @@ def call(subdir, name='SConscript'):
 # Build libraries.
 ML = call('ML')
 Export('ML')
+call('Demo')
 
 if mymode == 'debug':
     top_dir = Dir('#').abspath   

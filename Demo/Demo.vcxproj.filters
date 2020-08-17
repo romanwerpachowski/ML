@@ -37,5 +37,6 @@
     <None Include="linear_regression.py">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="SConscript" />
   </ItemGroup>
 </Project>

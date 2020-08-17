@@ -14,9 +14,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F8C3EA91-4CE0-41D4-A366-E7A7BF7DE880}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		benchmark.txt = benchmark.txt
+		benchmark-Windows.txt = benchmark-Windows.txt
 		LICENSE = LICENSE
 		README.md = README.md
+		SConstruct = SConstruct
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PythonBindings", "PythonBindings\PythonBindings.vcxproj", "{54C9836C-51BD-4E2A-B4C1-0F4C8A76CA64}"

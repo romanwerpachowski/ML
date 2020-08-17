@@ -148,6 +148,7 @@
     <None Include="classification_tree.py" />
     <None Include="linear_regression.py" />
     <None Include="mousie.py" />
+    <None Include="SConscript" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

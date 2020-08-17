@@ -15,7 +15,10 @@ DEBUG_BINARIES = False
 NAME = "PyML"
 
 # Filename templates for required binary files.
-BINARY_FILES_TEMPLATES = ["PyML%s.pyd", "ML%s.dll"]
+if os.name == "posix":
+    BINARY_FILES_TEMPLATES = ["PyML%s.pyd", "libML%s.so"]
+else:
+    BINARY_FILES_TEMPLATES = ["PyML%s.pyd", "ML%s.dll"]
 
 # Names of required binary files.
 BINARY_FILES = [tmpl % "" for tmpl in BINARY_FILES_TEMPLATES]
