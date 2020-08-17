@@ -38,7 +38,7 @@ namespace ml
 
 		/** Move constructor. */
 		DecisionTree(DecisionTree<Y>&& other) noexcept
-			: root_(std::move(other.root_)), lowest_split_nodes_(std::move(lowest_split_nodes_))
+			: root_(std::move(other.root_)), lowest_split_nodes_(std::move(other.lowest_split_nodes_))
 		{}
 
 		/** Copy constructor. */
