@@ -32,11 +32,10 @@ arch_switch = '-m64'
 c_flags.append(arch_switch)
 linkflags.append(arch_switch)
 flags = ["-std=c++17"] + c_flags
+BUILD_DIR = 'scons_build/%s' % mymode
 if mymode == 'debug':
-    BUILD_DIR = 'scons_build/Debug'
     flags += debugcflags
 else:
-    BUILD_DIR = 'scons_build/Release'
     flags += releasecflags
 Export('BUILD_DIR')
 
@@ -66,6 +65,7 @@ def call(subdir, name='SConscript'):
 ML = call('ML')
 Export('ML')
 call('Demo')
+PyML = call('PythonBindings')
 
 if mymode == 'debug':
     top_dir = Dir('#').abspath   

@@ -16,7 +16,7 @@ Tested with Visual Studio C++ 2019 and Python 3.7.7.
 
 ### C++ dependencies
 
-- pybind
+- pybind11 (use latest version from GitHub, not old Ubuntu packages)
 - googletest (install it via NuGet)
 - benchmark (Google C++ benchmarking library)
 - Python 3.x header files
