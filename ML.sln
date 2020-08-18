@@ -22,30 +22,62 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PythonBindings", "PythonBindings\PythonBindings.vcxproj", "{54C9836C-51BD-4E2A-B4C1-0F4C8A76CA64}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest", "googletest\build\gtest.vcxproj", "{01635AC7-6106-38C7-AF84-47C4C972B55A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		MinSizeRel|x64 = MinSizeRel|x64
 		Release|x64 = Release|x64
+		RelWithDebInfo|x64 = RelWithDebInfo|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{74134C42-057A-4653-8391-C15485C7EC12}.Debug|x64.ActiveCfg = Debug|x64
 		{74134C42-057A-4653-8391-C15485C7EC12}.Debug|x64.Build.0 = Debug|x64
+		{74134C42-057A-4653-8391-C15485C7EC12}.MinSizeRel|x64.ActiveCfg = Release|x64
+		{74134C42-057A-4653-8391-C15485C7EC12}.MinSizeRel|x64.Build.0 = Release|x64
 		{74134C42-057A-4653-8391-C15485C7EC12}.Release|x64.ActiveCfg = Release|x64
 		{74134C42-057A-4653-8391-C15485C7EC12}.Release|x64.Build.0 = Release|x64
+		{74134C42-057A-4653-8391-C15485C7EC12}.RelWithDebInfo|x64.ActiveCfg = Release|x64
+		{74134C42-057A-4653-8391-C15485C7EC12}.RelWithDebInfo|x64.Build.0 = Release|x64
 		{3173AF79-8013-4D5E-AD00-A1D80280C84F}.Debug|x64.ActiveCfg = Debug|x64
 		{3173AF79-8013-4D5E-AD00-A1D80280C84F}.Debug|x64.Build.0 = Debug|x64
+		{3173AF79-8013-4D5E-AD00-A1D80280C84F}.MinSizeRel|x64.ActiveCfg = Release|x64
+		{3173AF79-8013-4D5E-AD00-A1D80280C84F}.MinSizeRel|x64.Build.0 = Release|x64
 		{3173AF79-8013-4D5E-AD00-A1D80280C84F}.Release|x64.ActiveCfg = Release|x64
+		{3173AF79-8013-4D5E-AD00-A1D80280C84F}.RelWithDebInfo|x64.ActiveCfg = Release|x64
+		{3173AF79-8013-4D5E-AD00-A1D80280C84F}.RelWithDebInfo|x64.Build.0 = Release|x64
 		{BCE2B69A-ACFB-4985-A09D-2F6FBD68D769}.Debug|x64.ActiveCfg = Debug|x64
 		{BCE2B69A-ACFB-4985-A09D-2F6FBD68D769}.Debug|x64.Build.0 = Debug|x64
+		{BCE2B69A-ACFB-4985-A09D-2F6FBD68D769}.MinSizeRel|x64.ActiveCfg = Release|x64
+		{BCE2B69A-ACFB-4985-A09D-2F6FBD68D769}.MinSizeRel|x64.Build.0 = Release|x64
 		{BCE2B69A-ACFB-4985-A09D-2F6FBD68D769}.Release|x64.ActiveCfg = Release|x64
 		{BCE2B69A-ACFB-4985-A09D-2F6FBD68D769}.Release|x64.Build.0 = Release|x64
+		{BCE2B69A-ACFB-4985-A09D-2F6FBD68D769}.RelWithDebInfo|x64.ActiveCfg = Release|x64
+		{BCE2B69A-ACFB-4985-A09D-2F6FBD68D769}.RelWithDebInfo|x64.Build.0 = Release|x64
 		{6C644C16-A00C-4A85-A188-89858632E87E}.Debug|x64.ActiveCfg = Debug|x64
+		{6C644C16-A00C-4A85-A188-89858632E87E}.MinSizeRel|x64.ActiveCfg = Release|x64
+		{6C644C16-A00C-4A85-A188-89858632E87E}.MinSizeRel|x64.Build.0 = Release|x64
 		{6C644C16-A00C-4A85-A188-89858632E87E}.Release|x64.ActiveCfg = Release|x64
 		{6C644C16-A00C-4A85-A188-89858632E87E}.Release|x64.Build.0 = Release|x64
+		{6C644C16-A00C-4A85-A188-89858632E87E}.RelWithDebInfo|x64.ActiveCfg = Release|x64
+		{6C644C16-A00C-4A85-A188-89858632E87E}.RelWithDebInfo|x64.Build.0 = Release|x64
 		{54C9836C-51BD-4E2A-B4C1-0F4C8A76CA64}.Debug|x64.ActiveCfg = Debug|x64
 		{54C9836C-51BD-4E2A-B4C1-0F4C8A76CA64}.Debug|x64.Build.0 = Debug|x64
+		{54C9836C-51BD-4E2A-B4C1-0F4C8A76CA64}.MinSizeRel|x64.ActiveCfg = Release|x64
+		{54C9836C-51BD-4E2A-B4C1-0F4C8A76CA64}.MinSizeRel|x64.Build.0 = Release|x64
 		{54C9836C-51BD-4E2A-B4C1-0F4C8A76CA64}.Release|x64.ActiveCfg = Release|x64
 		{54C9836C-51BD-4E2A-B4C1-0F4C8A76CA64}.Release|x64.Build.0 = Release|x64
+		{54C9836C-51BD-4E2A-B4C1-0F4C8A76CA64}.RelWithDebInfo|x64.ActiveCfg = Release|x64
+		{54C9836C-51BD-4E2A-B4C1-0F4C8A76CA64}.RelWithDebInfo|x64.Build.0 = Release|x64
+		{01635AC7-6106-38C7-AF84-47C4C972B55A}.Debug|x64.ActiveCfg = Debug|x64
+		{01635AC7-6106-38C7-AF84-47C4C972B55A}.Debug|x64.Build.0 = Debug|x64
+		{01635AC7-6106-38C7-AF84-47C4C972B55A}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{01635AC7-6106-38C7-AF84-47C4C972B55A}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
+		{01635AC7-6106-38C7-AF84-47C4C972B55A}.Release|x64.ActiveCfg = Release|x64
+		{01635AC7-6106-38C7-AF84-47C4C972B55A}.Release|x64.Build.0 = Release|x64
+		{01635AC7-6106-38C7-AF84-47C4C972B55A}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{01635AC7-6106-38C7-AF84-47C4C972B55A}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
