@@ -3,6 +3,7 @@
 To install the package, run "python setup.py install" from PythonBindings
 directory.
 """
+import glob
 import os
 from setuptools import setup, find_packages
 import shutil
@@ -38,14 +39,22 @@ else:
     BINARY_FILENAMES = [ML_FILENAME, PYML_FILENAME]
     SRC_PATHS = [ML_PATH, PYML_PATH]
 
-def setup_binary_files():
+def get_binary_files():    
     package_dirname = os.path.join(SETUP_DIRNAME, NAME)
+    # Remove old files.
+    for extension in ["dll", "pyd", "so"]:
+        paths = glob.glob(os.path.join(package_dirname, "*.%s" % extension))
+        for path in paths:
+            os.remove(path)
+            print("Removed %s" % path)
     for src_path, dst_filename in zip(SRC_PATHS, BINARY_FILENAMES):
         dst_path = os.path.join(package_dirname, dst_filename)
         shutil.copyfile(src_path, dst_path)
         print("Copied %s to %s" % (src_path, dst_path))
 
-setup_binary_files()
+get_binary_files()
+
+PACKAGE_DATA = BINARY_FILENAMES + ["LICENSE.txt"]
 
 setup(
     name=NAME,
@@ -57,5 +66,5 @@ setup(
     url="https://github.com/romanwerpachowski/ML",
     author_email="roman.werpachowski@gmail.com",
     description="Efficient implementations of selected ML algorithms for Python.",
-    package_data={NAME: BINARY_FILENAMES}
+    package_data={NAME: PACKAGE_DATA}
 )
