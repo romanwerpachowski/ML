@@ -51,6 +51,9 @@
     <None Include="tests\test_decision_trees.py">
       <Filter>Python\tests</Filter>
     </None>
+    <None Include="tests\test_clustering.py">
+      <Filter>Python\tests</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="types.hpp">

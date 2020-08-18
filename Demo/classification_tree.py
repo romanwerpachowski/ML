@@ -35,7 +35,7 @@ def main():
         tree, _, _ = decision_trees.classification_tree(iris.data, iris.target, alphas=[], min_split_size=min_split_size)
     t1 = time.perf_counter()
     print("PyML time: %g" % (t1 - t0))
-    print("PyML accuracy: %g" % decision_trees.classification_tree_accuracy(tree, iris.data.T, iris.target))
+    print("PyML accuracy: %g" % decision_trees.classification_tree_accuracy(tree, iris.data, iris.target))
 
 if __name__ == "__main__":
     main()

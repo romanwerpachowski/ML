@@ -188,6 +188,7 @@
     <None Include="SConscript" />
     <None Include="setup.py" />
     <None Include="tests\test_decision_trees.py" />
+    <None Include="tests\test_clustering.py" />
     <None Include="tests\test_linear_regression.py" />
   </ItemGroup>
   <ItemGroup>
