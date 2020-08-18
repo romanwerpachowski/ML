@@ -1,4 +1,4 @@
-"""Setup script for FastML package.
+"""Setup script for cppyml package.
 
 To install the package, run "python setup.py install" from PythonBindings
 directory.
@@ -16,7 +16,7 @@ DEBUG_BINARIES = False
 CPP_BUILD_MODE = "Debug" if DEBUG_BINARIES else "Release"
 
 # Package name.
-NAME = "FastML"
+NAME = "cppyml"
 
 # Directory where setup.py is located.
 SETUP_DIRNAME = os.path.dirname(__file__)
@@ -26,13 +26,13 @@ BASE_DIRECTORY = os.path.abspath(os.path.join(SETUP_DIRNAME, ".."))
 
 # Filenames and paths of binary files needed.
 if os.name == "posix":
-    PYML_FILENAME = "FastML.so"
+    PYML_FILENAME = "cppyml.so"
     PYML_PATH = os.path.join(BASE_DIRECTORY, "PythonBindings", "build", CPP_BUILD_MODE, PYML_FILENAME)
     BINARY_FILENAMES = [PYML_FILENAME]
     SRC_PATHS = [PYML_PATH]
 else:
     ML_FILENAME = "ML.dll"
-    PYML_FILENAME = "FastML.pyd"
+    PYML_FILENAME = "cppyml.pyd"
     BINARY_DIRECTORY = os.path.join(BASE_DIRECTORY, "x64", CPP_BUILD_MODE)
     ML_PATH = os.path.join(BINARY_DIRECTORY, ML_FILENAME)
     PYML_PATH = os.path.join(BINARY_DIRECTORY, PYML_FILENAME)
@@ -68,5 +68,5 @@ setup(
     description="Efficient implementations of selected ML algorithms for Python.",
     package_data={NAME: PACKAGE_DATA},
     license="GPL-3.0",
-    keywords="machine-learning ML extension algorithms numerical optimised",
+    keywords="machine-learning ML extension algorithms numerical optimised",    
 )

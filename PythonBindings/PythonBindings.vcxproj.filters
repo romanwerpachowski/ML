@@ -33,15 +33,12 @@
     <ClCompile Include="linear_regression.cpp">
       <Filter>C++\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FastML.cpp">
+    <ClCompile Include="cppyml.cpp">
       <Filter>C++\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="setup.py">
-      <Filter>Python</Filter>
-    </None>
-    <None Include="PyML\__init__.py">
       <Filter>Python</Filter>
     </None>
     <None Include="tests\test_linear_regression.py">
@@ -53,6 +50,9 @@
     </None>
     <None Include="tests\test_clustering.py">
       <Filter>Python\tests</Filter>
+    </None>
+    <None Include="cppyml\__init__.py">
+      <Filter>Python</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

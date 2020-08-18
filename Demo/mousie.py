@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
-from FastML import clustering
+from cppyml import clustering
 import sklearn.cluster
 import sklearn.mixture
 warnings.filterwarnings("default")
@@ -76,7 +76,7 @@ def main():
     km_class = km.labels_
 
     report = pd.DataFrame()
-    report["FastML"] = pyml_report
+    report["cppyml"] = pyml_report
     report["sklearn"] = sklearn_report
 
     print(report)
@@ -92,7 +92,7 @@ def main():
 
     fig, ax = plt.subplots(1, 3, figsize=(12, 4))
     sns.scatterplot(x=data[:, 0], y=data[:, 1], hue=pyml_class, ax=ax[0], palette=palette)
-    ax[0].set_title("FastML")
+    ax[0].set_title("cppyml")
     sns.scatterplot(x=data[:, 0], y=data[:, 1], hue=sklearn_class, ax=ax[1], palette=palette)
     ax[1].set_title("sklearn")
     sns.scatterplot(x=data[:, 0], y=data[:, 1], hue=km_class, ax=ax[2], palette=palette)

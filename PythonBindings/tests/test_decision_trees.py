@@ -6,7 +6,7 @@ import numpy as np
 from sklearn.datasets import load_diabetes, load_iris
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 
-from FastML import decision_trees
+from cppyml import decision_trees
 
 
 class DecisionTreesTest(unittest.TestCase):
