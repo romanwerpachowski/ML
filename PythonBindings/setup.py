@@ -66,5 +66,7 @@ setup(
     url="https://github.com/romanwerpachowski/ML",
     author_email="roman.werpachowski@gmail.com",
     description="Efficient implementations of selected ML algorithms for Python.",
-    package_data={NAME: PACKAGE_DATA}
+    package_data={NAME: PACKAGE_DATA},
+    license="GPL-3.0",
+    keywords="machine-learning ML extension algorithms numerical optimised",
 )
