@@ -350,3 +350,6 @@ healthchecksdb
 /Demo/mousie.csv
 /mousie.csv
 /.sconsign.dblite
+/googletest/build/CMakeFiles
+/googletest/build/cmake_install.cmake
+/googletest/build/CMakeCache.txt

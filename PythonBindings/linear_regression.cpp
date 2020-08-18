@@ -12,6 +12,7 @@ namespace ml
 {
 	namespace LinearRegression
 	{
+		/** Version of "multivariate" taking an X with row-major order. */
 		static MultivariateOLSResult multivariate_row_major(const Eigen::Ref<const MatrixXdR> X, const Eigen::Ref<const Eigen::VectorXd> y, bool add_ones)
 		{
 			Eigen::Ref<const Eigen::MatrixXd> XT = X.transpose();
