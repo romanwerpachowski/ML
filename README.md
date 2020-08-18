@@ -11,13 +11,17 @@ Tested with Visual Studio C++ 2019 and Python 3.7.7.
 
 ### Linux
 
+Tested on Ubuntu LTS.
+
 - SCons
 - g++
 
 ### C++ dependencies
 
-- pybind11 (use latest version from GitHub, not old Ubuntu packages)
-- googletest (install it via NuGet)
+Avoid using old Ubuntu packages, prefer getting the source from GitHub.
+
+- pybind11
+- googletest
 - benchmark (Google C++ benchmarking library)
 - Python 3.x header files
 - Eigen++
@@ -30,8 +34,11 @@ For build:
 - setuptools
 
 For demos and tests:
+- numpy
+- pandas
 - sklearn
 - scipy
+- unittest
 
 ## Licence
 
