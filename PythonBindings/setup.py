@@ -54,7 +54,7 @@ def get_binary_files():
 
 get_binary_files()
 
-PACKAGE_DATA = BINARY_FILENAMES + ["LICENSE.txt"]
+PACKAGE_DATA = BINARY_FILENAMES
 
 setup(
     name=NAME,
