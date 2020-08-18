@@ -1,5 +1,0 @@
-Import('env')
-penv = env.Clone()
-penv.Append(CPPPATH=['#/googletest'])
-gtest = penv.StaticLibrary('gtest', Glob('src/gtest-all.cc'))
-Return('gtest')
