@@ -2,7 +2,7 @@
 import time
 import warnings
 
-from PyML import decision_trees
+from FastML import decision_trees
 import numpy as np
 import pandas as pd
 
@@ -34,8 +34,8 @@ def main():
     for _ in range(n_timing_iters):        
         tree, _, _ = decision_trees.classification_tree(iris.data, iris.target, alphas=[], min_split_size=min_split_size)
     t1 = time.perf_counter()
-    print("PyML time: %g" % (t1 - t0))
-    print("PyML accuracy: %g" % decision_trees.classification_tree_accuracy(tree, iris.data, iris.target))
+    print("FastML time: %g" % (t1 - t0))
+    print("FastML accuracy: %g" % decision_trees.classification_tree_accuracy(tree, iris.data, iris.target))
 
 if __name__ == "__main__":
     main()

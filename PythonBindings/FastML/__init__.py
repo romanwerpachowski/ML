@@ -15,6 +15,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from .PyML import clustering
-from .PyML import decision_trees
-from .PyML import linear_regression
+from .FastML import clustering
+from .FastML import decision_trees
+from .FastML import linear_regression

@@ -7,7 +7,7 @@ import pandas as pd
 from scipy import stats
 from sklearn.linear_model import LinearRegression
 
-from PyML import linear_regression
+from FastML import linear_regression
 
 def main():
     np.random.seed(1066)
@@ -27,8 +27,8 @@ def main():
         result = linear_regression.univariate(x, y)
     t1 = time.perf_counter()
 
-    print("PyML time: %g" % (t1 - t0))
-    print("PyML result: %s" % result)
+    print("FastML time: %g" % (t1 - t0))
+    print("FastML result: %s" % result)
 
     t0 = time.perf_counter()
     for _ in range(n_timing_iters):
@@ -44,8 +44,8 @@ def main():
     for _ in range(n_timing_iters):
         result = linear_regression.univariate_without_intercept(x, y)
     t1 = time.perf_counter()
-    print("PyML time: %g" % (t1 - t0))
-    print("PyML result: %s" % result)
+    print("FastML time: %g" % (t1 - t0))
+    print("FastML result: %s" % result)
 
     lr = LinearRegression(fit_intercept=False)
     t0 = time.perf_counter()

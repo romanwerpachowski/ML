@@ -6,7 +6,7 @@ import numpy as np
 from scipy import stats
 from sklearn import linear_model
 
-from PyML import linear_regression
+from FastML import linear_regression
 
 
 class LinearRegressionTest(unittest.TestCase):

@@ -3,6 +3,6 @@ Import('MLObjs')
 penv = env.Clone()
 # pybind11 include directory should be under this:
 penv.Append(CXXFLAGS=['-isystem/usr/include/python3.6/'])
-penv['SHLIBPREFIX'] = ''  # We need PyML.so, not libPyML.so
-PyML = penv.SharedLibrary('PyML', Glob('*.cpp') + MLObjs)
-Return('PyML')
+penv['SHLIBPREFIX'] = ''  # We need FastML.so, not libPyML.so
+FastML = penv.SharedLibrary('FastML', Glob('*.cpp') + MLObjs)
+Return('FastML')

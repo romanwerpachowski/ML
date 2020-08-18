@@ -92,12 +92,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.pyd</TargetExt>
-    <TargetName>PyML</TargetName>
+    <TargetName>FastML</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.pyd</TargetExt>
-    <TargetName>PyML</TargetName>
+    <TargetName>FastML</TargetName>
     <CopyLocalProjectReference>true</CopyLocalProjectReference>
     <PostBuildEventUseInBuild>
     </PostBuildEventUseInBuild>
@@ -176,7 +176,7 @@
     <ClCompile Include="clustering.cpp" />
     <ClCompile Include="decision_trees.cpp" />
     <ClCompile Include="linear_regression.cpp" />
-    <ClCompile Include="PyML.cpp" />
+    <ClCompile Include="FastML.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ML\ML.vcxproj">

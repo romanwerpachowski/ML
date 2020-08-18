@@ -27,13 +27,13 @@
     <ClCompile Include="clustering.cpp">
       <Filter>C++\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PyML.cpp">
-      <Filter>C++\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="decision_trees.cpp">
       <Filter>C++\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="linear_regression.cpp">
+      <Filter>C++\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FastML.cpp">
       <Filter>C++\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -8,7 +8,7 @@ import pandas as pd
 import sklearn.cluster
 import sklearn.mixture
 
-from PyML import clustering
+from FastML import clustering
 
 
 class ClusteringTest(unittest.TestCase):
