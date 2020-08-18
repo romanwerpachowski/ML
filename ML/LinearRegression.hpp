@@ -83,7 +83,9 @@ namespace ml
 
 		/** Carries out multivariate linear regression.
 
-		R2 is always calculated w/r to model returning average Y.
+		Given X and y, finds beta minimising || y - X^T * beta ||^2.
+
+		R2 is always calculated w/r to model returning average y.
 
 		If fitting with intercept is desired, include a row of 1's in the X values.
 
@@ -98,5 +100,7 @@ namespace ml
 		@return New matrix with a row filled with 1's added at the end.
 		*/
 		DLL_DECLSPEC Eigen::MatrixXd add_ones(Eigen::Ref<const Eigen::MatrixXd> X);
+
+		
 	}
 }

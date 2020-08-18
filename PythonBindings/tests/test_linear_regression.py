@@ -1,11 +1,13 @@
 """Unit tests for linear_regression module."""
 
+import unittest
+
 import numpy as np
 from scipy import stats
 from sklearn import linear_model
-import unittest
 
 from PyML import linear_regression
+
 
 class LinearRegressionTest(unittest.TestCase):
 
@@ -92,5 +94,4 @@ class LinearRegressionTest(unittest.TestCase):
         
 
 if __name__ == "__main__": 
-    unittest.main()
-    print("Done!")
+    unittest.main()    
