@@ -22,7 +22,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{54c9836c-51bd-4e2a-b4c1-0f4c8a76ca64}</ProjectGuid>
-    <RootNamespace>PythonBindings</RootNamespace>
+    <RootNamespace>cppyml</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>cppyml</ProjectName>
   </PropertyGroup>

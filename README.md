@@ -2,6 +2,16 @@
 
 Efficient C++ implementations of some ML algorithms with Python bindings.
 
+## Contents
+
+- clustering (EM algorithm)
+- decision trees for classification and regression
+- linear regression
+
+More is coming!
+
+Precompiled Python bindings for Windows are available on [PyPi](https://pypi.org/project/cppyml/).
+
 
 ## Requirements
 
@@ -15,6 +25,7 @@ Tested on Ubuntu LTS.
 
 - SCons
 - g++
+- Python 3.x
 
 ### C++ dependencies
 
@@ -39,6 +50,16 @@ For demos and tests:
 - sklearn
 - scipy
 - unittest
+
+## Installation
+
+### Windows
+
+Python extension 
+
+### Linux
+
+You have to build from source for now, using SCons.
 
 ## Licence
 

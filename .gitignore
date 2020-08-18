@@ -338,14 +338,14 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
-/PythonBindings/build
-/PythonBindings/dist
-/PythonBindings/PyML.egg-info
-/PythonBindings/PyML/*.dll
-/PythonBindings/PyML/*.exp
-/PythonBindings/PyML/*.lib
-/PythonBindings/PyML/*.pyd
-/PythonBindings/PyML/*.so
+/cppyml/build
+/cppyml/dist
+/cppyml/cppyml.egg-info
+/cppyml/cppyml/*.dll
+/cppyml/cppyml/*.exp
+/cppyml/cppyml/*.lib
+/cppyml/cppyml/*.pyd
+/cppyml/cppyml/*.so
 /Demo/mousie.pdf
 /Demo/mousie.csv
 /mousie.csv

@@ -66,7 +66,7 @@ ML, MLObjs = call('ML')
 Export('ML')
 Export('MLObjs')
 call('Demo')
-call('PythonBindings')
+call('cppyml')
 
 if build_mode == 'debug':
     top_dir = Dir('#').abspath   

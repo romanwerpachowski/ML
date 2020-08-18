@@ -1,11 +1,14 @@
 """Setup script for cppyml package.
 
-To install the package, run "python setup.py install" from PythonBindings
+To install the package, run "python setup.py install" from cppyml
 directory.
+
+To build a distributable version, run "python setup.py sdist bdist_wheel".
 """
 import glob
 import os
 from setuptools import setup, find_packages
+from setuptools.dist import Distribution
 import shutil
 
 
@@ -27,7 +30,7 @@ BASE_DIRECTORY = os.path.abspath(os.path.join(SETUP_DIRNAME, ".."))
 # Filenames and paths of binary files needed.
 if os.name == "posix":
     PYML_FILENAME = "cppyml.so"
-    PYML_PATH = os.path.join(BASE_DIRECTORY, "PythonBindings", "build", CPP_BUILD_MODE, PYML_FILENAME)
+    PYML_PATH = os.path.join(BASE_DIRECTORY, "cppyml", "build", CPP_BUILD_MODE, PYML_FILENAME)
     BINARY_FILENAMES = [PYML_FILENAME]
     SRC_PATHS = [PYML_PATH]
 else:
@@ -56,17 +59,24 @@ get_binary_files()
 
 PACKAGE_DATA = BINARY_FILENAMES
 
+
+class BinaryDistribution(Distribution):
+    """Distribution which always forces a binary package with platform name"""
+    def has_ext_modules(foo):
+        return True
+
 setup(
     name=NAME,
-    version="0.1",
-    packages=find_packages(),
-    include_package_data=True,
-    zip_safe=False,
     author="Roman Werpachowski",
     url="https://github.com/romanwerpachowski/ML",
     author_email="roman.werpachowski@gmail.com",
     description="Efficient implementations of selected ML algorithms for Python.",
-    package_data={NAME: PACKAGE_DATA},
     license="GPL-3.0",
-    keywords="machine-learning ML extension algorithms numerical optimised",    
+    keywords="machine-learning ML extension algorithms numerical optimised",   
+    version="0.1",
+    packages=find_packages(),
+    include_package_data=True,
+    zip_safe=False,
+    package_data={NAME: PACKAGE_DATA},
+    distclass=BinaryDistribution,
 )
