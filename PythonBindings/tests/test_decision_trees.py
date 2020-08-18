@@ -3,9 +3,8 @@
 import unittest
 
 import numpy as np
-from sklearn.datasets import load_iris
-from sklearn.model_selection import cross_val_score
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.datasets import load_diabetes, load_iris
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 
 from PyML import decision_trees
 
@@ -14,19 +13,32 @@ class DecisionTreesTest(unittest.TestCase):
 
     def setUp(self):
         np.random.seed(1066)
+        self.min_split_size = 5
 
     def test_classification(self):
-        min_split_size = 5        
         iris = load_iris()
 
-        clf = DecisionTreeClassifier(random_state=0, min_samples_split=min_split_size)
+        clf = DecisionTreeClassifier(random_state=0, min_samples_split=self.min_split_size)
         clf.fit(iris.data, iris.target)
         sklearn_accuracy = clf.score(iris.data, iris.target)
 
-        tree, _, _ = decision_trees.classification_tree(iris.data.T, iris.target, alphas=[], min_split_size=min_split_size)
-        pyml_accuracy = decision_trees.classification_tree_accuracy(tree, iris.data.T, iris.target)
+        tree, _, _ = decision_trees.classification_tree(iris.data.T, iris.target, alphas=[], min_split_size=self.min_split_size)
+        pyml_accuracy = decision_trees.classification_tree_accuracy(tree, iris.data.T, iris.target)        
         
-        self.assertAlmostEqual(sklearn_accuracy, pyml_accuracy, 1e-6)
+        self.assertAlmostEqual(sklearn_accuracy, pyml_accuracy, delta=1e-12)
+
+    def test_regression(self):
+        X, y = load_diabetes(return_X_y=True)
+
+        regressor = DecisionTreeRegressor(random_state=0, min_samples_split=self.min_split_size)
+        regressor.fit(X, y)
+        y_hat = regressor.predict(X)
+        sklearn_mse = ((y - y_hat)**2).mean()
+
+        tree, _, _ = decision_trees.univariate_regression_tree(X.T, y, alphas=[], min_split_size=self.min_split_size)
+        pyml_mse = decision_trees.univariate_regression_tree_mean_squared_error(tree, X.T, y)
+        self.assertGreater(pyml_mse, 0)        
+        self.assertAlmostEqual(sklearn_mse, pyml_mse, delta=1e-12)
 
 
 if __name__ == "__main__": 
