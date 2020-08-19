@@ -35,6 +35,8 @@ void init_linear_regression(py::module& m)
 
 	py::class_<ml::LinearRegression::UnivariateOLSResult>(m_lin_reg, "UnivariateOLSResult")
 		.def(py::init<unsigned int, unsigned int, double, double, double, double, double, double, double>(),
+			py::arg("n"), py::arg("dof"), py::arg("var_y"), py::arg("r2"), py::arg("slope"), py::arg("intercept"),
+			py::arg("var_slope"), py::arg("var_intercept"), py::arg("cov_slope_intercept"),
 			R"(Constructs a new instance of UnivariateOLSResult.
 
 Args:
