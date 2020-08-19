@@ -108,6 +108,7 @@ class LinearRegressionTest(unittest.TestCase):
         X[:, d - 1] = 1
         y = -0.5 * X[:, 0] + 0.1 * X[:, 1] - X[:, 3] + 4 + 0.2 * np.random.randn(n)
         result = linear_regression.multivariate(X, y, False)
+        self.assertTrue(result.cov.flags["C_CONTIGUOUS"])
         self.assertEqual(n, result.n)
         self.assertEqual(n - d, result.dof)
         lr = linear_model.LinearRegression(fit_intercept=False)  # Force lr not to add another column with 1's.

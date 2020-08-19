@@ -12,17 +12,36 @@ namespace ml
 {
 	namespace LinearRegression
 	{
+		/** Version of MultivariateOLSResult accepting and returning covariance matrix in row-major order. */
+		struct MultivariateOLSResultRowMajor : public MultivariateOLSResult
+		{
+			/** Wrap C++ result. */
+			MultivariateOLSResultRowMajor(MultivariateOLSResult&& wrapped)
+				: MultivariateOLSResult(std::move(wrapped))
+			{}
+
+			/** Wrap const C++ result. */
+			MultivariateOLSResultRowMajor(const MultivariateOLSResult& wrapped)
+				: MultivariateOLSResult(wrapped)
+			{}
+
+			Eigen::Ref<const MatrixXdR> cov_row_major() const
+			{
+				return cov.transpose();
+			}
+		};
+
 		/** Version of "multivariate" taking an X with row-major order. */
-		static MultivariateOLSResult multivariate_row_major(const Eigen::Ref<const MatrixXdR> X, const Eigen::Ref<const Eigen::VectorXd> y, bool add_ones)
+		static MultivariateOLSResultRowMajor multivariate_row_major(const Eigen::Ref<const MatrixXdR> X, const Eigen::Ref<const Eigen::VectorXd> y, bool add_ones)
 		{
 			Eigen::Ref<const Eigen::MatrixXd> XT = X.transpose();
 			assert(XT.data() == X.data()); // No copying.
 			if (!add_ones) {
-				return multivariate(XT, y);
+				return MultivariateOLSResultRowMajor(multivariate(XT, y));
 			}
 			else {
 				const auto XT_with_ones = LinearRegression::add_ones(XT);
-				return multivariate(XT_with_ones, y);
+				return MultivariateOLSResultRowMajor(multivariate(XT_with_ones, y));
 			}			
 		}
 	}	
@@ -64,14 +83,14 @@ Args:
 
 The following properties assume independent Gaussian error terms: `var_slope`, `var_intercept` and `cov_slope_intercept`.)";
 
-	py::class_<ml::LinearRegression::MultivariateOLSResult>(m_lin_reg, "MultivariateOLSResult")
-		.def("__repr__", &ml::LinearRegression::MultivariateOLSResult::to_string)
-		.def_readonly("n", &ml::LinearRegression::MultivariateOLSResult::n, "Number of data points.")
-		.def_readonly("dof", &ml::LinearRegression::MultivariateOLSResult::dof, "Number of degrees of freedom.")
-		.def_readonly("var_y", &ml::LinearRegression::MultivariateOLSResult::var_y, "Estimated variance of observations Y.")
-		.def_readonly("r2", &ml::LinearRegression::MultivariateOLSResult::r2, "R2 = 1 - fraction of variance unexplained relative to a \"base model\".")
-		.def_readonly("beta", &ml::LinearRegression::MultivariateOLSResult::beta, "Fitted coefficients of the model y_i = beta^T X_i.")
-		.def_readonly("cov", &ml::LinearRegression::MultivariateOLSResult::cov, "Covariance matrix of beta coefficients.")
+	py::class_<ml::LinearRegression::MultivariateOLSResultRowMajor>(m_lin_reg, "MultivariateOLSResult")
+		.def("__repr__", &ml::LinearRegression::MultivariateOLSResultRowMajor::to_string)
+		.def_readonly("n", &ml::LinearRegression::MultivariateOLSResultRowMajor::n, "Number of data points.")
+		.def_readonly("dof", &ml::LinearRegression::MultivariateOLSResultRowMajor::dof, "Number of degrees of freedom.")
+		.def_readonly("var_y", &ml::LinearRegression::MultivariateOLSResultRowMajor::var_y, "Estimated variance of observations Y.")
+		.def_readonly("r2", &ml::LinearRegression::MultivariateOLSResultRowMajor::r2, "R2 = 1 - fraction of variance unexplained relative to a \"base model\".")
+		.def_readonly("beta", &ml::LinearRegression::MultivariateOLSResultRowMajor::beta, "Fitted coefficients of the model y_i = beta^T X_i.")
+		.def_property_readonly("cov", &ml::LinearRegression::MultivariateOLSResultRowMajor::cov_row_major, "Covariance matrix of beta coefficients.")
 		.doc() = R"(Result of multivariate Ordinary Least Squares regression.
 
 The `cov` property assumes independent Gaussian error terms.)";
