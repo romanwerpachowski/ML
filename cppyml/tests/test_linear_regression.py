@@ -36,6 +36,24 @@ class LinearRegressionTest(unittest.TestCase):
         self.assertEqual(var_intercept, result.var_intercept)
         self.assertEqual(cov_slope_intercept, result.cov_slope_intercept)
 
+    def test_multivariate_ols_result(self):
+        n = 100
+        dof = 98
+        var_y = 0.3
+        r2 = 0.8
+        beta = np.array([-0.4, 0.2])
+        cov = np.array([[0.004, -0.0001],
+                        [-0.00010001, 0.03]])
+        result = linear_regression.MultivariateOLSResult(
+            n, dof, var_y, r2, beta, cov)
+        self.assertTrue(result.cov.flags["C_CONTIGUOUS"])
+        self.assertEqual(n, result.n)
+        self.assertEqual(dof, result.dof)
+        self.assertEqual(var_y, result.var_y)
+        self.assertEqual(r2, result.r2)
+        np.testing.assert_array_equal(beta, result.beta)
+        np.testing.assert_array_equal(cov, result.cov)
+
     def test_univariate_with_intercept(self):
         n = 25
         slope = 0.1

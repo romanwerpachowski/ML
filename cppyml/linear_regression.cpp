@@ -25,6 +25,11 @@ namespace ml
 				: MultivariateOLSResult(wrapped)
 			{}
 
+			/** Construct the result from user data. */
+			MultivariateOLSResultRowMajor(unsigned int n, unsigned int dof, double var_y, double r2, const Eigen::Ref<const Eigen::VectorXd> beta, const Eigen::Ref<const MatrixXdR> cov)
+				: MultivariateOLSResult{ n, dof, var_y, r2, beta, cov.transpose() }
+			{}
+
 			Eigen::Ref<const MatrixXdR> cov_row_major() const
 			{
 				return cov.transpose();
@@ -84,6 +89,18 @@ Args:
 The following properties assume independent Gaussian error terms: `var_slope`, `var_intercept` and `cov_slope_intercept`.)";
 
 	py::class_<ml::LinearRegression::MultivariateOLSResultRowMajor>(m_lin_reg, "MultivariateOLSResult")
+		.def(py::init<unsigned int, unsigned int, double, double, const Eigen::Ref<const Eigen::VectorXd>, const Eigen::Ref<const MatrixXdR>>(),
+			py::arg("n"), py::arg("dof"), py::arg("var_y"), py::arg("r2"), py::arg("beta"), py::arg("cov"),
+			R"(Constructs a new instance of MultivariateOLSResult.
+
+Args:
+	n: Number of data points.
+	dof: Number of degrees of freedom.
+	var_y: Estimated variance of observations Y.
+	r2: R2 = 1 - fraction of variance unexplained relative to a "base model" (method-dependent).
+	beta: Fitted coefficients of the model y_i = beta^T X_i.
+	cov: Covariance matrix of beta coefficients.
+)")
 		.def("__repr__", &ml::LinearRegression::MultivariateOLSResultRowMajor::to_string)
 		.def_readonly("n", &ml::LinearRegression::MultivariateOLSResultRowMajor::n, "Number of data points.")
 		.def_readonly("dof", &ml::LinearRegression::MultivariateOLSResultRowMajor::dof, "Number of degrees of freedom.")
