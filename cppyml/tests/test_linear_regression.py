@@ -14,6 +14,28 @@ class LinearRegressionTest(unittest.TestCase):
     def setUp(self):
         np.random.seed(4098549032)
 
+    def test_univariate_ols_result(self):
+        n = 100
+        dof = 98
+        var_y = 0.3
+        r2 = 0.8
+        slope = -0.1
+        intercept = 10
+        var_slope = 0.001
+        var_intercept = 0.002
+        cov_slope_intercept = -0.0005
+        result = linear_regression.UnivariateOLSResult(
+            n, dof, var_y, r2, slope, intercept, var_slope, var_intercept, cov_slope_intercept)
+        self.assertEqual(n, result.n)
+        self.assertEqual(dof, result.dof)
+        self.assertEqual(var_y, result.var_y)
+        self.assertEqual(r2, result.r2)
+        self.assertEqual(slope, result.slope)
+        self.assertEqual(intercept, result.intercept)
+        self.assertEqual(var_slope, result.var_slope)
+        self.assertEqual(var_intercept, result.var_intercept)
+        self.assertEqual(cov_slope_intercept, result.cov_slope_intercept)
+
     def test_univariate_with_intercept(self):
         n = 25
         slope = 0.1

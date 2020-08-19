@@ -183,6 +183,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cppyml\__init__.py" />
+    <None Include="README.md" />
     <None Include="SConscript" />
     <None Include="setup.py" />
     <None Include="tests\test_decision_trees.py" />

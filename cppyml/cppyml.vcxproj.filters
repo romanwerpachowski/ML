@@ -54,6 +54,9 @@
     <None Include="cppyml\__init__.py">
       <Filter>Python</Filter>
     </None>
+    <None Include="README.md">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="types.hpp">

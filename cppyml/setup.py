@@ -22,7 +22,7 @@ CPP_BUILD_MODE = "Debug" if DEBUG_BINARIES else "Release"
 NAME = "cppyml"
 
 # Directory where setup.py is located.
-SETUP_DIRNAME = os.path.dirname(__file__)
+SETUP_DIRNAME = os.path.abspath(os.path.dirname(__file__))
 
 # Base directory of the whole project.
 BASE_DIRECTORY = os.path.abspath(os.path.join(SETUP_DIRNAME, ".."))
@@ -42,7 +42,8 @@ else:
     BINARY_FILENAMES = [ML_FILENAME, PYML_FILENAME]
     SRC_PATHS = [ML_PATH, PYML_PATH]
 
-def get_binary_files():    
+
+def get_binary_files():
     package_dirname = os.path.join(SETUP_DIRNAME, NAME)
     # Remove old files.
     for extension in ["dll", "pyd", "so"]:
@@ -54,6 +55,12 @@ def get_binary_files():
         dst_path = os.path.join(package_dirname, dst_filename)
         shutil.copyfile(src_path, dst_path)
         print("Copied %s to %s" % (src_path, dst_path))
+
+
+def load_readme():
+    with open(os.path.join(SETUP_DIRNAME, "README.md"), "r") as f:
+        return f.read()
+
 
 get_binary_files()
 
@@ -69,11 +76,13 @@ setup(
     name=NAME,
     author="Roman Werpachowski",
     url="https://github.com/romanwerpachowski/ML",
-    author_email="roman.werpachowski@gmail.com",
-    description="Efficient implementations of selected ML algorithms for Python.",
+    author_email="roman.werpachowski@gmail.com",    
     license="GPL-3.0",
     keywords="machine-learning ML extension algorithms numerical optimised",   
-    version="0.1",
+    version="0.1.1",
+    description="Efficient implementations of selected ML algorithms for Python.",
+    long_description=load_readme(),
+    long_description_content_type="text/markdown",
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,

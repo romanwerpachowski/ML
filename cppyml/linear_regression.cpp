@@ -34,6 +34,20 @@ void init_linear_regression(py::module& m)
 	auto m_lin_reg = m.def_submodule("linear_regression", "Linear regression algorithms.");
 
 	py::class_<ml::LinearRegression::UnivariateOLSResult>(m_lin_reg, "UnivariateOLSResult")
+		.def(py::init<unsigned int, unsigned int, double, double, double, double, double, double, double>(),
+			R"(Constructs a new instance of UnivariateOLSResult.
+
+Args:
+	n: Number of data points.
+	dof: Number of degrees of freedom.
+	var_y: Estimated variance of observations Y.
+	r2: R2 = 1 - fraction of variance unexplained relative to a "base model" (method-dependent).
+	slope: Coefficient multiplying X values when predicting Y.
+	intercept: Constant added to slope * X when predicting Y.
+	var_slope: Estimated variance of the slope.
+	var_intercept: Estimated variance of the intercept.
+	cov_slope_intercept: Estimated covariance of the slope and the intercept.
+)")
 		.def("__repr__", &ml::LinearRegression::UnivariateOLSResult::to_string)
 		.def_readonly("n", &ml::LinearRegression::UnivariateOLSResult::n, "Number of data points.")
 		.def_readonly("dof", &ml::LinearRegression::UnivariateOLSResult::dof, "Number of degrees of freedom.")
