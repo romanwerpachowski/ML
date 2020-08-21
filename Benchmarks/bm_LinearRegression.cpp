@@ -47,7 +47,8 @@ template <unsigned int D> static void multivariate_linear_regression(benchmark::
 {
 	const auto sample_size = state.range(0);
 	const Eigen::MatrixXd X(Eigen::MatrixXd::Random(D, sample_size));
-	const Eigen::VectorXd y(Eigen::VectorXd::Random(sample_size));
+	const Eigen::VectorXd beta(Eigen::VectorXd::Random(D));
+	const Eigen::VectorXd y(X.transpose() * beta + 0.02 * Eigen::VectorXd::Random(sample_size));
 	for (auto _ : state) {
 		ml::LinearRegression::multivariate(X, y);
 	}
