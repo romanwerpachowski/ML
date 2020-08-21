@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <Eigen/Cholesky>
 #include <Eigen/Core>
 #include "dll.hpp"
 
@@ -127,7 +126,7 @@ namespace ml
 			/** Update the beta estimate with a new sample.
 			@param X D x N matrix of X values, with data points in columns.
 			@param y Y vector with length N.
-			@throw std::invalid_argument If (X, y) is the first sample (i.e., n() == 0), and y.size() != X.cols() or X.cols() < X.rows().
+			@throw std::invalid_argument If (X, y) is the first sample (i.e., n() == 0) and X.cols() < X.rows(), or y.size() != X.cols().
 			*/
 			DLL_DECLSPEC void update(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
@@ -148,10 +147,9 @@ namespace ml
 			{
 				return beta_;
 			}
-		private:
-			Eigen::LDLT<Eigen::MatrixXd> XXt_decomp_; /**< LDLT decomposition of X_1 * X_1^T + X_2 * X_2 + ... */
+		private:			
 			Eigen::MatrixXd P_; /**< D x D information matrix, equal to (X_1 * X_1^T + X_2 * X_2 + ...)^-1. */
-			Eigen::MatrixXd K_; /**< Temporary matrix.*/
+			Eigen::MatrixXd K_; /**< D x N_i helper matrix. */
 			Eigen::VectorXd beta_; /**< Current estimate of beta. */
 			unsigned int n_; /**< Number of data points seen so far. */			
 			unsigned int d_; /**< Dimension of each x data point. */

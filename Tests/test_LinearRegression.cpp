@@ -429,7 +429,7 @@ TEST(LinearRegression, recursive_multivariate_ols_many_samples)
 {
 	constexpr unsigned int d = 10;
 	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d));
-	const std::vector<unsigned int> sample_sizes({ 20, 5, 20, 4, 1, 100 });
+	const std::vector<unsigned int> sample_sizes({ d, 4, 20, 6, 20, 4, 1, 100 });
 	RecursiveMultivariateOLS rmols;
 	const unsigned int total_n = std::accumulate(sample_sizes.begin(), sample_sizes.end(), 0u);
 	unsigned int cumulative_n = 0;
@@ -443,8 +443,11 @@ TEST(LinearRegression, recursive_multivariate_ols_many_samples)
 		all_X.block(0, cumulative_n, d, n) = X;
 		all_y.segment(cumulative_n, n) = y;
 		cumulative_n += n;
-		const auto cumulative_result = multivariate(all_X.leftCols(cumulative_n), all_y.head(cumulative_n));
+		const auto cumulative_X = all_X.leftCols(cumulative_n);
+		const auto cumulative_y = all_y.head(cumulative_n);		
+		const auto ols_beta = multivariate(cumulative_X, cumulative_y).beta;
+		const auto beta_error = rmols.beta() - ols_beta;
+		ASSERT_NEAR(0, beta_error.norm(), 1e-14) << sample_idx << ":\n" << beta_error << "\nOLS beta:\n" << ols_beta << "\nRecursive OLS beta:\n" << rmols.beta();
 		++sample_idx;
-		EXPECT_NEAR(0, (cumulative_result.beta - rmols.beta()).norm(), 1e-15) << sample_idx << ":\n" << (rmols.beta() - cumulative_result.beta);
 	}
 }

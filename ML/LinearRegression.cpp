@@ -4,6 +4,7 @@
 #include <limits>
 #include <stdexcept>
 #include <sstream>
+#include <Eigen/Cholesky>
 #include "LinearRegression.hpp"
 
 namespace ml
@@ -119,7 +120,7 @@ namespace ml
 		typedef Eigen::LDLT<Eigen::MatrixXd> XXTMatrixDecomposition;
 
 		/** Calculate X*X^T, invert it, and calculate beta. */
-		static Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::MatrixXd& XXt, XXTMatrixDecomposition& xxt_decomp, const bool check_number_points)
+		static Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, XXTMatrixDecomposition& xxt_decomp, const bool check_number_points)
 		{
 			// X is an q x N matrix and y is a N-size vector.
 			const auto n = static_cast<unsigned int>(X.cols());
@@ -132,7 +133,7 @@ namespace ml
 			}
 			const Eigen::VectorXd b(X * y);
 			assert(b.size() == X.rows());
-			XXt = X * X.transpose();
+			const Eigen::MatrixXd XXt(X * X.transpose());
 			assert(XXt.rows() == XXt.cols());
 			assert(XXt.rows() == X.rows());
 			MultivariateOLSResult result;
@@ -147,21 +148,22 @@ namespace ml
 			// X is an q x N matrix and y is a N-size vector.
 			const auto q = static_cast<unsigned int>(X.rows());
 			const auto n = static_cast<unsigned int>(X.cols());
-			Eigen::MatrixXd XXt;			
 			XXTMatrixDecomposition xxt_decomp;
 			MultivariateOLSResult result;
-			result.beta = calculate_XXt_beta(X, y, XXt, xxt_decomp, true);
+			result.beta = calculate_XXt_beta(X, y, xxt_decomp, true);
 			result.n = n;
 			result.dof = n - q;
 			assert(result.beta.size() == X.rows());
 			const double sse = (y - X.transpose() * result.beta).squaredNorm();
 			if (result.dof) {
 				result.var_y = sse / result.dof;
-			}
-			else {
+				result.cov = xxt_decomp.solve(Eigen::MatrixXd::Identity(q, q));
+				result.cov *= result.var_y;				
+			} else {
 				result.var_y = std::numeric_limits<double>::quiet_NaN();
+				result.cov = Eigen::MatrixXd::Constant(q, q, result.var_y);
 			}
-			result.cov = xxt_decomp.solve(Eigen::MatrixXd::Identity(q, q)) * result.var_y;
+			
 			const auto my = y.mean();
 			const auto y_centred = y.array() - my;
 			const auto syy = (y_centred * y_centred).sum();
@@ -195,7 +197,8 @@ namespace ml
 				initialise(X, y);
 			}
 			else {
-				if (!X.cols()) {
+				const unsigned int n_i = static_cast<unsigned int>(X.cols());
+				if (!n_i) {
 					throw std::invalid_argument("No new data points");
 				}
 				if (d_ != static_cast<unsigned int>(X.rows())) {
@@ -204,19 +207,37 @@ namespace ml
 				if (X.cols() != y.size()) {
 					throw std::invalid_argument("X matrix has different number of data points than Y has values");
 				}
-				XXt_decomp_.rankUpdate(X);
-				P_ = XXt_decomp_.solve(Eigen::MatrixXd::Identity(d_, d_));
+				// Update P.
 				K_.noalias() = P_ * X;
-				beta_ += K_ * (y - X.transpose() * beta_);
-				n_ += static_cast<unsigned int>(X.cols());
+				assert(K_.rows() == d_);
+				assert(K_.cols() == n_i);
+				XXTMatrixDecomposition ldlt; // N_i x N_i decomposition.
+				Eigen::MatrixXd W(X.transpose() * K_);
+				assert(W.rows() == n_i);
+				assert(W.cols() == n_i);
+				W += Eigen::MatrixXd::Identity(n_i, n_i);
+				ldlt.compute(W);
+				Eigen::MatrixXd V(ldlt.solve(K_.transpose()));
+				assert(V.rows() == n_i);
+				assert(V.cols() == d_);
+				P_.noalias() -= K_ * V;
+				// Update beta.
+				K_.noalias() = P_ * X;
+				assert(K_.rows() == d_);
+				assert(K_.cols() == n_i);
+				const Eigen::VectorXd r(y - X.transpose() * beta_);
+				beta_ += K_ * r;
+				n_ += n_i;
 			}
 		}
 
 		void RecursiveMultivariateOLS::initialise(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y)
 		{			
-			beta_ = calculate_XXt_beta(X, y, P_, XXt_decomp_, false);
+			XXTMatrixDecomposition ldlt; // D x D decomposition.
+			beta_ = calculate_XXt_beta(X, y, ldlt, true);
 			d_ = static_cast<unsigned int>(X.rows());
 			n_ = static_cast<unsigned int>(X.cols());
+			P_ = ldlt.solve(Eigen::MatrixXd::Identity(d_, d_));
 		}
 	}
 }
