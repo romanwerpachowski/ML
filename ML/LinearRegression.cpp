@@ -4,13 +4,12 @@
 #include <limits>
 #include <stdexcept>
 #include <sstream>
-#include <Eigen/Cholesky>
 #include "LinearRegression.hpp"
 
 namespace ml
 {
 	namespace LinearRegression
-	{
+	{		
 		std::string UnivariateOLSResult::to_string() const
 		{
 			std::stringstream s;
@@ -116,7 +115,11 @@ namespace ml
 			return calc_univariate_linear_regression_result(sxx, sxy, syy, 0, 0, n, false);
 		}
 
-		MultivariateOLSResult multivariate(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y)
+		/** Type of matrix decomposition used for X * X^T. */
+		typedef Eigen::LDLT<Eigen::MatrixXd> XXTMatrixDecomposition;
+
+		/** Calculate X*X^T, invert it, and calculate beta. */
+		static Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::MatrixXd& XXt, XXTMatrixDecomposition& xxt_decomp, const bool check_number_points)
 		{
 			// X is an q x N matrix and y is a N-size vector.
 			const auto n = static_cast<unsigned int>(X.cols());
@@ -124,20 +127,32 @@ namespace ml
 				throw std::invalid_argument("X matrix has different number of data points than Y has values");
 			}
 			const auto q = static_cast<unsigned int>(X.rows());
-			if (n < q) {
+			if (check_number_points && (n < q)) {
 				throw std::invalid_argument("Not enough data points for regression");
 			}
 			const Eigen::VectorXd b(X * y);
 			assert(b.size() == X.rows());
-			const Eigen::MatrixXd XXt(X * X.transpose());
+			XXt = X * X.transpose();
 			assert(XXt.rows() == XXt.cols());
 			assert(XXt.rows() == X.rows());
 			MultivariateOLSResult result;
 			result.n = n;
 			result.dof = n - q;
-			Eigen::LLT<Eigen::MatrixXd> llt;
-			llt.compute(XXt);
-			result.beta = llt.solve(b);
+			xxt_decomp.compute(XXt);
+			return xxt_decomp.solve(b);
+		}
+
+		MultivariateOLSResult multivariate(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y)
+		{
+			// X is an q x N matrix and y is a N-size vector.
+			const auto q = static_cast<unsigned int>(X.rows());
+			const auto n = static_cast<unsigned int>(X.cols());
+			Eigen::MatrixXd XXt;			
+			XXTMatrixDecomposition xxt_decomp;
+			MultivariateOLSResult result;
+			result.beta = calculate_XXt_beta(X, y, XXt, xxt_decomp, true);
+			result.n = n;
+			result.dof = n - q;
 			assert(result.beta.size() == X.rows());
 			const double sse = (y - X.transpose() * result.beta).squaredNorm();
 			if (result.dof) {
@@ -146,7 +161,7 @@ namespace ml
 			else {
 				result.var_y = std::numeric_limits<double>::quiet_NaN();
 			}
-			result.cov = llt.solve(Eigen::MatrixXd::Identity(q, q)) * result.var_y;
+			result.cov = xxt_decomp.solve(Eigen::MatrixXd::Identity(q, q)) * result.var_y;
 			const auto my = y.mean();
 			const auto y_centred = y.array() - my;
 			const auto syy = (y_centred * y_centred).sum();
@@ -163,6 +178,45 @@ namespace ml
 			X_with_intercept.topRows(X.rows()) = X;
 			X_with_intercept.bottomRows(1) = Eigen::RowVectorXd::Ones(X.cols());
 			return X_with_intercept;
+		}
+
+		RecursiveMultivariateOLS::RecursiveMultivariateOLS()
+			: n_(0), d_(0)
+		{}
+
+		RecursiveMultivariateOLS::RecursiveMultivariateOLS(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y)
+		{
+			initialise(X, y);
+		}
+
+		void RecursiveMultivariateOLS::update(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
+		{
+			if (!n_) {
+				initialise(X, y);
+			}
+			else {
+				if (!X.cols()) {
+					throw std::invalid_argument("No new data points");
+				}
+				if (d_ != static_cast<unsigned int>(X.rows())) {
+					throw std::invalid_argument("Data dimension mismatch");
+				}
+				if (X.cols() != y.size()) {
+					throw std::invalid_argument("X matrix has different number of data points than Y has values");
+				}
+				XXt_decomp_.rankUpdate(X);
+				P_ = XXt_decomp_.solve(Eigen::MatrixXd::Identity(d_, d_));
+				K_.noalias() = P_ * X;
+				beta_ += K_ * (y - X.transpose() * beta_);
+				n_ += static_cast<unsigned int>(X.cols());
+			}
+		}
+
+		void RecursiveMultivariateOLS::initialise(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y)
+		{			
+			beta_ = calculate_XXt_beta(X, y, P_, XXt_decomp_, false);
+			d_ = static_cast<unsigned int>(X.rows());
+			n_ = static_cast<unsigned int>(X.cols());
 		}
 	}
 }

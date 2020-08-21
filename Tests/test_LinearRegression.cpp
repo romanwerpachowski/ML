@@ -311,7 +311,7 @@ TEST(LinearRegression, multivariate_exact_fit)
 	const MultivariateOLSResult result = multivariate(X, y);
 	ASSERT_EQ(2u, result.n);
 	ASSERT_EQ(0u, result.dof);
-	ASSERT_NEAR(-2, result.beta[0], 2e-15);
+	ASSERT_NEAR(-2, result.beta[0], 1e-14);
 	ASSERT_NEAR(0.7, result.beta[1], 1e-15);
 	ASSERT_NEAR(1, result.r2, 1e-15);
 	ASSERT_TRUE(std::isnan(result.var_y)) << result.var_y;
@@ -392,4 +392,59 @@ TEST(LinearRegression, add_ones)
 	actual = add_ones(X);
 	ASSERT_EQ(X, actual.topRows(1));
 	ASSERT_EQ(Eigen::MatrixXd::Ones(1, 2), actual.bottomRows(1));
+}
+
+TEST(LinearRegression, recursive_multivariate_ols_no_data)
+{
+	RecursiveMultivariateOLS rmols;
+	ASSERT_EQ(0u, rmols.n());
+	ASSERT_EQ(0, rmols.beta().size());
+}
+
+TEST(LinearRegression, recursive_multivariate_ols_one_sample)
+{
+	constexpr unsigned int n = 10;
+	constexpr unsigned int d = 3;
+	const Eigen::MatrixXd X(Eigen::MatrixXd::Random(d, n));
+	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d));
+	const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
+	RecursiveMultivariateOLS rmols1;
+	rmols1.update(X, y);
+	ASSERT_EQ(n, rmols1.n());
+	ASSERT_EQ(d, rmols1.beta().size());
+	RecursiveMultivariateOLS rmols2(X, y);
+	ASSERT_EQ(n, rmols2.n());
+	ASSERT_EQ(d, rmols2.beta().size());
+	ASSERT_EQ(0, (rmols1.beta() - rmols2.beta()).norm()) << rmols1.beta() << " vs " << rmols2.beta();
+	const auto expected_beta = multivariate(X, y).beta;
+	constexpr double eps1 = 1e-16;
+	ASSERT_NEAR(0, (expected_beta - rmols1.beta()).norm(), eps1) << rmols1.beta();
+	ASSERT_NEAR(0, (expected_beta - rmols2.beta()).norm(), eps1) << rmols2.beta();
+	constexpr double eps2 = 5e-2;
+	ASSERT_NEAR(0, (true_beta - rmols1.beta()).norm(), eps2) << rmols1.beta();
+	ASSERT_NEAR(0, (true_beta - rmols2.beta()).norm(), eps2) << rmols2.beta();
+}
+
+TEST(LinearRegression, recursive_multivariate_ols_many_samples)
+{
+	constexpr unsigned int d = 10;
+	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d));
+	const std::vector<unsigned int> sample_sizes({ 20, 5, 20, 4, 1, 100 });
+	RecursiveMultivariateOLS rmols;
+	const unsigned int total_n = std::accumulate(sample_sizes.begin(), sample_sizes.end(), 0u);
+	unsigned int cumulative_n = 0;
+	Eigen::MatrixXd all_X(d, total_n);
+	Eigen::VectorXd all_y(total_n);
+	unsigned int sample_idx = 0;
+	for (const auto n : sample_sizes) {
+		const Eigen::MatrixXd X(Eigen::MatrixXd::Random(d, n));		
+		const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
+		rmols.update(X, y);
+		all_X.block(0, cumulative_n, d, n) = X;
+		all_y.segment(cumulative_n, n) = y;
+		cumulative_n += n;
+		const auto cumulative_result = multivariate(all_X.leftCols(cumulative_n), all_y.head(cumulative_n));
+		++sample_idx;
+		EXPECT_NEAR(0, (cumulative_result.beta - rmols.beta()).norm(), 1e-15) << sample_idx << ":\n" << (rmols.beta() - cumulative_result.beta);
+	}
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <Eigen/Cholesky>
 #include <Eigen/Core>
 #include "dll.hpp"
 
@@ -89,8 +90,8 @@ namespace ml
 
 		If fitting with intercept is desired, include a row of 1's in the X values.
 
-		@param X X matrix, with data points in columns.
-		@param y Y vector.
+		@param X D x N matrix of X values, with data points in columns.
+		@param y Y vector with length N.
 		@throw std::invalid_argument If y.size() != X.cols() or X.cols() < X.rows().
 		*/
 		DLL_DECLSPEC MultivariateOLSResult multivariate(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
@@ -101,6 +102,61 @@ namespace ml
 		*/
 		DLL_DECLSPEC Eigen::MatrixXd add_ones(Eigen::Ref<const Eigen::MatrixXd> X);
 
-		
+		/** Given a stream of pairs (X_i, y_i), updates the least-squares estimate for beta solving the equations
+
+		y_0 = X_0^T * beta + e_0
+		y_1 = X_1^T * beta + e_1
+		...
+
+		Based on https://cpb-us-w2.wpmucdn.com/sites.gatech.edu/dist/2/436/files/2017/07/22-notes-6250-f16.pdf
+		*/
+		class RecursiveMultivariateOLS
+		{
+		public:
+			/** Initialises without data. */
+			DLL_DECLSPEC RecursiveMultivariateOLS();
+
+			/** Initialises with the first sample and calculates the first beta estimate.
+
+			@param X D x N matrix of X values, with data points in columns.
+			@param y Y vector with length N.
+			@throw std::invalid_argument If y.size() != X.cols() or X.cols() < X.rows().
+			*/
+			DLL_DECLSPEC RecursiveMultivariateOLS(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
+
+			/** Update the beta estimate with a new sample.
+			@param X D x N matrix of X values, with data points in columns.
+			@param y Y vector with length N.
+			@throw std::invalid_argument If (X, y) is the first sample (i.e., n() == 0), and y.size() != X.cols() or X.cols() < X.rows().
+			*/
+			DLL_DECLSPEC void update(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
+
+			/** Returns the number of data points seen so far. */
+			unsigned int n() const
+			{
+				return n_;
+			}
+
+			/** Returns the dimension of data points. If n() == 0, returs 0. */
+			unsigned int d() const
+			{
+				return d_;
+			}
+
+			/** Returns the current estimate of beta. If n() == 0, returns an empty vector. */
+			const Eigen::VectorXd& beta() const
+			{
+				return beta_;
+			}
+		private:
+			Eigen::LDLT<Eigen::MatrixXd> XXt_decomp_; /**< LDLT decomposition of X_1 * X_1^T + X_2 * X_2 + ... */
+			Eigen::MatrixXd P_; /**< D x D information matrix, equal to (X_1 * X_1^T + X_2 * X_2 + ...)^-1. */
+			Eigen::MatrixXd K_; /**< Temporary matrix.*/
+			Eigen::VectorXd beta_; /**< Current estimate of beta. */
+			unsigned int n_; /**< Number of data points seen so far. */			
+			unsigned int d_; /**< Dimension of each x data point. */
+
+			void initialise(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
+		};
 	}
 }
