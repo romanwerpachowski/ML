@@ -447,7 +447,20 @@ TEST(LinearRegression, recursive_multivariate_ols_many_samples)
 		const auto cumulative_y = all_y.head(cumulative_n);		
 		const auto ols_beta = multivariate(cumulative_X, cumulative_y).beta;
 		const auto beta_error = rmols.beta() - ols_beta;
-		ASSERT_NEAR(0, beta_error.norm(), 1e-14) << sample_idx << ":\n" << beta_error << "\nOLS beta:\n" << ols_beta << "\nRecursive OLS beta:\n" << rmols.beta();
+		ASSERT_NEAR(0, beta_error.norm(), 2e-14) << sample_idx << ":\n" << beta_error << "\nOLS beta:\n" << ols_beta << "\nRecursive OLS beta:\n" << rmols.beta();
 		++sample_idx;
 	}
+}
+
+TEST(LinearRegression, recursive_multivariate_ols_errors)
+{
+	Eigen::MatrixXd X(Eigen::MatrixXd::Random(10, 5));
+	Eigen::VectorXd y(Eigen::VectorXd::Random(5));
+	ASSERT_THROW(RecursiveMultivariateOLS(X, y), std::invalid_argument);
+	RecursiveMultivariateOLS rmols;
+	ASSERT_THROW(rmols.update(X, y), std::invalid_argument);
+	X.resize(10, 20);
+	y.resize(21);
+	ASSERT_THROW(RecursiveMultivariateOLS(X, y), std::invalid_argument);
+	ASSERT_THROW(rmols.update(X, y), std::invalid_argument);
 }
