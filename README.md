@@ -6,7 +6,7 @@ Efficient C++ implementations of some ML algorithms with Python bindings.
 
 - clustering (EM algorithm)
 - decision trees for classification and regression
-- linear regression
+- linear regression (incl. recursive)
 
 More is coming!
 
