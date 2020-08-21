@@ -1,131 +1,137 @@
-----------------------------------------------------------------------------------
-Benchmark                                           Time           CPU Iterations
-----------------------------------------------------------------------------------
-[0;32msse/10                                     [m[0;33m         9 ns          9 ns [m[0;36m  74666667[m
-[m[0;32msse/100                                    [m[0;33m       148 ns        146 ns [m[0;36m   4480000[m
-[m[0;32msse/1000                                   [m[0;33m      1630 ns       1639 ns [m[0;36m    448000[m
-[m[0;32msse/10000                                  [m[0;33m     16432 ns      16741 ns [m[0;36m     44800[m
-[m[0;32msse/100000                                 [m[0;33m    165732 ns     164958 ns [m[0;36m      4073[m
-[m[0;34msse_BigO                                   [m[0;33m      1.66 N       1.65 N [m
-[m[0;34msse_RMS                                    [m[0;33m         0 %          0 % [m
-[m[0;32msse_and_mean/10                            [m[0;33m         9 ns          9 ns [m[0;36m  74666667[m
-[m[0;32msse_and_mean/100                           [m[0;33m       149 ns        144 ns [m[0;36m   4977778[m
-[m[0;32msse_and_mean/1000                          [m[0;33m      1633 ns       1611 ns [m[0;36m    407273[m
-[m[0;32msse_and_mean/10000                         [m[0;33m     16433 ns      16392 ns [m[0;36m     44800[m
-[m[0;32msse_and_mean/100000                        [m[0;33m    164610 ns     164958 ns [m[0;36m      4073[m
-[m[0;34msse_and_mean_BigO                          [m[0;33m      1.65 N       1.65 N [m
-[m[0;34msse_and_mean_RMS                           [m[0;33m         0 %          0 % [m
-[m[0;32mgini_index<double>/10                      [m[0;33m        23 ns         23 ns [m[0;36m  29866667[m
-[m[0;32mgini_index<double>/100                     [m[0;33m        82 ns         82 ns [m[0;36m   8960000[m
-[m[0;32mgini_index<double>/1000                    [m[0;33m       643 ns        642 ns [m[0;36m   1120000[m
-[m[0;32mgini_index<double>/10000                   [m[0;33m      6339 ns       6417 ns [m[0;36m    112000[m
-[m[0;32mgini_index<double>/100000                  [m[0;33m     63699 ns      62779 ns [m[0;36m     11200[m
-[m[0;34mgini_index<double>_BigO                    [m[0;33m      0.64 N       0.63 N [m
-[m[0;34mgini_index<double>_RMS                     [m[0;33m         0 %          0 % [m
-[m[0;32mgini_index<int>/10                         [m[0;33m        20 ns         20 ns [m[0;36m  37333333[m
-[m[0;32mgini_index<int>/100                        [m[0;33m        54 ns         53 ns [m[0;36m  10000000[m
-[m[0;32mgini_index<int>/1000                       [m[0;33m       365 ns        369 ns [m[0;36m   1947826[m
-[m[0;32mgini_index<int>/10000                      [m[0;33m      3524 ns       3530 ns [m[0;36m    194783[m
-[m[0;32mgini_index<int>/100000                     [m[0;33m     34903 ns      35295 ns [m[0;36m     20364[m
-[m[0;34mgini_index<int>_BigO                       [m[0;33m      0.35 N       0.35 N [m
-[m[0;34mgini_index<int>_RMS                        [m[0;33m         0 %          0 % [m
-[m[0;32mgini_index_and_mode<double>/10             [m[0;33m        26 ns         26 ns [m[0;36m  28000000[m
-[m[0;32mgini_index_and_mode<double>/100            [m[0;33m        84 ns         84 ns [m[0;36m   8960000[m
-[m[0;32mgini_index_and_mode<double>/1000           [m[0;33m       647 ns        642 ns [m[0;36m   1120000[m
-[m[0;32mgini_index_and_mode<double>/10000          [m[0;33m      6346 ns       6278 ns [m[0;36m    112000[m
-[m[0;32mgini_index_and_mode<double>/100000         [m[0;33m     63291 ns      64174 ns [m[0;36m     11200[m
-[m[0;34mgini_index_and_mode<double>_BigO           [m[0;33m      0.63 N       0.64 N [m
-[m[0;34mgini_index_and_mode<double>_RMS            [m[0;33m         0 %          0 % [m
-[m[0;32mgini_index_and_mode<int>/10                [m[0;33m        23 ns         23 ns [m[0;36m  29866667[m
-[m[0;32mgini_index_and_mode<int>/100               [m[0;33m        57 ns         58 ns [m[0;36m  10000000[m
-[m[0;32mgini_index_and_mode<int>/1000              [m[0;33m       366 ns        369 ns [m[0;36m   1947826[m
-[m[0;32mgini_index_and_mode<int>/10000             [m[0;33m      3532 ns       3530 ns [m[0;36m    194783[m
-[m[0;32mgini_index_and_mode<int>/100000            [m[0;33m     35074 ns      34528 ns [m[0;36m     20364[m
-[m[0;34mgini_index_and_mode<int>_BigO              [m[0;33m      0.35 N       0.35 N [m
-[m[0;34mgini_index_and_mode<int>_RMS               [m[0;33m         0 %          0 % [m
-[m[0;32munivariate_linear_regression/10            [m[0;33m        35 ns         35 ns [m[0;36m  20363636[m
-[m[0;32munivariate_linear_regression/100           [m[0;33m        90 ns         90 ns [m[0;36m   7466667[m
-[m[0;32munivariate_linear_regression/1000          [m[0;33m       649 ns        642 ns [m[0;36m   1120000[m
-[m[0;32munivariate_linear_regression/10000         [m[0;33m      8432 ns       8545 ns [m[0;36m     89600[m
-[m[0;34munivariate_linear_regression_BigO          [m[0;33m      0.06 NlgN       0.06 NlgN [m
-[m[0;34munivariate_linear_regression_RMS           [m[0;33m         1 %          1 % [m
-[m[0;32munivariate_linear_regression_regular/10    [m[0;33m        30 ns         29 ns [m[0;36m  23578947[m
-[m[0;32munivariate_linear_regression_regular/100   [m[0;33m        67 ns         67 ns [m[0;36m  11200000[m
-[m[0;32munivariate_linear_regression_regular/1000  [m[0;33m       460 ns        465 ns [m[0;36m   1544828[m
-[m[0;32munivariate_linear_regression_regular/10000 [m[0;33m      5083 ns       5156 ns [m[0;36m    100000[m
-[m[0;34munivariate_linear_regression_regular_BigO  [m[0;33m      0.51 N       0.52 N [m
-[m[0;34munivariate_linear_regression_regular_RMS   [m[0;33m         2 %          2 % [m
-[m[0;32mmultivariate_linear_regression_1d/10       [m[0;33m       331 ns        337 ns [m[0;36m   2133333[m
-[m[0;32mmultivariate_linear_regression_1d/100      [m[0;33m       752 ns        750 ns [m[0;36m    896000[m
-[m[0;32mmultivariate_linear_regression_1d/1000     [m[0;33m      4284 ns       4332 ns [m[0;36m    165926[m
-[m[0;32mmultivariate_linear_regression_1d/10000    [m[0;33m     41237 ns      41713 ns [m[0;36m     17231[m
-[m[0;34mmultivariate_linear_regression_1d_BigO     [m[0;33m      4.13 N       4.17 N [m
-[m[0;34mmultivariate_linear_regression_1d_RMS      [m[0;33m         2 %          2 % [m
-[m[0;32mmultivariate_linear_regression_2d/10       [m[0;33m       391 ns        392 ns [m[0;36m   1792000[m
-[m[0;32mmultivariate_linear_regression_2d/100      [m[0;33m      1129 ns       1147 ns [m[0;36m    640000[m
-[m[0;32mmultivariate_linear_regression_2d/1000     [m[0;33m      7573 ns       7673 ns [m[0;36m     89600[m
-[m[0;32mmultivariate_linear_regression_2d/10000    [m[0;33m     73533 ns      73242 ns [m[0;36m      8960[m
-[m[0;34mmultivariate_linear_regression_2d_BigO     [m[0;33m      7.36 N       7.33 N [m
-[m[0;34mmultivariate_linear_regression_2d_RMS      [m[0;33m         1 %          2 % [m
-[m[0;32mmultivariate_linear_regression_5d/10       [m[0;33m       732 ns        739 ns [m[0;36m   1120000[m
-[m[0;32mmultivariate_linear_regression_5d/100      [m[0;33m      1535 ns       1535 ns [m[0;36m    448000[m
-[m[0;32mmultivariate_linear_regression_5d/1000     [m[0;33m      9511 ns       9521 ns [m[0;36m     64000[m
-[m[0;32mmultivariate_linear_regression_5d/10000    [m[0;33m     92797 ns      94164 ns [m[0;36m      7467[m
-[m[0;34mmultivariate_linear_regression_5d_BigO     [m[0;33m      9.28 N       9.42 N [m
-[m[0;34mmultivariate_linear_regression_5d_RMS      [m[0;33m         2 %          2 % [m
-[m[0;32mmultivariate_linear_regression_10d/100     [m[0;33m      3284 ns       3223 ns [m[0;36m    213333[m
-[m[0;32mmultivariate_linear_regression_10d/1000    [m[0;33m     18927 ns      18834 ns [m[0;36m     37333[m
-[m[0;32mmultivariate_linear_regression_10d/10000   [m[0;33m    181101 ns     180303 ns [m[0;36m      4073[m
-[m[0;34mmultivariate_linear_regression_10d_BigO    [m[0;33m     18.12 N      18.04 N [m
-[m[0;34mmultivariate_linear_regression_10d_RMS     [m[0;33m         1 %          1 % [m
-[m[0;32mmultivariate_linear_regression_50d/100     [m[0;33m     48932 ns      48652 ns [m[0;36m     14452[m
-[m[0;32mmultivariate_linear_regression_50d/1000    [m[0;33m    159389 ns     156948 ns [m[0;36m      4480[m
-[m[0;32mmultivariate_linear_regression_50d/10000   [m[0;33m   1258130 ns    1255580 ns [m[0;36m       560[m
-[m[0;34mmultivariate_linear_regression_50d_BigO    [m[0;33m    126.18 N     125.90 N [m
-[m[0;34mmultivariate_linear_regression_50d_RMS     [m[0;33m         6 %          6 % [m
-[m[0;32mem_mousie/100                              [m[0;33m   1093891 ns    1098633 ns [m[0;36m       640[m
-[m[0;32mem_mousie/1000                             [m[0;33m  42306200 ns   42279412 ns [m[0;36m        17[m
-[m[0;32mem_mousie/10000                            [m[0;33m  99581471 ns  100446429 ns [m[0;36m         7[m
-[m[0;32mem_mousie/100000                           [m[0;33m4735498200 ns 4734375000 ns [m[0;36m         1[m
-[m[0;34mem_mousie_BigO                             [m[0;33m      0.47 N^2       0.47 N^2 [m
-[m[0;34mem_mousie_RMS                              [m[0;33m         3 %          3 % [m
-[m[0;32munivariate_regression_tree/2/real_time     [m[0;33m       784 ns        786 ns [m[0;36m    894309[m
-[m[0;32munivariate_regression_tree/4/real_time     [m[0;33m      2760 ns       2723 ns [m[0;36m    252454[m
-[m[0;32munivariate_regression_tree/8/real_time     [m[0;33m     18833 ns      18115 ns [m[0;36m     37090[m
-[m[0;32munivariate_regression_tree/16/real_time    [m[0;33m    150696 ns     151112 ns [m[0;36m      4653[m
-[m[0;32munivariate_regression_tree/32/real_time    [m[0;33m   1341200 ns    1346983 ns [m[0;36m       522[m
-[m[0;32munivariate_regression_tree/64/real_time    [m[0;33m  13617610 ns   13480392 ns [m[0;36m        51[m
-[m[0;34munivariate_regression_tree_BigO            [m[0;33m     51.77 N^3      51.26 N^3 [m
-[m[0;34munivariate_regression_tree_RMS             [m[0;33m         6 %          6 % [m
-[m[0;32mclassification_tree/2/real_time            [m[0;33m       465 ns        462 ns [m[0;36m   1489635[m
-[m[0;32mclassification_tree/4/real_time            [m[0;33m      2685 ns       2678 ns [m[0;36m    262581[m
-[m[0;32mclassification_tree/8/real_time            [m[0;33m      9988 ns      10048 ns [m[0;36m     69974[m
-[m[0;32mclassification_tree/16/real_time           [m[0;33m     83451 ns      83805 ns [m[0;36m      8390[m
-[m[0;32mclassification_tree/32/real_time           [m[0;33m    745491 ns     749600 ns [m[0;36m       938[m
-[m[0;32mclassification_tree/64/real_time           [m[0;33m   6624720 ns    6696429 ns [m[0;36m       105[m
-[m[0;34mclassification_tree_BigO                   [m[0;33m     25.23 N^3      25.50 N^3 [m
-[m[0;34mclassification_tree_RMS                    [m[0;33m         3 %          3 % [m
-[m[0;32mcost_complexity_prune/2                    [m[0;33m      1167 ns       1032 ns [m[0;36m    560000[m
-[m[0;32mcost_complexity_prune/4                    [m[0;33m      1812 ns       1674 ns [m[0;36m    373333[m
-[m[0;32mcost_complexity_prune/8                    [m[0;33m      6765 ns       7344 ns [m[0;36m    100000[m
-[m[0;32mcost_complexity_prune/16                   [m[0;33m     44189 ns      44643 ns [m[0;36m     11200[m
-[m[0;32mcost_complexity_prune/32                   [m[0;33m    579477 ns     627790 ns [m[0;36m      1120[m
-[m[0;32mcost_complexity_prune/64                   [m[0;33m  14887347 ns   14583333 ns [m[0;36m        45[m
-[m[0;34mcost_complexity_prune_BigO                 [m[0;33m     56.18 N^3      55.06 N^3 [m
-[m[0;34mcost_complexity_prune_RMS                  [m[0;33m        20 %         19 % [m
-[m[0;32mtree_copy/2                                [m[0;33m       152 ns        150 ns [m[0;36m   4480000[m
-[m[0;32mtree_copy/4                                [m[0;33m       785 ns        785 ns [m[0;36m    896000[m
-[m[0;32mtree_copy/8                                [m[0;33m      3392 ns       3442 ns [m[0;36m    213333[m
-[m[0;32mtree_copy/16                               [m[0;33m     16655 ns      16741 ns [m[0;36m     44800[m
-[m[0;32mtree_copy/32                               [m[0;33m     76146 ns      76730 ns [m[0;36m      8960[m
-[m[0;32mtree_copy/64                               [m[0;33m    334265 ns     329641 ns [m[0;36m      2133[m
-[m[0;34mtree_copy_BigO                             [m[0;33m     81.12 N^2      80.09 N^2 [m
-[m[0;34mtree_copy_RMS                              [m[0;33m         5 %          4 % [m
-[m[0;32mcalc_test_error/100                        [m[0;33m      3337 ns       3369 ns [m[0;36m    213333[m
-[m[0;32mcalc_test_error/1000                       [m[0;33m     23446 ns      23542 ns [m[0;36m     29867[m
-[m[0;32mcalc_test_error/10000                      [m[0;33m    234111 ns     235395 ns [m[0;36m      2987[m
-[m[0;32mcalc_test_error/100000                     [m[0;33m   2358714 ns    2351589 ns [m[0;36m       299[m
-[m[0;32mcalc_test_error/1000000                    [m[0;33m  39477094 ns   39522059 ns [m[0;36m        17[m
-[m[0;34mcalc_test_error_BigO                       [m[0;33m      1.98 NlgN       1.98 NlgN [m
-[m[0;34mcalc_test_error_RMS                        [m[0;33m         5 %          5 % [m
+--------------------------------------------------------------------------------------------
+Benchmark                                                     Time           CPU Iterations
+--------------------------------------------------------------------------------------------
+[0;32msse/10                                               [m[0;33m         9 ns          9 ns [m[0;36m  74666667[m
+[m[0;32msse/100                                              [m[0;33m       146 ns        146 ns [m[0;36m   4480000[m
+[m[0;32msse/1000                                             [m[0;33m      1625 ns       1639 ns [m[0;36m    448000[m
+[m[0;32msse/10000                                            [m[0;33m     16379 ns      16497 ns [m[0;36m     40727[m
+[m[0;32msse/100000                                           [m[0;33m    165514 ns     167411 ns [m[0;36m      4480[m
+[m[0;34msse_BigO                                             [m[0;33m      1.65 N       1.67 N [m
+[m[0;34msse_RMS                                              [m[0;33m         0 %          0 % [m
+[m[0;32msse_and_mean/10                                      [m[0;33m         9 ns          9 ns [m[0;36m  74666667[m
+[m[0;32msse_and_mean/100                                     [m[0;33m       146 ns        146 ns [m[0;36m   4480000[m
+[m[0;32msse_and_mean/1000                                    [m[0;33m      1630 ns       1639 ns [m[0;36m    448000[m
+[m[0;32msse_and_mean/10000                                   [m[0;33m     16403 ns      16497 ns [m[0;36m     40727[m
+[m[0;32msse_and_mean/100000                                  [m[0;33m    164116 ns     164958 ns [m[0;36m      4073[m
+[m[0;34msse_and_mean_BigO                                    [m[0;33m      1.64 N       1.65 N [m
+[m[0;34msse_and_mean_RMS                                     [m[0;33m         0 %          0 % [m
+[m[0;32mgini_index<double>/10                                [m[0;33m        24 ns         24 ns [m[0;36m  29866667[m
+[m[0;32mgini_index<double>/100                               [m[0;33m        82 ns         82 ns [m[0;36m   8960000[m
+[m[0;32mgini_index<double>/1000                              [m[0;33m       652 ns        656 ns [m[0;36m   1120000[m
+[m[0;32mgini_index<double>/10000                             [m[0;33m      6445 ns       6557 ns [m[0;36m    112000[m
+[m[0;32mgini_index<double>/100000                            [m[0;33m     64408 ns      64174 ns [m[0;36m     11200[m
+[m[0;34mgini_index<double>_BigO                              [m[0;33m      0.64 N       0.64 N [m
+[m[0;34mgini_index<double>_RMS                               [m[0;33m         0 %          0 % [m
+[m[0;32mgini_index<int>/10                                   [m[0;33m        19 ns         19 ns [m[0;36m  34461538[m
+[m[0;32mgini_index<int>/100                                  [m[0;33m        54 ns         55 ns [m[0;36m  10000000[m
+[m[0;32mgini_index<int>/1000                                 [m[0;33m       364 ns        360 ns [m[0;36m   1866667[m
+[m[0;32mgini_index<int>/10000                                [m[0;33m      3517 ns       3530 ns [m[0;36m    203636[m
+[m[0;32mgini_index<int>/100000                               [m[0;33m     35034 ns      35295 ns [m[0;36m     20364[m
+[m[0;34mgini_index<int>_BigO                                 [m[0;33m      0.35 N       0.35 N [m
+[m[0;34mgini_index<int>_RMS                                  [m[0;33m         0 %          0 % [m
+[m[0;32mgini_index_and_mode<double>/10                       [m[0;33m        26 ns         26 ns [m[0;36m  28000000[m
+[m[0;32mgini_index_and_mode<double>/100                      [m[0;33m        84 ns         84 ns [m[0;36m   8960000[m
+[m[0;32mgini_index_and_mode<double>/1000                     [m[0;33m       646 ns        642 ns [m[0;36m   1120000[m
+[m[0;32mgini_index_and_mode<double>/10000                    [m[0;33m      6331 ns       6278 ns [m[0;36m    112000[m
+[m[0;32mgini_index_and_mode<double>/100000                   [m[0;33m     63190 ns      62779 ns [m[0;36m     11200[m
+[m[0;34mgini_index_and_mode<double>_BigO                     [m[0;33m      0.63 N       0.63 N [m
+[m[0;34mgini_index_and_mode<double>_RMS                      [m[0;33m         0 %          0 % [m
+[m[0;32mgini_index_and_mode<int>/10                          [m[0;33m        23 ns         24 ns [m[0;36m  29866667[m
+[m[0;32mgini_index_and_mode<int>/100                         [m[0;33m        57 ns         57 ns [m[0;36m  11200000[m
+[m[0;32mgini_index_and_mode<int>/1000                        [m[0;33m       366 ns        360 ns [m[0;36m   1866667[m
+[m[0;32mgini_index_and_mode<int>/10000                       [m[0;33m      3529 ns       3530 ns [m[0;36m    203636[m
+[m[0;32mgini_index_and_mode<int>/100000                      [m[0;33m     35025 ns      35296 ns [m[0;36m     19478[m
+[m[0;34mgini_index_and_mode<int>_BigO                        [m[0;33m      0.35 N       0.35 N [m
+[m[0;34mgini_index_and_mode<int>_RMS                         [m[0;33m         0 %          0 % [m
+[m[0;32munivariate_linear_regression/10                      [m[0;33m        37 ns         37 ns [m[0;36m  18666667[m
+[m[0;32munivariate_linear_regression/100                     [m[0;33m        91 ns         90 ns [m[0;36m   7466667[m
+[m[0;32munivariate_linear_regression/1000                    [m[0;33m       652 ns        641 ns [m[0;36m   1000000[m
+[m[0;32munivariate_linear_regression/10000                   [m[0;33m      8463 ns       8545 ns [m[0;36m     89600[m
+[m[0;34munivariate_linear_regression_BigO                    [m[0;33m      0.06 NlgN       0.06 NlgN [m
+[m[0;34munivariate_linear_regression_RMS                     [m[0;33m         1 %          1 % [m
+[m[0;32munivariate_linear_regression_regular/10              [m[0;33m        30 ns         30 ns [m[0;36m  23578947[m
+[m[0;32munivariate_linear_regression_regular/100             [m[0;33m        67 ns         68 ns [m[0;36m  11200000[m
+[m[0;32munivariate_linear_regression_regular/1000            [m[0;33m       461 ns        465 ns [m[0;36m   1544828[m
+[m[0;32munivariate_linear_regression_regular/10000           [m[0;33m      5078 ns       5022 ns [m[0;36m    112000[m
+[m[0;34munivariate_linear_regression_regular_BigO            [m[0;33m      0.51 N       0.50 N [m
+[m[0;34munivariate_linear_regression_regular_RMS             [m[0;33m         2 %          2 % [m
+[m[0;32munivariate_linear_regression_without_intercept/10    [m[0;33m        23 ns         23 ns [m[0;36m  32000000[m
+[m[0;32munivariate_linear_regression_without_intercept/100   [m[0;33m        56 ns         54 ns [m[0;36m  11200000[m
+[m[0;32munivariate_linear_regression_without_intercept/1000  [m[0;33m       370 ns        368 ns [m[0;36m   1866667[m
+[m[0;32munivariate_linear_regression_without_intercept/10000 [m[0;33m      6302 ns       6278 ns [m[0;36m    112000[m
+[m[0;34munivariate_linear_regression_without_intercept_BigO  [m[0;33m      0.05 NlgN       0.05 NlgN [m
+[m[0;34munivariate_linear_regression_without_intercept_RMS   [m[0;33m         3 %          3 % [m
+[m[0;32mmultivariate_linear_regression_1d/10                 [m[0;33m       301 ns        305 ns [m[0;36m   2357895[m
+[m[0;32mmultivariate_linear_regression_1d/100                [m[0;33m       700 ns        698 ns [m[0;36m    896000[m
+[m[0;32mmultivariate_linear_regression_1d/1000               [m[0;33m      4097 ns       4081 ns [m[0;36m    172308[m
+[m[0;32mmultivariate_linear_regression_1d/10000              [m[0;33m     39418 ns      39237 ns [m[0;36m     17920[m
+[m[0;34mmultivariate_linear_regression_1d_BigO               [m[0;33m      3.94 N       3.93 N [m
+[m[0;34mmultivariate_linear_regression_1d_RMS                [m[0;33m         2 %          2 % [m
+[m[0;32mmultivariate_linear_regression_2d/10                 [m[0;33m       370 ns        369 ns [m[0;36m   1947826[m
+[m[0;32mmultivariate_linear_regression_2d/100                [m[0;33m      1067 ns       1074 ns [m[0;36m    640000[m
+[m[0;32mmultivariate_linear_regression_2d/1000               [m[0;33m      7270 ns       7150 ns [m[0;36m     89600[m
+[m[0;32mmultivariate_linear_regression_2d/10000              [m[0;33m     70772 ns      69754 ns [m[0;36m      8960[m
+[m[0;34mmultivariate_linear_regression_2d_BigO               [m[0;33m      7.08 N       6.98 N [m
+[m[0;34mmultivariate_linear_regression_2d_RMS                [m[0;33m         1 %          1 % [m
+[m[0;32mmultivariate_linear_regression_5d/10                 [m[0;33m       708 ns        711 ns [m[0;36m   1120000[m
+[m[0;32mmultivariate_linear_regression_5d/100                [m[0;33m      1525 ns       1538 ns [m[0;36m    497778[m
+[m[0;32mmultivariate_linear_regression_5d/1000               [m[0;33m      9356 ns       9208 ns [m[0;36m     74667[m
+[m[0;32mmultivariate_linear_regression_5d/10000              [m[0;33m     94898 ns      94164 ns [m[0;36m      7467[m
+[m[0;34mmultivariate_linear_regression_5d_BigO               [m[0;33m      9.49 N       9.42 N [m
+[m[0;34mmultivariate_linear_regression_5d_RMS                [m[0;33m         2 %          2 % [m
+[m[0;32mmultivariate_linear_regression_10d/100               [m[0;33m      3230 ns       3278 ns [m[0;36m    224000[m
+[m[0;32mmultivariate_linear_regression_10d/1000              [m[0;33m     18890 ns      18834 ns [m[0;36m     37333[m
+[m[0;32mmultivariate_linear_regression_10d/10000             [m[0;33m    181675 ns     184139 ns [m[0;36m      4073[m
+[m[0;34mmultivariate_linear_regression_10d_BigO              [m[0;33m     18.18 N      18.42 N [m
+[m[0;34mmultivariate_linear_regression_10d_RMS               [m[0;33m         1 %          1 % [m
+[m[0;32mmultivariate_linear_regression_50d/100               [m[0;33m     46635 ns      47085 ns [m[0;36m     14933[m
+[m[0;32mmultivariate_linear_regression_50d/1000              [m[0;33m    158407 ns     156948 ns [m[0;36m      4480[m
+[m[0;32mmultivariate_linear_regression_50d/10000             [m[0;33m   1261333 ns    1255580 ns [m[0;36m       560[m
+[m[0;34mmultivariate_linear_regression_50d_BigO              [m[0;33m    126.49 N     125.90 N [m
+[m[0;34mmultivariate_linear_regression_50d_RMS               [m[0;33m         6 %          6 % [m
+[m[0;32mem_mousie/100                                        [m[0;33m   1089986 ns    1098633 ns [m[0;36m       640[m
+[m[0;32mem_mousie/1000                                       [m[0;33m  42233212 ns   42279412 ns [m[0;36m        17[m
+[m[0;32mem_mousie/10000                                      [m[0;33m  99538167 ns   98958333 ns [m[0;36m         6[m
+[m[0;32mem_mousie/100000                                     [m[0;33m4744692000 ns 4750000000 ns [m[0;36m         1[m
+[m[0;34mem_mousie_BigO                                       [m[0;33m      0.47 N^2       0.48 N^2 [m
+[m[0;34mem_mousie_RMS                                        [m[0;33m         3 %          3 % [m
+[m[0;32munivariate_regression_tree/2/real_time               [m[0;33m       790 ns        793 ns [m[0;36m    886960[m
+[m[0;32munivariate_regression_tree/4/real_time               [m[0;33m      2777 ns       2792 ns [m[0;36m    251869[m
+[m[0;32munivariate_regression_tree/8/real_time               [m[0;33m     18706 ns      18819 ns [m[0;36m     37362[m
+[m[0;32munivariate_regression_tree/16/real_time              [m[0;33m    151903 ns     151398 ns [m[0;36m      4541[m
+[m[0;32munivariate_regression_tree/32/real_time              [m[0;33m   1339581 ns    1344407 ns [m[0;36m       523[m
+[m[0;32munivariate_regression_tree/64/real_time              [m[0;33m  13776867 ns   13822115 ns [m[0;36m        52[m
+[m[0;34munivariate_regression_tree_BigO                      [m[0;33m     52.37 N^3      52.54 N^3 [m
+[m[0;34munivariate_regression_tree_RMS                       [m[0;33m         6 %          6 % [m
+[m[0;32mclassification_tree/2/real_time                      [m[0;33m       480 ns        475 ns [m[0;36m   1479463[m
+[m[0;32mclassification_tree/4/real_time                      [m[0;33m      2726 ns       2717 ns [m[0;36m    258751[m
+[m[0;32mclassification_tree/8/real_time                      [m[0;33m     10159 ns      10029 ns [m[0;36m     68552[m
+[m[0;32mclassification_tree/16/real_time                     [m[0;33m     85373 ns      83831 ns [m[0;36m      8201[m
+[m[0;32mclassification_tree/32/real_time                     [m[0;33m    749510 ns     750400 ns [m[0;36m       937[m
+[m[0;32mclassification_tree/64/real_time                     [m[0;33m   6643087 ns    6696429 ns [m[0;36m       105[m
+[m[0;34mclassification_tree_BigO                             [m[0;33m     25.30 N^3      25.50 N^3 [m
+[m[0;34mclassification_tree_RMS                              [m[0;33m         3 %          3 % [m
+[m[0;32mcost_complexity_prune/2                              [m[0;33m      1165 ns       1151 ns [m[0;36m    746667[m
+[m[0;32mcost_complexity_prune/4                              [m[0;33m      1784 ns       1660 ns [m[0;36m    320000[m
+[m[0;32mcost_complexity_prune/8                              [m[0;33m      6966 ns       6975 ns [m[0;36m    112000[m
+[m[0;32mcost_complexity_prune/16                             [m[0;33m     42929 ns      44922 ns [m[0;36m     19478[m
+[m[0;32mcost_complexity_prune/32                             [m[0;33m    580663 ns     571987 ns [m[0;36m      1120[m
+[m[0;32mcost_complexity_prune/64                             [m[0;33m  14852387 ns   14583333 ns [m[0;36m        45[m
+[m[0;34mcost_complexity_prune_BigO                           [m[0;33m     56.05 N^3      55.03 N^3 [m
+[m[0;34mcost_complexity_prune_RMS                            [m[0;33m        20 %         20 % [m
+[m[0;32mtree_copy/2                                          [m[0;33m       143 ns        143 ns [m[0;36m   4480000[m
+[m[0;32mtree_copy/4                                          [m[0;33m       795 ns        785 ns [m[0;36m    896000[m
+[m[0;32mtree_copy/8                                          [m[0;33m      3495 ns       3530 ns [m[0;36m    203636[m
+[m[0;32mtree_copy/16                                         [m[0;33m     16792 ns      16497 ns [m[0;36m     40727[m
+[m[0;32mtree_copy/32                                         [m[0;33m     77405 ns      78474 ns [m[0;36m      8960[m
+[m[0;32mtree_copy/64                                         [m[0;33m    337847 ns     337672 ns [m[0;36m      2036[m
+[m[0;34mtree_copy_BigO                                       [m[0;33m     82.01 N^2      82.03 N^2 [m
+[m[0;34mtree_copy_RMS                                        [m[0;33m         5 %          4 % [m
+[m[0;32mcalc_test_error/100                                  [m[0;33m      3354 ns       3376 ns [m[0;36m    203636[m
+[m[0;32mcalc_test_error/1000                                 [m[0;33m     23427 ns      23542 ns [m[0;36m     29867[m
+[m[0;32mcalc_test_error/10000                                [m[0;33m    234967 ns     235395 ns [m[0;36m      2987[m
+[m[0;32mcalc_test_error/100000                               [m[0;33m   2371508 ns    2403846 ns [m[0;36m       299[m
+[m[0;32mcalc_test_error/1000000                              [m[0;33m  39126767 ns   39062500 ns [m[0;36m        18[m
+[m[0;34mcalc_test_error_BigO                                 [m[0;33m      1.96 NlgN       1.96 NlgN [m
+[m[0;34mcalc_test_error_RMS                                  [m[0;33m         5 %          5 % [m
 [m
