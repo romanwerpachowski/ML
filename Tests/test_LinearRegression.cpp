@@ -433,15 +433,13 @@ TEST(LinearRegression, recursive_multivariate_ols_many_samples)
 	RecursiveMultivariateOLS rmols;
 	const unsigned int total_n = std::accumulate(sample_sizes.begin(), sample_sizes.end(), 0u);
 	unsigned int cumulative_n = 0;
-	Eigen::MatrixXd all_X(d, total_n);
-	Eigen::VectorXd all_y(total_n);
+	const Eigen::MatrixXd all_X = Eigen::MatrixXd::Random(d, total_n);
+	const Eigen::VectorXd all_y = all_X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(total_n);
 	unsigned int sample_idx = 0;
 	for (const auto n : sample_sizes) {
-		const Eigen::MatrixXd X(Eigen::MatrixXd::Random(d, n));		
-		const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
+		const auto X = all_X.block(0, cumulative_n, d, n);
+		const auto y = all_y.segment(cumulative_n, n);
 		rmols.update(X, y);
-		all_X.block(0, cumulative_n, d, n) = X;
-		all_y.segment(cumulative_n, n) = y;
 		cumulative_n += n;
 		const auto cumulative_X = all_X.leftCols(cumulative_n);
 		const auto cumulative_y = all_y.head(cumulative_n);		
@@ -449,6 +447,25 @@ TEST(LinearRegression, recursive_multivariate_ols_many_samples)
 		const auto beta_error = rmols.beta() - ols_beta;
 		ASSERT_NEAR(0, beta_error.norm(), 2e-14) << sample_idx << ":\n" << beta_error << "\nOLS beta:\n" << ols_beta << "\nRecursive OLS beta:\n" << rmols.beta();
 		++sample_idx;
+	}
+}
+
+TEST(LinearRegression, recursive_multivariate_ols_one_by_one)
+{
+	constexpr unsigned int d = 10;
+	constexpr unsigned int n_vectors = 200;
+	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d));	
+	const unsigned int total_n = d + n_vectors;
+	const Eigen::MatrixXd all_X = Eigen::MatrixXd::Random(d, total_n);
+	const Eigen::VectorXd all_y = all_X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(total_n);
+	RecursiveMultivariateOLS rmols(all_X.leftCols(d), all_y.head(d));
+	for (unsigned int i = d; i < total_n; ++i) {
+		rmols.update(all_X.block(0, i, d, 1), all_y.segment(i, 1));
+		const auto cumulative_X = all_X.leftCols(i + 1);
+		const auto cumulative_y = all_y.head(i + 1);
+		const auto ols_beta = multivariate(cumulative_X, cumulative_y).beta;
+		const auto beta_error = rmols.beta() - ols_beta;
+		ASSERT_NEAR(0, beta_error.norm(), 1e-7) << i << ":\n" << beta_error << "\nOLS beta:\n" << ols_beta << "\nRecursive OLS beta:\n" << rmols.beta();
 	}
 }
 
