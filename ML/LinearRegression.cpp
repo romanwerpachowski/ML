@@ -211,22 +211,21 @@ namespace ml
 				K_.noalias() = P_ * X;
 				assert(K_.rows() == d_);
 				assert(K_.cols() == n_i);
-				XXTMatrixDecomposition ldlt; // N_i x N_i decomposition.
-				Eigen::MatrixXd W(X.transpose() * K_);
-				assert(W.rows() == n_i);
-				assert(W.cols() == n_i);
-				W += Eigen::MatrixXd::Identity(n_i, n_i);
-				ldlt.compute(W);
-				Eigen::MatrixXd V(ldlt.solve(K_.transpose()));
-				assert(V.rows() == n_i);
-				assert(V.cols() == d_);
-				P_.noalias() -= K_ * V;
+				W_.noalias() = X.transpose() * K_;
+				assert(W_.rows() == n_i);
+				assert(W_.cols() == n_i);
+				W_ += Eigen::MatrixXd::Identity(n_i, n_i);
+				helper_decomp_.compute(W_);
+				V_ = helper_decomp_.solve(K_.transpose());
+				assert(V_.rows() == n_i);
+				assert(V_.cols() == d_);
+				P_.noalias() -= K_ * V_;
 				// Update beta.
 				K_.noalias() = P_ * X;
 				assert(K_.rows() == d_);
 				assert(K_.cols() == n_i);
-				const Eigen::VectorXd r(y - X.transpose() * beta_);
-				beta_ += K_ * r;
+				residuals_ = y - X.transpose() * beta_;
+				beta_ += K_ * residuals_;
 				n_ += n_i;
 			}
 		}

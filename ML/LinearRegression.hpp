@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <Eigen/Cholesky>
 #include <Eigen/Core>
 #include "dll.hpp"
 
@@ -148,9 +149,13 @@ namespace ml
 				return beta_;
 			}
 		private:			
+			Eigen::LDLT<Eigen::MatrixXd> helper_decomp_; /**< N_i x N_i decomposition. */
 			Eigen::MatrixXd P_; /**< D x D information matrix, equal to (X_1 * X_1^T + X_2 * X_2 + ...)^-1. */
 			Eigen::MatrixXd K_; /**< D x N_i helper matrix. */
+			Eigen::MatrixXd W_; /**< N_i x N_i helper matrix. */
+			Eigen::MatrixXd V_; /**< N_i x D helper matrix. */
 			Eigen::VectorXd beta_; /**< Current estimate of beta. */
+			Eigen::VectorXd residuals_; /**< Helper vector w/ size N_i. */
 			unsigned int n_; /**< Number of data points seen so far. */			
 			unsigned int d_; /**< Dimension of each x data point. */
 
