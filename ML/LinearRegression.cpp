@@ -232,11 +232,10 @@ namespace ml
 
 		void RecursiveMultivariateOLS::initialise(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y)
 		{			
-			XXTMatrixDecomposition ldlt; // D x D decomposition.
-			beta_ = calculate_XXt_beta(X, y, ldlt, true);
+			beta_ = calculate_XXt_beta(X, y, helper_decomp_, true);
 			d_ = static_cast<unsigned int>(X.rows());
 			n_ = static_cast<unsigned int>(X.cols());
-			P_ = ldlt.solve(Eigen::MatrixXd::Identity(d_, d_));
+			P_ = helper_decomp_.solve(Eigen::MatrixXd::Identity(d_, d_));
 		}
 	}
 }
