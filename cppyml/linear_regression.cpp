@@ -134,7 +134,7 @@ R2 coefficient is calculated w/r to a model returning average Y, and is equal to
 
 Args:
 	x0: First X value.
-	dx: X increment.
+	dx: Positive X increment.
 	y: Y vector with length not less than 2.
 
 Returns:

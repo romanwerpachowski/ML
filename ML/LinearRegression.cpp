@@ -86,6 +86,9 @@ namespace ml
 
 		UnivariateOLSResult univariate(const double x0, const double dx, const Eigen::Ref<const Eigen::VectorXd> y)
 		{
+			if (dx <= 0) {
+				throw std::domain_error("dx must be positive");
+			}
 			const auto n = static_cast<unsigned int>(y.size());
 			if (n < 2) {
 				throw std::invalid_argument("Need at least 2 points for regresssion");

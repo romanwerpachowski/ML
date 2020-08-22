@@ -63,9 +63,10 @@ namespace ml
 			R2 = 1 - \sum_{i=1}^n (y_i - hat{y}_i)^2 / \sum_{i=1}^n (y_i - avg(Y))^2.
 
 		@param x0 First X value.
-		@param dx X increment.
+		@param dx Positive X increment.
 		@param y Y vector.
-		@throw std::invalid_argument If y.size() is less than 2.
+		@throw std::invalid_argument If y.size() < 2.
+		@throw std::domain_error If dx <= 0.
 		*/
 		DLL_DECLSPEC UnivariateOLSResult univariate(double x0, double dx, Eigen::Ref<const Eigen::VectorXd> y);
 

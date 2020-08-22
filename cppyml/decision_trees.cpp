@@ -75,11 +75,12 @@ Args:
 	y: Dependent variable (vector) with length N.
 	max_split_levels: Maximum number of split nodes on the way to any leaf node.
 	min_split_size: Minimum sample size which can be split (at least 2).
-	alphas: Candidate alphas for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used. Defaults to [1E-6, 1E-5, ..., 10, 100].
+	alphas: Candidate alphas (non-negative) for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used. Defaults to [1E-6, 1E-5, ..., 10, 100].
 	num_folds: Number of folds for cross-validation. Ignored if cross-validation is not done.
 
 Returns:
-	Tuple of: trained decision tree, chosen alpha (NaN if no pruning was done) and minimum cross-validation test error (NaN if no cross-validation was done).)");
+	Tuple of: trained decision tree, chosen alpha (NaN if no pruning was done) and minimum cross-validation test error (NaN if no cross-validation was done).
+)");
 
 	m_dec_trees.def("classification_tree", &ml::DecisionTrees::classification_tree_auto_prune_row_major, py::arg("X"),
 		py::arg("y"), py::arg("max_split_levels") = DEFAULT_MAX_SPLIT_LEVELS, py::arg("min_split_size") = DEFAULT_MIN_SPLIT_SIZE, py::arg("alphas") = DEFAULT_ALPHAS, py::arg("num_folds") = DEFAULT_NUM_FOLDS,
@@ -90,11 +91,12 @@ Args:
 	y: Dependent variable (vector) with length N.
 	max_split_levels: Maximum number of split nodes on the way to any leaf node.
 	min_split_size: Minimum sample size which can be split (at least 2).
-	alphas: Candidate alphas for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used. Defaults to [1E-6, 1E-5, ..., 10, 100].
+	alphas: Candidate alphas (non-negative) for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used. Defaults to [1E-6, 1E-5, ..., 10, 100].
 	num_folds: Number of folds for cross-validation. Ignored if cross-validation is not done.
 
 Returns:
-	Tuple of: trained decision tree, chosen alpha (NaN if no pruning was done) and minimum cross-validation test error (NaN if no cross-validation was done).)");
+	Tuple of: trained decision tree, chosen alpha (NaN if no pruning was done) and minimum cross-validation test error (NaN if no cross-validation was done).
+)");
 
 	m_dec_trees.def("univariate_regression_tree_mean_squared_error", &ml::DecisionTrees::univariate_regression_tree_mean_squared_error_row_major, py::arg("tree"), py::arg("X"), py::arg("y"),
 		R"(Calculates univariate regression tree mean squared error on (X, y) data.
@@ -105,7 +107,8 @@ Args:
 	y: Dependent variable (vector) with length N.
 
 Returns:
-	Mean squared error.)");
+	Mean squared error.
+)");
 
 	m_dec_trees.def("classification_tree_accuracy", &ml::DecisionTrees::classification_tree_accuracy_row_major, py::arg("tree"), py::arg("X"), py::arg("y"),
 		R"(Calculates classification tree accuracy on (X, y) data.
@@ -116,5 +119,6 @@ Args:
 	y: Dependent variable (vector) with length N.
 
 Returns:
-	Classification accuracy.)");
+	Classification accuracy.
+)");
 }

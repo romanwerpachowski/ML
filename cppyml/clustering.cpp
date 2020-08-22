@@ -75,7 +75,8 @@ Args:
 	data: A 2D array with data points in rows.
 
 Returns:
-	True if EM algorithm converged.)"
+	True if EM algorithm converged.
+)"
 		)
 		.def_property_readonly("number_components", &ml::EMPy::number_components, "Number of Gaussian components.")
 		.def_property_readonly("means", &ml::EMPy::means, "Fitted means.")
