@@ -125,7 +125,7 @@ namespace ml
 			*/
 			DLL_DECLSPEC RecursiveMultivariateOLS(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
-			/** Update the beta estimate with a new sample.
+			/** Updates the beta estimate with a new sample.
 			@param X D x N matrix of X values, with data points in columns.
 			@param y Y vector with length N.
 			@throw std::invalid_argument If (X, y) is the first sample (i.e., n() == 0) and X.cols() < X.rows(), or y.size() != X.cols().

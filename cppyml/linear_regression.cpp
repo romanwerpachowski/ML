@@ -40,7 +40,6 @@ namespace ml
 		static MultivariateOLSResultRowMajor multivariate_row_major(const Eigen::Ref<const MatrixXdR> X, const Eigen::Ref<const Eigen::VectorXd> y, bool add_ones)
 		{
 			Eigen::Ref<const Eigen::MatrixXd> XT = X.transpose();
-			assert(XT.data() == X.data()); // No copying.
 			if (!add_ones) {
 				return MultivariateOLSResultRowMajor(multivariate(XT, y));
 			}
@@ -49,6 +48,24 @@ namespace ml
 				return MultivariateOLSResultRowMajor(multivariate(XT_with_ones, y));
 			}			
 		}
+
+		/** Version of RecursiveMultivariateOLS taking X_i with row-major order. */
+		class RecursiveMultivariateOLSRowMajor : public RecursiveMultivariateOLS
+		{
+		public:
+			RecursiveMultivariateOLSRowMajor()
+				: RecursiveMultivariateOLS()
+			{}
+
+			RecursiveMultivariateOLSRowMajor(Eigen::Ref<const MatrixXdR> X, Eigen::Ref<const Eigen::VectorXd> y)
+				: RecursiveMultivariateOLS(X.transpose(), y)
+			{}
+
+			void update(Eigen::Ref<const MatrixXdR> X, Eigen::Ref<const Eigen::VectorXd> y)
+			{
+				RecursiveMultivariateOLS::update(X.transpose(), y);
+			}
+		};
 	}	
 }
 
@@ -169,4 +186,37 @@ Args:
 Returns:
 	Instance of `MultivariateOLSResult`.
 )");
+
+	py::class_ <ml::LinearRegression::RecursiveMultivariateOLSRowMajor>(m_lin_reg, "RecursiveMultivariateOLS")
+		.def(py::init<>(), "Initialises without data.")
+		.def(py::init<Eigen::Ref<const MatrixXdR>, Eigen::Ref<const Eigen::VectorXd>>(),
+			py::arg("X"), py::arg("y"),
+			R"(Initialises with the first sample and calculates the first beta estimate.
+
+Args:
+	X: N x D matrix of X values, with data points in rows and N >= D.
+	y: Y vector with length N.
+)")
+		.def("update", &ml::LinearRegression::RecursiveMultivariateOLSRowMajor::update,
+			py::arg("X"), py::arg("y"),
+		R"(Updates the beta estimate with a new sample.
+
+Args:
+	X: N x D matrix of X values, with data points in rows.
+	y: Y vector with length N.
+
+Throws:
+	ValueError: If n == 0 (i.e., (X, y) is the first sample) and N < D.
+)")
+		.def_property_readonly("n", &ml::LinearRegression::RecursiveMultivariateOLSRowMajor::n, "Number of data points seen so far.")
+		.def_property_readonly("d", &ml::LinearRegression::RecursiveMultivariateOLSRowMajor::d, "Dimension of data points. If n == 0, returs 0.")
+		.def_property_readonly("beta", &ml::LinearRegression::RecursiveMultivariateOLSRowMajor::beta, "Current beta estimate. If n == 0, returns an empty array.")
+		.doc() = R"(Given a stream of pairs (X_i, y_i), updates the least-squares estimate for beta solving the equations
+
+		y_0 = X_0^T * beta + e_0
+		y_1 = X_1^T * beta + e_1
+		...
+
+		Based on https://cpb-us-w2.wpmucdn.com/sites.gatech.edu/dist/2/436/files/2017/07/22-notes-6250-f16.pdf
+)";
 }

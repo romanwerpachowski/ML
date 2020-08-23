@@ -79,7 +79,7 @@ setup(
     author_email="roman.werpachowski@gmail.com",    
     license="GPL-3.0",
     keywords="machine-learning ML extension algorithms numerical optimised",   
-    version="0.1.1",
+    version="0.1.2",
     description="Efficient implementations of selected ML algorithms for Python.",
     long_description=load_readme(),
     long_description_content_type="text/markdown",

@@ -1,4 +1,3 @@
-#include <cassert>
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 #include "ML/Clustering.hpp"
@@ -20,9 +19,7 @@ namespace ml
 		*/
 		bool fit_row_major(Eigen::Ref<const MatrixXdR> data)
 		{
-			Eigen::Ref<const Eigen::MatrixXd> dataT = data.transpose();
-			assert(dataT.data() == data.data()); // No copying.
-			return fit(dataT);
+			return fit(data.transpose());
 		}
 	};
 }
