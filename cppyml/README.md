@@ -6,7 +6,13 @@ Optmised Python extension for machine learning based on the [ML](https://github.
 
 ### Linux
 
-Build from source using `SCons` and install using `python setup.py install`.
+Build from source using `SCons` and install using `python setup.py install`:
+
+```bash
+scons mode=release
+cd cppyml
+python setup.py install
+```
 
 ### Windows
 
