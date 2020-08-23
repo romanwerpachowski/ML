@@ -398,6 +398,7 @@ TEST(LinearRegression, recursive_multivariate_ols_no_data)
 {
 	RecursiveMultivariateOLS rmols;
 	ASSERT_EQ(0u, rmols.n());
+	ASSERT_EQ(0u, rmols.d());
 	ASSERT_EQ(0, rmols.beta().size());
 }
 

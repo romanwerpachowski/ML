@@ -132,7 +132,42 @@ class LinearRegressionTest(unittest.TestCase):
         lr = linear_model.LinearRegression(fit_intercept=False)  # Force lr not to add another column with 1's.
         lr.fit(X, y)
         np.testing.assert_array_almost_equal(result.beta, lr.coef_, decimal=14)
-        
+
+    def test_recursive_multivariate_ols_no_data(self):
+        rmols = linear_regression.RecursiveMultivariateOLS()
+        self.assertEqual(0, rmols.n)
+        self.assertEqual(0, rmols.d)
+        self.assertEqual(0, len(rmols.beta))
+
+    def test_recursive_multivariate_ols_errors_init(self):
+        with self.assertRaises(ValueError):
+            linear_regression.RecursiveMultivariateOLS(np.zeros((5, 10)), np.zeros(5))
+        with self.assertRaises(ValueError):
+            linear_regression.RecursiveMultivariateOLS(np.zeros((10, 10)), np.zeros(12))
+
+    def test_recursive_multivariate_ols_errors_update(self):
+        rmols = linear_regression.RecursiveMultivariateOLS()
+        with self.assertRaises(ValueError):
+            rmols.update(np.zeros((5, 10)), np.zeros(5))
+        with self.assertRaises(ValueError):
+            rmols.update(np.zeros((10, 10)), np.zeros(12))
+
+    def test_recursive_multivariate_ols_errors_one_sample(self):
+        n = 10
+        d = 3
+        X = np.random.randn(n, d)
+        true_beta = 0.5 - np.random.rand(d)
+        y = np.matmul(X, true_beta) + 0.1 * np.random.randn(n)
+        rmols1 = linear_regression.RecursiveMultivariateOLS()
+        rmols1.update(X, y)
+        self.assertEqual(n, rmols1.n)
+        self.assertEqual(d, rmols1.d)
+        rmols2 = linear_regression.RecursiveMultivariateOLS(X, y)
+        self.assertEqual(n, rmols2.n)
+        self.assertEqual(d, rmols2.d)
+        np.testing.assert_array_equal(rmols1.beta, rmols2.beta)
+        expected_beta = linear_regression.multivariate(X, y).beta
+        np.testing.assert_array_almost_equal(expected_beta, rmols1.beta, 16)        
 
 if __name__ == "__main__": 
     unittest.main()    
