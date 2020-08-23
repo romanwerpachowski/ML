@@ -6,7 +6,17 @@
 using namespace ml::LinearRegression;
 
 
-TEST(LinearRegression, univariate_errors)
+class LinearRegressionTest : public ::testing::Test
+{
+protected:
+	void SetUp() override
+	{
+		srand(42); // Eigen++ uses old RNG API.
+	}
+};
+
+
+TEST_F(LinearRegressionTest, univariate_errors)
 {
 	Eigen::VectorXd x(4);
 	Eigen::VectorXd y(3);
@@ -16,7 +26,7 @@ TEST(LinearRegression, univariate_errors)
 	ASSERT_THROW(univariate(x, y), std::invalid_argument);
 }
 
-TEST(LinearRegression, univariate_two_points)
+TEST_F(LinearRegressionTest, univariate_two_points)
 {
 	Eigen::Vector2d x(0.1, 0.2);
 	Eigen::Vector2d y(0.5, 0.3);
@@ -32,7 +42,7 @@ TEST(LinearRegression, univariate_two_points)
 	ASSERT_TRUE(std::isnan(result.cov_slope_intercept)) << result.cov_slope_intercept;
 }
 
-TEST(LinearRegression, univariate_two_points_regular)
+TEST_F(LinearRegressionTest, univariate_two_points_regular)
 {
 	Eigen::Vector2d y(0.5, 0.3);
 	const UnivariateOLSResult result = univariate(.1, .1, y);
@@ -47,7 +57,7 @@ TEST(LinearRegression, univariate_two_points_regular)
 	ASSERT_TRUE(std::isnan(result.cov_slope_intercept)) << result.cov_slope_intercept;
 }
 
-TEST(LinearRegression, univariate_high_noise)
+TEST_F(LinearRegressionTest, univariate_high_noise)
 {
 	const unsigned int n = 10000;
 	Eigen::VectorXd x(n);
@@ -72,7 +82,7 @@ TEST(LinearRegression, univariate_high_noise)
 	EXPECT_NEAR(expected_observation_variance, result.var_y, expected_observation_variance * 1e-3);
 }
 
-TEST(LinearRegression, univariate_high_noise_regular)
+TEST_F(LinearRegressionTest, univariate_high_noise_regular)
 {
 	const unsigned int n = 10000;
 	Eigen::VectorXd y(n);
@@ -96,7 +106,7 @@ TEST(LinearRegression, univariate_high_noise_regular)
 	EXPECT_NEAR(expected_observation_variance, result.var_y, expected_observation_variance * 1e-3);
 }
 
-TEST(LinearRegression, univariate_true_model)
+TEST_F(LinearRegressionTest, univariate_true_model)
 {
 	const double noise_std_dev = 0.2;
 	const double x_range = 5; // width of the X range
@@ -149,7 +159,7 @@ TEST(LinearRegression, univariate_true_model)
 	EXPECT_NEAR(covariance, result.cov_slope_intercept, 4e-7);
 }
 
-TEST(LinearRegression, univariate_true_model_regular)
+TEST_F(LinearRegressionTest, univariate_true_model_regular)
 {
 	const double noise_std_dev = 0.2;
 	const double x_range = 5; // width of the X range
@@ -199,7 +209,7 @@ TEST(LinearRegression, univariate_true_model_regular)
 	EXPECT_NEAR(covariance, result.cov_slope_intercept, 2e-6);
 }
 
-TEST(LinearRegression, univariate_without_intercept_errors)
+TEST_F(LinearRegressionTest, univariate_without_intercept_errors)
 {
 	Eigen::VectorXd x(4);
 	Eigen::VectorXd y(3);
@@ -209,7 +219,7 @@ TEST(LinearRegression, univariate_without_intercept_errors)
 	ASSERT_THROW(univariate_without_intercept(x, y), std::invalid_argument);
 }
 
-TEST(LinearRegression, univariate_without_intercept_one_point)
+TEST_F(LinearRegressionTest, univariate_without_intercept_one_point)
 {
 	Eigen::VectorXd x(1);
 	x << 0.5;
@@ -227,7 +237,7 @@ TEST(LinearRegression, univariate_without_intercept_one_point)
 	ASSERT_EQ(0, result.cov_slope_intercept);
 }
 
-TEST(LinearRegression, univariate_without_intercept_high_noise)
+TEST_F(LinearRegressionTest, univariate_without_intercept_high_noise)
 {
 	const unsigned int n = 10000;
 	Eigen::VectorXd x(n);
@@ -251,7 +261,7 @@ TEST(LinearRegression, univariate_without_intercept_high_noise)
 	EXPECT_NEAR(expected_observation_variance, result.var_y, expected_observation_variance * 1e-2);
 }
 
-TEST(LinearRegression, univariate_without_intercept_true_model)
+TEST_F(LinearRegressionTest, univariate_without_intercept_true_model)
 {
 	const double noise_std_dev = 0.2;
 	const double x_range = 5; // width of the X range
@@ -293,7 +303,7 @@ TEST(LinearRegression, univariate_without_intercept_true_model)
 	EXPECT_NEAR(slope_sse_and_mean.second, result.slope, 3e-3);
 }
 
-TEST(LinearRegression, multivariate_error)
+TEST_F(LinearRegressionTest, multivariate_error)
 {
 	Eigen::MatrixXd X(3, 10);
 	Eigen::VectorXd y(9);
@@ -302,7 +312,7 @@ TEST(LinearRegression, multivariate_error)
 	ASSERT_THROW(multivariate(X, y), std::invalid_argument);
 }
 
-TEST(LinearRegression, multivariate_exact_fit)
+TEST_F(LinearRegressionTest, multivariate_exact_fit)
 {
 	Eigen::MatrixXd X(2, 2);
 	X << 0.1, 0.2,
@@ -322,7 +332,7 @@ TEST(LinearRegression, multivariate_exact_fit)
 	}
 }
 
-TEST(LinearRegression, multivariate_true_model)
+TEST_F(LinearRegressionTest, multivariate_true_model)
 {
 	const double noise_std_dev = 0.2;
 	const double x_range = 5; // width of the X range
@@ -376,13 +386,13 @@ TEST(LinearRegression, multivariate_true_model)
 	}	
 }
 
-TEST(LinearRegression, add_ones_error)
+TEST_F(LinearRegressionTest, add_ones_error)
 {
 	Eigen::MatrixXd X(2, 0);
 	ASSERT_THROW(add_ones(X), std::invalid_argument);
 }
 
-TEST(LinearRegression, add_ones)
+TEST_F(LinearRegressionTest, add_ones)
 {
 	Eigen::MatrixXd X(0, 2);
 	Eigen::MatrixXd actual(add_ones(X));
@@ -394,7 +404,7 @@ TEST(LinearRegression, add_ones)
 	ASSERT_EQ(Eigen::MatrixXd::Ones(1, 2), actual.bottomRows(1));
 }
 
-TEST(LinearRegression, recursive_multivariate_ols_no_data)
+TEST_F(LinearRegressionTest, recursive_multivariate_ols_no_data)
 {
 	RecursiveMultivariateOLS rmols;
 	ASSERT_EQ(0u, rmols.n());
@@ -402,7 +412,7 @@ TEST(LinearRegression, recursive_multivariate_ols_no_data)
 	ASSERT_EQ(0, rmols.beta().size());
 }
 
-TEST(LinearRegression, recursive_multivariate_ols_one_sample)
+TEST_F(LinearRegressionTest, recursive_multivariate_ols_one_sample)
 {
 	constexpr unsigned int n = 10;
 	constexpr unsigned int d = 3;
@@ -420,13 +430,10 @@ TEST(LinearRegression, recursive_multivariate_ols_one_sample)
 	const auto expected_beta = multivariate(X, y).beta;
 	constexpr double eps1 = 1e-16;
 	ASSERT_NEAR(0, (expected_beta - rmols1.beta()).norm(), eps1) << rmols1.beta();
-	ASSERT_NEAR(0, (expected_beta - rmols2.beta()).norm(), eps1) << rmols2.beta();
-	constexpr double eps2 = 5e-2;
-	ASSERT_NEAR(0, (true_beta - rmols1.beta()).norm(), eps2) << rmols1.beta();
-	ASSERT_NEAR(0, (true_beta - rmols2.beta()).norm(), eps2) << rmols2.beta();
+	ASSERT_NEAR(0, (expected_beta - rmols2.beta()).norm(), eps1) << rmols2.beta();	
 }
 
-TEST(LinearRegression, recursive_multivariate_ols_many_samples)
+TEST_F(LinearRegressionTest, recursive_multivariate_ols_many_samples)
 {
 	constexpr unsigned int d = 10;
 	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d));
@@ -451,7 +458,7 @@ TEST(LinearRegression, recursive_multivariate_ols_many_samples)
 	}
 }
 
-TEST(LinearRegression, recursive_multivariate_ols_one_by_one)
+TEST_F(LinearRegressionTest, recursive_multivariate_ols_one_by_one)
 {
 	constexpr unsigned int d = 10;
 	constexpr unsigned int n_vectors = 200;
@@ -470,7 +477,7 @@ TEST(LinearRegression, recursive_multivariate_ols_one_by_one)
 	}
 }
 
-TEST(LinearRegression, recursive_multivariate_ols_errors)
+TEST_F(LinearRegressionTest, recursive_multivariate_ols_errors)
 {
 	Eigen::MatrixXd X(Eigen::MatrixXd::Random(10, 5));
 	Eigen::VectorXd y(Eigen::VectorXd::Random(5));

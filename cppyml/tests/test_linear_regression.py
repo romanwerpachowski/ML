@@ -167,7 +167,27 @@ class LinearRegressionTest(unittest.TestCase):
         self.assertEqual(d, rmols2.d)
         np.testing.assert_array_equal(rmols1.beta, rmols2.beta)
         expected_beta = linear_regression.multivariate(X, y).beta
-        np.testing.assert_array_almost_equal(expected_beta, rmols1.beta, 16)        
+        np.testing.assert_array_almost_equal(expected_beta, rmols1.beta, 16)
+
+    def test_recursive_multivariate_ols_many_samples(self):
+        d = 10
+        true_beta = 0.5 - np.random.rand(d)
+        sample_sizes = [d, 4, 20, 6, 20, 4, 1, 100]
+        rmols = linear_regression.RecursiveMultivariateOLS()
+        cumulative_n = 0
+        total_n = sum(sample_sizes)
+        all_X = np.random.randn(total_n, d)
+        all_y = np.matmul(all_X, true_beta) + 0.1 * np.random.randn(total_n)
+        for sample_idx, n in enumerate(sample_sizes):
+            X = all_X[cumulative_n : (cumulative_n + n)]
+            y = all_y[cumulative_n : (cumulative_n + n)]
+            rmols.update(X, y)
+            cumulative_n += n
+            cumulative_X = all_X[:cumulative_n]
+            cumulative_y = all_y[:cumulative_n]
+            ols_beta = linear_regression.multivariate(cumulative_X, cumulative_y).beta
+            np.testing.assert_array_almost_equal(ols_beta, rmols.beta, 13)
+
 
 if __name__ == "__main__": 
     unittest.main()    
