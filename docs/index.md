@@ -56,7 +56,8 @@ For demos and tests:
 
 Use the Visual Studio build process.
 
-Pre-built Python extension `cppyml` can be installed via `pip install cppyml` (requires Python 3.7.x). If you want to build it from source, build the Visual Studio solution in Release mode.
+Pre-built Python extension `cppyml` can be installed via `pip install cppyml` (requires Python 3.7.x).
+If you want to build it from source, see [cppyml documentation](cppyml.md).
 
 ### Linux binaries
 
@@ -75,4 +76,4 @@ doxygen
 
 ## Python extension
 
-Documentation for Python extension project `cppyml` is [here](cppyml.md).
+Documentation for the Python extension project `cppyml` is [here](cppyml.md).
