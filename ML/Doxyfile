@@ -1,7 +1,7 @@
 PROJECT_NAME		= ML
 
 INPUT				= .
-FILE_PATTERNS		= *.hpp *.cpp
+FILE_PATTERNS		= *.hpp
 MACRO_EXPANSION		= YES
 
 OUTPUT_DIRECTORY	= docs

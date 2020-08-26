@@ -7,8 +7,7 @@
 
 
 namespace ml 
-{
-	/** @brief Classes and functions related to clustering algorithm. */
+{	
 	namespace Clustering
 	{
 		class CentroidsInitialiser;
@@ -22,46 +21,65 @@ namespace ml
 	class EM {
 	public:		
 		/** @brief Constructs an EM ready to fit.
-		@param number_components Number of Gaussian components, > 0.		
+		@param[in] number_components Number of Gaussian components.
+		@throw If `number_components == 0`.
 		*/
 		DLL_DECLSPEC EM(unsigned int number_components);
 
-		/** @brief Sets PRNG seed. */
+		/** @brief Sets PRNG seed. 
+		@param[in] seed PRNG seed.
+		*/
 		DLL_DECLSPEC void set_seed(unsigned int seed);
 
-		/** @brief Sets absolute tolerance for convergence test. */
+		/** @brief Sets absolute tolerance for convergence test. 
+		@param[in] absolute_tolerance Absolute tolerance.
+		@throw std::domain_error If `absolute_tolerance < 0`.
+		*/
 		DLL_DECLSPEC void set_absolute_tolerance(double absolute_tolerance);
 
-		/** @brief Sets relative tolerance for convergence test. */
+		/** @brief Sets relative tolerance for convergence test. 
+		@param[in] relative_tolerance Relative tolerance.
+		@throw std::domain_error If `relative_tolerance < 0`.
+		*/
 		DLL_DECLSPEC void set_relative_tolerance(double relative_tolerance);
 
-		/** @brief Sets maximum number of E-M steps. */
+		/** @brief Sets maximum number of E-M steps. 
+		@param[in] maximum_steps Maximum number of E-M steps.
+		@throw std::invalid_argument If `maximum_steps < 2`.
+		*/
 		DLL_DECLSPEC void set_maximum_steps(unsigned int maximum_steps);
 
 		/** @brief Sets means initialiser.
-		@param means_initialiser Pointer to MeansInitialiser implementation.
+		@param[in] means_initialiser Pointer to MeansInitialiser implementation.
+		@throw std::invalid_argument If `means_initialiser` is null.
 		*/
 		DLL_DECLSPEC void set_means_initialiser(std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser);
 
 		/** @brief Sets responsibilities initialiser.
-		@param responsibilities_initialiser Pointer to ResponsibilitiesInitialiser implementation.
+		@param[in] responsibilities_initialiser Pointer to ResponsibilitiesInitialiser implementation.
+		@throw std::invalid_argument If `responsibilities_initialiser` is null.
 		*/
 		DLL_DECLSPEC void set_responsibilities_initialiser(std::shared_ptr<const Clustering::ResponsibilitiesInitialiser> responsibilities_initialiser);
 
-		/** @brief Switches between verbose and quiet mode. */
+		/** @brief Switches between verbose and quiet mode.
+		@param[in] verbose `true` if we want verbose output.
+		*/
 		void set_verbose(bool verbose)
 		{
 			verbose_ = verbose;
 		}
 
-		/** @brief Switches between starting with E or M step first. */
+		/** @brief Switches between starting with E or M step first.
+		@param[in] maximise_first `true` if we want to start with the E step.
+		*/
 		void set_maximise_first(bool maximise_first)
 		{
 			maximise_first_ = maximise_first;
 		}
 
 		/** @brief Fits the model.
-		@param data Matrix (column-major order) with a data point in every column.
+		@param]in] data Matrix (column-major order) with a data point in every column.
+		@return `true` if fitting converged successfully.
 		*/
 		DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data);		
 

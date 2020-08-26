@@ -6,7 +6,7 @@
 
 namespace ml
 {
-	/** @brief Methods and classes for clustering. */
+	/** @brief Methods and classes for clustering algorithms. */
 	namespace Clustering
 	{
 		/** @brief Chooses initial locations of centroids. */

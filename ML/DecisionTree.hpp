@@ -28,6 +28,7 @@ namespace ml
 		/** @brief Constructs a decision tree by taking ownership of a root node. 
 		
 		@param[in,out] root Non-null root node pointer.
+		@throw std::invalid_argument If `root` or  `root->parent` is null.
 		*/
 		DecisionTree(std::unique_ptr<Node>&& root)
 			: root_(std::move(root))
@@ -134,11 +135,12 @@ namespace ml
 
 		/** @brief Finds the weakest link and removes it, if the error does not increase too much.
 
-		A "weakest link" is a split node which can be collapsed with the minimum increase of total_leaf_error().
+		A "weakest link" is a split node which can be collapsed with the minimum increase of #total_leaf_error().
 		Only the lowest split node can be a weakest link.
+
 		@param[in] max_allowed_error_increase Maximum allowed increase in total leaf error.
 		@return Whether a node was removed.
-		@throw std::domain_error If max_allowed_error_increase < 0.
+		@throw std::domain_error If `max_allowed_error_increase` < 0.
 		*/
 		bool remove_weakest_link(const double max_allowed_error_increase)
 		{
@@ -196,7 +198,9 @@ namespace ml
 			return true;
 		}
 
-		/** @brief  Counts lowest split nodes. */
+		/** @brief Counts lowest split nodes. 
+		@return Number of lowest split nodes.
+		*/
 		unsigned int number_lowest_split_nodes() const
 		{
 			return static_cast<unsigned int>(lowest_split_nodes_.size());

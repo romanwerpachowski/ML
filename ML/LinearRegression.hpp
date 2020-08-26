@@ -43,7 +43,7 @@ namespace ml
 		*/
 		struct MultivariateOLSResult : public Result
 		{
-			Eigen::VectorXd beta; /**< Fitted coefficients of the model \f$y_i = \beta^T X_i + \epsilon_i\f$. */
+			Eigen::VectorXd beta; /**< Fitted coefficients of the model \f$\hat{y} = \vec{\beta} \cdot \vec{x}\f$. */
 			Eigen::MatrixXd cov; /**< Covariance matrix of beta coefficients. */
 
 			/** @brief Formats the result as string. */
@@ -61,8 +61,9 @@ namespace ml
 
 		where \f$ \bar{y} = n^{-1} \sum_{i=1}^n y_i \f$.
 
-		@param x X vector.
-		@param y Y vector.
+		@param[in] x X vector.
+		@param[in] y Y vector.
+		@return UnivariateOLSResult object.
 		@throw std::invalid_argument If `x` and `y` have different sizes, or if their size is less than 2.
 		*/
 		DLL_DECLSPEC UnivariateOLSResult univariate(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y);
@@ -75,9 +76,10 @@ namespace ml
 
 		where \f$ \bar{y} = n^{-1} \sum_{i=1}^n y_i \f$.
 
-		@param x0 First X value.
-		@param dx Positive X increment.
-		@param y Y vector.
+		@param[in] x0 First X value.
+		@param[in] dx Positive X increment.
+		@param[in] y Y vector.
+		@return UnivariateOLSResult object.
 		@throw std::invalid_argument If `y.size() < 2`.
 		@throw std::domain_error If `dx <= 0`.
 		*/
@@ -89,10 +91,9 @@ namespace ml
 
 			\f$R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n y_i^2}.\f$		
 		
-		In returned UnivariateOLSResult struct, `intercept`, `var_intercept` and `cov_slope_intercept` are set to 0.
-
-		@param x X vector.
-		@param y Y vector.
+		@param[in] x X vector.
+		@param[in] y Y vector.
+		@return UnivariateOLSResult object with `intercept`, `var_intercept` and `cov_slope_intercept` set to 0.
 		@throw std::invalid_argument If `x` and `y` have different sizes, or if their size is less than 1.
 		*/
 		DLL_DECLSPEC UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y);
@@ -105,25 +106,31 @@ namespace ml
 
 		If fitting with intercept is desired, include a row of 1's in the X values.
 
-		@param X D x N matrix of X values, with data points in columns.
-		@param y Y vector with length N.
-		@throw std::invalid_argument If y.size() != X.cols() or X.cols() < X.rows().
+		@param[in] X D x N matrix of X values, with data points in columns.
+		@param[in] y Y vector with length N.
+		@return MultivariateOLSResult object.
+		@throw std::invalid_argument If `y.size() != X.cols()` or `X.cols() < X.rows()`.
 		*/
 		DLL_DECLSPEC MultivariateOLSResult multivariate(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
 		/** @brief Adds another row with 1s in every column to X.
-		@throw std::invalid_argument If X.cols() == 0.
+		@param[in] X Matrix of independent variables with data points in columns.
 		@return New matrix with a row filled with 1's added at the end.
+		@throw std::invalid_argument If `X.cols() == 0`.		
 		*/
 		DLL_DECLSPEC Eigen::MatrixXd add_ones(Eigen::Ref<const Eigen::MatrixXd> X);
 
 		/** @brief Recursive multivariate Ordinary Least Squares.
 		
-		Given a stream of pairs (X_i, y_i), updates the least-squares estimate for beta solving the equations
+		Given a stream of pairs \f$(X_i, \vec{y}_i)\f$, updates the least-squares estimate for \f$\vec{\beta}\f$ using the model
 
-		y_0 = X_0^T * beta + e_0
-		y_1 = X_1^T * beta + e_1
+		\f$ \vec{y}_0 = X_0^T \vec{\beta} + \vec{e}_0 \f$
+
+		\f$ \vec{y}_1 = X_1^T \vec{\beta} + \vec{e}_1 \f$
+
 		...
+
+		where \f$\vec{e}_i\f$ are i.i.d. Gaussian.
 
 		Based on https://cpb-us-w2.wpmucdn.com/sites.gatech.edu/dist/2/436/files/2017/07/22-notes-6250-f16.pdf
 		*/
@@ -135,16 +142,16 @@ namespace ml
 
 			/** @brief Initialises with the first sample and calculates the first beta estimate.
 
-			@param X D x N matrix of X values, with data points in columns.
-			@param y Y vector with length N.
-			@throw std::invalid_argument If y.size() != X.cols() or X.cols() < X.rows().
+			@param[in] X D x N matrix of X values, with data points in columns.
+			@param[in] y Y vector with length N.
+			@throw std::invalid_argument If `y.size() != X.cols()` or `X.cols() < X.rows()`.
 			*/
 			DLL_DECLSPEC RecursiveMultivariateOLS(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
 			/** @brief Updates the beta estimate with a new sample.
-			@param X D x N matrix of X values, with data points in columns.
-			@param y Y vector with length N.
-			@throw std::invalid_argument If (X, y) is the first sample (i.e., n() == 0) and X.cols() < X.rows(), or y.size() != X.cols().
+			@param[in] X D x N matrix of X values, with data points in columns.
+			@param[in] y Y vector with length N.
+			@throw std::invalid_argument If `(X, y)` is the first sample (i.e., `n() == 0`) and `X.cols() < X.rows()`, or `y.size() != X.cols()`.
 			*/
 			DLL_DECLSPEC void update(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
@@ -176,6 +183,7 @@ namespace ml
 			unsigned int n_; /**< Number of data points seen so far. */			
 			unsigned int d_; /**< Dimension of each x data point. */
 
+			/// Initialise recursive OLS.
 			void initialise(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 		};
 	}

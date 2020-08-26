@@ -105,6 +105,7 @@ namespace ml
 		@param[in] num_folds Number of folds.
 
 		@tparam Trainer Functor type for model training.
+		@tparam Tester Functor type for calculating test error.
 
 		@return Error value per data point.
 		*/

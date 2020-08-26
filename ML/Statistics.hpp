@@ -24,8 +24,8 @@ namespace ml
 	
 		@param[in] begin Iterator pointing to the beginning of the range of sample values.
 		@param[in] end Iterator pointing one past to the end of the range of sample values.
-		@return (\f$\mathrm{SSE}\f$, \f$\bar{x}\f$) pair.
 		@tparam Iter Iterator type.
+		@return (\f$\mathrm{SSE}\f$, \f$\bar{x}\f$) pair.
 		*/
 		template <class Iter> std::pair<double, double> sse_and_mean(const Iter begin, const Iter end)
 		{
@@ -56,8 +56,8 @@ namespace ml
 
 		@param[in] begin Iterator pointing to the beginning of the range of sample values.
 		@param[in] end Iterator pointing one past to the end of the range of sample values.
-		@return SSE.
 		@tparam Iter Iterator type.
+		@return SSE.		
 		*/
 		template <class Iter> double sse(const Iter begin, const Iter end)
 		{
@@ -77,6 +77,7 @@ namespace ml
 		@param[in] begin Iterator pointing to the beginning of the range of sample values.
 		@param[in] end Iterator pointing one past to the end of the range of sample values.
 		@param[in] K Number of classes, positive.
+		@tparam Iter Iterator type.
 		@return Gini index and the most frequent class. If `begin == end`, `mode == K`.
 		*/
 		template <class Iter> std::pair<double, unsigned int> gini_index_and_mode(const Iter begin, const Iter end, const unsigned int K)
@@ -116,6 +117,7 @@ namespace ml
 		@param[in] begin Iterator pointing to the beginning of the range of sample values.
 		@param[in] end Iterator pointing one past to the end of the range of sample values.
 		@param[in] K Number of classes, positive.
+		@tparam Iter Iterator type.
 		@return Gini index.
 		*/
 		template <class Iter> double gini_index(const Iter begin, const Iter end, const unsigned int K)
@@ -140,6 +142,7 @@ namespace ml
 		@param[in] begin Iterator pointing to the beginning of the range of sample values.
 		@param[in] end Iterator pointing one past to the end of the range of sample values.
 		@param[in] K Positive number of distinct values.
+		@tparam Iter Iterator type.
 		@return Mode of the sample.
 		*/
 		template <class Iter> unsigned int mode(const Iter begin, const Iter end, const unsigned int K)
@@ -168,9 +171,9 @@ namespace ml
 		@param[in] ys Y values.
 		@tparam R Scalar value type.
 
-		@throw std::invalid_argument If `xs.size() != ys.size()`.
-
 		@return Sample covariance (unbiased estimate of population covariance) or NaN if `xs.size() < 2`.
+
+		@throw std::invalid_argument If `xs.size() != ys.size()`.		
 		*/
 		template <class R> R covariance(const std::vector<R>& xs, const std::vector<R>& ys)
 		{			
@@ -198,9 +201,9 @@ namespace ml
 		@param xs X values.
 		@param ys Y values.
 
-		@throw std::invalid_argument If `xs.size() != ys.size()`.
-
 		@return Sample covariance (unbiased estimate of population covariance) or NaN if `xs.size() < 2`.
+
+		@throw std::invalid_argument If `xs.size() != ys.size()`.		
 		*/
 		DLL_DECLSPEC double covariance(Eigen::Ref<const Eigen::VectorXd> xs, Eigen::Ref<const Eigen::VectorXd> ys);
 	}	
