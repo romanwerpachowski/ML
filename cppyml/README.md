@@ -18,12 +18,18 @@ Build from source using `SCons` and install using `python setup.py install`:
 ```bash
 scons mode=release
 cd cppyml
-python setup.py install
+sudo python setup.py install
 ```
 
 ### Windows
 
 Precompiled binaries are available on [PyPi](https://pypi.org/project/cppyml/).
+
+To build from source under Windows, build the solution in Release mode and then do:
+```bash
+cd cppyml
+python setup.py install
+```
 
 ## Example
 
@@ -37,4 +43,4 @@ y = 0.1 * x - 0.9 + 0.2 * np.random.randn(n)
 result = linear_regression.univariate(x, y)
 ```
 
-See also unit tests.
+See also unit tests in `tests`.
