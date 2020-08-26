@@ -1,5 +1,9 @@
 #pragma once
 
+/** @file dll.hpp
+Preprocessor declarations used to export functions and classes in the shared library.
+*/
+
 #ifdef _MSC_VER
 #ifdef _EXPORTING
 #define DLL_DECLSPEC    __declspec(dllexport)
