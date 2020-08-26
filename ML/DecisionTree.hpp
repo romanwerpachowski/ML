@@ -13,6 +13,8 @@ namespace ml
 	/** @brief Decision tree.
 
 	Data points are in columns.
+
+	@tparam Y Type of predicted value (integer for classification, real for regression).
 	*/
 	template <class Y> class DecisionTree
 	{
@@ -23,7 +25,10 @@ namespace ml
 		typedef DecisionTrees::SplitNode<Y> SplitNode; /**< Non-terminal node, which splits data depending on a threshold value of some feature. */
 		typedef DecisionTrees::LeafNode<Y> LeafNode; /**< Terminal node, which returns a constant prediction value for features which ended up on it. */
 
-		/** @brief Constructs a decision tree by taking ownership of a root node. */
+		/** @brief Constructs a decision tree by taking ownership of a root node. 
+		
+		@param[in,out] root Non-null root node pointer.
+		*/
 		DecisionTree(std::unique_ptr<Node>&& root)
 			: root_(std::move(root))
 		{
@@ -36,19 +41,28 @@ namespace ml
 			root_->collect_lowest_split_nodes(lowest_split_nodes_);
 		}
 
-		/** @brief Move constructor. */
+		/** @brief Move constructor. 
+		
+		@param[in,out] other Moved tree.
+		*/
 		DecisionTree(DecisionTree<Y>&& other) noexcept
 			: root_(std::move(other.root_)), lowest_split_nodes_(std::move(other.lowest_split_nodes_))
 		{}
 
-		/** @brief Copy constructor. */
+		/** @brief Copy constructor. 
+		
+		@param[in] other Copied tree.
+		*/
 		DecisionTree(const DecisionTree<Y>& other)
 			: root_(other.root_->clone(nullptr))
 		{
 			root_->collect_lowest_split_nodes(lowest_split_nodes_);
 		}
 
-		/** @brief Move assignment operator. */
+		/** @brief Move assignment operator. 
+		
+		@param[in,out] other Moved tree.
+		*/
 		DecisionTree<Y>& operator=(DecisionTree<Y>&& other) noexcept
 		{
 			if (this != &other) {
@@ -58,7 +72,10 @@ namespace ml
 			return *this;
 		}
 
-		/** @brief Copy assignment operator. */
+		/** @brief Copy assignment operator. 
+		
+		@param[in] other Copied tree.
+		*/
 		DecisionTree<Y>& operator=(const DecisionTree<Y>& other)
 		{
 			if (this != &other) {
@@ -69,7 +86,12 @@ namespace ml
 			return *this;
 		}
 
-		/** @brief  Returns a prediction given a feature vector. */
+		/** @brief  Returns a prediction given a feature vector. 
+		
+		@param[in] x Feature vector.
+
+		@return Predicted value.
+		*/
 		Y operator()(arg_type x) const
 		{
 			return (*root_)(x);
@@ -99,7 +121,12 @@ namespace ml
 			return root_->total_leaf_error();
 		}
 
-		/** @brief Calculates cost-complexity for given alpha. */
+		/** @brief Calculates cost-complexity measure. 
+		
+		@param[in] alpha Complexity penalty per each leaf node.
+
+		@return Total leaf error plus `alpha` times the number of leaf nodes.
+		*/
 		double cost_complexity(double alpha) const
 		{
 			return total_leaf_error() + alpha * static_cast<double>(count_leaf_nodes());
@@ -109,7 +136,7 @@ namespace ml
 
 		A "weakest link" is a split node which can be collapsed with the minimum increase of total_leaf_error().
 		Only the lowest split node can be a weakest link.
-		@param max_allowed_error_increase Maximum allowed increase in total leaf error.
+		@param[in] max_allowed_error_increase Maximum allowed increase in total leaf error.
 		@return Whether a node was removed.
 		@throw std::domain_error If max_allowed_error_increase < 0.
 		*/

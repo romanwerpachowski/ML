@@ -11,12 +11,12 @@ namespace ml
 {	
 	namespace DecisionTrees
 	{
-		typedef std::pair<Eigen::Index, double> IndexedFeatureValue;
+		typedef std::pair<Eigen::Index, double> IndexedFeatureValue; /**< @brief Used to sort feature vectors. */
 
 		static const auto SORTED_FEATURE_COMPARATOR = [](const IndexedFeatureValue& a, const IndexedFeatureValue& b) { return a.second < b.second; };
-		constexpr bool USE_THREADS = false;
-		constexpr Eigen::Index MIN_SAMPLE_SIZE_FOR_NEW_THREADS = 256;
-		constexpr unsigned int DEFAULT_MAX_NUM_THREADS = 2;		
+		constexpr bool USE_THREADS = false; /**< @brief Whether to use threads when fitting a tree .*/
+		constexpr Eigen::Index MIN_SAMPLE_SIZE_FOR_NEW_THREADS = 256; /**< @brief Minimum sample size for which it's worth launching a new thread.*/
+		constexpr unsigned int DEFAULT_MAX_NUM_THREADS = 2; /**< @brief Default maximum number of threads.*/
 
 		/** Creates an iterator pair containing begin() and end(). */
 		template <typename T> VectorRange<T> from_vector(std::vector<T>& v)
@@ -233,6 +233,7 @@ namespace ml
 				metrics, nullptr, unsorted_X, sorted_X, unsorted_y, sorted_y, max_split_levels, min_sample_size, from_vector(features), max_num_threads ? max_num_threads : DEFAULT_MAX_NUM_THREADS));
 		}
 
+		/** @brief Metrics for classification trees. */
 		struct ClassificationMetrics
 		{
 			unsigned int num_classes;
@@ -264,6 +265,7 @@ namespace ml
 			}
 		};
 
+		/** @brief Metrics for regression trees. */
 		struct UnivariateRegressionMetrics
 		{
 			template <typename Iter> std::pair<double, double> error_and_value(Iter begin, Iter end) const
