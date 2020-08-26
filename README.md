@@ -10,5 +10,4 @@ Available under GNU GENERAL PUBLIC LICENSE Version 3.
 
 ## Documentation
 
-- [local](docs/index.md)
-- [hosted](https://romanwerpachowski.github.io/ML/)
+See [here](https://romanwerpachowski.github.io/ML/).
