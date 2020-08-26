@@ -1,6 +1,7 @@
 #include <random>
 #include <gtest/gtest.h>
 #include "ML/LinearRegression.hpp"
+#include "ML/RecursiveMultivariateOLS.hpp"
 #include "ML/Statistics.hpp"
 
 using namespace ml::LinearRegression;

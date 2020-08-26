@@ -168,6 +168,7 @@
     <ClInclude Include="dll.hpp" />
     <ClInclude Include="EM.hpp" />
     <ClInclude Include="LinearRegression.hpp" />
+    <ClInclude Include="RecursiveMultivariateOLS.hpp" />
     <ClInclude Include="Statistics.hpp" />
     <ClInclude Include="Version.hpp" />
   </ItemGroup>
@@ -177,6 +178,7 @@
     <ClCompile Include="DecisionTrees.cpp" />
     <ClCompile Include="EM.cpp" />
     <ClCompile Include="LinearRegression.cpp" />
+    <ClCompile Include="RecursiveMultivariateOLS.cpp" />
     <ClCompile Include="Statistics.cpp" />
   </ItemGroup>
   <ItemGroup>

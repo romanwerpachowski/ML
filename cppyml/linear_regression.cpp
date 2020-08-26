@@ -2,6 +2,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 #include "ML/LinearRegression.hpp"
+#include "ML/RecursiveMultivariateOLS.hpp"
 #include "types.hpp"
 
 
