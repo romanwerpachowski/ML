@@ -6,12 +6,12 @@
 
 namespace ml
 {
-	/** Helper functions and classes for decision trees. */
+	/** @brief Helper functions and classes for decision trees. */
 	namespace DecisionTrees 
 	{
 		template <class Y> struct SplitNode;
 
-		/** Tree node. Nodes are split (non-terminal) or leaf (terminal). */
+		/** @brief Tree node. Nodes are split (non-terminal) or leaf (terminal). */
 		template <class Y> struct Node
 		{
 			typedef Eigen::Ref<const Eigen::VectorXd> arg_type; /**< Type for feature vector. */
@@ -20,7 +20,7 @@ namespace ml
 			Y value; /**< Value which should be returned if we stop splitting at this node. */
 			SplitNode<Y>* parent; /**< Link to parent node. */
 
-			/** Constructor.
+			/** @brief Constructor.
 			@param n_error Prediction error value on training data which reached this node.
 			@param n_value Prediction value assigned to this node.
 			@param n_parent Link to parent node.
@@ -33,37 +33,38 @@ namespace ml
 				}
 			}
 
+			/** @brief Virtual destructor. */
 			virtual ~Node() {}
 
-			/** Returns a prediction given a feature vector. */
+			/** @brief Returns a prediction given a feature vector. */
 			virtual Y operator()(arg_type x) const = 0;
 
-			/** Total number of nodes reachable from this one. */
+			/** @brief Total number of nodes reachable from this one. */
 			virtual unsigned int count_lower_nodes() const = 0;
 
-			/** Total number of leaf nodes reachable from this one, including itself. */
+			/** @brief Total number of leaf nodes reachable from this one, including itself. */
 			virtual unsigned int count_leaf_nodes() const = 0;
 
-			/** Total error of the training samples seen by the leaf nodes reachable from this node (including its own if leaf).
+			/** @brief Total error of the training samples seen by the leaf nodes reachable from this node (including its own if leaf).
 
 			Has the invariant total_leaf_error() <= error.
 			*/
 			virtual double total_leaf_error() const = 0;
 
-			/** Make a perfect copy of the node.
+			/** @brief Make a perfect copy of the node.
 			Function works recursively from root to leafs.
 			@param cloned_parent Pointer to already cloned parent.
 			*/
 			virtual Node* clone(SplitNode<Y>* cloned_parent) const = 0;
 
-			/** Return true if node is a leaf. */
+			/** @brief Return true if node is a leaf. */
 			virtual bool is_leaf() const = 0;
 
-			/** Walk over this node and all below it, adding to s every split node which has only leaf nodes as children. */
+			/** @brief Walk over this node and all below it, adding to s every split node which has only leaf nodes as children. */
 			virtual void collect_lowest_split_nodes(std::unordered_set<SplitNode<Y>*>& s) = 0;
 		};
 
-		/** Non-terminal node, which splits data depending on a threshold value of some feature. */
+		/** @brief Non-terminal node, which splits data depending on a threshold value of some feature. */
 		template <class Y> struct SplitNode : public Node<Y>
 		{
 			std::unique_ptr<Node<Y>> lower; /**< Followed if x[feature_index] < threshold. */
@@ -76,7 +77,7 @@ namespace ml
 			using Node<Y>::value;
 			using Node<Y>::parent;
 
-			/** Constructor.
+			/** @brief Constructor.
 			@param n_error Prediction error value on training data which reached this node.
 			@param n_value Prediction value assigned to this node.
 			@param n_parent Link to parent node.
@@ -169,10 +170,10 @@ namespace ml
 			}
 		};
 
-		/** Terminal node, which returns a constant prediction value for features which ended up on it. */
+		/** @brief Terminal node, which returns a constant prediction value for features which ended up on it. */
 		template <class Y> struct LeafNode : public Node<Y>
 		{
-			/** Constructor.
+			/** @brief Constructor.
 			@param n_error Prediction error value on training data which reached this node.
 			@param n_value Prediction value assigned to this node.
 			@param n_parent Link to parent node.

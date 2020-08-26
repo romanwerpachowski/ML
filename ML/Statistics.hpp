@@ -9,10 +9,10 @@
 
 namespace ml 
 {
-	/** Statistical functions. */
+	/** @brief Statistical functions. */
 	namespace Statistics
 	{
-		/** Calculates mean(x) and sum_i (x_i - mean(x))^2 for given range.
+		/** @brief Calculates mean(x) and sum_i (x_i - mean(x))^2 for given range.
 		@return Pair of (SSE, mean).
 		@tparam Iter Iterator type.
 		*/
@@ -33,7 +33,7 @@ namespace ml
 			return std::make_pair(sse, mean);
 		}
 
-		/** Calculates sum_i (x_i - mean(x))^2 for given range.
+		/** @brief Calculates sum_i (x_i - mean(x))^2 for given range.
 		@tparam Iter Iterator type.
 		*/
 		template <class Iter> double sse(const Iter begin, const Iter end)
@@ -41,9 +41,13 @@ namespace ml
 			return sse_and_mean(begin, end).first;
 		}		
 
-		/** Calculates the Gini index sum_{k=1}^K \hat{p}_k (1 - \hat{p}_k)
+		/** @brief Calculates the Gini index.
+		
+		Gini index is defined as sum_{k=1}^K \hat{p}_k (1 - \hat{p}_k)
 		for \hat{p}_k being the frequency of occurrence of class k in data.
+
 		Takes as argument a range [begin, end) of class values from 0 to K - 1.
+
 		@param K Number of classes, positive.
 		@return Gini index and the most frequent class. If begin == end, mode == K.
 		*/
@@ -71,9 +75,13 @@ namespace ml
 			return std::make_pair(gi, mode);
 		}
 
-		/** Calculates the Gini index sum_{k=1}^K \hat{p}_k (1 - \hat{p}_k)
+		/** @brief Calculates the Gini index.
+		
+		Gini index is defined as sum_{k=1}^K \hat{p}_k (1 - \hat{p}_k)
 		for \hat{p}_k being the frequency of occurrence of class k in data.
+
 		Takes as argument a range [begin, end) of class values from 0 to K - 1.
+
 		@param K Number of classes, positive.
 		@return Gini index.
 		*/
@@ -113,7 +121,7 @@ namespace ml
 			return mode;
 		}
 
-		/**! Calculates sample covariance of two vectors. */
+		/** @brief Calculates sample covariance of two vectors. */
 		template <class R> R covariance(const std::vector<R>& xs, const std::vector<R>& ys)
 		{			
 			if (xs.size() != ys.size()) {
@@ -135,7 +143,7 @@ namespace ml
 			return sum_xy / (n - 1);
 		}
 
-		/**! Calculates sample covariance of two vectors. */
+		/** @brief Calculates sample covariance of two vectors. */
 		DLL_DECLSPEC double covariance(Eigen::Ref<const Eigen::VectorXd> xs, Eigen::Ref<const Eigen::VectorXd> ys);
 	}	
 }

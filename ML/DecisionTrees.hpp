@@ -6,19 +6,19 @@
 
 namespace ml
 {
-	/** Decision tree for univariate linear regression. */
+	/** @brief Decision tree for univariate linear regression. */
 	typedef DecisionTree<double> UnivariateRegressionTree;
 
-	/** Decision tree for multinomial classification. */
+	/** @brief Decision tree for multinomial classification. */
 	typedef DecisionTree<unsigned int> ClassificationTree;
 
-	/** Functions for manipulating decision trees. */
+	/** @brief Functions for manipulating decision trees. */
 	namespace DecisionTrees
 	{
-		/** Pair of vector iterators. */
+		/** @brief Pair of vector iterators. */
 		template <typename T> using VectorRange = std::pair<typename std::vector<T>::iterator, typename std::vector<T>::iterator>;
 
-		/** Grows a univariate regression tree with pruning.
+		/** @brief Grows a univariate regression tree with pruning.
 		@param X Independent variables (column-wise).
 		@param y Dependent variable.
 		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
@@ -29,7 +29,7 @@ namespace ml
 		*/
 		DLL_DECLSPEC std::tuple<UnivariateRegressionTree, double, double> univariate_regression_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds);
 
-		/** Grows a classification tree with pruning.
+		/** @brief Grows a classification tree with pruning.
 		@param X Features (column-wise).
 		@param y Class indices.
 		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
@@ -40,7 +40,7 @@ namespace ml
 		*/
 		DLL_DECLSPEC std::tuple<ClassificationTree, double, double> classification_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds);		
 
-		/** Grows a univariate regression tree without pruning.
+		/** @brief Grows a univariate regression tree without pruning.
 		@param X Independent variables (column-wise).
 		@param y Dependent variable.
 		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
@@ -48,7 +48,7 @@ namespace ml
 		*/
 		DLL_DECLSPEC UnivariateRegressionTree univariate_regression_tree(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
 
-		/** Grows a classification tree without pruning.
+		/** @brief Grows a classification tree without pruning.
 		@param X Classification features (column-wise).
 		@param y Class indices.
 		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
@@ -56,9 +56,10 @@ namespace ml
 		*/
 		DLL_DECLSPEC ClassificationTree classification_tree(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
 
-		/** Performs cost-complexity pruning in-place.
+		/** @brief  Performs cost-complexity pruning in-place.
 
 		@param alpha Cost of complexity per node.
+		@tparam Y Decision tree output value type.
 		@throw std::domain_error If alpha < 0.
 		*/
 		template <typename Y> void cost_complexity_prune(DecisionTree<Y>& tree, const double alpha)
@@ -70,20 +71,19 @@ namespace ml
 			while (tree.remove_weakest_link(alpha)) {}
 		}
 
-		/** Calculates tree mean squared error on (X, y) data. */
+		/** @brief Calculates tree mean squared error on (X, y) data. */
 		DLL_DECLSPEC double univariate_regression_tree_mean_squared_error(const UnivariateRegressionTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
-		/** Calculates tree accuracy on (X, y) data. */
+		/** @brief Calculates tree accuracy on (X, y) data. */
 		DLL_DECLSPEC double classification_tree_accuracy(const ClassificationTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
-		/** 1 - tree accuracy. */
+		/** @brief Calculates 1 - tree accuracy on (X, y) data. */
 		inline double classification_tree_misclassification_rate(const ClassificationTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
 		{
 			return 1 - classification_tree_accuracy(tree, X, y);
 		}
 
-		/** Finds the split on a single feature which minimises the sum of SSEs of split samples.
-
+		/** @private Finds the split on a single feature which minimises the sum of SSEs of split samples.
 		This function is not meant to be used directly. It's exposed for testing.
 		*/
 		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_univariate_regression(

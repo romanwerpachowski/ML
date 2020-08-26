@@ -119,10 +119,10 @@ namespace ml
 			return calc_univariate_linear_regression_result(sxx, sxy, syy, 0, 0, n, false);
 		}
 
-		/** Type of matrix decomposition used for X * X^T. */
+		/** @brief Type of matrix decomposition used for \f$X X^T\f$. */
 		typedef Eigen::LDLT<Eigen::MatrixXd> XXTMatrixDecomposition;
 
-		/** Calculate X*X^T, invert it, and calculate beta. */
+		/** @brief Calculates X*X^T, inverts it, and calculates beta. */
 		static Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, XXTMatrixDecomposition& xxt_decomp, const bool check_number_points)
 		{
 			// X is an q x N matrix and y is a N-size vector.

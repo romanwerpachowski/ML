@@ -10,7 +10,7 @@
 
 namespace ml
 {
-	/** Decision tree.
+	/** @brief Decision tree.
 
 	Data points are in columns.
 	*/
@@ -23,7 +23,7 @@ namespace ml
 		typedef DecisionTrees::SplitNode<Y> SplitNode; /**< Non-terminal node, which splits data depending on a threshold value of some feature. */
 		typedef DecisionTrees::LeafNode<Y> LeafNode; /**< Terminal node, which returns a constant prediction value for features which ended up on it. */
 
-		/** Constructs a decision tree by taking ownership of a root node. */
+		/** @brief Constructs a decision tree by taking ownership of a root node. */
 		DecisionTree(std::unique_ptr<Node>&& root)
 			: root_(std::move(root))
 		{
@@ -36,19 +36,19 @@ namespace ml
 			root_->collect_lowest_split_nodes(lowest_split_nodes_);
 		}
 
-		/** Move constructor. */
+		/** @brief Move constructor. */
 		DecisionTree(DecisionTree<Y>&& other) noexcept
 			: root_(std::move(other.root_)), lowest_split_nodes_(std::move(other.lowest_split_nodes_))
 		{}
 
-		/** Copy constructor. */
+		/** @brief Copy constructor. */
 		DecisionTree(const DecisionTree<Y>& other)
 			: root_(other.root_->clone(nullptr))
 		{
 			root_->collect_lowest_split_nodes(lowest_split_nodes_);
 		}
 
-		/** Move assignment operator. */
+		/** @brief Move assignment operator. */
 		DecisionTree<Y>& operator=(DecisionTree<Y>&& other) noexcept
 		{
 			if (this != &other) {
@@ -58,7 +58,7 @@ namespace ml
 			return *this;
 		}
 
-		/** Copy assignment operator. */
+		/** @brief Copy assignment operator. */
 		DecisionTree<Y>& operator=(const DecisionTree<Y>& other)
 		{
 			if (this != &other) {
@@ -69,43 +69,43 @@ namespace ml
 			return *this;
 		}
 
-		/** Returns a prediction given a feature vector. */
+		/** @brief  Returns a prediction given a feature vector. */
 		Y operator()(arg_type x) const
 		{
 			return (*root_)(x);
 		}
 
-		/** Counts nodes in the tree. */
+		/** @brief Counts nodes in the tree. */
 		unsigned int count_nodes() const
 		{
 			return 1 + root_->count_lower_nodes();
 		}
 
-		/** Counts leaf nodes in the tree. */
+		/** @brief Counts leaf nodes in the tree. */
 		unsigned int count_leaf_nodes() const
 		{
 			return root_->count_leaf_nodes();
 		}
 
-		/** Returns the prediction error for training data before any splits are made. */
+		/** @brief Returns the prediction error for training data before any splits are made. */
 		double original_error() const
 		{
 			return root_->error;
 		}
 
-		/** Returns the total prediction error for training data after all splits. */
+		/** @brief Returns the total prediction error for training data after all splits. */
 		double total_leaf_error() const
 		{
 			return root_->total_leaf_error();
 		}
 
-		/** Calculates cost-complexity for given alpha. */
+		/** @brief Calculates cost-complexity for given alpha. */
 		double cost_complexity(double alpha) const
 		{
 			return total_leaf_error() + alpha * static_cast<double>(count_leaf_nodes());
 		}
 
-		/** Finds the weakest link and remove it, if the error does not increase too much.
+		/** @brief Finds the weakest link and removes it, if the error does not increase too much.
 
 		A "weakest link" is a split node which can be collapsed with the minimum increase of total_leaf_error().
 		Only the lowest split node can be a weakest link.
@@ -169,13 +169,13 @@ namespace ml
 			return true;
 		}
 
-		/** Counts lowest split nodes. */
+		/** @brief  Counts lowest split nodes. */
 		unsigned int number_lowest_split_nodes() const
 		{
 			return static_cast<unsigned int>(lowest_split_nodes_.size());
 		}
 	private:
 		std::unique_ptr<Node> root_;
-		std::unordered_set<SplitNode*> lowest_split_nodes_; /** Set of lowest split nodes. */
+		std::unordered_set<SplitNode*> lowest_split_nodes_; /**< Set of lowest split nodes. */
 	};
 }

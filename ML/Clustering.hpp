@@ -6,16 +6,17 @@
 
 namespace ml
 {
-	/** Methods and classes for clustering. */
+	/** @brief Methods and classes for clustering. */
 	namespace Clustering
 	{
-		/** Chooses initial locations of centroids. */
+		/** @brief Chooses initial locations of centroids. */
 		class CentroidsInitialiser
 		{
 		public:
+			/** @brief Virtual destructor. */
 			DLL_DECLSPEC virtual ~CentroidsInitialiser();
 
-			/** Initialises location of centroids. 
+			/** @brief Initialises location of centroids. 
 
 			@param data Data matrix with data points in columns.
 			@param prng Pseudo-random number generator.
@@ -25,13 +26,14 @@ namespace ml
 			DLL_DECLSPEC virtual void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> centroids) const = 0;
 		};
 
-		/** Chooses initial component responsibilities. */
+		/** @brief Chooses initial component responsibilities. */
 		class ResponsibilitiesInitialiser
 		{
 		public:
+			/** @brief Virtual destructor. */
 			DLL_DECLSPEC virtual ~ResponsibilitiesInitialiser();
 
-			/** Initialises component responsibilities.
+			/** @brief Initialises component responsibilities.
 
 			@param data Data matrix with data points in columns.
 			@param prng Pseudo-random number generator.
@@ -41,28 +43,30 @@ namespace ml
 			DLL_DECLSPEC virtual void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> responsibilities) const = 0;
 		};
 
-		/** Chooses random points as new centroids. */
+		/** @brief Chooses random points as new centroids. */
 		class Forgy : public CentroidsInitialiser
 		{
 		public:
 			DLL_DECLSPEC void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> centroids) const override;
 		};
 
-		/** Assigns points to clusters randomly and then returns cluster means. */
+		/** @brief Assigns points to clusters randomly and then returns cluster means. */
 		class RandomPartition : public CentroidsInitialiser
 		{
 		public:
 			DLL_DECLSPEC void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> centroids) const override;
 		};
 
-		/** See https://en.wikipedia.org/wiki/K-means%2B%2B */
+		/** @brief Implements the K++ algorithm.
+		
+		See https://en.wikipedia.org/wiki/K-means%2B%2B */
 		class KPP : public CentroidsInitialiser
 		{
 		public:
 			DLL_DECLSPEC void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> centroids) const override;
 		};
 
-		/** Initialises centroids and then assigns the responsibility for each point to its closest centroid. */
+		/** @brief Initialises centroids and then assigns the responsibility for each point to its closest centroid. */
 		class ClosestCentroid : public ResponsibilitiesInitialiser
 		{
 		public:

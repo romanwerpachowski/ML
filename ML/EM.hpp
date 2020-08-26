@@ -8,102 +8,103 @@
 
 namespace ml 
 {
+	/** @brief Classes and functions related to clustering algorithm. */
 	namespace Clustering
 	{
 		class CentroidsInitialiser;
 		class ResponsibilitiesInitialiser;
 	}
 
-	/** Gaussian Expectation-Maximisation algorithm.
+	/** @brief Gaussian Expectation-Maximisation algorithm.
 
 	Iterates until log-likelihood converges.
 	*/
 	class EM {
 	public:		
-		/** Constructs an EM ready to fit.
+		/** @brief Constructs an EM ready to fit.
 		@param number_components Number of Gaussian components, > 0.		
 		*/
 		DLL_DECLSPEC EM(unsigned int number_components);
 
-		/** Sets PRNG seed. */
+		/** @brief Sets PRNG seed. */
 		DLL_DECLSPEC void set_seed(unsigned int seed);
 
-		/** Sets absolute tolerance for convergence test. */
+		/** @brief Sets absolute tolerance for convergence test. */
 		DLL_DECLSPEC void set_absolute_tolerance(double absolute_tolerance);
 
-		/** Sets relative tolerance for convergence test. */
+		/** @brief Sets relative tolerance for convergence test. */
 		DLL_DECLSPEC void set_relative_tolerance(double relative_tolerance);
 
-		/** Sets maximum number of E-M steps. */
+		/** @brief Sets maximum number of E-M steps. */
 		DLL_DECLSPEC void set_maximum_steps(unsigned int maximum_steps);
 
-		/** Sets means initialiser.
+		/** @brief Sets means initialiser.
 		@param means_initialiser Pointer to MeansInitialiser implementation.
 		*/
 		DLL_DECLSPEC void set_means_initialiser(std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser);
 
-		/** Sets responsibilities initialiser.
+		/** @brief Sets responsibilities initialiser.
 		@param responsibilities_initialiser Pointer to ResponsibilitiesInitialiser implementation.
 		*/
 		DLL_DECLSPEC void set_responsibilities_initialiser(std::shared_ptr<const Clustering::ResponsibilitiesInitialiser> responsibilities_initialiser);
 
-		/** Switches between verbose and quiet mode. */
+		/** @brief Switches between verbose and quiet mode. */
 		void set_verbose(bool verbose)
 		{
 			verbose_ = verbose;
 		}
 
-		/** Switches between starting with E or M step first. */
+		/** @brief Switches between starting with E or M step first. */
 		void set_maximise_first(bool maximise_first)
 		{
 			maximise_first_ = maximise_first;
 		}
 
-		/** Fits the model.
+		/** @brief Fits the model.
 		@param data Matrix (column-major order) with a data point in every column.
 		*/
 		DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data);		
 
-		/** Returns the number of components. */
+		/** @brief Returns the number of components. */
 		auto number_components() const
 		{
 			return number_components_;
 		}
 
-		/** Returns a const reference to fitted component means. */
+		/** @brief Returns a const reference to fitted component means. */
 		const auto& means() const 
 		{
 			return means_;
 		}
 
-		/** Returns a const reference to fitted component covariance matrices. */
+		/** @brief Returns a const reference to fitted component covariance matrices. */
 		const auto& covariances() const
 		{
 			return covariances_;
 		}
 
-		/** Returns a const reference to fitted k-th component's covariance matrix. */
+		/** @brief Returns a const reference to fitted k-th component's covariance matrix. */
 		DLL_DECLSPEC const Eigen::MatrixXd& covariance(unsigned int k) const;
 
-		/** Returns a const reference to fitted component mixing probabilities. */
+		/** @brief Returns a const reference to fitted component mixing probabilities. */
 		const auto& mixing_probabilities() const 
 		{
 			return mixing_probabilities_;
 		}
 
-		/** Returns a const reference to resulting component responsibilities. */
+		/** @brief Returns a const reference to resulting component responsibilities. */
 		const auto& responsibilities() const 
 		{
 			return responsibilities_;
 		}
 
-		/** Returns a const reference to maximised log-likelihood of training data. */
+		/** @brief Returns a const reference to maximised log-likelihood of training data. */
 		double log_likelihood() const 
 		{
 			return log_likelihood_;
 		}		
 
-		/** Returns a shared pointer to means initialiser implementation. */
+		/** @brief Returns a shared pointer to means initialiser implementation. */
 		std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser() const
 		{
 			return means_initialiser_;
