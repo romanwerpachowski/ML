@@ -26,6 +26,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest", "googletest\build\g
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{AAC07B84-0EFE-492B-A7F1-2DA5B40D5BE9}"
 	ProjectSection(SolutionItems) = preProject
+		docs\cppyml.md = docs\cppyml.md
 		docs\index.md = docs\index.md
 	EndProjectSection
 EndProject

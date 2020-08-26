@@ -42,6 +42,9 @@
     <ClInclude Include="LinearRegression.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Version.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EM.cpp">

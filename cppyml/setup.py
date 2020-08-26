@@ -75,7 +75,7 @@ class BinaryDistribution(Distribution):
 setup(
     name=NAME,
     author="Roman Werpachowski",
-    url="https://github.com/romanwerpachowski/ML",
+    url="https://romanwerpachowski.github.io/ML/",
     author_email="roman.werpachowski@gmail.com",    
     license="GPL-3.0",
     keywords="machine-learning ML extension algorithms numerical optimised",   

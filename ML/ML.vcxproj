@@ -169,6 +169,7 @@
     <ClInclude Include="EM.hpp" />
     <ClInclude Include="LinearRegression.hpp" />
     <ClInclude Include="Statistics.hpp" />
+    <ClInclude Include="Version.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Clustering.cpp" />
