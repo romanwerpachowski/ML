@@ -179,6 +179,7 @@
     <ClCompile Include="Statistics.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Doxyfile" />
     <None Include="SConscript" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

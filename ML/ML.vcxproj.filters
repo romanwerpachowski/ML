@@ -65,5 +65,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SConscript" />
+    <None Include="Doxyfile">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

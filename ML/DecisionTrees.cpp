@@ -338,7 +338,7 @@ namespace ml
 			return static_cast<double>(num_correctly_classified) / static_cast<double>(sample_size);
 		}		
 
-		template <class Grow, class TestError> std::pair<double, double> find_best_alpha(const std::vector<double>& alphas, Grow grow_function, TestError test_error_function, const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int num_folds)
+		template <class Trainer, class Tester> std::pair<double, double> find_best_alpha(const std::vector<double>& alphas, Trainer grow_function, Tester test_error_function, const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int num_folds)
 		{
 			double min_cv_test_error = std::numeric_limits<double>::infinity();
 			double best_alpha = -1;
@@ -357,7 +357,7 @@ namespace ml
 			return std::make_pair(best_alpha, min_cv_test_error);
 		}
 
-		template <class Y, class Metrics, class TestError> std::tuple<DecisionTree<Y>, double, double> tree_1d_auto_prune(const Metrics metrics, TestError test_error_function, const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds)
+		template <class Y, class Metrics, class Tester> std::tuple<DecisionTree<Y>, double, double> tree_1d_auto_prune(const Metrics metrics, Tester test_error_function, const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds)
 		{
 			double alpha = std::numeric_limits<double>::quiet_NaN();
 			double min_cv_test_error = std::numeric_limits<double>::quiet_NaN();
