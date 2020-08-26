@@ -12,7 +12,7 @@ Current version number for both projects is 0.2
 - decision trees for classification and regression
 - linear regression (incl. recursive)
 
-More is coming!
+More is coming! See Doxygen documentation for details.
 
 ## Requirements
 
