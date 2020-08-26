@@ -4,6 +4,8 @@ ML++ is a set of efficient C++ implementations of some ML algorithms.
 
 cppyml is a Python extension module built on top of M++. Precompiled cppyml binaries for Windows are available on [PyPi](https://pypi.org/project/cppyml/).
 
+Current version number for both projects is 0.2
+
 ## Contents
 
 - clustering (EM algorithm)
@@ -61,18 +63,22 @@ If you want to build it from source, see [cppyml documentation](cppyml.md).
 
 ### Linux binaries
 
-Call `scons` in the main project directory to build in Debug mode, or `scons mode=release` for a Release (optimised) build.
+Call `scons` in the main repository directory to build in Debug mode, or `scons mode=release` 
+for a Release (optimised) build.
 
 ### Doxygen documentation
 
-C++ code has Doxygen-compatible comments. To generate HTML documentation from them, run (from the main project directory):
+C++ code has Doxygen-compatible comments. To generate HTML documentation from them, run 
+(from the main repository directory):
 
 ```bash
 cd ML
 doxygen
 ```
 
-(requires `doxygen` and `graphviz` to be installed). The documentation will be written to `ML/docs/html` subdirectory.
+(requires `doxygen` and `graphviz` to be installed). The documentation will be written to
+`ML/docs/html` subdirectory. A pre-built version of this documentation for the current release
+is [here](html/index.html).
 
 ## Python extension
 

@@ -1,0 +1,5 @@
+<map id="ml::Clustering::CentroidsInitialiser" name="ml::Clustering::CentroidsInitialiser">
+<area shape="rect" id="node2" href="$classml_1_1Clustering_1_1Forgy.html" title="Chooses random points as new centroids. " alt="" coords="5,95,149,121"/>
+<area shape="rect" id="node3" href="$classml_1_1Clustering_1_1KPP.html" title="Implements the K++ algorithm. " alt="" coords="173,95,312,121"/>
+<area shape="rect" id="node4" href="$classml_1_1Clustering_1_1RandomPartition.html" title="Assigns points to clusters randomly and then returns cluster means. " alt="" coords="336,95,544,121"/>
+</map>
