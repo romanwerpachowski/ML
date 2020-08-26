@@ -11,4 +11,4 @@ Available under GNU GENERAL PUBLIC LICENSE Version 3.
 ## Documentation
 
 - [local](docs/index.md)
-- [cppyml README](cppyml/README.md)
+- [hosted](https://romanwerpachowski.github.io/ML/)
