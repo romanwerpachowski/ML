@@ -123,7 +123,7 @@ namespace ml
 		typedef Eigen::LDLT<Eigen::MatrixXd> XXTMatrixDecomposition;
 
 		/** @brief Calculates X*X^T, inverts it, and calculates beta. */
-		static Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, XXTMatrixDecomposition& xxt_decomp, const bool check_number_points)
+		static Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, XXTMatrixDecomposition& xxt_decomp)
 		{
 			// X is an q x N matrix and y is a N-size vector.
 			const auto n = static_cast<unsigned int>(X.cols());
@@ -131,7 +131,7 @@ namespace ml
 				throw std::invalid_argument("X matrix has different number of data points than Y has values");
 			}
 			const auto q = static_cast<unsigned int>(X.rows());
-			if (check_number_points && (n < q)) {
+			if (n < q) {
 				throw std::invalid_argument("Not enough data points for regression");
 			}
 			const Eigen::VectorXd b(X * y);
@@ -153,7 +153,7 @@ namespace ml
 			const auto n = static_cast<unsigned int>(X.cols());
 			XXTMatrixDecomposition xxt_decomp;
 			MultivariateOLSResult result;
-			result.beta = calculate_XXt_beta(X, y, xxt_decomp, true);
+			result.beta = calculate_XXt_beta(X, y, xxt_decomp);
 			result.n = n;
 			result.dof = n - q;
 			assert(result.beta.size() == X.rows());
@@ -235,7 +235,7 @@ namespace ml
 
 		void RecursiveMultivariateOLS::initialise(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y)
 		{			
-			beta_ = calculate_XXt_beta(X, y, helper_decomp_, true);
+			beta_ = calculate_XXt_beta(X, y, helper_decomp_);
 			d_ = static_cast<unsigned int>(X.rows());
 			n_ = static_cast<unsigned int>(X.cols());
 			P_ = helper_decomp_.solve(Eigen::MatrixXd::Identity(d_, d_));
