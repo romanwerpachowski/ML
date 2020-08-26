@@ -54,14 +54,13 @@ For demos and tests:
 
 ### Windows binaries
 
-Pre-built Python extension can be installed via `pip install cppyml` (requires Python 3.7.x).
+Use the Visual Studio build process.
 
-If you want to build from source, build the Visual Studio solution in Release mode.
+Pre-built Python extension `cppyml` can be installed via `pip install cppyml` (requires Python 3.7.x). If you want to build it from source, build the Visual Studio solution in Release mode.
 
 ### Linux binaries
 
-You have to build from source for now, using SCons. Call `scons` in the main project directory
-to build in Debug mode, or `scons mode=release` for a Release (optimised) build.
+Call `scons` in the main project directory to build in Debug mode, or `scons mode=release` for a Release (optimised) build.
 
 ### Doxygen documentation
 
