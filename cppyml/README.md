@@ -23,7 +23,7 @@ sudo python setup.py install
 
 ### Windows
 
-Precompiled binaries are available on [PyPi](https://pypi.org/project/cppyml/).
+Precompiled binaries are available on [PyPi](https://pypi.org/project/cppyml/). Install them using `pip install cppyml`.
 
 To build from source under Windows, build the solution in Release mode and then do:
 ```bash

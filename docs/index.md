@@ -75,15 +75,6 @@ doxygen
 
 (requires `doxygen` and `graphviz` to be installed). The documentation will be written to `ML/docs/html` subdirectory.
 
-## Installation of Python extension
+## Python extension
 
-### Pre-build Windows binaries
-
-Run `pip install cppyml`.
-
-### Locally built extension
-
-```bash
-cd cppyml
-python setup.py install
-```
+Documentation for Python extension project `cppyml` is [here](../cppyml/README.md).
