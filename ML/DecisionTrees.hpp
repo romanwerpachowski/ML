@@ -6,8 +6,8 @@
 
 namespace ml
 {
-	/** @brief Decision tree for univariate linear regression. */
-	typedef DecisionTree<double> UnivariateRegressionTree;
+	/** @brief Decision tree for linear regression. */
+	typedef DecisionTree<double> RegressionTree;
 
 	/** @brief Decision tree for multinomial classification. */
 	typedef DecisionTree<unsigned int> ClassificationTree;
@@ -18,7 +18,7 @@ namespace ml
 		/** @brief Pair of vector iterators. */
 		template <typename T> using VectorRange = std::pair<typename std::vector<T>::iterator, typename std::vector<T>::iterator>;
 
-		/** @brief Grows a univariate regression tree with pruning.
+		/** @brief Grows a regression tree with pruning.
 		@param X Independent variables (column-wise).
 		@param y Dependent variable.
 		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
@@ -27,7 +27,7 @@ namespace ml
 		@param num_folds Number of folds for cross-validation. Ignored if cross-validation is not done.
 		@return Tuple of: trained decision tree, chosen alpha (NaN if no pruning was done) and minimum cross-validation test error (NaN if no cross-validation was done).
 		*/
-		DLL_DECLSPEC std::tuple<UnivariateRegressionTree, double, double> univariate_regression_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds);
+		DLL_DECLSPEC std::tuple<RegressionTree, double, double> regression_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds);
 
 		/** @brief Grows a classification tree with pruning.
 		@param X Features (column-wise).
@@ -40,13 +40,13 @@ namespace ml
 		*/
 		DLL_DECLSPEC std::tuple<ClassificationTree, double, double> classification_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds);		
 
-		/** @brief Grows a univariate regression tree without pruning.
+		/** @brief Grows a regression tree without pruning.
 		@param X Independent variables (column-wise).
 		@param y Dependent variable.
 		@param max_split_levels Maximum number of split nodes on the way to any leaf node.
 		@param min_sample_size Minimum sample size which can be split (at least 2).
 		*/
-		DLL_DECLSPEC UnivariateRegressionTree univariate_regression_tree(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
+		DLL_DECLSPEC RegressionTree regression_tree(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size);
 
 		/** @brief Grows a classification tree without pruning.
 		@param X Classification features (column-wise).
@@ -72,7 +72,7 @@ namespace ml
 		}
 
 		/** @brief Calculates tree mean squared error on (X, y) data. */
-		DLL_DECLSPEC double univariate_regression_tree_mean_squared_error(const UnivariateRegressionTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
+		DLL_DECLSPEC double regression_tree_mean_squared_error(const RegressionTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
 		/** @brief Calculates tree accuracy on (X, y) data. */
 		DLL_DECLSPEC double classification_tree_accuracy(const ClassificationTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
@@ -86,7 +86,7 @@ namespace ml
 		/** @private Finds the split on a single feature which minimises the sum of SSEs of split samples.
 		This function is not meant to be used directly. It's exposed for testing.
 		*/
-		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_univariate_regression(
+		DLL_DECLSPEC std::pair<unsigned int, double> find_best_split_regression(
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,

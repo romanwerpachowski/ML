@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 #include "ML/DecisionTrees.hpp"
 
-typedef ml::UnivariateRegressionTree RegTree;
+typedef ml::RegressionTree RegTree;
 
 typedef std::pair<Eigen::Index, double> IndexedFeatureValue;
 
@@ -96,7 +96,7 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_constant_y)
 	}
 	std::vector<IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
-	const auto split = ml::DecisionTrees::find_best_split_univariate_regression(X, y, sorted_y, from_vector(features));
+	const auto split = ml::DecisionTrees::find_best_split_regression(X, y, sorted_y, from_vector(features));
 	ASSERT_EQ(-std::numeric_limits<double>::infinity(), split.second);	
 }
 
@@ -115,7 +115,7 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_linear_in_x0)
 	}
 	std::vector<IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
-	const auto split = ml::DecisionTrees::find_best_split_univariate_regression(X, y, sorted_y, from_vector(features));
+	const auto split = ml::DecisionTrees::find_best_split_regression(X, y, sorted_y, from_vector(features));
 	ASSERT_EQ(0u, split.first);
 	ASSERT_NEAR(4.5, split.second, 1e-15);
 }
@@ -135,7 +135,7 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_linear)
 	}
 	std::vector<IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
-	const auto split = ml::DecisionTrees::find_best_split_univariate_regression(X, y, sorted_y, from_vector(features));
+	const auto split = ml::DecisionTrees::find_best_split_regression(X, y, sorted_y, from_vector(features));
 	ASSERT_EQ(0u, split.first);
 	ASSERT_NEAR(4.5, split.second, 1e-15);	
 }
@@ -155,7 +155,7 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_const)
 	}
 	std::vector<IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
-	const auto split = ml::DecisionTrees::find_best_split_univariate_regression(X, y, sorted_y, from_vector(features));
+	const auto split = ml::DecisionTrees::find_best_split_regression(X, y, sorted_y, from_vector(features));
 	ASSERT_EQ(0u, split.first);
 	ASSERT_EQ(-std::numeric_limits<double>::infinity(), split.second);
 }
@@ -185,8 +185,8 @@ TEST(DecisionTreeTest, stepwise)
 		}
 	}
 
-	const RegTree tree(ml::DecisionTrees::univariate_regression_tree(X, y, 2, 10));
-	const RegTree tree1(ml::DecisionTrees::univariate_regression_tree(X, y, 1, 10));
+	const RegTree tree(ml::DecisionTrees::regression_tree(X, y, 2, 10));
+	const RegTree tree1(ml::DecisionTrees::regression_tree(X, y, 1, 10));
 	ASSERT_EQ(tree1.original_error(), tree1.original_error());
 	ASSERT_EQ(7u, tree.count_nodes());
 	ASSERT_EQ(3u, tree1.count_nodes());
@@ -204,7 +204,7 @@ TEST(DecisionTreeTest, stepwise)
 
 	ASSERT_EQ(2u, tree.number_lowest_split_nodes());
 
-	const ml::UnivariateRegressionTree tree_copy(tree);
+	const ml::RegressionTree tree_copy(tree);
 	ASSERT_EQ(2u, tree_copy.number_lowest_split_nodes());
 }
 
@@ -235,7 +235,7 @@ TEST(DecisionTreeTest, univariate_regression_with_pruning)
 		test_y[i] = f(test_X(0, i), test_X(1, i));
 	}
 	// Grow a big tree.
-	RegTree tree(ml::DecisionTrees::univariate_regression_tree(train_X, train_y, 100, 2));
+	RegTree tree(ml::DecisionTrees::regression_tree(train_X, train_y, 100, 2));
 	const double train_sse = tree.total_leaf_error();
 	const auto orig_num_modes = tree.count_nodes();
 	const double alpha = 0.001;
@@ -243,7 +243,7 @@ TEST(DecisionTreeTest, univariate_regression_with_pruning)
 	ASSERT_EQ(0, train_sse);	
 	const double train_mse = train_sse / static_cast<double>(train_sample_size);
 	
-	const double test_mse = ml::DecisionTrees::univariate_regression_tree_mean_squared_error(tree, test_X, test_y);
+	const double test_mse = ml::DecisionTrees::regression_tree_mean_squared_error(tree, test_X, test_y);
 	ASSERT_GT(test_mse, train_mse + 0.01);
 	ASSERT_LE(test_mse, train_mse + 0.035);
 
@@ -251,7 +251,7 @@ TEST(DecisionTreeTest, univariate_regression_with_pruning)
 	ASSERT_GT(tree.total_leaf_error(), train_sse);
 	ASSERT_LT(tree.count_nodes(), orig_num_modes);
 	ASSERT_LT(tree.cost_complexity(alpha), orig_cost_complexity);
-	const double pruned_test_mse = ml::DecisionTrees::univariate_regression_tree_mean_squared_error(tree, test_X, test_y);
+	const double pruned_test_mse = ml::DecisionTrees::regression_tree_mean_squared_error(tree, test_X, test_y);
 	ASSERT_GT(pruned_test_mse, train_sse + 0.01);
 }
 
@@ -285,7 +285,7 @@ TEST(DecisionTreeTest, univariate_regression_with_crossvalidation)
 		test_y[i] = f(test_X(0, i), test_X(1, i)) + noise_strength * noise();
 	}
 	const std::vector<double> alphas({ 1e-3, 3e-3, 1e-2 });
-	auto result = ml::DecisionTrees::univariate_regression_tree_auto_prune(train_X, train_y, 100, 2, alphas, 10);
+	auto result = ml::DecisionTrees::regression_tree_auto_prune(train_X, train_y, 100, 2, alphas, 10);
 	const RegTree& tree = std::get<0>(result);
 	const auto alpha = std::get<1>(result);
 	ASSERT_GT(alpha, alphas.front());
@@ -293,7 +293,7 @@ TEST(DecisionTreeTest, univariate_regression_with_crossvalidation)
 	const auto cv_test_error = std::get<2>(result);
 	ASSERT_GT(cv_test_error, 0);
 	ASSERT_NE(alphas.end(), std::find(alphas.begin(), alphas.end(), alpha));
-	const double test_error = ml::DecisionTrees::univariate_regression_tree_mean_squared_error(tree, test_X, test_y);
+	const double test_error = ml::DecisionTrees::regression_tree_mean_squared_error(tree, test_X, test_y);
 	ASSERT_NEAR(test_error, noise_strength * noise_strength, 2e-5);	
 	ASSERT_GT(cv_test_error, test_error);
 }
@@ -333,7 +333,7 @@ TEST(DecisionTreeTest, pruning)
 		}
 	}
 	// Grow a big tree.
-	RegTree tree(ml::DecisionTrees::univariate_regression_tree(X, y, 100, 2));
+	RegTree tree(ml::DecisionTrees::regression_tree(X, y, 100, 2));
 
 	ASSERT_EQ(n, static_cast<int>(tree.count_leaf_nodes()));
 	ASSERT_NEAR(0, tree.total_leaf_error(), 1e-15);

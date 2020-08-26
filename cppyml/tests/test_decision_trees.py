@@ -39,17 +39,17 @@ class DecisionTreesTest(unittest.TestCase):
         y_hat = regressor.predict(X)
         sklearn_mse = ((y - y_hat)**2).mean()
 
-        tree, _, _ = decision_trees.univariate_regression_tree(X, y, alphas=[], min_split_size=self.min_split_size)
-        pyml_mse = decision_trees.univariate_regression_tree_mean_squared_error(tree, X, y)
+        tree, _, _ = decision_trees.regression_tree(X, y, alphas=[], min_split_size=self.min_split_size)
+        pyml_mse = decision_trees.regression_tree_mean_squared_error(tree, X, y)
         self.assertGreater(pyml_mse, 0)        
         self.assertAlmostEqual(sklearn_mse, pyml_mse, delta=1e-12)
 
     def test_regression_with_pruning(self):
         X, y = self.diabetes
-        tree, _, _ = decision_trees.univariate_regression_tree(X, y, alphas=[], min_split_size=self.min_split_size)
-        mse = decision_trees.univariate_regression_tree_mean_squared_error(tree, X, y)
-        pruned_tree, _, _ = decision_trees.univariate_regression_tree(X, y, min_split_size=self.min_split_size)
-        pruned_mse = decision_trees.univariate_regression_tree_mean_squared_error(pruned_tree, X, y)        
+        tree, _, _ = decision_trees.regression_tree(X, y, alphas=[], min_split_size=self.min_split_size)
+        mse = decision_trees.regression_tree_mean_squared_error(tree, X, y)
+        pruned_tree, _, _ = decision_trees.regression_tree(X, y, min_split_size=self.min_split_size)
+        pruned_mse = decision_trees.regression_tree_mean_squared_error(pruned_tree, X, y)        
         self.assertGreater(pruned_mse, mse)
 
 

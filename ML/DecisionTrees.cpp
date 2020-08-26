@@ -266,7 +266,7 @@ namespace ml
 		};
 
 		/** @brief Metrics for regression trees. */
-		struct UnivariateRegressionMetrics
+		struct RegressionMetrics
 		{
 			template <typename Iter> std::pair<double, double> error_and_value(Iter begin, Iter end) const
 			{
@@ -284,20 +284,20 @@ namespace ml
 			}
 		};
 
-		std::pair<unsigned int, double> find_best_split_univariate_regression(
+		std::pair<unsigned int, double> find_best_split_regression(
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
 			const VectorRange<IndexedFeatureValue> features)
 		{
-			const UnivariateRegressionMetrics metrics;
+			const RegressionMetrics metrics;
 			const double error_whole_sample = metrics.error_for_splitting(y.data(), y.data() + y.size());
 			return find_best_split_1d(metrics, X, y, sorted_y, error_whole_sample, features);
 		}
 
-		UnivariateRegressionTree univariate_regression_tree(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size)
+		RegressionTree regression_tree(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size)
 		{
-			return tree_1d<double>(UnivariateRegressionMetrics(), X, y, max_split_levels, min_sample_size);
+			return tree_1d<double>(RegressionMetrics(), X, y, max_split_levels, min_sample_size);
 		}
 
 		ClassificationTree classification_tree(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int max_split_levels, const unsigned int min_sample_size)
@@ -305,7 +305,7 @@ namespace ml
 			return tree_1d<unsigned int>(ClassificationMetrics(static_cast<unsigned int>(y.maxCoeff()) + 1), X, y, max_split_levels, min_sample_size);
 		}
 
-		double univariate_regression_tree_mean_squared_error(const UnivariateRegressionTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
+		double regression_tree_mean_squared_error(const RegressionTree& tree, Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
 		{
 			const auto sample_size = y.size();
 			if (!sample_size) {
@@ -380,9 +380,9 @@ namespace ml
 			return std::make_tuple(std::move(tree), alpha, min_cv_test_error);
 		}
 
-		std::tuple<UnivariateRegressionTree, double, double> univariate_regression_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds)
+		std::tuple<RegressionTree, double, double> regression_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds)
 		{
-			return tree_1d_auto_prune<double>(UnivariateRegressionMetrics(), univariate_regression_tree_mean_squared_error, X, y, max_split_levels, min_sample_size, alphas, num_folds);
+			return tree_1d_auto_prune<double>(RegressionMetrics(), regression_tree_mean_squared_error, X, y, max_split_levels, min_sample_size, alphas, num_folds);
 		}
 
 		std::tuple<ClassificationTree, double, double> classification_tree_auto_prune(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector<double>& alphas, const unsigned int num_folds)

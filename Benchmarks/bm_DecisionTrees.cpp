@@ -2,7 +2,7 @@
 #include <benchmark/benchmark.h>
 #include "ML/DecisionTrees.hpp"
 
-static void univariate_regression_tree(benchmark::State& state)
+static void regression_tree(benchmark::State& state)
 {
 	std::default_random_engine rng;
 	std::normal_distribution normal;
@@ -36,12 +36,12 @@ static void univariate_regression_tree(benchmark::State& state)
 	}
 	// Benchmarked code.
 	for (auto _ : state) {
-		ml::UnivariateRegressionTree tree(ml::DecisionTrees::univariate_regression_tree(X, y, 100, 2));
+		ml::RegressionTree tree(ml::DecisionTrees::regression_tree(X, y, 100, 2));
 	}
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(univariate_regression_tree)->RangeMultiplier(2)->Range(2, 64)->UseRealTime()->Complexity();
+BENCHMARK(regression_tree)->RangeMultiplier(2)->Range(2, 64)->UseRealTime()->Complexity();
 
 
 static void classification_tree(benchmark::State& state)
@@ -120,12 +120,12 @@ static void cost_complexity_prune(benchmark::State& state)
 			y[k] += sigma * normal(rng);
 		}
 	}
-	const ml::UnivariateRegressionTree tree(ml::DecisionTrees::univariate_regression_tree(X, y, 100, 2));
+	const ml::RegressionTree tree(ml::DecisionTrees::regression_tree(X, y, 100, 2));
 	// Benchmarked code.
 	for (auto _ : state) {
 		state.PauseTiming();
 		// Do not measure the cost of copying the tree.
-		ml::UnivariateRegressionTree pruned_tree(tree);
+		ml::RegressionTree pruned_tree(tree);
 		state.ResumeTiming();
 		ml::DecisionTrees::cost_complexity_prune(pruned_tree, 0.01);
 	}
@@ -166,10 +166,10 @@ static void tree_copy(benchmark::State& state)
 			y[k] += sigma * normal(rng);
 		}
 	}
-	const ml::UnivariateRegressionTree tree(ml::DecisionTrees::univariate_regression_tree(X, y, 100, 2));
+	const ml::RegressionTree tree(ml::DecisionTrees::regression_tree(X, y, 100, 2));
 	// Benchmarked code.
 	for (auto _ : state) {
-		ml::UnivariateRegressionTree copy(tree);
+		ml::RegressionTree copy(tree);
 	}
 	state.SetComplexityN(state.range(0));
 }

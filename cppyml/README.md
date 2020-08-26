@@ -2,6 +2,13 @@
 
 Optimised Python extension for machine learning based on the [ML](https://github.com/romanwerpachowski/ML) C++ library.
 
+## Contents
+
+- ordinary least squares (OLS) regression
+- recursive OLS regression
+- classification and regression decision trees with pruning
+- Gaussian E-M clustering
+
 ## Installation
 
 ### Linux
