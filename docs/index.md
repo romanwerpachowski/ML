@@ -76,4 +76,4 @@ doxygen
 
 ## Python extension
 
-Documentation for Python extension project `cppyml` is [here](../cppyml/README.md).
+Documentation for Python extension project `cppyml` is [here](cppyml.md).
