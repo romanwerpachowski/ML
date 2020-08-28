@@ -180,5 +180,26 @@ namespace ml
 			X_with_intercept.bottomRows(1) = Eigen::RowVectorXd::Ones(X.cols());
 			return X_with_intercept;
 		}
+
+		DLL_DECLSPEC Eigen::MatrixXd standardise(const Eigen::Ref<const Eigen::MatrixXd> X)
+		{
+			if (!X.size()) {
+				throw std::invalid_argument("Standardising an empty matrix");
+			}
+			Eigen::MatrixXd Xstd(X);
+			Eigen::VectorXd w(X.rows());
+			w = Xstd.rowwise().mean();
+			Xstd.colwise() -= w;
+			w = Xstd.rowwise().squaredNorm();
+			w /= static_cast<double>(X.cols());
+			w = w.array().sqrt();
+			for (Eigen::Index i = 0; i < Xstd.rows(); ++i) {
+				if (!w[i]) {
+					throw std::invalid_argument("At least one row has constant values");
+				}
+				Xstd.row(i) /= w[i];
+			}			
+			return Xstd;
+		}
 	}
 }

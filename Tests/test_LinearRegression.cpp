@@ -490,3 +490,28 @@ TEST_F(LinearRegressionTest, recursive_multivariate_ols_errors)
 	ASSERT_THROW(RecursiveMultivariateOLS(X, y), std::invalid_argument);
 	ASSERT_THROW(rmols.update(X, y), std::invalid_argument);
 }
+
+TEST_F(LinearRegressionTest, standardise_errors)
+{
+	Eigen::MatrixXd X;
+	ASSERT_THROW(standardise(X), std::invalid_argument);
+	X.resize(3, 2);
+	X << 2, 2,
+		0, 1,
+		-1, 1;
+	ASSERT_THROW(standardise(X), std::invalid_argument);
+}
+
+TEST_F(LinearRegressionTest, standardise)
+{
+	Eigen::MatrixXd X(2, 3);
+	X << 0, 1, 2,
+		0, 0, 2;
+	const auto actual = standardise(X);
+	Eigen::MatrixXd expected(2, 3);
+	const double a = 1 / std::sqrt(2 / 3.);
+	const double b = 1 / std::sqrt(2);
+	expected << -a, 0, a,
+		-b, -b, 2 * b;
+	ASSERT_NEAR(0, (actual - expected).norm(), 1e-15);
+}

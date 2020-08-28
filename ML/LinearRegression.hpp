@@ -99,7 +99,7 @@ namespace ml
 
 		/** @brief Carries out multivariate linear regression.
 
-		Given X and y, finds beta minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 \f$.
+		Given X and y, finds \f$\vec{beta}\f$ minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 \f$.
 
 		R2 is always calculated w/r to model returning average y.
 
@@ -112,12 +112,39 @@ namespace ml
 		*/
 		DLL_DECLSPEC MultivariateOLSResult multivariate(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
+		/** @brief Carries out multivariate linear regression with ridge regularisation.
+
+		Given X and y, finds beta minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 + \lambda  \f$.
+
+		R2 is always calculated w/r to model returning average y.
+
+		If fitting with intercept is desired, include a row of 1's in the X values.
+
+		@param[in] X D x N matrix of X values, with data points in columns.
+		@param[in] y Y vector with length N.
+		@return MultivariateOLSResult object.
+		@throw std::invalid_argument If `y.size() != X.cols()` or `X.cols() < X.rows()`.
+		*/
+		DLL_DECLSPEC MultivariateOLSResult multivariate_ridge(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda);
+
 		/** @brief Adds another row with 1s in every column to X.
 		@param[in] X Matrix of independent variables with data points in columns.
 		@return New matrix with a row filled with 1's added at the end.
 		@throw std::invalid_argument If `X.cols() == 0`.		
 		*/
-		DLL_DECLSPEC Eigen::MatrixXd add_ones(Eigen::Ref<const Eigen::MatrixXd> X);		
+		DLL_DECLSPEC Eigen::MatrixXd add_ones(Eigen::Ref<const Eigen::MatrixXd> X);
+
+		/** @brief Standardises independent variables.
+
+		From each row, `standardise` subtracts its mean and divides it by its standard deviation.
+		The standard deviation is calculated using the biased estimator (with denominator equal to
+		the number of columns in `X`), so that standardisation works also for N x 1 data.
+
+		@param[in] X Matrix of independent variables with data points in columns.
+		@return Standardised matrix with the same dimensions as `X`.
+		@throw std::invalid_argument If any row of `X` has all values the same, or `X` is empty.
+		*/
+		DLL_DECLSPEC Eigen::MatrixXd standardise(Eigen::Ref<const Eigen::MatrixXd> X);
 
 		/** @brief Calculates X*X^T, inverts it, and calculates beta. 
 		@private Shared between multiple linear regression algorithms.
