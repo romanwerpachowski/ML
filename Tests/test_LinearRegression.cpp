@@ -502,6 +502,19 @@ TEST_F(LinearRegressionTest, standardise_errors)
 	ASSERT_THROW(standardise(X), std::invalid_argument);
 }
 
+TEST_F(LinearRegressionTest, standardise_with_params_errors)
+{
+	Eigen::MatrixXd X;
+	Eigen::VectorXd means;
+	Eigen::VectorXd standard_deviations;
+	ASSERT_THROW(standardise(X, means, standard_deviations), std::invalid_argument);
+	X.resize(3, 2);
+	X << 2, 2,
+		0, 1,
+		-1, 1;
+	ASSERT_THROW(standardise(X, means, standard_deviations), std::invalid_argument);
+}
+
 TEST_F(LinearRegressionTest, standardise)
 {
 	Eigen::MatrixXd X(2, 3);
@@ -514,4 +527,46 @@ TEST_F(LinearRegressionTest, standardise)
 	expected << -a, 0, a,
 		-b, -b, 2 * b;
 	ASSERT_NEAR(0, (actual - expected).norm(), 1e-15);
+}
+
+TEST_F(LinearRegressionTest, standardise_with_params)
+{
+	Eigen::MatrixXd X(2, 3);
+	X << 0, 1, 2,
+		0, 0, 2;
+	Eigen::VectorXd means;
+	Eigen::VectorXd standard_deviations;
+	const auto actual = standardise(X, means, standard_deviations);
+	Eigen::MatrixXd expected(2, 3);
+	const double a = 1 / std::sqrt(2 / 3.);
+	const double b = 1 / std::sqrt(2);
+	expected << -a, 0, a,
+		-b, -b, 2 * b;
+	ASSERT_NEAR(0, (actual - expected).norm(), 1e-15) << actual;
+	ASSERT_EQ(2u, means.size());
+	ASSERT_EQ(2u, standard_deviations.size());
+	Eigen::VectorXd w(2);
+	w << 1, 2. / 3;
+	ASSERT_NEAR(0, (w - means).norm(), 1e-15) << means;
+	w << std::sqrt(2 / 3.), 2 * std::sqrt(2) / 3;
+	ASSERT_NEAR(0, (w - standard_deviations).norm(), 1e-15) << standard_deviations;
+}
+
+TEST_F(LinearRegressionTest, standardise_with_params_same_vector)
+{
+	Eigen::MatrixXd X(2, 3);
+	X << 0, 1, 2,
+		0, 0, 2;
+	Eigen::VectorXd standard_deviations;
+	const auto actual = standardise(X, standard_deviations, standard_deviations);
+	Eigen::MatrixXd expected(2, 3);
+	const double a = 1 / std::sqrt(2 / 3.);
+	const double b = 1 / std::sqrt(2);
+	expected << -a, 0, a,
+		-b, -b, 2 * b;
+	ASSERT_NEAR(0, (actual - expected).norm(), 1e-15) << actual;
+	ASSERT_EQ(2u, standard_deviations.size());
+	Eigen::VectorXd w(2);
+	w << std::sqrt(2 / 3.), 2 * std::sqrt(2) / 3;
+	ASSERT_NEAR(0, (w - standard_deviations).norm(), 1e-15) << standard_deviations;
 }

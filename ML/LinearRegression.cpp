@@ -181,24 +181,32 @@ namespace ml
 			return X_with_intercept;
 		}
 
-		DLL_DECLSPEC Eigen::MatrixXd standardise(const Eigen::Ref<const Eigen::MatrixXd> X)
+		Eigen::MatrixXd standardise(const Eigen::Ref<const Eigen::MatrixXd> X)
+		{
+			Eigen::VectorXd w;
+			return standardise(X, w, w);
+		}
+
+		Eigen::MatrixXd standardise(const Eigen::Ref<const Eigen::MatrixXd> X, Eigen::VectorXd& means, Eigen::VectorXd& standard_deviations)
 		{
 			if (!X.size()) {
 				throw std::invalid_argument("Standardising an empty matrix");
 			}
 			Eigen::MatrixXd Xstd(X);
-			Eigen::VectorXd w(X.rows());
-			w = Xstd.rowwise().mean();
-			Xstd.colwise() -= w;
-			w = Xstd.rowwise().squaredNorm();
-			w /= static_cast<double>(X.cols());
-			w = w.array().sqrt();
+			means.resize(X.rows());
+			means = Xstd.rowwise().mean();
+			Xstd.colwise() -= means;
+			standard_deviations.resize(X.rows());
+			standard_deviations = Xstd.rowwise().squaredNorm();
+			standard_deviations /= static_cast<double>(X.cols());
+			standard_deviations = standard_deviations.array().sqrt();
 			for (Eigen::Index i = 0; i < Xstd.rows(); ++i) {
-				if (!w[i]) {
+				const auto sigma = standard_deviations[i];
+				if (!sigma) {
 					throw std::invalid_argument("At least one row has constant values");
 				}
-				Xstd.row(i) /= w[i];
-			}			
+				Xstd.row(i) /= sigma;
+			}
 			return Xstd;
 		}
 	}

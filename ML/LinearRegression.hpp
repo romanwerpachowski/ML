@@ -109,21 +109,22 @@ namespace ml
 		@param[in] y Y vector with length N.
 		@return MultivariateOLSResult object.
 		@throw std::invalid_argument If `y.size() != X.cols()` or `X.cols() < X.rows()`.
+		@see add_ones()
 		*/
 		DLL_DECLSPEC MultivariateOLSResult multivariate(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
 		/** @brief Carries out multivariate linear regression with ridge regularisation.
 
-		Given X and y, finds beta minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 + \lambda  \f$.
+		Given X and y, finds beta minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 + \lambda \lVert \vec{\beta} \rVert^2 \f$.
 
-		R2 is always calculated w/r to model returning average y.
-
-		If fitting with intercept is desired, include a row of 1's in the X values.
+		R2 is always calculated w/r to model returning average y. The matrix `X` is assumed to be standardised.
 
 		@param[in] X D x N matrix of X values, with data points in columns.
 		@param[in] y Y vector with length N.
+		@param[in] lambda Regularisation strength.
 		@return MultivariateOLSResult object.
 		@throw std::invalid_argument If `y.size() != X.cols()` or `X.cols() < X.rows()`.
+		@see standardise()
 		*/
 		DLL_DECLSPEC MultivariateOLSResult multivariate_ridge(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda);
 
@@ -145,6 +146,24 @@ namespace ml
 		@throw std::invalid_argument If any row of `X` has all values the same, or `X` is empty.
 		*/
 		DLL_DECLSPEC Eigen::MatrixXd standardise(Eigen::Ref<const Eigen::MatrixXd> X);
+
+		/** @brief Standardises independent variables.
+
+		From each row, `standardise` subtracts its mean and divides it by its standard deviation.
+		The standard deviation is calculated using the biased estimator (with denominator equal to
+		the number of columns in `X`), so that standardisation works also for N x 1 data.
+
+		This version of `standardise` saves original mean and standard deviation for
+		every row in provided vectors.
+
+		@param[in] X D x N matrix of independent variables with data points in columns.
+		@param[out] means At exit has length D and contains means of rows of `X`.
+		@param[out] standard_deviations At exit has length D and contains standard deviations of rows of `X`. 
+			If `means` and `standard_deviations` refer to the same vector, at exit this vector will contain the standard deviations.
+		@return Standardised matrix with the same dimensions as `X`.
+		@throw std::invalid_argument If any row of `X` has all values the same, or `X` is empty.
+		*/
+		DLL_DECLSPEC Eigen::MatrixXd standardise(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::VectorXd& means, Eigen::VectorXd& standard_deviations);
 
 		/** @brief Calculates X*X^T, inverts it, and calculates beta. 
 		@private Shared between multiple linear regression algorithms.
