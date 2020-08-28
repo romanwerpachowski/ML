@@ -47,9 +47,21 @@ namespace ml
 
 			/** @brief Formats the result as string. */
 			DLL_DECLSPEC std::string to_string() const;
+		};
 
-			/** @brief Destructor. */
-			DLL_DECLSPEC ~MultivariateOLSResult();
+		/** @brief Result of a (multivariate) ridge regression with intercept.
+
+		Does not contain error estimates because they are not easy to estimate reliably for regularised regression.
+
+		Intercept is reported separately because it has a special status: it's not regularised.
+		*/
+		struct RidgeRegressionResult : public Result
+		{
+			Eigen::VectorXd slopes; /**< Regularised coefficients multiplying independent variables. */
+			double intercept; /**< Unregularised intercept. */
+
+			/** @brief Formats the result as string. */
+			DLL_DECLSPEC std::string to_string() const;
 		};
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept.
@@ -113,20 +125,21 @@ namespace ml
 		*/
 		DLL_DECLSPEC MultivariateOLSResult multivariate(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
-		/** @brief Carries out multivariate linear regression with ridge regularisation.
+		/** @brief Carries out multivariate ridge regression with intercept.
 
-		Given X and y, finds beta minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 + \lambda \lVert \vec{\beta} \rVert^2 \f$.
+		Given X and y, finds beta and beta0 minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 + \lambda \lVert \vec{\beta} \rVert^2 \f$.
 
 		R2 is always calculated w/r to model returning average y. The matrix `X` is assumed to be standardised.
 
 		@param[in] X D x N matrix of X values, with data points in columns.
 		@param[in] y Y vector with length N.
 		@param[in] lambda Regularisation strength.
-		@return MultivariateOLSResult object.
+		@return BiasedMultivariateOLSResult object with `beta.size() == X.rows() + 1`.
 		@throw std::invalid_argument If `y.size() != X.cols()` or `X.cols() < X.rows()`.
+		@throw std::domain_error If `lambda < 0`.
 		@see standardise()
 		*/
-		DLL_DECLSPEC MultivariateOLSResult multivariate_ridge(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda);
+		DLL_DECLSPEC RidgeRegressionResult ridge(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda);
 
 		/** @brief Adds another row with 1s in every column to X.
 		@param[in] X Matrix of independent variables with data points in columns.
@@ -165,9 +178,15 @@ namespace ml
 		*/
 		DLL_DECLSPEC Eigen::MatrixXd standardise(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::VectorXd& means, Eigen::VectorXd& standard_deviations);
 
-		/** @brief Calculates X*X^T, inverts it, and calculates beta. 
+		/** @brief Calculates X*X^T, inverts it, and calculates beta.
+
+		Calculates the decomposition of \f$ X X^T + \lambda I \f$ and returns the result of
+
+		\f$ (X X^T + \lambda I)^{-1} X \vec{y} \f$.
+
+		@param lambda Regularisation constant for ridge regression.
 		@private Shared between multiple linear regression algorithms.
 		*/
-		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp);
+		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp, double lambda);
 	}
 }

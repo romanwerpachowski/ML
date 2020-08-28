@@ -31,8 +31,15 @@ namespace ml
 			return s.str();
 		}
 
-		MultivariateOLSResult::~MultivariateOLSResult()
-		{}
+		std::string RidgeRegressionResult::to_string() const
+		{
+			std::stringstream s;
+			s << "RidgeRegressionResult(";
+			s << "n=" << n << ", dof=" << dof << ", r2=" << r2 << ", var_y=" << var_y;
+			s << ", slopes=[" << slopes.transpose() << "]";
+			s << ", intercept=" << intercept << "])";
+			return s.str();
+		}
 
 		static UnivariateOLSResult calc_univariate_linear_regression_result(
 			const double sxx, const double sxy, const double syy, const double mx,
@@ -119,8 +126,11 @@ namespace ml
 			return calc_univariate_linear_regression_result(sxx, sxy, syy, 0, 0, n, false);
 		}
 
-		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp)
+		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp, const double lambda)
 		{
+			if (lambda < 0) {
+				throw std::domain_error("Ridge regularisation constant cannot be negative");
+			}
 			// X is an q x N matrix and y is a N-size vector.
 			const auto n = static_cast<unsigned int>(X.cols());
 			if (n != y.size()) {
@@ -132,12 +142,12 @@ namespace ml
 			}
 			const Eigen::VectorXd b(X * y);
 			assert(b.size() == X.rows());
-			const Eigen::MatrixXd XXt(X * X.transpose());
+			Eigen::MatrixXd XXt(X * X.transpose());
+			if (lambda) {
+				XXt += lambda * Eigen::MatrixXd::Identity(q, q);
+			}
 			assert(XXt.rows() == XXt.cols());
 			assert(XXt.rows() == X.rows());
-			MultivariateOLSResult result;
-			result.n = n;
-			result.dof = n - q;
 			xxt_decomp.compute(XXt);
 			return xxt_decomp.solve(b);
 		}
@@ -149,7 +159,7 @@ namespace ml
 			const auto n = static_cast<unsigned int>(X.cols());
 			Eigen::LDLT<Eigen::MatrixXd> xxt_decomp;
 			MultivariateOLSResult result;
-			result.beta = calculate_XXt_beta(X, y, xxt_decomp);
+			result.beta = calculate_XXt_beta(X, y, xxt_decomp, 0);
 			result.n = n;
 			result.dof = n - q;
 			assert(result.beta.size() == X.rows());
@@ -165,6 +175,26 @@ namespace ml
 			
 			const auto my = y.mean();
 			const auto y_centred = y.array() - my;
+			const auto syy = (y_centred * y_centred).sum();
+			result.r2 = 1 - sse / syy;
+			return result;
+		}
+
+		RidgeRegressionResult ridge(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const double lambda)
+		{
+			// X is an q x N matrix and y is a N-size vector.
+			const auto q = static_cast<unsigned int>(X.rows());
+			const auto n = static_cast<unsigned int>(X.cols());
+			RidgeRegressionResult result;
+			result.n = n;
+			result.dof = n - q;
+			result.intercept = y.mean();
+			Eigen::LDLT<Eigen::MatrixXd> xxt_decomp;
+			result.slopes = calculate_XXt_beta(X, y, xxt_decomp, lambda);
+			assert(result.slopes.size() == X.rows());
+			// Use the fact that intercept == mean(y).
+			const Eigen::VectorXd y_centred(y.array() - result.intercept); 
+			const double sse = (y_centred - X.transpose() * result.slopes).squaredNorm();
 			const auto syy = (y_centred * y_centred).sum();
 			result.r2 = 1 - sse / syy;
 			return result;

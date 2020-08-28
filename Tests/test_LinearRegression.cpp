@@ -309,6 +309,7 @@ TEST_F(LinearRegressionTest, multivariate_error)
 	Eigen::MatrixXd X(3, 10);
 	Eigen::VectorXd y(9);
 	ASSERT_THROW(multivariate(X, y), std::invalid_argument);
+	X.resize(3, 2);
 	y.resize(2);
 	ASSERT_THROW(multivariate(X, y), std::invalid_argument);
 }
@@ -569,4 +570,32 @@ TEST_F(LinearRegressionTest, standardise_with_params_same_vector)
 	Eigen::VectorXd w(2);
 	w << std::sqrt(2 / 3.), 2 * std::sqrt(2) / 3;
 	ASSERT_NEAR(0, (w - standard_deviations).norm(), 1e-15) << standard_deviations;
+}
+
+TEST_F(LinearRegressionTest, ridge_errors)
+{
+	Eigen::MatrixXd X(3, 10);
+	Eigen::VectorXd y(9);
+	ASSERT_THROW(ridge(X, y, 1), std::invalid_argument);
+	X.resize(3, 2);
+	y.resize(2);
+	ASSERT_THROW(ridge(X, y, 1), std::invalid_argument);
+	X.resize(3, 10);
+	y.resize(10);
+	ASSERT_THROW(ridge(X, y, -1), std::domain_error);
+}
+
+TEST_F(LinearRegressionTest, ridge_zero_lambda)
+{
+	constexpr unsigned int n = 10;
+	constexpr unsigned int d = 3;
+	const Eigen::MatrixXd X0(Eigen::MatrixXd::Random(d, n));
+	const Eigen::MatrixXd X(add_ones(X0));
+	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d + 1));
+	const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
+	const auto expected = multivariate(X, y);
+	const auto actual = ridge(X0, y, 0);
+	ASSERT_EQ(expected.n, actual.n);
+	ASSERT_EQ(expected.dof, actual.dof);
+	ASSERT_NEAR(expected.r2, actual.r2, 1e-15) << actual.to_string();
 }
