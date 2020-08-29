@@ -39,7 +39,7 @@ namespace ml
 
 		/** @brief Result of multivariate Ordinary Least Squares regression.		
 
-		The `cov` matrix is calculated asuming independent Gaussian error terms.
+		The #cov matrix is calculated asuming independent Gaussian error terms.
 		*/
 		struct MultivariateOLSResult : public Result
 		{
@@ -55,6 +55,8 @@ namespace ml
 		Does not contain error estimates because they are not easy to estimate reliably for regularised regression.
 
 		Intercept is reported separately because it has a special status: it's not regularised.
+
+		#var_y is calculated using #dof as the denominator.
 		*/
 		struct RidgeRegressionResult : public Result
 		{
@@ -68,7 +70,7 @@ namespace ml
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept.
 
-		R2 coefficient is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:
+		R2 is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:
 
 			\f$R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2}\f$
 
@@ -83,7 +85,7 @@ namespace ml
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept on regularly spaced points.
 
-		R2 coefficient is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:
+		R2 is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:
 
 			\f$R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2}\f$
 
@@ -100,7 +102,7 @@ namespace ml
 
 		/** @brief Carries out univariate (aka simple) linear regression without intercept.
 
-		R2 coefficient is calculated w/r to a model returning average Y, and is therefore _not_ equal to correlation of X and Y squared:
+		R2 is calculated w/r to a model returning average Y, and is therefore _not_ equal to correlation of X and Y squared:
 
 			\f$R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n y_i^2}.\f$		
 		

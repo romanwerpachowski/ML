@@ -603,6 +603,8 @@ TEST_F(LinearRegressionTest, ridge_zero_lambda)
 	ASSERT_NEAR(expected.var_y, actual.var_y, tol);
 	ASSERT_EQ(expected.dof, actual.effective_dof);
 	ASSERT_NEAR(expected.r2, actual.r2, tol);
+	ASSERT_NEAR(expected.beta[d], actual.intercept, tol);
+	ASSERT_NEAR(0, (expected.beta.head(d) - actual.slopes).norm(), tol) << actual.slopes;
 }
 
 TEST_F(LinearRegressionTest, ridge_nonzero_lambda)
@@ -625,7 +627,9 @@ TEST_F(LinearRegressionTest, ridge_nonzero_lambda)
 	Eigen::VectorXd beta_diff(unregularised.beta);
 	beta_diff.head(d) -= regularised.slopes;
 	beta_diff[d] -= regularised.intercept;
-	ASSERT_NEAR(unregularised.beta[d], regularised.intercept, 1e-16);
+	const double tol = 1e-16;
+	ASSERT_NEAR(unregularised.beta[d], regularised.intercept, tol);
+	ASSERT_NEAR(y.mean(), regularised.intercept, tol);
 	const double beta_diff_norm = beta_diff.norm();
 	ASSERT_LT(0, beta_diff_norm) << beta_diff;
 	ASSERT_GT(1e-4, beta_diff_norm) << beta_diff;
@@ -633,4 +637,25 @@ TEST_F(LinearRegressionTest, ridge_nonzero_lambda)
 	ASSERT_GT(unregularised.beta.norm(), reg_beta_norm);
 	ASSERT_LT(unregularised.dof, regularised.effective_dof);
 	ASSERT_LT(0, regularised.effective_dof);
+}
+
+TEST_F(LinearRegressionTest, ridge_yuge_lambda)
+{
+	constexpr unsigned int n = 10;
+	constexpr unsigned int d = 3;
+	Eigen::MatrixXd X0(Eigen::MatrixXd::Random(d, n));
+	standardise(X0);
+	const Eigen::MatrixXd X(add_ones(X0));
+	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d + 1));
+	const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
+	const auto result = ridge(X0, y, 1e50);
+	ASSERT_EQ(n, result.n);
+	ASSERT_EQ(n - d - 1, result.dof);
+	const double sst = (y.array() - y.mean()).square().sum();
+	const double tol = 1e-16;
+	ASSERT_NEAR(sst / result.dof, result.var_y, tol);
+	ASSERT_NEAR(0, result.r2, tol);
+	ASSERT_NEAR(y.mean(), result.intercept, tol);
+	ASSERT_NEAR(0, result.slopes.norm(), tol);
+	ASSERT_NEAR(n - 1, result.effective_dof, tol);
 }
