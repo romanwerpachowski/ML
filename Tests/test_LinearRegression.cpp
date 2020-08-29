@@ -659,3 +659,27 @@ TEST_F(LinearRegressionTest, ridge_yuge_lambda)
 	ASSERT_NEAR(0, result.slopes.norm(), tol);
 	ASSERT_NEAR(n - 1, result.effective_dof, tol);
 }
+
+TEST_F(LinearRegressionTest, ridge_very_small_slopes)
+{
+	constexpr unsigned int n = 10;
+	constexpr unsigned int d = 3;
+	Eigen::MatrixXd X0(Eigen::MatrixXd::Random(d, n));
+	standardise(X0);
+	const Eigen::MatrixXd X(add_ones(X0));
+	Eigen::VectorXd true_beta(d + 1);
+	constexpr double b = 1e-6;
+	true_beta << -b, b, 0, 0.5;
+	const Eigen::VectorXd y(X.transpose() * true_beta);
+	const auto expected = multivariate(X, y);
+	constexpr double lambda = 1e-5;
+	const auto actual = ridge(X0, y, lambda);
+	ASSERT_EQ(expected.n, actual.n);
+	ASSERT_EQ(expected.dof, actual.dof);
+	constexpr double tol = lambda * b;
+	ASSERT_NEAR(expected.var_y, actual.var_y, tol);
+	ASSERT_NEAR(expected.dof, actual.effective_dof, lambda);
+	ASSERT_NEAR(expected.r2, actual.r2, tol);
+	ASSERT_NEAR(expected.beta[d], actual.intercept, tol);
+	ASSERT_NEAR(0, (expected.beta.head(d) - actual.slopes).norm(), tol) << actual.slopes;
+}
