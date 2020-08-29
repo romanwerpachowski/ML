@@ -154,11 +154,10 @@ namespace ml
 		The standard deviation is calculated using the biased estimator (with denominator equal to
 		the number of columns in `X`), so that standardisation works also for N x 1 data.
 
-		@param[in] X Matrix of independent variables with data points in columns.
-		@return Standardised matrix with the same dimensions as `X`.
+		@param[in, out] X Matrix of independent variables with data points in columns.
 		@throw std::invalid_argument If any row of `X` has all values the same, or `X` is empty.
 		*/
-		DLL_DECLSPEC Eigen::MatrixXd standardise(Eigen::Ref<const Eigen::MatrixXd> X);
+		DLL_DECLSPEC void standardise(Eigen::Ref<Eigen::MatrixXd> X);
 
 		/** @brief Standardises independent variables.
 
@@ -169,14 +168,13 @@ namespace ml
 		This version of `standardise` saves original mean and standard deviation for
 		every row in provided vectors.
 
-		@param[in] X D x N matrix of independent variables with data points in columns.
+		@param[in, out] X D x N matrix of independent variables with data points in columns.
 		@param[out] means At exit has length D and contains means of rows of `X`.
 		@param[out] standard_deviations At exit has length D and contains standard deviations of rows of `X`. 
 			If `means` and `standard_deviations` refer to the same vector, at exit this vector will contain the standard deviations.
-		@return Standardised matrix with the same dimensions as `X`.
 		@throw std::invalid_argument If any row of `X` has all values the same, or `X` is empty.
 		*/
-		DLL_DECLSPEC Eigen::MatrixXd standardise(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::VectorXd& means, Eigen::VectorXd& standard_deviations);
+		DLL_DECLSPEC void standardise(Eigen::Ref<Eigen::MatrixXd> X, Eigen::VectorXd& means, Eigen::VectorXd& standard_deviations);
 
 		/** @brief Calculates X*X^T, inverts it, and calculates beta.
 

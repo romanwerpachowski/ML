@@ -187,7 +187,7 @@ namespace ml
 			const auto n = static_cast<unsigned int>(X.cols());
 			RidgeRegressionResult result;
 			result.n = n;
-			result.dof = n - q;
+			result.dof = n - q - 1; // -1 for the intercept.
 			result.intercept = y.mean();
 			Eigen::LDLT<Eigen::MatrixXd> xxt_decomp;
 			result.slopes = calculate_XXt_beta(X, y, xxt_decomp, lambda);
@@ -195,8 +195,14 @@ namespace ml
 			// Use the fact that intercept == mean(y).
 			const Eigen::VectorXd y_centred(y.array() - result.intercept); 
 			const double sse = (y_centred - X.transpose() * result.slopes).squaredNorm();
-			const auto syy = (y_centred * y_centred).sum();
+			const auto syy = y_centred.squaredNorm();
 			result.r2 = 1 - sse / syy;
+			if (result.dof) {
+				result.var_y = sse / result.dof;
+			}
+			else {
+				result.var_y = std::numeric_limits<double>::quiet_NaN();
+			}
 			return result;
 		}
 
@@ -211,33 +217,32 @@ namespace ml
 			return X_with_intercept;
 		}
 
-		Eigen::MatrixXd standardise(const Eigen::Ref<const Eigen::MatrixXd> X)
+		void standardise(Eigen::Ref<Eigen::MatrixXd> X)
 		{
 			Eigen::VectorXd w;
 			return standardise(X, w, w);
 		}
 
-		Eigen::MatrixXd standardise(const Eigen::Ref<const Eigen::MatrixXd> X, Eigen::VectorXd& means, Eigen::VectorXd& standard_deviations)
+		void standardise(Eigen::Ref<Eigen::MatrixXd> X, Eigen::VectorXd& means, Eigen::VectorXd& standard_deviations)
 		{
 			if (!X.size()) {
 				throw std::invalid_argument("Standardising an empty matrix");
 			}
-			Eigen::MatrixXd Xstd(X);
-			means.resize(X.rows());
-			means = Xstd.rowwise().mean();
-			Xstd.colwise() -= means;
-			standard_deviations.resize(X.rows());
-			standard_deviations = Xstd.rowwise().squaredNorm();
+			const auto d = X.rows();
+			means.resize(d);
+			means = X.rowwise().mean();
+			X.colwise() -= means;
+			standard_deviations.resize(d);
+			standard_deviations = X.rowwise().squaredNorm();
 			standard_deviations /= static_cast<double>(X.cols());
 			standard_deviations = standard_deviations.array().sqrt();
-			for (Eigen::Index i = 0; i < Xstd.rows(); ++i) {
+			for (Eigen::Index i = 0; i < d; ++i) {
 				const auto sigma = standard_deviations[i];
 				if (!sigma) {
 					throw std::invalid_argument("At least one row has constant values");
 				}
-				Xstd.row(i) /= sigma;
+				X.row(i) /= sigma;
 			}
-			return Xstd;
 		}
 	}
 }

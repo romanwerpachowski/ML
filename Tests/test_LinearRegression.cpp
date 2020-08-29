@@ -521,13 +521,13 @@ TEST_F(LinearRegressionTest, standardise)
 	Eigen::MatrixXd X(2, 3);
 	X << 0, 1, 2,
 		0, 0, 2;
-	const auto actual = standardise(X);
+	standardise(X);
 	Eigen::MatrixXd expected(2, 3);
 	const double a = 1 / std::sqrt(2 / 3.);
 	const double b = 1 / std::sqrt(2);
 	expected << -a, 0, a,
 		-b, -b, 2 * b;
-	ASSERT_NEAR(0, (actual - expected).norm(), 1e-15);
+	ASSERT_NEAR(0, (X - expected).norm(), 1e-15);
 }
 
 TEST_F(LinearRegressionTest, standardise_with_params)
@@ -537,13 +537,13 @@ TEST_F(LinearRegressionTest, standardise_with_params)
 		0, 0, 2;
 	Eigen::VectorXd means;
 	Eigen::VectorXd standard_deviations;
-	const auto actual = standardise(X, means, standard_deviations);
+	standardise(X, means, standard_deviations);
 	Eigen::MatrixXd expected(2, 3);
 	const double a = 1 / std::sqrt(2 / 3.);
 	const double b = 1 / std::sqrt(2);
 	expected << -a, 0, a,
 		-b, -b, 2 * b;
-	ASSERT_NEAR(0, (actual - expected).norm(), 1e-15) << actual;
+	ASSERT_NEAR(0, (X - expected).norm(), 1e-15) << X;
 	ASSERT_EQ(2u, means.size());
 	ASSERT_EQ(2u, standard_deviations.size());
 	Eigen::VectorXd w(2);
@@ -559,13 +559,13 @@ TEST_F(LinearRegressionTest, standardise_with_params_same_vector)
 	X << 0, 1, 2,
 		0, 0, 2;
 	Eigen::VectorXd standard_deviations;
-	const auto actual = standardise(X, standard_deviations, standard_deviations);
+	standardise(X, standard_deviations, standard_deviations);
 	Eigen::MatrixXd expected(2, 3);
 	const double a = 1 / std::sqrt(2 / 3.);
 	const double b = 1 / std::sqrt(2);
 	expected << -a, 0, a,
 		-b, -b, 2 * b;
-	ASSERT_NEAR(0, (actual - expected).norm(), 1e-15) << actual;
+	ASSERT_NEAR(0, (X - expected).norm(), 1e-15) << X;
 	ASSERT_EQ(2u, standard_deviations.size());
 	Eigen::VectorXd w(2);
 	w << std::sqrt(2 / 3.), 2 * std::sqrt(2) / 3;
@@ -589,7 +589,8 @@ TEST_F(LinearRegressionTest, ridge_zero_lambda)
 {
 	constexpr unsigned int n = 10;
 	constexpr unsigned int d = 3;
-	const Eigen::MatrixXd X0(Eigen::MatrixXd::Random(d, n));
+	Eigen::MatrixXd X0(Eigen::MatrixXd::Random(d, n));
+	standardise(X0);
 	const Eigen::MatrixXd X(add_ones(X0));
 	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d + 1));
 	const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
@@ -597,5 +598,5 @@ TEST_F(LinearRegressionTest, ridge_zero_lambda)
 	const auto actual = ridge(X0, y, 0);
 	ASSERT_EQ(expected.n, actual.n);
 	ASSERT_EQ(expected.dof, actual.dof);
-	ASSERT_NEAR(expected.r2, actual.r2, 1e-15) << actual.to_string();
+	ASSERT_NEAR(expected.r2, actual.r2, 1e-15) << expected.to_string() << "\nvs\n" << actual.to_string();
 }
