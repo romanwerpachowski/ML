@@ -48,6 +48,9 @@
     <ClInclude Include="RecursiveMultivariateOLS.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="doc.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EM.cpp">

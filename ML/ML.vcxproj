@@ -166,6 +166,7 @@
     <ClInclude Include="DecisionTreeNodes.hpp" />
     <ClInclude Include="DecisionTrees.hpp" />
     <ClInclude Include="dll.hpp" />
+    <ClInclude Include="doc.hpp" />
     <ClInclude Include="EM.hpp" />
     <ClInclude Include="LinearRegression.hpp" />
     <ClInclude Include="RecursiveMultivariateOLS.hpp" />
