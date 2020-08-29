@@ -1,5 +1,7 @@
 """Setup script for cppyml package.
 
+(C) 2020 Roman Werpachowski.
+
 To install the package, run "python setup.py install" from cppyml
 directory.
 

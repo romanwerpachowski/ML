@@ -1,3 +1,4 @@
+/* (C) 2020 Roman Werpachowski. */
 #include <random>
 #include <gtest/gtest.h>
 #include "ML/LinearRegression.hpp"

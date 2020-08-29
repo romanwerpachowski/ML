@@ -1,4 +1,7 @@
-"""Unit tests for clustering module."""
+"""Unit tests for clustering module.
+
+(C) 2020 Roman Werpachowski.
+"""
 import unittest
 import warnings
 

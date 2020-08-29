@@ -1,3 +1,4 @@
+/* (C) 2020 Roman Werpachowski. */
 #include <unordered_set>
 #include <gtest/gtest.h>
 #include "ML/DecisionTreeNodes.hpp"

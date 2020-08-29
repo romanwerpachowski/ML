@@ -1,3 +1,4 @@
+/* (C) 2020 Roman Werpachowski. */
 #include <gtest/gtest.h>
 
 int main(int argc, char **argv) {

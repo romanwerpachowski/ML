@@ -1,5 +1,7 @@
 /* Main source for the cppyml extension.
 
+(C) 2020 Roman Werpachowski.
+
 IMPORTANT: compile it with the same optimisation options as ML.dll!
 */
 

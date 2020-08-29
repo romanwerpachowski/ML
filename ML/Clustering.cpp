@@ -1,3 +1,4 @@
+/* (C) 2020 Roman Werpachowski. */
 #include <cassert>
 #include <numeric>
 #include "Clustering.hpp"

@@ -1,3 +1,4 @@
+/* (C) 2020 Roman Werpachowski. */
 #include <stdexcept>
 #include "Crossvalidation.hpp"
 

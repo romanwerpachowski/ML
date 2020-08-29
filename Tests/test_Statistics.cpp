@@ -1,3 +1,4 @@
+/* (C) 2020 Roman Werpachowski. */
 #include <cmath>
 #include <random>
 #include <gtest/gtest.h>

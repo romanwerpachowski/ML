@@ -1,4 +1,7 @@
-"""Unit tests for linear_regression module."""
+"""Unit tests for linear_regression module.
+
+(C) 2020 Roman Werpachowski.
+"""
 
 import unittest
 

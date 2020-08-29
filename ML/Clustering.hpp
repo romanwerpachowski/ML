@@ -1,3 +1,4 @@
+/* (C) 2020 Roman Werpachowski. */
 #pragma once
 #include <memory>
 #include <random>

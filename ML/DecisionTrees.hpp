@@ -1,3 +1,4 @@
+/* (C) 2020 Roman Werpachowski. */
 #pragma once
 #include <utility>
 #include <Eigen/Core>

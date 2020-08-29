@@ -1,4 +1,7 @@
-"""Demo program for clustering module."""
+"""Demo program for clustering module.
+
+(C) 2020 Roman Werpachowski.
+"""
 import time
 import warnings
 

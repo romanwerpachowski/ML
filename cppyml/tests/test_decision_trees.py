@@ -1,4 +1,7 @@
-"""Unit tests for decision_trees module."""
+"""Unit tests for decision_trees module.
+
+(C) 2020 Roman Werpachowski.
+"""
 
 import unittest
 

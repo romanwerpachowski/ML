@@ -1,4 +1,7 @@
-"""Demo program for decision_trees module."""
+"""Demo program for decision_trees module.
+
+(C) 2020 Roman Werpachowski.
+"""
 import time
 import warnings
 

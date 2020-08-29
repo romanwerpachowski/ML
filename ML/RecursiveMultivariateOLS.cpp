@@ -1,3 +1,4 @@
+/* (C) 2020 Roman Werpachowski. */
 #include "RecursiveMultivariateOLS.hpp"
 
 namespace ml

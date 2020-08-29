@@ -1,3 +1,4 @@
+/* (C) 2020 Roman Werpachowski. */
 #include <random>
 #include <benchmark/benchmark.h>
 #include "ML/Statistics.hpp"

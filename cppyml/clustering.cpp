@@ -1,3 +1,4 @@
+/* (C) 2020 Roman Werpachowski. */
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 #include "ML/Clustering.hpp"

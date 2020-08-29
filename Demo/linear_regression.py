@@ -1,4 +1,7 @@
-"""Demo program for linear_regression module."""
+"""Demo program for linear_regression module.
+
+(C) 2020 Roman Werpachowski.
+"""
 import time
 import warnings
 
