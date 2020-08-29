@@ -12,7 +12,7 @@ namespace ml
 		struct Result
 		{
 			unsigned int n; /**< Number of data points. */
-			unsigned int dof; /**< Number of degrees of freedom. */
+			unsigned int dof; /**< Number of residual degrees of freedom (e.g. `n - 2` for univariate regression with intercept). */
 			double var_y; /**< Estimated variance of observations Y. */
 			double r2; /**< R2 coefficient: 1 - fraction of variance unexplained relative to a "base model". */
 		};
@@ -59,6 +59,7 @@ namespace ml
 		{
 			Eigen::VectorXd slopes; /**< Regularised coefficients multiplying independent variables. */
 			double intercept; /**< Unregularised intercept. */
+			double effective_dof; /**< Effective number of residual degrees of freedom \f$ N - \mathrm{tr} [ X^T (X X^T + \lambda I)^{-1} X ] - 1 \f$. */
 
 			/** @brief Formats the result as string. */
 			DLL_DECLSPEC std::string to_string() const;

@@ -203,6 +203,12 @@ namespace ml
 			else {
 				result.var_y = std::numeric_limits<double>::quiet_NaN();
 			}
+			if (lambda > 0) {
+				result.effective_dof = std::max(n - (X.transpose() * xxt_decomp.solve(X)).trace() - 1, static_cast<double>(result.dof));
+			}
+			else {
+				result.effective_dof = result.dof;
+			}
 			return result;
 		}
 
