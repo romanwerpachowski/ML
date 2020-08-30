@@ -3,7 +3,7 @@ dist: bionic
 compiler: gcc
 os: linux
 before_install:
-        - sudo apt-get -y libeigen3-dev 
+        - sudo apt-get -y install libeigen3-dev
 jobs:
         include:
                 - stage: build
