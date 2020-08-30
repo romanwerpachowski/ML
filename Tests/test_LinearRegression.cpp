@@ -84,6 +84,34 @@ TEST_F(LinearRegressionTest, univariate_high_noise)
 	EXPECT_NEAR(expected_observation_variance, result.var_y, expected_observation_variance * 1e-3);
 }
 
+TEST_F(LinearRegressionTest, univariate_regular_vs_standard)
+{
+	constexpr unsigned int n = 100;
+	constexpr double x0 = -1.4;
+	constexpr double dx = 0.23;
+	Eigen::VectorXd x(n);
+	Eigen::VectorXd y(n);
+	constexpr double intercept = 0.3;
+	constexpr double noise_strength = 0.1;
+	std::default_random_engine rng(784957984);
+	std::uniform_int_distribution uniform(0, 1);
+	for (unsigned int i = 0; i < n; ++i) {
+		const double x_i = x0 + i * dx;
+		x[i] = x_i;
+		y[i] = noise_strength * (0.5 - static_cast<double>(uniform(rng))) + intercept;
+	}
+	const auto r1 = univariate(x, y);
+	const auto r2 = univariate(x0, dx, y);
+	constexpr double tol = 1e-15;
+	ASSERT_NEAR(r1.slope, r2.slope, tol);
+	ASSERT_NEAR(r1.intercept, r2.intercept, tol);
+	ASSERT_NEAR(r1.var_y, r2.var_y, tol);
+	ASSERT_NEAR(r1.r2, r2.r2, tol);
+	ASSERT_NEAR(r1.var_intercept, r2.var_intercept, tol);
+	ASSERT_NEAR(r1.var_slope, r2.var_slope, tol);
+	ASSERT_NEAR(r1.cov_slope_intercept, r2.cov_slope_intercept, tol);
+}
+
 TEST_F(LinearRegressionTest, univariate_high_noise_regular)
 {
 	const unsigned int n = 10000;
