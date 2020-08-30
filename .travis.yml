@@ -4,9 +4,9 @@ compiler: gcc
 os: linux
 jobs:
         include:
-                stage: build
-                script: ./build.sh
-                stage: test
-                script: ./Tests/build/Debug/Tests
-                stage: benchmark
-                script: ./Benchmarks/build/Release/Benchmarks
+                - stage: build
+                  script: ./build.sh
+                - stage: test
+                  script: ./Tests/build/Debug/Tests
+                - stage: benchmark
+                  script: ./Benchmarks/build/Release/Benchmarks
