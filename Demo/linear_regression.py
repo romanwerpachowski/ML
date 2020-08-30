@@ -8,7 +8,7 @@ import warnings
 import numpy as np
 import pandas as pd
 from scipy import stats
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, Ridge
 
 from cppyml import linear_regression
 
@@ -51,14 +51,58 @@ def main():
     print("cppyml result: %s" % result)
 
     lr = LinearRegression(fit_intercept=False)
-    t0 = time.perf_counter()
     X = np.reshape(x, (-1, 1))
+    t0 = time.perf_counter()    
     for _ in range(n_timing_iters):
         lr.fit(X, y)
     t1 = time.perf_counter()
     print("sklearn.linear_model.LinearRegression time: %g" % (t1 - t0))
     # R2 will be different because LinearRegression uses a different base model.
     print("sklearn.linear_model.LinearRegression result: coef=%s, r2=%g" % (lr.coef_, lr.score(X, y)))
+
+    print("\n*** Multivariate ***")
+    d = 4
+    X = np.empty((n, d + 1))
+    X[:,:d] = np.random.randn(n, d)
+    X[:, d] = 1
+    beta = np.random.rand(d + 1)
+    y = np.matmul(X, beta) + 0.4 * np.random.randn(n)
+
+    t0 = time.perf_counter()
+    for _ in range(n_timing_iters):
+        result = linear_regression.multivariate(X, y)
+    t1 = time.perf_counter()
+    print("cppyml time: %g" % (t1 - t0))
+    print("cppyml result: %s" % result)
+
+    t0 = time.perf_counter()    
+    for _ in range(n_timing_iters):
+        lr.fit(X, y)
+    t1 = time.perf_counter()
+    print("sklearn.linear_model.LinearRegression time: %g" % (t1 - t0))
+    print("sklearn.linear_model.LinearRegression result: coef=%s, r2=%g" % (lr.coef_, lr.score(X, y)))
+
+    print("\n*** Multivariate w/ ridge regression - already standardised ***")
+    
+    lam = 0.01
+    X = X[:, :d]
+    X = X - np.mean(X, axis=0)
+    X = X / np.std(X, axis=0, ddof=0)
+    ridge = Ridge(alpha=lam, fit_intercept=True, normalize=False)
+
+    t0 = time.perf_counter()
+    for _ in range(n_timing_iters):
+        result = linear_regression.ridge(X, y, lam, do_standardise=False)
+    t1 = time.perf_counter()
+    print("cppyml time: %g" % (t1 - t0))
+    print("cppyml result: %s" % result)
+
+    t0 = time.perf_counter()    
+    for _ in range(n_timing_iters):
+        ridge.fit(X, y)
+    t1 = time.perf_counter()
+    print("sklearn.linear_model.Ridge time: %g" % (t1 - t0))
+    print("sklearn.linear_model.Ridge result: coef=%s, intercept=%g, r2=%g" % (ridge.coef_, ridge.intercept_, ridge.score(X, y)))
 
 if __name__ == "__main__":
     main()

@@ -656,6 +656,7 @@ TEST_F(LinearRegressionTest, standardise_with_params)
 	Eigen::MatrixXd X(2, 3);
 	X << 0, 1, 2,
 		0, 0, 2;
+	const Eigen::MatrixXd Xorig(X);
 	Eigen::VectorXd means;
 	Eigen::VectorXd standard_deviations;
 	standardise(X, means, standard_deviations);
@@ -672,6 +673,8 @@ TEST_F(LinearRegressionTest, standardise_with_params)
 	ASSERT_NEAR(0, (w - means).norm(), 1e-15) << means;
 	w << std::sqrt(2 / 3.), 2 * std::sqrt(2) / 3;
 	ASSERT_NEAR(0, (w - standard_deviations).norm(), 1e-15) << standard_deviations;
+	unstandardise(X, means, standard_deviations);
+	ASSERT_NEAR(0, (X - Xorig).norm(), 1e-15) << X;
 }
 
 TEST_F(LinearRegressionTest, standardise_with_params_same_vector)
@@ -693,17 +696,39 @@ TEST_F(LinearRegressionTest, standardise_with_params_same_vector)
 	ASSERT_NEAR(0, (w - standard_deviations).norm(), 1e-15) << standard_deviations;
 }
 
-TEST_F(LinearRegressionTest, ridge_errors)
+TEST_F(LinearRegressionTest, unstandardise_errors)
+{
+	Eigen::MatrixXd X(2, 3);
+	Eigen::VectorXd v1(X.rows() + 1);
+	Eigen::VectorXd v2(X.rows());
+	ASSERT_THROW(unstandardise(X, v1, v2), std::invalid_argument);
+	ASSERT_THROW(unstandardise(X, v2, v1), std::invalid_argument);
+	v1.resize(X.rows());
+	v2 << 0.1, 0;
+	ASSERT_THROW(unstandardise(X, v1, v2), std::domain_error);
+	v2 << -0.1, 0.2;
+	ASSERT_THROW(unstandardise(X, v1, v2), std::domain_error);
+	v2 << 0.1, std::numeric_limits<double>::quiet_NaN();
+	ASSERT_THROW(unstandardise(X, v1, v2), std::domain_error);
+}
+
+template <bool DoStandardise> void test_ridge_errors()
 {
 	Eigen::MatrixXd X(3, 10);
 	Eigen::VectorXd y(9);
-	ASSERT_THROW(ridge(X, y, 1), std::invalid_argument);
+	ASSERT_THROW(ridge<DoStandardise>(X, y, 1), std::invalid_argument);
 	X.resize(3, 2);
 	y.resize(2);
-	ASSERT_THROW(ridge(X, y, 1), std::invalid_argument);
+	ASSERT_THROW(ridge<DoStandardise>(X, y, 1), std::invalid_argument);
 	X.resize(3, 10);
 	y.resize(10);
-	ASSERT_THROW(ridge(X, y, -1), std::domain_error);
+	ASSERT_THROW(ridge<DoStandardise>(X, y, -1), std::domain_error);
+}
+
+TEST_F(LinearRegressionTest, ridge_errors)
+{
+	test_ridge_errors<false>();
+	test_ridge_errors<true>();
 }
 
 TEST_F(LinearRegressionTest, ridge_zero_lambda)
@@ -716,7 +741,7 @@ TEST_F(LinearRegressionTest, ridge_zero_lambda)
 	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d + 1));
 	const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
 	const auto expected = multivariate(X, y);
-	const auto actual = ridge(X0, y, 0);
+	const auto actual = ridge<false>(X0, y, 0);
 	ASSERT_EQ(expected.n, actual.n);
 	ASSERT_EQ(expected.dof, actual.dof);
 	constexpr double tol = 1e-15;
@@ -738,7 +763,7 @@ TEST_F(LinearRegressionTest, ridge_nonzero_lambda)
 	const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
 	const auto unregularised = multivariate(X, y);
 	const double lambda = 1e-4;
-	const auto regularised = ridge(X0, y, lambda);
+	const auto regularised = ridge<false>(X0, y, lambda);
 	ASSERT_EQ(unregularised.n, regularised.n);
 	ASSERT_EQ(unregularised.dof, regularised.dof);
 	ASSERT_LT(unregularised.var_y, regularised.var_y);	
@@ -770,7 +795,7 @@ TEST_F(LinearRegressionTest, ridge_yuge_lambda)
 	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d + 1));
 	const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
 	constexpr double lambda = 1e50;
-	const auto result = ridge(X0, y, 1e50);
+	const auto result = ridge<false>(X0, y, 1e50);
 	ASSERT_EQ(n, result.n);
 	ASSERT_EQ(n - d - 1, result.dof);
 	const double sst = (y.array() - y.mean()).square().sum();
@@ -796,7 +821,7 @@ TEST_F(LinearRegressionTest, ridge_very_small_slopes)
 	const Eigen::VectorXd y(X.transpose() * true_beta);
 	const auto expected = multivariate(X, y);
 	constexpr double lambda = 1e-5;
-	const auto actual = ridge(X0, y, lambda);
+	const auto actual = ridge<false>(X0, y, lambda);
 	ASSERT_EQ(expected.n, actual.n);
 	ASSERT_EQ(expected.dof, actual.dof);
 	constexpr double tol = lambda * b;

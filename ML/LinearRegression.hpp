@@ -133,17 +133,30 @@ namespace ml
 
 		Given X and y, finds beta and beta0 minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 + \lambda \lVert \vec{\beta} \rVert^2 \f$.
 
-		R2 is always calculated w/r to model returning average y. The matrix `X` is assumed to be standardised.
+		R2 is always calculated w/r to model returning average y. The matrix `X` is either assumed to be standardised (`DoStandardise == false`)
+		or is standardised internally (`DoStandardise == true`; requires a matrix copy).
 
 		@param[in] X D x N matrix of X values, with data points in columns.
 		@param[in] y Y vector with length N.
 		@param[in] lambda Regularisation strength.
-		@return BiasedMultivariateOLSResult object with `beta.size() == X.rows() + 1`.
+		@tparam DoStandardise Whether to standardise `X` internally.
+		@return RidgeRegressionResult object with `beta.size() == X.rows() + 1`. If `DoStandardise == true`, the `slopes` and `intercept`
+		fields will be rescaled and shifted to original `X` units and origins.
 		@throw std::invalid_argument If `y.size() != X.cols()` or `X.cols() < X.rows()`.
 		@throw std::domain_error If `lambda < 0`.
 		@see standardise()
 		*/
-		DLL_DECLSPEC RidgeRegressionResult ridge(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda);
+		template <bool DoStandardise> RidgeRegressionResult ridge(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda);
+
+		/** @brief Carries out multivariate ridge regression with intercept, standardising `X` inputs internally.
+		@see ridge().
+		*/
+		template <> DLL_DECLSPEC RidgeRegressionResult ridge<true>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda);
+
+		/** @brief Carries out multivariate ridge regression with intercept, assuming standardised `X` inputs.
+		@see ridge().
+		*/
+		template <> DLL_DECLSPEC RidgeRegressionResult ridge<false>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda);
 
 		/** @brief Adds another row with 1s in every column to X.
 		@param[in] X Matrix of independent variables with data points in columns.
@@ -155,8 +168,6 @@ namespace ml
 		/** @brief Standardises independent variables.
 
 		From each row, `standardise` subtracts its mean and divides it by its standard deviation.
-		The standard deviation is calculated using the biased estimator (with denominator equal to
-		the number of columns in `X`), so that standardisation works also for N x 1 data.
 
 		@param[in, out] X Matrix of independent variables with data points in columns.
 		@throw std::invalid_argument If any row of `X` has all values the same, or `X` is empty.
@@ -165,9 +176,7 @@ namespace ml
 
 		/** @brief Standardises independent variables.
 
-		From each row, `standardise` subtracts its mean and divides it by its standard deviation.
-		The standard deviation is calculated using the biased estimator (with denominator equal to
-		the number of columns in `X`), so that standardisation works also for N x 1 data.
+		From each row, `standardise` subtracts its mean and divides it by its standard deviation.		
 
 		This version of `standardise` saves original mean and standard deviation for
 		every row in provided vectors.
@@ -179,6 +188,18 @@ namespace ml
 		@throw std::invalid_argument If any row of `X` has all values the same, or `X` is empty.
 		*/
 		DLL_DECLSPEC void standardise(Eigen::Ref<Eigen::MatrixXd> X, Eigen::VectorXd& means, Eigen::VectorXd& standard_deviations);
+
+		/** @brief Reverses the outcome of standardise().
+
+		From each row, `standardise` multiplies it by its standard deviation and adds its mean.
+
+		@param[in, out] X D x N matrix of standardised independent variables with data points in columns.
+		@param[in] means Means of rows of `X`.
+		@param[in] standard_deviations Standard deviations of rows of `X`.		
+		@throw std::invalid_argument If `X.rows() != means.size()` or `X.rows() != standard_deviations.size()`.
+		@throw std::domain_error If any element of `standard_deviations` is not positive.
+		*/
+		DLL_DECLSPEC void unstandardise(Eigen::Ref<Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> means, Eigen::Ref<const Eigen::VectorXd> standard_deviations);
 
 		/** @brief Calculates X*X^T, inverts it, and calculates beta.
 

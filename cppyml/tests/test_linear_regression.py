@@ -191,6 +191,34 @@ class LinearRegressionTest(unittest.TestCase):
             ols_beta = linear_regression.multivariate(cumulative_X, cumulative_y).beta
             np.testing.assert_array_almost_equal(ols_beta, rmols.beta, 13)
 
+    def test_ridge(self):
+        n =25
+        d = 4
+        X = np.random.randn(n, d)
+        true_beta = np.random.rand(d)
+        intercept = 0.2
+        y = np.matmul(X, true_beta) + 0.4 * np.random.randn(n) + intercept
+        means = np.mean(X, axis=0)
+        Xstd = X - means
+        stds = np.std(Xstd, axis=0, ddof=0)
+        Xstd = Xstd / stds
+        lam = 0.01
+        ridge = linear_model.Ridge(alpha=lam, fit_intercept=True, normalize=False)
+        result1 = linear_regression.ridge(Xstd, y, lam, do_standardise=False)
+        ridge.fit(Xstd, y)
+        result2 = linear_regression.ridge(Xstd, y, lam, do_standardise=True)
+        result3 = linear_regression.ridge(X, y, lam, do_standardise=True)
+        np.testing.assert_array_almost_equal(ridge.coef_, result1.slopes, 14)
+        np.testing.assert_array_almost_equal(ridge.coef_, result2.slopes, 14)
+        np.testing.assert_array_almost_equal(ridge.coef_ / stds, result3.slopes, 14)
+        self.assertAlmostEqual(ridge.intercept_, result1.intercept, delta=1e-14)
+        self.assertAlmostEqual(ridge.intercept_, result2.intercept, delta=1e-14)
+        self.assertAlmostEqual(ridge.intercept_ - np.dot(ridge.coef_, means / stds), result3.intercept, delta=1e-14)
+        r2 = ridge.score(Xstd, y)
+        self.assertAlmostEqual(r2, result1.r2, delta=1e-14)
+        self.assertAlmostEqual(r2, result2.r2, delta=1e-14)
+        self.assertAlmostEqual(r2, result3.r2, delta=1e-14)
+
 
 if __name__ == "__main__": 
     unittest.main()    

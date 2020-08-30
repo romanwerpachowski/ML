@@ -39,7 +39,7 @@ namespace ml
 		};
 
 		/** Version of "multivariate" taking an X with row-major order. */
-		static MultivariateOLSResultRowMajor multivariate_row_major(const Eigen::Ref<const MatrixXdR> X, const Eigen::Ref<const Eigen::VectorXd> y, bool add_ones)
+		static MultivariateOLSResultRowMajor multivariate_row_major(const Eigen::Ref<const MatrixXdR> X, const Eigen::Ref<const Eigen::VectorXd> y, const bool add_ones)
 		{
 			Eigen::Ref<const Eigen::MatrixXd> XT = X.transpose();
 			if (!add_ones) {
@@ -68,6 +68,16 @@ namespace ml
 				RecursiveMultivariateOLS::update(X.transpose(), y);
 			}
 		};
+
+		static RidgeRegressionResult ridge_row_major(Eigen::Ref<const MatrixXdR> X, Eigen::Ref<const Eigen::VectorXd> y, const double lambda, const bool do_standardise)
+		{
+			if (do_standardise) {
+				return ridge<true>(X.transpose(), y, lambda);
+			}
+			else {
+				return ridge<false>(X.transpose(), y, lambda);
+			}			
+		}
 	}	
 }
 
@@ -129,7 +139,26 @@ Args:
 		.def_property_readonly("cov", &ml::LinearRegression::MultivariateOLSResultRowMajor::cov_row_major, "Covariance matrix of beta coefficients.")
 		.doc() = R"(Result of multivariate Ordinary Least Squares regression.
 
-The `cov` property assumes independent Gaussian error terms.)";
+The `cov` property assumes independent Gaussian error terms.
+)";
+
+	py::class_<ml::LinearRegression::RidgeRegressionResult>(m_lin_reg, "RidgeRegressionResult")
+		.def("__repr__", &ml::LinearRegression::RidgeRegressionResult::to_string)
+		.def_readonly("n", &ml::LinearRegression::RidgeRegressionResult::n, "Number of data points.")
+		.def_readonly("dof", &ml::LinearRegression::RidgeRegressionResult::dof, "Number of degrees of freedom.")
+		.def_readonly("var_y", &ml::LinearRegression::RidgeRegressionResult::var_y, "Estimated variance of observations Y.")
+		.def_readonly("r2", &ml::LinearRegression::RidgeRegressionResult::r2, "R2 = 1 - fraction of variance unexplained relative to a \"base model\".")
+		.def_readonly("slopes", &ml::LinearRegression::RidgeRegressionResult::slopes, "Regularised coefficients multiplying independent variables.")
+		.def_readonly("intercept", &ml::LinearRegression::RidgeRegressionResult::intercept, "Unregularised intercept.")
+		.def_readonly("effective_dof", &ml::LinearRegression::RidgeRegressionResult::effective_dof, "Effective number of residual degrees of freedom: N - tr [ X^T (X * X^T + lambda * I)^{-1} X ] - 1.")
+		.doc() = R"(Result of a (multivariate) ridge regression with intercept.
+
+Does not contain error estimates because they are not easy to estimate reliably for regularised regression.
+
+Intercept is reported separately because it has a special status: it's not regularised.
+
+`var_y` is calculated using `dof` as the denominator.
+)";
 
 	m_lin_reg.def("univariate", static_cast<ml::LinearRegression::UnivariateOLSResult(*)(Eigen::Ref<const Eigen::VectorXd>, Eigen::Ref<const Eigen::VectorXd>)>(ml::LinearRegression::univariate),
 		py::arg("x"), py::arg("y"), R"(Carries out univariate (aka simple) linear regression with intercept.
@@ -179,11 +208,14 @@ Returns:
 		R"(Carries out multivariate linear regression.
 
 R2 is always calculated w/r to model returning average Y.
-If fitting with intercept is desired, include a row of 1's in the X values.
+If fitting with intercept is desired, include a row of 1's in the X values
+or set the parameter `add_ones` to `True`.
+
 
 Args:
 	X: X matrix (shape N x D, with D <= N), with data points in rows.
 	y: Y vector with length N.
+	add_ones: Whether to automatically add a column of 1's at the end of `X` (optional, defaults to `False`).
 
 Returns:
 	Instance of `MultivariateOLSResult`.
@@ -221,4 +253,23 @@ Throws:
 
 		Based on https://cpb-us-w2.wpmucdn.com/sites.gatech.edu/dist/2/436/files/2017/07/22-notes-6250-f16.pdf
 )";
+
+	m_lin_reg.def("ridge", &ml::LinearRegression::ridge_row_major,
+		py::arg("X"), py::arg("y"), py::arg("lambda"), py::arg("do_standardise") = false,
+		R"(Carries out multivariate ridge regression with intercept.
+
+Given X and y, finds beta and beta0 minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 + \lambda \lVert \vec{\beta} \rVert^2 \f$.
+
+R2 is always calculated w/r to model returning average y. 
+The matrix `X` is assumed to be standardised unless `do_standardise` is set to `True`.
+
+Args:
+	X: X matrix (shape N x D, with D <= N), with data points in rows.
+	y: Y vector with length N.
+	do_standardise: Whether to automatically subtract the mean from each row in `X` and divide it by its standard deviation.
+
+Returns:
+	Instance of `RidgeRegressionResult`. If `do_standardise` was `True`, the `slopes` and `intercept` fields will be rescaled and shifted
+	to original `X` units and origins.
+)");
 }

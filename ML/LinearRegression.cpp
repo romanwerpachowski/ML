@@ -176,12 +176,12 @@ namespace ml
 			
 			const auto my = y.mean();
 			const auto y_centred = y.array() - my;
-			const auto syy = (y_centred * y_centred).sum();
+			const auto syy = y_centred.square().sum();
 			result.r2 = 1 - sse / syy;
 			return result;
 		}
 
-		RidgeRegressionResult ridge(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const double lambda)
+		template <> RidgeRegressionResult ridge<false>(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const double lambda)
 		{
 			// X is an q x N matrix and y is a N-size vector.
 			const auto q = static_cast<unsigned int>(X.rows());
@@ -210,6 +210,18 @@ namespace ml
 			else {
 				result.effective_dof = result.dof;
 			}
+			return result;
+		}
+
+		template <> RidgeRegressionResult ridge<true>(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const double lambda)
+		{
+			Eigen::MatrixXd workX(X);
+			Eigen::VectorXd means;
+			Eigen::VectorXd standard_deviations;
+			standardise(workX, means, standard_deviations);
+			auto result = ridge<false>(workX, y, lambda);
+			result.slopes.array() /= standard_deviations.array();
+			result.intercept -= result.slopes.dot(means);
 			return result;
 		}
 
@@ -250,6 +262,25 @@ namespace ml
 				}
 				X.row(i) /= sigma;
 			}
+		}
+
+		void unstandardise(Eigen::Ref<Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> means, Eigen::Ref<const Eigen::VectorXd> standard_deviations)
+		{
+			const auto d = X.rows();
+			if (means.size() != d) {
+				throw std::invalid_argument("Incorrect size of means vector");
+			}
+			if (standard_deviations.size() != d) {
+				throw std::invalid_argument("Incorrect size of standard deviations vector");
+			}
+			for (Eigen::Index i = 0; i < X.rows(); ++i) {
+				const auto sigma = standard_deviations[i];
+				if (!(sigma > 0)) {
+					throw std::domain_error("Standard deviation is not positive");
+				}
+				X.row(i) *= sigma;
+			}
+			X.colwise() += means;
 		}
 	}
 }

@@ -135,8 +135,7 @@ template <unsigned int D> static void ridge_regression(benchmark::State& state)
 		const Eigen::VectorXd beta(Eigen::VectorXd::Random(D));
 		const Eigen::VectorXd y(X.transpose() * beta + 0.02 * Eigen::VectorXd::Random(sample_size));
 		state.ResumeTiming();
-		ml::LinearRegression::standardise(X);
-		ml::LinearRegression::ridge(X, y, lambda);
+		ml::LinearRegression::ridge<true>(X, y, lambda);
 	}
 	state.SetComplexityN(state.range(0));
 }
