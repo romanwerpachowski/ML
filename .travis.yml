@@ -2,10 +2,12 @@ language: cpp
 dist: bionic
 compiler: gcc
 os: linux
+before_install:
+        - sudo apt-get -y libeigen3-dev 
 jobs:
         include:
                 - stage: build
-                  script: ./build.sh
+                  script: bash build.sh
                 - stage: test
                   script: ./Tests/build/Debug/Tests
                 - stage: benchmark
