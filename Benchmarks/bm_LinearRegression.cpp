@@ -2,6 +2,7 @@
 #include <random>
 #include <benchmark/benchmark.h>
 #include "ML/LinearRegression.hpp"
+#include "ML/RecursiveMultivariateOLS.hpp"
 
 
 static void univariate_linear_regression(benchmark::State& state)
@@ -122,3 +123,32 @@ constexpr auto recursive_multivariate_linear_regression_random_sample_size_500d 
 
 BENCHMARK(recursive_multivariate_linear_regression_random_sample_size_5d)->RangeMultiplier(2)->Range(1, 128)->Complexity();
 BENCHMARK(recursive_multivariate_linear_regression_random_sample_size_500d)->RangeMultiplier(2)->Range(1, 32)->Complexity();
+
+
+template <unsigned int D> static void ridge_regression(benchmark::State& state)
+{
+	const auto sample_size = state.range(0);	
+	constexpr double lambda = 1e-2;
+	for (auto _ : state) {
+		state.PauseTiming();
+		Eigen::MatrixXd X(Eigen::MatrixXd::Random(D, sample_size));
+		const Eigen::VectorXd beta(Eigen::VectorXd::Random(D));
+		const Eigen::VectorXd y(X.transpose() * beta + 0.02 * Eigen::VectorXd::Random(sample_size));
+		state.ResumeTiming();
+		ml::LinearRegression::standardise(X);
+		ml::LinearRegression::ridge(X, y, lambda);
+	}
+	state.SetComplexityN(state.range(0));
+}
+
+constexpr auto ridge_regression_1d = ridge_regression<1>;
+constexpr auto ridge_regression_2d = ridge_regression<2>;
+constexpr auto ridge_regression_5d = ridge_regression<5>;
+constexpr auto ridge_regression_10d = ridge_regression<10>;
+constexpr auto ridge_regression_50d = ridge_regression<50>;
+
+BENCHMARK(ridge_regression_1d)->RangeMultiplier(10)->Range(10, 10000)->Complexity();
+BENCHMARK(ridge_regression_2d)->RangeMultiplier(10)->Range(10, 10000)->Complexity();
+BENCHMARK(ridge_regression_5d)->RangeMultiplier(10)->Range(10, 10000)->Complexity();
+BENCHMARK(ridge_regression_10d)->RangeMultiplier(10)->Range(100, 10000)->Complexity();
+BENCHMARK(ridge_regression_50d)->RangeMultiplier(10)->Range(100, 10000)->Complexity();
