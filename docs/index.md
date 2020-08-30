@@ -33,7 +33,6 @@ Tested on Ubuntu 18.04.5 LTS.
 Avoid using old Ubuntu packages, prefer getting the source from GitHub.
 
 - pybind11
-- googletest
 - benchmark (Google C++ benchmarking library)
 - Python 3.x header files
 - Eigen++
