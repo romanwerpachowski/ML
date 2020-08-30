@@ -17,6 +17,63 @@ protected:
 	}
 };
 
+inline double calc_sse(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y, const double slope, const double intercept)
+{
+	return (y.array() - slope * x.array() - intercept).square().sum();
+}
+
+static double calc_sse(const double x0, const double dx, Eigen::Ref<const Eigen::VectorXd> y, const double slope, const double intercept)
+{
+	double sse = 0;
+	for (Eigen::Index i = 0; i < y.size(); ++i) {
+		sse += std::pow(y[i] - slope * (x0 + i * dx) - intercept, 2);
+	}
+	return sse;
+}
+
+inline double calc_sse(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<const Eigen::VectorXd> beta)
+{
+	return (y - X.transpose() * beta).squaredNorm();
+}
+
+static void test_sse_minimisation(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y, const double slope, const double intercept, const double slope_delta, const double intercept_delta)
+{
+	const double min_sse = calc_sse(x, y, slope, intercept);
+	if (slope_delta > 0) {
+		ASSERT_LE(min_sse, calc_sse(x, y, slope + slope_delta, intercept));
+		ASSERT_LE(min_sse, calc_sse(x, y, slope - slope_delta, intercept));
+	}
+	if (intercept_delta > 0) {
+		ASSERT_LE(min_sse, calc_sse(x, y, slope, intercept + intercept_delta));
+		ASSERT_LE(min_sse, calc_sse(x, y, slope, intercept - intercept_delta));
+	}
+}
+
+static void test_sse_minimisation(const double x0, const double dx, Eigen::Ref<const Eigen::VectorXd> y, const double slope, const double intercept, const double slope_delta, const double intercept_delta)
+{
+	const double min_sse = calc_sse(x0, dx, y, slope, intercept);
+	if (slope_delta > 0) {
+		ASSERT_LE(min_sse, calc_sse(x0, dx, y, slope + slope_delta, intercept));
+		ASSERT_LE(min_sse, calc_sse(x0, dx, y, slope - slope_delta, intercept));
+	}
+	if (intercept_delta > 0) {
+		ASSERT_LE(min_sse, calc_sse(x0, dx, y, slope, intercept + intercept_delta));
+		ASSERT_LE(min_sse, calc_sse(x0, dx, y, slope, intercept - intercept_delta));
+	}
+}
+
+static void test_sse_minimisation(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<const Eigen::VectorXd> beta, Eigen::Ref<const Eigen::VectorXd> beta_deltas)
+{
+	const double min_sse = calc_sse(X, y, beta);
+	for (Eigen::Index i = 0; i < beta.size(); ++i) {
+		const double delta = beta_deltas[i];
+		if (delta > 0) {
+			const auto v_delta = Eigen::VectorXd::Unit(beta.size(), i) * delta;
+			ASSERT_LE(min_sse, calc_sse(X, y, beta + v_delta));
+			ASSERT_LE(min_sse, calc_sse(X, y, beta - v_delta));
+		}		
+	}
+}
 
 TEST_F(LinearRegressionTest, univariate_errors)
 {
@@ -42,12 +99,15 @@ TEST_F(LinearRegressionTest, univariate_two_points)
 	ASSERT_TRUE(std::isnan(result.var_slope)) << result.var_slope;
 	ASSERT_TRUE(std::isnan(result.var_intercept)) << result.var_intercept;
 	ASSERT_TRUE(std::isnan(result.cov_slope_intercept)) << result.cov_slope_intercept;
+	test_sse_minimisation(x, y, result.slope, result.intercept, 1e-8, 1e-8);
 }
 
 TEST_F(LinearRegressionTest, univariate_two_points_regular)
 {
+	constexpr double x0 = 0.1;
+	constexpr double dx = 0.1;
 	Eigen::Vector2d y(0.5, 0.3);
-	const UnivariateOLSResult result = univariate(.1, .1, y);
+	const UnivariateOLSResult result = univariate(x0, dx, y);
 	ASSERT_EQ(2u, result.n);
 	ASSERT_EQ(0u, result.dof);
 	ASSERT_NEAR(-2, result.slope, 1e-15);
@@ -57,6 +117,7 @@ TEST_F(LinearRegressionTest, univariate_two_points_regular)
 	ASSERT_TRUE(std::isnan(result.var_slope)) << result.var_slope;
 	ASSERT_TRUE(std::isnan(result.var_intercept)) << result.var_intercept;
 	ASSERT_TRUE(std::isnan(result.cov_slope_intercept)) << result.cov_slope_intercept;
+	test_sse_minimisation(x0, dx, y, result.slope, result.intercept, 1e-8, 1e-8);
 }
 
 TEST_F(LinearRegressionTest, univariate_high_noise)
@@ -82,6 +143,7 @@ TEST_F(LinearRegressionTest, univariate_high_noise)
 	EXPECT_GE(result.r2, 0);
 	const double expected_observation_variance = noise_strength * noise_strength / 4;
 	EXPECT_NEAR(expected_observation_variance, result.var_y, expected_observation_variance * 1e-3);
+	test_sse_minimisation(x, y, result.slope, result.intercept, 1e-8, 1e-8);
 }
 
 TEST_F(LinearRegressionTest, univariate_regular_vs_standard)
@@ -125,7 +187,7 @@ TEST_F(LinearRegressionTest, univariate_high_noise_regular)
 	for (unsigned int i = 0; i < n; ++i) {
 		y[i] = noise_strength * (0.5 - static_cast<double>(uniform(rng))) + intercept;
 	}
-	const auto result = univariate(x0, dx, y);
+	const auto result = univariate(x0, dx, y);	
 	ASSERT_EQ(n, result.n);
 	ASSERT_EQ(n - 2, result.dof);
 	EXPECT_NEAR(0, result.slope, noise_strength * 1e-2);
@@ -134,6 +196,7 @@ TEST_F(LinearRegressionTest, univariate_high_noise_regular)
 	EXPECT_GE(result.r2, 0);
 	const double expected_observation_variance = noise_strength * noise_strength / 4;
 	EXPECT_NEAR(expected_observation_variance, result.var_y, expected_observation_variance * 1e-3);
+	test_sse_minimisation(x0, dx, y, result.slope, result.intercept, 1e-8, 1e-8);
 }
 
 TEST_F(LinearRegressionTest, univariate_true_model)
@@ -158,6 +221,7 @@ TEST_F(LinearRegressionTest, univariate_true_model)
 		return univariate(x, y);
 	};
 	const auto result = sample_noise_and_run_regression();
+	test_sse_minimisation(x, y, result.slope, result.intercept, 1e-8, 1e-8);
 	ASSERT_EQ(n, result.n);
 	ASSERT_EQ(n - 2, result.dof);
 	EXPECT_NEAR(intercept, result.intercept, 4e-3);
@@ -208,6 +272,7 @@ TEST_F(LinearRegressionTest, univariate_true_model_regular)
 		return univariate(x0, dx, y);
 	};
 	const auto result = sample_noise_and_run_regression();
+	test_sse_minimisation(x0, dx, y, result.slope, result.intercept, 1e-8, 1e-8);
 	ASSERT_EQ(n, result.n);
 	ASSERT_EQ(n - 2, result.dof);
 	EXPECT_NEAR(intercept, result.intercept, 2e-2);
@@ -265,6 +330,7 @@ TEST_F(LinearRegressionTest, univariate_without_intercept_one_point)
 	ASSERT_TRUE(std::isnan(result.var_slope)) << result.var_slope;
 	ASSERT_EQ(0, result.var_intercept);
 	ASSERT_EQ(0, result.cov_slope_intercept);
+	test_sse_minimisation(x, y, result.slope, result.intercept, 1e-8, 0);
 }
 
 TEST_F(LinearRegressionTest, univariate_without_intercept_high_noise)
@@ -289,6 +355,7 @@ TEST_F(LinearRegressionTest, univariate_without_intercept_high_noise)
 	EXPECT_GE(result.r2, 0);
 	const double expected_observation_variance = noise_strength * noise_strength / 4;
 	EXPECT_NEAR(expected_observation_variance, result.var_y, expected_observation_variance * 1e-2);
+	test_sse_minimisation(x, y, result.slope, result.intercept, 1e-6, 0);
 }
 
 TEST_F(LinearRegressionTest, univariate_without_intercept_true_model)
@@ -312,6 +379,7 @@ TEST_F(LinearRegressionTest, univariate_without_intercept_true_model)
 		return univariate_without_intercept(x, y);
 	};
 	const auto result = sample_noise_and_run_regression();
+	test_sse_minimisation(x, y, result.slope, result.intercept, 1e-8, 0);
 	ASSERT_EQ(n, result.n);
 	ASSERT_EQ(n - 1, result.dof);
 	EXPECT_NEAR(slope, result.slope, 3e-3);
@@ -361,6 +429,7 @@ TEST_F(LinearRegressionTest, multivariate_exact_fit)
 			ASSERT_TRUE(std::isnan(result.cov(i, j))) << "cov(" << i << ", " << j << ") == " << result.cov(i, j);
 		}
 	}
+	test_sse_minimisation(X, y, result.beta, Eigen::Vector2d(1e-8, 1e-8));
 }
 
 TEST_F(LinearRegressionTest, multivariate_true_model)
@@ -388,6 +457,7 @@ TEST_F(LinearRegressionTest, multivariate_true_model)
 		return multivariate(X, y);
 	};
 	const auto result = sample_noise_and_run_regression();
+	test_sse_minimisation(X, y, result.beta, Eigen::VectorXd::Constant(dim, 1e-8));
 	ASSERT_EQ(n, result.n);
 	ASSERT_EQ(n - dim, result.dof);
 	EXPECT_NEAR(0, (beta - result.beta).lpNorm<Eigen::Infinity>(), 1e-2) << (result.beta - beta);
