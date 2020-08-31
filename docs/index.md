@@ -76,7 +76,7 @@ doxygen
 ```
 
 (requires `doxygen` and `graphviz` to be installed). The documentation will be written to
-`ML/docs/html` subdirectory. A pre-built version of this documentation for the current release
+`ML/docs/html` subdirectory. A pre-built version of this documentation for the current HEAD version
 is [here](html/index.html).
 
 ## Python extension
