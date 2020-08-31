@@ -17,6 +17,7 @@ jobs:
       name: "Release build"
       script: ./scripts/ci_release_build.sh
     - stage: documentation
+      name: "Generate Doxygen documentation and deploy it to GitHub pages"
       script: doxygen Doxyfile
       deploy:
         edge: true
