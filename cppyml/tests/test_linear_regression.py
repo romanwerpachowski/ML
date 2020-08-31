@@ -57,6 +57,26 @@ class LinearRegressionTest(unittest.TestCase):
         np.testing.assert_array_equal(beta, result.beta)
         np.testing.assert_array_equal(cov, result.cov)
 
+    def test_ridge_regression_result(self):
+        n = 100
+        dof = 98
+        var_y = 0.3
+        r2 = 0.8
+        beta = np.array([-0.4, 0.2])
+        cov = np.array([[0.004, -0.0001],
+                        [-0.00010001, 0.03]])
+        effective_dof = 99
+        result = linear_regression.RidgeRegressionResult(
+            n, dof, var_y, r2, beta, cov, effective_dof)
+        self.assertTrue(result.cov.flags["C_CONTIGUOUS"])
+        self.assertEqual(n, result.n)
+        self.assertEqual(dof, result.dof)
+        self.assertEqual(var_y, result.var_y)
+        self.assertEqual(r2, result.r2)        
+        np.testing.assert_array_equal(beta, result.beta)
+        np.testing.assert_array_equal(cov, result.cov)
+        self.assertEqual(effective_dof, result.effective_dof)
+
     def test_univariate_with_intercept(self):
         n = 25
         slope = 0.1
@@ -208,12 +228,13 @@ class LinearRegressionTest(unittest.TestCase):
         ridge.fit(Xstd, y)
         result2 = linear_regression.ridge(Xstd, y, lam, do_standardise=True)
         result3 = linear_regression.ridge(X, y, lam, do_standardise=True)
-        np.testing.assert_array_almost_equal(ridge.coef_, result1.slopes, 14)
-        np.testing.assert_array_almost_equal(ridge.coef_, result2.slopes, 14)
-        np.testing.assert_array_almost_equal(ridge.coef_ / stds, result3.slopes, 14)
-        self.assertAlmostEqual(ridge.intercept_, result1.intercept, delta=1e-14)
-        self.assertAlmostEqual(ridge.intercept_, result2.intercept, delta=1e-14)
-        self.assertAlmostEqual(ridge.intercept_ - np.dot(ridge.coef_, means / stds), result3.intercept, delta=1e-14)
+        for idx, result in enumerate((result1, result2)):
+            self.assertEqual(d + 1, len(result.beta), msg=str(idx))
+            np.testing.assert_array_almost_equal(ridge.coef_, result.beta[:d], 14, err_msg=str(idx))            
+        np.testing.assert_array_almost_equal(ridge.coef_ / stds, result3.beta[:d], 14)
+        self.assertAlmostEqual(ridge.intercept_, result1.beta[d], delta=1e-14)
+        self.assertAlmostEqual(ridge.intercept_, result2.beta[d], delta=1e-14)
+        self.assertAlmostEqual(ridge.intercept_ - np.dot(ridge.coef_, means / stds), result3.beta[d], delta=1e-14)
         r2 = ridge.score(Xstd, y)
         self.assertAlmostEqual(r2, result1.r2, delta=1e-14)
         self.assertAlmostEqual(r2, result2.r2, delta=1e-14)

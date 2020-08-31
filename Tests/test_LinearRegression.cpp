@@ -36,9 +36,10 @@ inline double calc_sse(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eig
 	return (y - X.transpose() * beta).squaredNorm();
 }
 
-inline double calc_sse(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, const double lambda, Eigen::Ref<const Eigen::VectorXd> slopes, const double intercept)
+inline double calc_sse(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, const double lambda, Eigen::Ref<const Eigen::VectorXd> beta)
 {
-	return (y - X.transpose() * slopes - Eigen::VectorXd::Constant(y.size(), intercept)).squaredNorm() + lambda * slopes.squaredNorm();
+	const auto d = X.rows();
+	return (y - X.transpose() * beta.head(d) - Eigen::VectorXd::Constant(y.size(), beta[d])).squaredNorm() + lambda * beta.head(d).squaredNorm();
 }
 
 static void test_sse_minimisation(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y, const double slope, const double intercept, const double slope_delta, const double intercept_delta)
@@ -80,21 +81,17 @@ static void test_sse_minimisation(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Re
 	}
 }
 
-static void test_sse_minimisation(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, const double lambda, Eigen::Ref<const Eigen::VectorXd> slopes, const double intercept, Eigen::Ref<const Eigen::VectorXd> slopes_deltas, const double intercept_delta)
+static void test_sse_minimisation(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, const double lambda, Eigen::Ref<const Eigen::VectorXd> beta, Eigen::Ref<const Eigen::VectorXd> beta_deltas)
 {
-	const double min_sse = calc_sse(X, y, lambda, slopes, intercept);
-	for (Eigen::Index i = 0; i < slopes.size(); ++i) {
-		const double delta = slopes_deltas[i];
+	const double min_sse = calc_sse(X, y, lambda, beta);
+	for (Eigen::Index i = 0; i < beta.size(); ++i) {
+		const double delta = beta_deltas[i];
 		if (delta > 0) {
-			const auto v_delta = Eigen::VectorXd::Unit(slopes.size(), i) * delta;
-			ASSERT_LE(min_sse, calc_sse(X, y, lambda, slopes + v_delta, intercept));
-			ASSERT_LE(min_sse, calc_sse(X, y, lambda, slopes - v_delta, intercept));
+			const auto v_delta = Eigen::VectorXd::Unit(beta.size(), i) * delta;
+			ASSERT_LE(min_sse, calc_sse(X, y, lambda, beta + v_delta));
+			ASSERT_LE(min_sse, calc_sse(X, y, lambda, beta - v_delta));
 		}
-	}
-	if (intercept_delta > 0) {
-		ASSERT_LE(min_sse, calc_sse(X, y, lambda, slopes, intercept + intercept_delta));
-		ASSERT_LE(min_sse, calc_sse(X, y, lambda, slopes, intercept - intercept_delta));
-	}
+	}	
 }
 
 TEST_F(LinearRegressionTest, univariate_errors)
@@ -748,8 +745,7 @@ TEST_F(LinearRegressionTest, ridge_zero_lambda)
 	ASSERT_NEAR(expected.var_y, actual.var_y, tol);
 	ASSERT_EQ(expected.dof, actual.effective_dof);
 	ASSERT_NEAR(expected.r2, actual.r2, tol);
-	ASSERT_NEAR(expected.beta[d], actual.intercept, tol);
-	ASSERT_NEAR(0, (expected.beta.head(d) - actual.slopes).norm(), tol) << actual.slopes;
+	ASSERT_NEAR(0, (expected.beta - actual.beta).norm(), tol) << actual.beta;
 }
 
 TEST_F(LinearRegressionTest, ridge_nonzero_lambda)
@@ -769,20 +765,18 @@ TEST_F(LinearRegressionTest, ridge_nonzero_lambda)
 	ASSERT_LT(unregularised.var_y, regularised.var_y);	
 	ASSERT_GT(unregularised.r2, regularised.r2);
 	ASSERT_LT(0, regularised.r2);
-	Eigen::VectorXd beta_diff(unregularised.beta);
-	beta_diff.head(d) -= regularised.slopes;
-	beta_diff[d] -= regularised.intercept;
+	const Eigen::VectorXd beta_diff(unregularised.beta - regularised.beta);
 	const double tol = 1e-16;
-	ASSERT_NEAR(unregularised.beta[d], regularised.intercept, tol);
-	ASSERT_NEAR(y.mean(), regularised.intercept, tol);
+	ASSERT_NEAR(unregularised.beta[d], regularised.beta[d], tol);
+	ASSERT_NEAR(y.mean(), regularised.beta[d], tol);
 	const double beta_diff_norm = beta_diff.norm();
 	ASSERT_LT(0, beta_diff_norm) << beta_diff;
 	ASSERT_GT(1e-4, beta_diff_norm) << beta_diff;
-	const double reg_beta_norm = std::sqrt(regularised.slopes.squaredNorm() + regularised.intercept * regularised.intercept);
+	const double reg_beta_norm = regularised.beta.norm();
 	ASSERT_GT(unregularised.beta.norm(), reg_beta_norm);
 	ASSERT_LT(unregularised.dof, regularised.effective_dof);
 	ASSERT_LT(0, regularised.effective_dof);
-	test_sse_minimisation(X0, y, lambda, regularised.slopes, regularised.intercept, Eigen::VectorXd::Constant(d, 1e-8), 1e-8);
+	test_sse_minimisation(X0, y, lambda, regularised.beta, Eigen::VectorXd::Constant(d + 1, 1e-8));
 }
 
 TEST_F(LinearRegressionTest, ridge_yuge_lambda)
@@ -802,10 +796,10 @@ TEST_F(LinearRegressionTest, ridge_yuge_lambda)
 	const double tol = 1e-16;
 	ASSERT_NEAR(sst / result.dof, result.var_y, tol);
 	ASSERT_NEAR(0, result.r2, tol);
-	ASSERT_NEAR(y.mean(), result.intercept, tol);
-	ASSERT_NEAR(0, result.slopes.norm(), tol);
+	ASSERT_NEAR(y.mean(), result.beta[d], tol);
+	ASSERT_NEAR(0, result.beta.head(d).norm(), tol);
 	ASSERT_NEAR(n - 1, result.effective_dof, tol);
-	test_sse_minimisation(X0, y, lambda, result.slopes, result.intercept, Eigen::VectorXd::Constant(d, 1e-8), 1e-8);
+	test_sse_minimisation(X0, y, lambda, result.beta, Eigen::VectorXd::Constant(d + 1, 1e-8));
 }
 
 TEST_F(LinearRegressionTest, ridge_very_small_slopes)
@@ -828,7 +822,6 @@ TEST_F(LinearRegressionTest, ridge_very_small_slopes)
 	ASSERT_NEAR(expected.var_y, actual.var_y, tol);
 	ASSERT_NEAR(expected.dof, actual.effective_dof, lambda);
 	ASSERT_NEAR(expected.r2, actual.r2, tol);
-	ASSERT_NEAR(expected.beta[d], actual.intercept, tol);
-	ASSERT_NEAR(0, (expected.beta.head(d) - actual.slopes).norm(), tol) << actual.slopes;
-	test_sse_minimisation(X0, y, lambda, actual.slopes, actual.intercept, Eigen::VectorXd::Constant(d, 1e-8), 1e-8);
+	ASSERT_NEAR(0, (expected.beta - actual.beta).norm(), tol) << actual.beta;
+	test_sse_minimisation(X0, y, lambda, actual.beta, Eigen::VectorXd::Constant(d + 1, 1e-8));
 }

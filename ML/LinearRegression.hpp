@@ -52,17 +52,13 @@ namespace ml
 
 		/** @brief Result of a (multivariate) ridge regression with intercept.
 
-		Does not contain error estimates because they are not easy to estimate reliably for regularised regression.
-
-		Intercept is reported separately because it has a special status: it's not regularised.
+		Intercept is the last coefficient in `beta`.
 
 		#var_y is calculated using #dof as the denominator.
 		*/
-		struct RidgeRegressionResult : public Result
+		struct RidgeRegressionResult : public MultivariateOLSResult
 		{
-			Eigen::VectorXd slopes; /**< Regularised coefficients multiplying independent variables. */
-			double intercept; /**< Unregularised intercept. */
-			double effective_dof; /**< Effective number of residual degrees of freedom \f$ N - \mathrm{tr} [ X^T (X X^T + \lambda I)^{-1} X ] - 1 \f$. */
+			double effective_dof; /**< Effective number of residual degrees of freedom \f$ N - \mathrm{tr} [ X^T (X X^T + \lambda I)^{-1} X ] - 1 \f$. */			
 
 			/** @brief Formats the result as string. */
 			DLL_DECLSPEC std::string to_string() const;

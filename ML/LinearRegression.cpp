@@ -36,9 +36,9 @@ namespace ml
 		{
 			std::stringstream s;
 			s << "RidgeRegressionResult(";
-			s << "n=" << n << ", dof=" << dof << ", r2=" << r2 << ", var_y=" << var_y;
-			s << ", slopes=[" << slopes.transpose() << "]";
-			s << ", intercept=" << intercept << "])";
+			s << "n=" << n << ", dof=" << dof << ", effective_dof=" << effective_dof << ", r2=" << r2 << ", var_y=" << var_y;
+			s << ", beta=[" << beta.transpose() << "]";
+			s << ", cov=[" << cov << "])";
 			return s.str();
 		}
 
@@ -189,13 +189,14 @@ namespace ml
 			RidgeRegressionResult result;
 			result.n = n;
 			result.dof = n - q - 1; // -1 for the intercept.
-			result.intercept = y.mean();
+			result.beta.resize(q + 1);
+			const double intercept = y.mean();
+			result.beta[q] = intercept;
 			Eigen::LDLT<Eigen::MatrixXd> xxt_decomp;
-			result.slopes = calculate_XXt_beta(X, y, xxt_decomp, lambda);
-			assert(result.slopes.size() == X.rows());
+			result.beta.head(q) = calculate_XXt_beta(X, y, xxt_decomp, lambda);
 			// Use the fact that intercept == mean(y).
-			const Eigen::VectorXd y_centred(y.array() - result.intercept); 
-			const double sse = (y_centred - X.transpose() * result.slopes).squaredNorm();
+			const Eigen::VectorXd y_centred(y.array() - intercept);
+			const double sse = (y_centred - X.transpose() * result.beta.head(q)).squaredNorm();
 			const auto syy = y_centred.squaredNorm();
 			result.r2 = 1 - sse / syy;
 			if (result.dof) {
@@ -220,8 +221,10 @@ namespace ml
 			Eigen::VectorXd standard_deviations;
 			standardise(workX, means, standard_deviations);
 			auto result = ridge<false>(workX, y, lambda);
-			result.slopes.array() /= standard_deviations.array();
-			result.intercept -= result.slopes.dot(means);
+			const auto q = X.rows();
+			auto slopes = result.beta.head(q);
+			slopes.array() /= standard_deviations.array();
+			result.beta[q] -= slopes.dot(means);
 			return result;
 		}
 
