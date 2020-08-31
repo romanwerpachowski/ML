@@ -5,5 +5,19 @@ compiler: gcc
 branches:
   only:
     - master
+
 before_install: ./scripts/ci_dependencies.sh
-script: ./scripts/ci_build.sh
+
+script:
+  stage: build
+  script: ./scripts/ci_build.sh
+  stage: documentation
+  script: doxysgen ML/Doxyfile
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: docs/html
+  github_token: $GH_REPO_TOKEN
+  on:
+    branch: master
