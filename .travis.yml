@@ -8,12 +8,12 @@ branches:
 
 before_install: ./scripts/ci_dependencies.sh
 
-script:
-  stage: build
-  script: ./scripts/ci_build.sh
-  stage: documentation
-  script:
-    - doxygen Doxyfile
+jobs:
+  include:
+    stage: build
+    script: ./scripts/ci_build.sh
+    stage: documentation
+    script: doxygen Doxyfile
 
 deploy:
   provider: pages
