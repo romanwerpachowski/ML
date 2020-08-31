@@ -10,10 +10,10 @@ before_install: ./scripts/ci_dependencies.sh
 
 jobs:
   include:
-    stage: build
-    script: ./scripts/ci_build.sh
-    stage: documentation
-    script: doxygen Doxyfile
+    - stage: build
+      script: ./scripts/ci_build.sh
+    - stage: documentation
+      script: doxygen Doxyfile
 
 deploy:
   provider: pages
