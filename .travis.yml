@@ -6,17 +6,19 @@ branches:
   only:
     - master
 
-before_install: ./scripts/ci_dependencies.sh
-
 jobs:
   include:
     - stage: build
+      before_install: ./scripts/ci_dependencies.sh
       name: "Debug build"
       script: ./scripts/ci_debug_build.sh      
     - # continue in build
       name: "Release build"
       script: ./scripts/ci_release_build.sh
     - stage: documentation
+      before_install:
+        - sudo apt-get update
+        - sudo apt-get -y install doxygen graphviz
       name: "Generate Doxygen documentation and deploy it to GitHub pages"
       script: doxygen Doxyfile
       deploy:
