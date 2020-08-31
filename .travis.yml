@@ -12,7 +12,7 @@ script:
   stage: build
   script: ./scripts/ci_build.sh
   stage: documentation
-  script: doxygen ML/Doxyfile
+  script: doxygen Doxyfile
 
 deploy:
   provider: pages

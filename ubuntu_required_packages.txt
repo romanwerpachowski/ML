@@ -1,4 +1,5 @@
 doxygen
+graphviz
 libeigen3-dev
 libbenchmark-dev
 pybind11-dev
