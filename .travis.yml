@@ -2,5 +2,8 @@ language: cpp
 os: linux
 dist: focal
 compiler: gcc
+branches:
+  only:
+    - master
 before_install: ./ci_dependencies.sh
 script: ./ci_build.sh
