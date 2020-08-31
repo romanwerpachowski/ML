@@ -1,6 +1,6 @@
 #pragma once
 
-/** @mainpage ML++
+/** @mainpage MLpp
 
 C++ library with efficient implementations of selected machine learning algorithms.
 
