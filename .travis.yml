@@ -10,18 +10,24 @@ before_install: ./scripts/ci_dependencies.sh
 
 jobs:
   include:
-    - stage: build
+    - stage: build_code
       script:
         - ./scripts/ci_debug_build.sh
         - ./scripts/ci_release_build.sh
-    - stage: documentation
+    - stage: build_documentation
       script: doxygen Doxyfile
+    - stage: deploy_documentation
+      script: skip
+      deploy:
+        edge: true
+        provider: pages
+        strategy: git
+        local_dir: docs
+        token: $GH_REPO_TOKEN
+        on:
+          branch: master
 
-deploy:
-  edge: true
-  provider: pages
-  strategy: git
-  local_dir: docs
-  token: $GH_REPO_TOKEN
-  on:
-    branch: master
+stages:
+  - build_code
+  - build_documentation
+  - deploy_documentation
