@@ -12,6 +12,7 @@ jobs:
   include:
     - stage: build
       script: ./scripts/ci_debug_build.sh
+    - # continue in build
       script: ./scripts/ci_release_build.sh
     - stage: build
       script: doxygen Doxyfile
