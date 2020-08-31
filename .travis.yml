@@ -13,6 +13,7 @@ jobs:
       name: "Debug build"
       script: ./scripts/ci_debug_build.sh      
     - # continue in build
+      before_install: ./scripts/ci_dependencies.sh
       name: "Release build"
       script: ./scripts/ci_release_build.sh
     - stage: documentation
