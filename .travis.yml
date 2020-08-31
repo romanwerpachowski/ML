@@ -11,7 +11,9 @@ before_install: ./scripts/ci_dependencies.sh
 jobs:
   include:
     - stage: build
-      script: ./scripts/ci_build.sh
+      script:
+        - ./scripts/ci_debug_build.sh
+        - ./scripts/ci_release_build.sh
     - stage: documentation
       script: doxygen Doxyfile
 
