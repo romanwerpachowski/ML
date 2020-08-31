@@ -1,5 +1,0 @@
-<map id="ml::LinearRegression::Result" name="ml::LinearRegression::Result">
-<area shape="rect" id="node2" href="$structml_1_1LinearRegression_1_1MultivariateOLSResult.html" title="Result of multivariate Ordinary Least Squares regression. " alt="" coords="202,5,363,47"/>
-<area shape="rect" id="node3" href="$structml_1_1LinearRegression_1_1RidgeRegressionResult.html" title="Result of a (multivariate) ridge regression with intercept. " alt="" coords="199,71,367,112"/>
-<area shape="rect" id="node4" href="$structml_1_1LinearRegression_1_1UnivariateOLSResult.html" title="Result of 1D Ordinary Least Squares regression (with or without intercept). " alt="" coords="206,136,359,177"/>
-</map>

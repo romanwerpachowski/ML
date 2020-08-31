@@ -1,4 +1,0 @@
-<map id="ml::DecisionTrees::Node&lt; Y &gt;" name="ml::DecisionTrees::Node&lt; Y &gt;">
-<area shape="rect" id="node2" href="$structml_1_1DecisionTrees_1_1LeafNode.html" title="Terminal node, which returns a constant prediction value for features which ended up on it..." alt="" coords="5,95,141,136"/>
-<area shape="rect" id="node3" href="$structml_1_1DecisionTrees_1_1SplitNode.html" title="Non&#45;terminal node, which splits data depending on a threshold value of some feature. " alt="" coords="165,95,301,136"/>
-</map>

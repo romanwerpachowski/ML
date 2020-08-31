@@ -1,5 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structml_1_1DecisionTrees_1_1Node.html" title="Tree node. Nodes are split (non&#45;terminal) or leaf (terminal). " alt="" coords="5,39,141,80"/>
-<area shape="rect" id="node2" href="$structml_1_1DecisionTrees_1_1LeafNode.html" title="Terminal node, which returns a constant prediction value for features which ended up on it..." alt="" coords="189,5,325,47"/>
-<area shape="rect" id="node3" href="$structml_1_1DecisionTrees_1_1SplitNode.html" title="Non&#45;terminal node, which splits data depending on a threshold value of some feature. " alt="" coords="189,71,325,112"/>
-</map>

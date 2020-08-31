@@ -5,5 +5,5 @@ compiler: gcc
 branches:
   only:
     - master
-before_install: ./ci_dependencies.sh
-script: ./ci_build.sh
+before_install: ./scripts/ci_dependencies.sh
+script: ./scripts/ci_build.sh
