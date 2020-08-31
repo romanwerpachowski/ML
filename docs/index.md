@@ -10,7 +10,7 @@ Current version number for both projects is 0.3.0
 
 - clustering (EM algorithm)
 - decision trees for classification and regression
-- linear regression (incl. recursive)
+- linear regression (incl. recursive and ridge)
 
 More is coming! See Doxygen documentation for details.
 
