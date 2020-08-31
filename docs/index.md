@@ -22,15 +22,14 @@ Tested with Visual Studio C++ 2019 and Python 3.7.7.
 
 ### Linux
 
-Tested on Ubuntu 20.04.1 LTS (Focal Fossa).
+Tested with on Ubuntu 20.04.1 LTS (Focal Fossa).
+A list of required packages for is in the `ubuntu_required_packages.txt` file.
 
-- SCons
-- g++
-- Python 3.x
+- SCons >= 4.0.1
+- g++ >= 7.5.0
+- Python >= 3.6
 
 ### C++ dependencies
-
-Avoid using old Ubuntu packages, prefer getting the source from GitHub.
 
 - pybind11
 - benchmark (Google C++ benchmarking library)
@@ -41,10 +40,11 @@ Avoid using old Ubuntu packages, prefer getting the source from GitHub.
 
 ### Python dependencies
 
-For build:
+For the build:
 - setuptools
 
 For demos and tests:
+- nose
 - numpy
 - pandas
 - sklearn
