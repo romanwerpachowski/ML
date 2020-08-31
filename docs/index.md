@@ -22,7 +22,7 @@ Tested with Visual Studio C++ 2019 and Python 3.7.7.
 
 ### Linux
 
-Tested on Ubuntu 18.04.5 LTS.
+Tested on Ubuntu 20.04.1 LTS (Focal Fossa).
 
 - SCons
 - g++
