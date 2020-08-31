@@ -9,5 +9,9 @@ var searchData=
   ['remove_5fweakest_5flink',['remove_weakest_link',['../classml_1_1DecisionTree.html#a978b18656760bc602a601e00fc78bf2f',1,'ml::DecisionTree']]],
   ['responsibilities',['responsibilities',['../classml_1_1EM.html#ad00fd3573c2078707aeaacebb1a40f14',1,'ml::EM']]],
   ['responsibilitiesinitialiser',['ResponsibilitiesInitialiser',['../classml_1_1Clustering_1_1ResponsibilitiesInitialiser.html',1,'ml::Clustering']]],
-  ['result',['Result',['../structml_1_1LinearRegression_1_1Result.html',1,'ml::LinearRegression']]]
+  ['result',['Result',['../structml_1_1LinearRegression_1_1Result.html',1,'ml::LinearRegression']]],
+  ['ridge',['ridge',['../namespaceml_1_1LinearRegression.html#a8c4c56fac8ea09d8323f3386a0c3a02b',1,'ml::LinearRegression']]],
+  ['ridge_3c_20false_20_3e',['ridge&lt; false &gt;',['../namespaceml_1_1LinearRegression.html#a9ca28ddff2cefee923c517e52b1f3e71',1,'ml::LinearRegression']]],
+  ['ridge_3c_20true_20_3e',['ridge&lt; true &gt;',['../namespaceml_1_1LinearRegression.html#af7b70c29c6236e9ae0fd7ceb3a5f0200',1,'ml::LinearRegression']]],
+  ['ridgeregressionresult',['RidgeRegressionResult',['../structml_1_1LinearRegression_1_1RidgeRegressionResult.html',1,'ml::LinearRegression']]]
 ];

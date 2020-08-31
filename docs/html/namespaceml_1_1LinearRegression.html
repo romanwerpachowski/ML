@@ -9,9 +9,19 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { init_search(); });
+</script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
@@ -30,6 +40,21 @@
    <div id="projectname">ML
    </div>
   </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Search" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+</td>
  </tr>
  </tbody>
 </table>
@@ -39,15 +64,21 @@
 <script type="text/javascript">
 var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
-<script type="text/javascript" src="menudata.js"></script>
-<script type="text/javascript" src="menu.js"></script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
 <script type="text/javascript">
-$(function() {
-  initMenu('',true,false,'search.php','Search');
-  $(document).ready(function() { init_search(); });
-});
+$(document).ready(function(){initNavTree('namespaceml_1_1LinearRegression.html','');});
 </script>
-<div id="main-nav"></div>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -62,11 +93,6 @@ $(function() {
 </iframe>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><b>ml</b></li><li class="navelem"><a class="el" href="namespaceml_1_1LinearRegression.html">LinearRegression</a></li>  </ul>
-</div>
-</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
@@ -90,6 +116,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LinearRegression_1_1Result.html">Result</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression. ">Result</a> of linear regression.  <a href="structml_1_1LinearRegression_1_1Result.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html">RidgeRegressionResult</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression. ">Result</a> of a (multivariate) ridge regression with intercept.  <a href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LinearRegression_1_1UnivariateOLSResult.html">UnivariateOLSResult</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression. ">Result</a> of 1D Ordinary Least Squares regression (with or without intercept).  <a href="structml_1_1LinearRegression_1_1UnivariateOLSResult.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -108,9 +137,30 @@ Functions</h2></td></tr>
 <tr class="memitem:ad36b2e75f9b2ba79ce0cdd7b49ed2f33"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structml_1_1LinearRegression_1_1MultivariateOLSResult.html">MultivariateOLSResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#ad36b2e75f9b2ba79ce0cdd7b49ed2f33">multivariate</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)</td></tr>
 <tr class="memdesc:ad36b2e75f9b2ba79ce0cdd7b49ed2f33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Carries out multivariate linear regression.  <a href="#ad36b2e75f9b2ba79ce0cdd7b49ed2f33">More...</a><br /></td></tr>
 <tr class="separator:ad36b2e75f9b2ba79ce0cdd7b49ed2f33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c4c56fac8ea09d8323f3386a0c3a02b"><td class="memTemplParams" colspan="2">template&lt;bool DoStandardise&gt; </td></tr>
+<tr class="memitem:a8c4c56fac8ea09d8323f3386a0c3a02b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html">RidgeRegressionResult</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#a8c4c56fac8ea09d8323f3386a0c3a02b">ridge</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, double lambda)</td></tr>
+<tr class="memdesc:a8c4c56fac8ea09d8323f3386a0c3a02b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Carries out multivariate ridge regression with intercept.  <a href="#a8c4c56fac8ea09d8323f3386a0c3a02b">More...</a><br /></td></tr>
+<tr class="separator:a8c4c56fac8ea09d8323f3386a0c3a02b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7b70c29c6236e9ae0fd7ceb3a5f0200"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:af7b70c29c6236e9ae0fd7ceb3a5f0200"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html">RidgeRegressionResult</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#af7b70c29c6236e9ae0fd7ceb3a5f0200">ridge&lt; true &gt;</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, double lambda)</td></tr>
+<tr class="memdesc:af7b70c29c6236e9ae0fd7ceb3a5f0200"><td class="mdescLeft">&#160;</td><td class="mdescRight">Carries out multivariate ridge regression with intercept, standardising <code>X</code> inputs internally.  <a href="#af7b70c29c6236e9ae0fd7ceb3a5f0200">More...</a><br /></td></tr>
+<tr class="separator:af7b70c29c6236e9ae0fd7ceb3a5f0200"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ca28ddff2cefee923c517e52b1f3e71"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
+<tr class="memitem:a9ca28ddff2cefee923c517e52b1f3e71"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html">RidgeRegressionResult</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#a9ca28ddff2cefee923c517e52b1f3e71">ridge&lt; false &gt;</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, double lambda)</td></tr>
+<tr class="memdesc:a9ca28ddff2cefee923c517e52b1f3e71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Carries out multivariate ridge regression with intercept, assuming standardised <code>X</code> inputs.  <a href="#a9ca28ddff2cefee923c517e52b1f3e71">More...</a><br /></td></tr>
+<tr class="separator:a9ca28ddff2cefee923c517e52b1f3e71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae433e433f0b72b81521f1eb3a733e66e"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#ae433e433f0b72b81521f1eb3a733e66e">add_ones</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X)</td></tr>
 <tr class="memdesc:ae433e433f0b72b81521f1eb3a733e66e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds another row with 1s in every column to X.  <a href="#ae433e433f0b72b81521f1eb3a733e66e">More...</a><br /></td></tr>
 <tr class="separator:ae433e433f0b72b81521f1eb3a733e66e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abef3640a6bb4c244c9f7e01060edd0a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#abef3640a6bb4c244c9f7e01060edd0a8">standardise</a> (Eigen::Ref&lt; Eigen::MatrixXd &gt; X)</td></tr>
+<tr class="memdesc:abef3640a6bb4c244c9f7e01060edd0a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standardises independent variables.  <a href="#abef3640a6bb4c244c9f7e01060edd0a8">More...</a><br /></td></tr>
+<tr class="separator:abef3640a6bb4c244c9f7e01060edd0a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add0fe95143e605bb7ff69982eee6d804"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#add0fe95143e605bb7ff69982eee6d804">standardise</a> (Eigen::Ref&lt; Eigen::MatrixXd &gt; X, Eigen::VectorXd &amp;means, Eigen::VectorXd &amp;standard_deviations)</td></tr>
+<tr class="memdesc:add0fe95143e605bb7ff69982eee6d804"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standardises independent variables.  <a href="#add0fe95143e605bb7ff69982eee6d804">More...</a><br /></td></tr>
+<tr class="separator:add0fe95143e605bb7ff69982eee6d804"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac16bc14f275c279f7007c7ca61d4264c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#ac16bc14f275c279f7007c7ca61d4264c">unstandardise</a> (Eigen::Ref&lt; Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; means, Eigen::Ref&lt; const Eigen::VectorXd &gt; standard_deviations)</td></tr>
+<tr class="memdesc:ac16bc14f275c279f7007c7ca61d4264c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverses the outcome of <a class="el" href="namespaceml_1_1LinearRegression.html#abef3640a6bb4c244c9f7e01060edd0a8" title="Standardises independent variables. ">standardise()</a>.  <a href="#ac16bc14f275c279f7007c7ca61d4264c">More...</a><br /></td></tr>
+<tr class="separator:ac16bc14f275c279f7007c7ca61d4264c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Linear regression algorithms. </p>
@@ -142,7 +192,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Carries out univariate (aka simple) linear regression with intercept. </p>
-<p>R2 coefficient is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:</p>
+<p>R2 is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:</p>
 <p>\(R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2}\)</p>
 <p>where \( \bar{y} = n^{-1} \sum_{i=1}^n y_i \).</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -195,7 +245,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Carries out univariate (aka simple) linear regression with intercept on regularly spaced points. </p>
-<p>R2 coefficient is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:</p>
+<p>R2 is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:</p>
 <p>\(R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2}\)</p>
 <p>where \( \bar{y} = n^{-1} \sum_{i=1}^n y_i \).</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -244,7 +294,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Carries out univariate (aka simple) linear regression without intercept. </p>
-<p>R2 coefficient is calculated w/r to a model returning average Y, and is therefore <em>not</em> equal to correlation of X and Y squared:</p>
+<p>R2 is calculated w/r to a model returning average Y, and is therefore <em>not</em> equal to correlation of X and Y squared:</p>
 <p>\(R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n y_i^2}.\)</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -290,7 +340,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Carries out multivariate linear regression. </p>
-<p>Given X and y, finds beta minimising \( \lVert \vec{y} - X^T \vec{\beta} \rVert^2 \).</p>
+<p>Given X and y, finds \(\vec{beta}\) minimising \( \lVert \vec{y} - X^T \vec{\beta} \rVert^2 \).</p>
 <p>R2 is always calculated w/r to model returning average y.</p>
 <p>If fitting with intercept is desired, include a row of 1's in the X values.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -307,6 +357,148 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceml_1_1LinearRegression.html#ae433e433f0b72b81521f1eb3a733e66e" title="Adds another row with 1s in every column to X. ">add_ones()</a> </dd></dl>
+
+</div>
+</div>
+<a id="a8c4c56fac8ea09d8323f3386a0c3a02b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c4c56fac8ea09d8323f3386a0c3a02b">&#9670;&nbsp;</a></span>ridge()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;bool DoStandardise&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html">RidgeRegressionResult</a> ml::LinearRegression::ridge </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>lambda</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Carries out multivariate ridge regression with intercept. </p>
+<p>Given X and y, finds beta and beta0 minimising \( \lVert \vec{y} - X^T \vec{\beta} \rVert^2 + \lambda \lVert \vec{\beta} \rVert^2 \).</p>
+<p>R2 is always calculated w/r to model returning average y. The matrix <code>X</code> is either assumed to be standardised (<code>DoStandardise == false</code>) or is standardised internally (<code>DoStandardise == true</code>; requires a matrix copy).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>D x N matrix of X values, with data points in columns. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Y vector with length N. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lambda</td><td>Regularisation strength. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">DoStandardise</td><td>Whether to standardise <code>X</code> internally. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html" title="Result of a (multivariate) ridge regression with intercept. ">RidgeRegressionResult</a> object with <code>beta.size() == X.rows() + 1</code>. If <code>DoStandardise == true</code>, the <code>slopes</code> and <code>intercept</code> fields will be rescaled and shifted to original <code>X</code> units and origins. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>y.size() != X.cols()</code> or <code>X.cols() &lt; X.rows()</code>. </td></tr>
+    <tr><td class="paramname">std::domain_error</td><td>If <code>lambda &lt; 0</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceml_1_1LinearRegression.html#abef3640a6bb4c244c9f7e01060edd0a8" title="Standardises independent variables. ">standardise()</a> </dd></dl>
+
+</div>
+</div>
+<a id="af7b70c29c6236e9ae0fd7ceb3a5f0200"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7b70c29c6236e9ae0fd7ceb3a5f0200">&#9670;&nbsp;</a></span>ridge< true >()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html">RidgeRegressionResult</a> <a class="el" href="namespaceml_1_1LinearRegression.html#a8c4c56fac8ea09d8323f3386a0c3a02b">ml::LinearRegression::ridge</a>&lt; true &gt; </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>lambda</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Carries out multivariate ridge regression with intercept, standardising <code>X</code> inputs internally. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceml_1_1LinearRegression.html#a8c4c56fac8ea09d8323f3386a0c3a02b" title="Carries out multivariate ridge regression with intercept. ">ridge()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a9ca28ddff2cefee923c517e52b1f3e71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ca28ddff2cefee923c517e52b1f3e71">&#9670;&nbsp;</a></span>ridge< false >()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html">RidgeRegressionResult</a> <a class="el" href="namespaceml_1_1LinearRegression.html#a8c4c56fac8ea09d8323f3386a0c3a02b">ml::LinearRegression::ridge</a>&lt; false &gt; </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>lambda</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Carries out multivariate ridge regression with intercept, assuming standardised <code>X</code> inputs. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceml_1_1LinearRegression.html#a8c4c56fac8ea09d8323f3386a0c3a02b" title="Carries out multivariate ridge regression with intercept. ">ridge()</a>. </dd></dl>
 
 </div>
 </div>
@@ -343,12 +535,153 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="abef3640a6bb4c244c9f7e01060edd0a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abef3640a6bb4c244c9f7e01060edd0a8">&#9670;&nbsp;</a></span>standardise() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ml::LinearRegression::standardise </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Ref&lt; Eigen::MatrixXd &gt;&#160;</td>
+          <td class="paramname"><em>X</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Standardises independent variables. </p>
+<p>From each row, <code>standardise</code> subtracts its mean and divides it by its standard deviation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">X</td><td>Matrix of independent variables with data points in columns. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If any row of <code>X</code> has all values the same, or <code>X</code> is empty. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="add0fe95143e605bb7ff69982eee6d804"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add0fe95143e605bb7ff69982eee6d804">&#9670;&nbsp;</a></span>standardise() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ml::LinearRegression::standardise </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Ref&lt; Eigen::MatrixXd &gt;&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::VectorXd &amp;&#160;</td>
+          <td class="paramname"><em>means</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::VectorXd &amp;&#160;</td>
+          <td class="paramname"><em>standard_deviations</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Standardises independent variables. </p>
+<p>From each row, <code>standardise</code> subtracts its mean and divides it by its standard deviation.</p>
+<p>This version of <code>standardise</code> saves original mean and standard deviation for every row in provided vectors.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">X</td><td>D x N matrix of independent variables with data points in columns. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">means</td><td>At exit has length D and contains means of rows of <code>X</code>. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">standard_deviations</td><td>At exit has length D and contains standard deviations of rows of <code>X</code>. If <code>means</code> and <code>standard_deviations</code> refer to the same vector, at exit this vector will contain the standard deviations. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If any row of <code>X</code> has all values the same, or <code>X</code> is empty. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac16bc14f275c279f7007c7ca61d4264c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac16bc14f275c279f7007c7ca61d4264c">&#9670;&nbsp;</a></span>unstandardise()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ml::LinearRegression::unstandardise </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Ref&lt; Eigen::MatrixXd &gt;&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>means</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>standard_deviations</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reverses the outcome of <a class="el" href="namespaceml_1_1LinearRegression.html#abef3640a6bb4c244c9f7e01060edd0a8" title="Standardises independent variables. ">standardise()</a>. </p>
+<p>From each row, <code>standardise</code> multiplies it by its standard deviation and adds its mean.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">X</td><td>D x N matrix of standardised independent variables with data points in columns. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">means</td><td>Means of rows of <code>X</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">standard_deviations</td><td>Standard deviations of rows of <code>X</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>X.rows() != means.size()</code> or <code>X.rows() != standard_deviations.size()</code>. </td></tr>
+    <tr><td class="paramname">std::domain_error</td><td>If any element of <code>standard_deviations</code> is not positive. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.13
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>ml</b></li><li class="navelem"><a class="el" href="namespaceml_1_1LinearRegression.html">LinearRegression</a></li>
+    <li class="footer">Generated by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
+  </ul>
+</div>
 </body>
 </html>

@@ -9,7 +9,9 @@ var searchData=
   ['set_5fseed',['set_seed',['../classml_1_1EM.html#a9d15f4af05825d1a5f15de8c06058dea',1,'ml::EM']]],
   ['set_5fverbose',['set_verbose',['../classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89',1,'ml::EM']]],
   ['slope',['slope',['../structml_1_1LinearRegression_1_1UnivariateOLSResult.html#a11aab575ba5a2836af1c7f92bbdb53a5',1,'ml::LinearRegression::UnivariateOLSResult']]],
+  ['slopes',['slopes',['../structml_1_1LinearRegression_1_1RidgeRegressionResult.html#a0cfaa0af801fd258218eba1336b9d7b6',1,'ml::LinearRegression::RidgeRegressionResult']]],
   ['splitnode',['SplitNode',['../structml_1_1DecisionTrees_1_1SplitNode.html',1,'ml::DecisionTrees::SplitNode&lt; Y &gt;'],['../classml_1_1DecisionTree.html#acc98ec49fbefaf01d043213777d01057',1,'ml::DecisionTree::SplitNode()'],['../structml_1_1DecisionTrees_1_1SplitNode.html#a55d25c9f674d08c8d5f96b4bcc967627',1,'ml::DecisionTrees::SplitNode::SplitNode()']]],
   ['sse',['sse',['../namespaceml_1_1Statistics.html#af476cfe2fdc1e8e4e73794534d403d8e',1,'ml::Statistics']]],
-  ['sse_5fand_5fmean',['sse_and_mean',['../namespaceml_1_1Statistics.html#a20e1ce7f355c7255b9e81fe379fcbc4d',1,'ml::Statistics']]]
+  ['sse_5fand_5fmean',['sse_and_mean',['../namespaceml_1_1Statistics.html#a20e1ce7f355c7255b9e81fe379fcbc4d',1,'ml::Statistics']]],
+  ['standardise',['standardise',['../namespaceml_1_1LinearRegression.html#abef3640a6bb4c244c9f7e01060edd0a8',1,'ml::LinearRegression::standardise(Eigen::Ref&lt; Eigen::MatrixXd &gt; X)'],['../namespaceml_1_1LinearRegression.html#add0fe95143e605bb7ff69982eee6d804',1,'ml::LinearRegression::standardise(Eigen::Ref&lt; Eigen::MatrixXd &gt; X, Eigen::VectorXd &amp;means, Eigen::VectorXd &amp;standard_deviations)']]]
 ];

@@ -4,6 +4,8 @@
 
 C++ library with efficient implementations of selected machine learning algorithms.
 
+Current version: 0.3.0
+
 (C) 2020 <a href="mailto:roman.werpachowski@gmail.com">Roman Werpachowski</a>.
 
 Project webpage: https://romanwerpachowski.github.io/ML/

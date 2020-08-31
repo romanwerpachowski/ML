@@ -10,5 +10,6 @@ var searchData=
   ['set_5fverbose',['set_verbose',['../classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89',1,'ml::EM']]],
   ['splitnode',['SplitNode',['../structml_1_1DecisionTrees_1_1SplitNode.html#a55d25c9f674d08c8d5f96b4bcc967627',1,'ml::DecisionTrees::SplitNode']]],
   ['sse',['sse',['../namespaceml_1_1Statistics.html#af476cfe2fdc1e8e4e73794534d403d8e',1,'ml::Statistics']]],
-  ['sse_5fand_5fmean',['sse_and_mean',['../namespaceml_1_1Statistics.html#a20e1ce7f355c7255b9e81fe379fcbc4d',1,'ml::Statistics']]]
+  ['sse_5fand_5fmean',['sse_and_mean',['../namespaceml_1_1Statistics.html#a20e1ce7f355c7255b9e81fe379fcbc4d',1,'ml::Statistics']]],
+  ['standardise',['standardise',['../namespaceml_1_1LinearRegression.html#abef3640a6bb4c244c9f7e01060edd0a8',1,'ml::LinearRegression::standardise(Eigen::Ref&lt; Eigen::MatrixXd &gt; X)'],['../namespaceml_1_1LinearRegression.html#add0fe95143e605bb7ff69982eee6d804',1,'ml::LinearRegression::standardise(Eigen::Ref&lt; Eigen::MatrixXd &gt; X, Eigen::VectorXd &amp;means, Eigen::VectorXd &amp;standard_deviations)']]]
 ];
