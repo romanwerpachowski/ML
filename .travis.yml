@@ -10,14 +10,11 @@ before_install: ./scripts/ci_dependencies.sh
 
 jobs:
   include:
-    - stage: build_code
-      script:
-        - ./scripts/ci_debug_build.sh
-        - ./scripts/ci_release_build.sh
-    - stage: build_documentation
+    - stage: build
+      script: ./scripts/ci_debug_build.sh
+      script: ./scripts/ci_release_build.sh
+    - stage: build
       script: doxygen Doxyfile
-    - stage: deploy_documentation
-      script: skip
       deploy:
         edge: true
         provider: pages
@@ -28,6 +25,5 @@ jobs:
           branch: master
 
 stages:
-  - build_code
-  - build_documentation
-  - deploy_documentation
+  - build
+  - documentation
