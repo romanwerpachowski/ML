@@ -13,6 +13,8 @@ from setuptools import setup, find_packages
 from setuptools.dist import Distribution
 import shutil
 
+# Package version.
+VERSION = "0.3.0"
 
 # Whether to install a Debug version of the binary files.
 DEBUG_BINARIES = False
@@ -81,7 +83,7 @@ setup(
     author_email="roman.werpachowski@gmail.com",    
     license="GPL-3.0",
     keywords="machine-learning ML extension algorithms numerical optimised",   
-    version="0.2",
+    version=VERSION,
     description="Efficient implementations of selected ML algorithms for Python.",
     long_description=load_readme(),
     long_description_content_type="text/markdown",
