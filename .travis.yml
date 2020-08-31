@@ -18,7 +18,7 @@ jobs:
 deploy:
   strategy: git
   provider: pages
-  cleanup: true
+  cleanup: false
   local_dir: docs
   token: $GH_REPO_TOKEN
   on:
