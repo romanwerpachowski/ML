@@ -19,7 +19,7 @@ jobs:
 
 deploy:
   edge: true
-  provider: pages:git
+  provider: pages
   strategy: git
   local_dir: docs
   token: $GH_REPO_TOKEN
