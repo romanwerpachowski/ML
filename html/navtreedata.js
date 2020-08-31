@@ -23,14 +23,12 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "MLpp", "index.html", [
-    [ "ML++", "index.html", [
-      [ "Provided algorithms", "index.html#provalg", [
-        [ "Clustering", "index.html#Clustering", null ],
-        [ "Decision trees", "index.html#decision_trees", null ],
-        [ "Linear regression", "index.html#linreg", null ],
-        [ "Cross-validation", "index.html#Cross-validation", null ],
-        [ "Statistics", "index.html#Statistics", null ]
-      ] ]
+    [ "Provided algorithms", "index.html#provalg", [
+      [ "Clustering", "index.html#Clustering", null ],
+      [ "Decision trees", "index.html#decision_trees", null ],
+      [ "Linear regression", "index.html#linreg", null ],
+      [ "Cross-validation", "index.html#Cross-validation", null ],
+      [ "Statistics", "index.html#Statistics", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],

@@ -67,17 +67,9 @@ for a Release (optimised) build.
 
 ### Doxygen documentation
 
-C++ code has Doxygen-compatible comments. To generate HTML documentation from them, run 
-(from the main repository directory):
-
-```bash
-cd ML
-doxygen
-```
-
-(requires `doxygen` and `graphviz` to be installed). The documentation will be written to
-`ML/docs/html` subdirectory. A pre-built version of this documentation for the current HEAD version
-is [here](html/index.html).
+C++ code has Doxygen-compatible comments. To generate [HTML documentation](html/index.html) from
+them, run  in the main repository directory `doxygen Doxyfile` (requires `doxygen` and `graphviz` 
+to be installed). The documentation will be written to the `docs/html` subdirectory.
 
 ## Python extension
 

@@ -3,7 +3,7 @@ var searchData=
   ['clustering_42',['Clustering',['../namespaceml_1_1Clustering.html',1,'ml']]],
   ['crossvalidation_43',['Crossvalidation',['../namespaceml_1_1Crossvalidation.html',1,'ml']]],
   ['decisiontrees_44',['DecisionTrees',['../namespaceml_1_1DecisionTrees.html',1,'ml']]],
-  ['ml_2b_2b_45',['ML++',['../index.html',1,'']]],
+  ['mlpp_45',['MLpp',['../index.html',1,'']]],
   ['linearregression_46',['LinearRegression',['../namespaceml_1_1LinearRegression.html',1,'ml']]],
   ['means_47',['means',['../classml_1_1EM.html#a7ab4b5d790cd3a37b12703c010d2056b',1,'ml::EM']]],
   ['means_5finitialiser_48',['means_initialiser',['../classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e',1,'ml::EM']]],
