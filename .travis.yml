@@ -18,9 +18,9 @@ jobs:
       script: doxygen Doxyfile
 
 deploy:
+  edge: true
   strategy: git
   provider: pages
-  cleanup: false
   local_dir: docs
   token: $GH_REPO_TOKEN
   on:
