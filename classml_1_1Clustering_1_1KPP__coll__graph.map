@@ -1,4 +1,0 @@
-<map id="ml::Clustering::KPP" name="ml::Clustering::KPP">
-<area shape="rect" id="node1" title="Implements the K++ algorithm." alt="" coords="23,95,170,121"/>
-<area shape="rect" id="node2" href="$classml_1_1Clustering_1_1CentroidsInitialiser.html" title="Chooses initial locations of centroids." alt="" coords="5,5,188,47"/>
-</map>

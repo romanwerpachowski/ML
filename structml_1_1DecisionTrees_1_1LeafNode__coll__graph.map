@@ -1,4 +1,0 @@
-<map id="ml::DecisionTrees::LeafNode&lt; Y &gt;" name="ml::DecisionTrees::LeafNode&lt; Y &gt;">
-<area shape="rect" id="node1" title="Terminal node, which returns a constant prediction value for features which ended up on it." alt="" coords="5,95,151,136"/>
-<area shape="rect" id="node2" href="$structml_1_1DecisionTrees_1_1Node.html" title="Tree node. Nodes are split (non&#45;terminal) or leaf (terminal)." alt="" coords="5,5,151,47"/>
-</map>
