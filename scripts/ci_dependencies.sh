@@ -1,8 +1,7 @@
 #!/bin/bash
 set -ev
 
-sudo apt-get update
+PACKAGES=$(cat ubuntu_required_packages.txt | tr -s '\n' ' ')
 
-for package in `cat ubuntu_required_packages.txt`; do
-    sudo apt-get -y install "${package}"
-done
+sudo apt-get update
+sudo apt-get -y install ${PACKAGES}
