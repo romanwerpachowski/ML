@@ -26,7 +26,8 @@ EIGEN_PATH = '/usr/include/eigen3/'
 system_include_paths = [('-isystem' + path) for path in [EIGEN_PATH]] # no space after -isystem!
 compilation_options = ['-fno-strict-overflow', '-fdiagnostics-color', '-march=native']
 enabled_warnings = ['-Wall', '-Werror', '-Wfatal-errors', '-Wpedantic', '-Wformat', '-Wextra', '-Wconversion']
-c_flags = system_include_paths + compilation_options + enabled_warnings
+disabled_warnings = ['-Wno-missing-field-initializers']
+c_flags = system_include_paths + compilation_options + enabled_warnings + disabled_warnings
 linkflags = []
 arch_switch = '-m64'
 c_flags.append(arch_switch)
