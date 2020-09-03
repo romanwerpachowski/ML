@@ -9,6 +9,7 @@ python3-nose
 python3-numpy
 python3-pandas
 python3-scipy
+python3-seaborn
 python3-setuptools
 python3-sklearn
 scons

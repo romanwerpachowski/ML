@@ -44,9 +44,11 @@ For the build:
 - setuptools
 
 For demos and tests:
+- matplotlib
 - nose
 - numpy
 - pandas
+- seaborn
 - sklearn
 - scipy
 - unittest
