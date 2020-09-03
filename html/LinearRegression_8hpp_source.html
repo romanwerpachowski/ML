@@ -165,7 +165,7 @@ $(document).ready(function(){initNavTree('LinearRegression_8hpp_source.html','')
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="namespaceml_1_1LinearRegression.html#ac16bc14f275c279f7007c7ca61d4264c">unstandardise</a>(Eigen::Ref&lt;Eigen::MatrixXd&gt; X, Eigen::Ref&lt;const Eigen::VectorXd&gt; means, Eigen::Ref&lt;const Eigen::VectorXd&gt; standard_deviations);</div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        Eigen::VectorXd calculate_XXt_beta(<span class="keyword">const</span> Eigen::Ref&lt;const Eigen::MatrixXd&gt; X, <span class="keyword">const</span> Eigen::Ref&lt;const Eigen::VectorXd&gt; y, Eigen::LDLT&lt;Eigen::MatrixXd&gt;&amp; xxt_decomp, <span class="keywordtype">double</span> lambda);</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        Eigen::VectorXd calculate_XXt_beta(<span class="keyword">const</span> Eigen::Ref&lt;const Eigen::MatrixXd&gt; X, <span class="keyword">const</span> Eigen::Ref&lt;const Eigen::VectorXd&gt; y, Eigen::Ref&lt;Eigen::MatrixXd&gt; XXt, Eigen::LDLT&lt;Eigen::MatrixXd&gt;&amp; xxt_decomp, <span class="keywordtype">double</span> lambda);</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    }</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
