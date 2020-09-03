@@ -13,6 +13,13 @@ from sklearn.linear_model import LinearRegression, Ridge
 from cppyml import linear_regression
 
 def main():
+    print("""
+
+*** LINEAR REGRESSION DEMO ***
+
+Times different versions of linear regression against standard Python libraries (scipy and sklearn).
+
+""")
     np.random.seed(1066)
     n_timing_iters = 100
     n = 25

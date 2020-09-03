@@ -17,6 +17,16 @@ warnings.filterwarnings("default")
 import seaborn as sns
 
 def main():
+    print("""
+
+*** E-M CLUSTERING DEMO ***
+
+Uses the classic "mouse" test set. The algorithm should correctly split the face and ears into three separate clusters.
+k-means clustering fails on this set.
+
+Compares cppyml with sklearn.
+
+""")
     np.random.seed(1066)
     warnings.filterwarnings("error")
 

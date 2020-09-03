@@ -17,6 +17,13 @@ import seaborn as sns
 
 
 def main():
+    print("""
+
+*** CLASSIFICATION TREE DEMO ***
+
+Compares cppyml with sklearn.
+
+""")
     np.random.seed(1066)
     warnings.filterwarnings("error")
 

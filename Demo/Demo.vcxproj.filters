@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Python">
+      <UniqueIdentifier>{f9c723b7-26f6-47d4-a2d8-adef93ad8e6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -28,15 +31,15 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="mousie.py">
-      <Filter>Source Files</Filter>
-    </None>
+    <None Include="SConscript" />
     <None Include="classification_tree.py">
-      <Filter>Source Files</Filter>
+      <Filter>Python</Filter>
     </None>
     <None Include="linear_regression.py">
-      <Filter>Source Files</Filter>
+      <Filter>Python</Filter>
     </None>
-    <None Include="SConscript" />
+    <None Include="mousie.py">
+      <Filter>Python</Filter>
+    </None>
   </ItemGroup>
 </Project>
