@@ -198,8 +198,9 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Carries out univariate (aka simple) linear regression with intercept. </p>
-<p>R2 is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared: </p><pre class="fragment">\f$R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2}\f$
-</pre><p>where \( \bar{y} = n^{-1} \sum_{i=1}^n y_i \).</p>
+<p>R2 is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:</p>
+<p>\( R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2} \)</p>
+<p>where \( \bar{y} = n^{-1} \sum_{i=1}^n y_i \).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>X vector. </td></tr>
@@ -250,8 +251,9 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Carries out univariate (aka simple) linear regression with intercept on regularly spaced points. </p>
-<p>R2 is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared: </p><pre class="fragment">\f$R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2}\f$
-</pre><p>where \( \bar{y} = n^{-1} \sum_{i=1}^n y_i \).</p>
+<p>R2 is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:</p>
+<p>\( R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2} \)</p>
+<p>where \( \bar{y} = n^{-1} \sum_{i=1}^n y_i \).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">x0</td><td>First X value. </td></tr>
@@ -298,8 +300,9 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Carries out univariate (aka simple) linear regression without intercept. </p>
-<p>R2 is calculated w/r to a model returning average Y, and is therefore <em>not</em> equal to correlation of X and Y squared: </p><pre class="fragment">\f$R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n y_i^2}.\f$       
-</pre><dl class="params"><dt>Parameters</dt><dd>
+<p>R2 is calculated w/r to a model returning average Y, and is therefore <em>not</em> equal to correlation of X and Y squared:</p>
+<p>\( R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n y_i^2} \).</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>X vector. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Y vector. </td></tr>
@@ -343,7 +346,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Carries out multivariate linear regression. </p>
-<p>Given X and y, finds \(\vec{beta}\) minimising \( \lVert \vec{y} - X^T \vec{\beta} \rVert^2 \).</p>
+<p>Given X and y, finds \( \vec{\beta} \) minimising \( \lVert \vec{y} - X^T \vec{\beta} \rVert^2 \).</p>
 <p>R2 is always calculated w/r to model returning average y.</p>
 <p>If fitting with intercept is desired, include a row of 1's in the X values.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -399,7 +402,7 @@ template&lt;bool DoStandardise&gt; </div>
 </div><div class="memdoc">
 
 <p>Carries out multivariate ridge regression with intercept. </p>
-<p>Given X and y, finds beta and beta0 minimising \( \lVert \vec{y} - X^T \vec{\beta} \rVert^2 + \lambda \lVert \vec{\beta} \rVert^2 \).</p>
+<p>Given X and y, finds \( \vec{\beta} \) and \( \beta_0 \) minimising \( \lVert \vec{y} - X^T \vec{\beta} - \beta_0 \rVert^2 + \lambda \lVert \vec{\beta} \rVert^2 \).</p>
 <p>R2 is always calculated w/r to model returning average y. The matrix <code>X</code> is either assumed to be standardised (<code>DoStandardise == false</code>) or is standardised internally (<code>DoStandardise == true</code>; requires a matrix copy).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
