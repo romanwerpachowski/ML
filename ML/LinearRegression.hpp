@@ -72,8 +72,8 @@ namespace ml
 		/** @brief Carries out univariate (aka simple) linear regression with intercept.
 
 		R2 is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:
-
-			\f$R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2}\f$
+		
+		\f$ R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2} \f$
 
 		where \f$ \bar{y} = n^{-1} \sum_{i=1}^n y_i \f$.
 
@@ -88,7 +88,7 @@ namespace ml
 
 		R2 is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:
 
-			\f$R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2}\f$
+		\f$ R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2} \f$
 
 		where \f$ \bar{y} = n^{-1} \sum_{i=1}^n y_i \f$.
 
@@ -105,7 +105,7 @@ namespace ml
 
 		R2 is calculated w/r to a model returning average Y, and is therefore _not_ equal to correlation of X and Y squared:
 
-			\f$R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n y_i^2}.\f$		
+		\f$ R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n y_i^2} \f$.
 		
 		@param[in] x X vector.
 		@param[in] y Y vector.
@@ -116,7 +116,7 @@ namespace ml
 
 		/** @brief Carries out multivariate linear regression.
 
-		Given X and y, finds \f$\vec{beta}\f$ minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 \f$.
+		Given X and y, finds \f$ \vec{\beta} \f$ minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 \f$.
 
 		R2 is always calculated w/r to model returning average y.
 
@@ -132,7 +132,7 @@ namespace ml
 
 		/** @brief Carries out multivariate ridge regression with intercept.
 
-		Given X and y, finds beta and beta0 minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 + \lambda \lVert \vec{\beta} \rVert^2 \f$.
+		Given X and y, finds \f$ \vec{\beta} \f$ and \f$ \beta_0 \f$ minimising \f$ \lVert \vec{y} - X^T \vec{\beta} - \beta_0 \rVert^2 + \lambda \lVert \vec{\beta} \rVert^2 \f$.
 
 		R2 is always calculated w/r to model returning average y. The matrix `X` is either assumed to be standardised (`DoStandardise == false`)
 		or is standardised internally (`DoStandardise == true`; requires a matrix copy).
