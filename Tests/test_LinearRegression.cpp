@@ -773,17 +773,17 @@ TEST_F(LinearRegressionTest, ridge_nonzero_lambda)
 	const double beta_diff_norm = beta_diff.norm();
 	ASSERT_LT(0, beta_diff_norm) << beta_diff;
 	ASSERT_GT(1e-4, beta_diff_norm) << beta_diff;
-	const double reg_beta_norm = regularised.beta.norm();
-	ASSERT_GT(unregularised.beta.norm(), reg_beta_norm);
+	ASSERT_GT(unregularised.beta.norm(), regularised.beta.norm());
 	ASSERT_LT(unregularised.dof, regularised.effective_dof);
 	ASSERT_LT(0, regularised.effective_dof);
 	test_sse_minimisation(X0, y, lambda, regularised.beta, Eigen::VectorXd::Constant(d + 1, 1e-8));
 	ASSERT_EQ(d + 1, regularised.cov.rows());
 	ASSERT_EQ(d + 1, regularised.cov.cols());
-	for (unsigned int i = 0; i <= d; ++i) {
+	for (unsigned int i = 0; i < d; ++i) {
 		ASSERT_LE(0, regularised.cov(i, i)) << i;
-		ASSERT_GE(unregularised.cov(i, i) + 2e-10, regularised.cov(i, i)) << i << ": " << unregularised.cov(i, i) - regularised.cov(i, i);
+		ASSERT_GT(unregularised.cov(i, i), regularised.cov(i, i)) << i << ": " << unregularised.cov(i, i) - regularised.cov(i, i);
 	}
+	ASSERT_NEAR(regularised.var_y / n, regularised.cov(d, d), tol);
 }
 
 TEST_F(LinearRegressionTest, ridge_yuge_lambda)
@@ -836,8 +836,9 @@ TEST_F(LinearRegressionTest, ridge_very_small_slopes)
 	ASSERT_NEAR(expected.r2, actual.r2, tol);
 	ASSERT_NEAR(0, (expected.beta - actual.beta).norm(), tol) << actual.beta;
 	test_sse_minimisation(X0, y, lambda, actual.beta, Eigen::VectorXd::Constant(d + 1, 1e-8));
-	for (unsigned int i = 0; i <= d; ++i) {
+	for (unsigned int i = 0; i < d; ++i) {
 		ASSERT_LE(0, actual.cov(i, i)) << i;
-		ASSERT_GE(expected.cov(i, i) + 1e-10, actual.cov(i, i)) << i << ": " << expected.cov(i, i) - actual.cov(i, i);
+		ASSERT_GE(expected.cov(i, i) + 1e-20, actual.cov(i, i)) << i << ": " << expected.cov(i, i) - actual.cov(i, i);
 	}
+	ASSERT_NEAR(actual.var_y / n, actual.cov(d, d), tol);	
 }
