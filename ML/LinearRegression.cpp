@@ -127,7 +127,7 @@ namespace ml
 			return calc_univariate_linear_regression_result(sxx, sxy, syy, 0, 0, n, false);
 		}
 
-		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp, const double lambda)
+		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<Eigen::MatrixXd> XXt, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp, const double lambda)
 		{
 			if (lambda < 0) {
 				throw std::domain_error("Ridge regularisation constant cannot be negative");
@@ -143,7 +143,7 @@ namespace ml
 			}
 			const Eigen::VectorXd b(X * y);
 			assert(b.size() == X.rows());
-			Eigen::MatrixXd XXt(X * X.transpose());
+			XXt.noalias() = X * X.transpose();
 			if (lambda) {
 				XXt += lambda * Eigen::MatrixXd::Identity(q, q);
 			}
@@ -160,7 +160,8 @@ namespace ml
 			const auto n = static_cast<unsigned int>(X.cols());
 			Eigen::LDLT<Eigen::MatrixXd> xxt_decomp;
 			MultivariateOLSResult result;
-			result.beta = calculate_XXt_beta(X, y, xxt_decomp, 0);
+			Eigen::MatrixXd XXt(q, q);
+			result.beta = calculate_XXt_beta(X, y, XXt, xxt_decomp, 0);
 			result.n = n;
 			result.dof = n - q;
 			assert(result.beta.size() == X.rows());
@@ -168,7 +169,7 @@ namespace ml
 			if (result.dof) {
 				result.var_y = sse / result.dof;
 				result.cov = xxt_decomp.solve(Eigen::MatrixXd::Identity(q, q));
-				result.cov *= result.var_y;				
+				result.cov *= result.var_y;
 			} else {
 				result.var_y = std::numeric_limits<double>::quiet_NaN();
 				result.cov = Eigen::MatrixXd::Constant(q, q, result.var_y);
@@ -184,16 +185,17 @@ namespace ml
 		template <> RidgeRegressionResult ridge<false>(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const double lambda)
 		{
 			// X is an q x N matrix and y is a N-size vector.
-			const auto q = static_cast<unsigned int>(X.rows());
-			const auto n = static_cast<unsigned int>(X.cols());
+			const auto q = X.rows();
+			const auto n = X.cols();
 			RidgeRegressionResult result;
-			result.n = n;
-			result.dof = n - q - 1; // -1 for the intercept.
+			result.n = static_cast<unsigned int>(n);
+			result.dof = static_cast<unsigned int>(n - q - 1); // -1 for the intercept.
 			result.beta.resize(q + 1);
 			const double intercept = y.mean();
 			result.beta[q] = intercept;
+			Eigen::MatrixXd XXt(q, q);
 			Eigen::LDLT<Eigen::MatrixXd> xxt_decomp;
-			result.beta.head(q) = calculate_XXt_beta(X, y, xxt_decomp, lambda);
+			result.beta.head(q) = calculate_XXt_beta(X, y, XXt, xxt_decomp, lambda);			
 			// Use the fact that intercept == mean(y).
 			const Eigen::VectorXd y_centred(y.array() - intercept);
 			const double sse = (y_centred - X.transpose() * result.beta.head(q)).squaredNorm();
@@ -206,11 +208,31 @@ namespace ml
 				result.var_y = std::numeric_limits<double>::quiet_NaN();
 			}
 			if (lambda > 0) {
-				result.effective_dof = std::max(n - (X.transpose() * xxt_decomp.solve(X)).trace() - 1, static_cast<double>(result.dof));
+				result.effective_dof = std::max(static_cast<double>(n) - (X.transpose() * xxt_decomp.solve(X)).trace() - 1, static_cast<double>(result.dof));
 			}
 			else {
 				result.effective_dof = result.dof;
 			}
+			result.cov.resize(q + 1, q + 1);
+			// Before multiplying by Var(Y).
+			// Var(intercept):
+			result.cov(q, q) = 1. / static_cast<double>(n);
+			// Cov(slopes):
+			auto cov_slopes = result.cov.block(0, 0, q, q);
+			if (lambda > 0) {				
+				const Eigen::MatrixXd inv_xxt_lambda(xxt_decomp.solve(Eigen::MatrixXd::Identity(q, q)));
+				cov_slopes.noalias() = XXt * inv_xxt_lambda;
+				XXt.noalias() = inv_xxt_lambda * cov_slopes;
+				cov_slopes = XXt;
+			}
+			else {
+				cov_slopes = xxt_decomp.solve(Eigen::MatrixXd::Identity(q, q));
+			}
+			// Cov(intercept, slopes) is zero by assumption of standardisation.
+			result.cov.col(q).head(q).setZero();
+			result.cov.row(q).head(q).setZero();
+			// Scale by Var(Y):
+			result.cov *= result.var_y;
 			return result;
 		}
 
@@ -224,7 +246,7 @@ namespace ml
 			const auto q = X.rows();
 			auto slopes = result.beta.head(q);
 			slopes.array() /= standard_deviations.array();
-			result.beta[q] -= slopes.dot(means);
+			result.beta[q] -= slopes.dot(means);			
 			return result;
 		}
 

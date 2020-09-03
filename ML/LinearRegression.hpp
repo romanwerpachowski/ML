@@ -206,6 +206,6 @@ namespace ml
 		@param lambda Regularisation constant for ridge regression.
 		@private Shared between multiple linear regression algorithms.
 		*/
-		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp, double lambda);
+		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<Eigen::MatrixXd> XXt, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp, double lambda);
 	}
 }

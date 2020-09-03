@@ -55,9 +55,10 @@ namespace ml
 
 		void RecursiveMultivariateOLS::initialise(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y)
 		{
-			beta_ = calculate_XXt_beta(X, y, helper_decomp_, 0);
 			d_ = static_cast<unsigned int>(X.rows());
 			n_ = static_cast<unsigned int>(X.cols());
+			P_.resize(d_, d_);
+			beta_ = calculate_XXt_beta(X, y, P_, helper_decomp_, 0);			
 			P_ = helper_decomp_.solve(Eigen::MatrixXd::Identity(d_, d_));
 		}
 	}

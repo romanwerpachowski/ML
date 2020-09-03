@@ -717,7 +717,7 @@ template <bool DoStandardise> void test_ridge_errors()
 	X.resize(3, 2);
 	y.resize(2);
 	ASSERT_THROW(ridge<DoStandardise>(X, y, 1), std::invalid_argument);
-	X.resize(3, 10);
+	X = Eigen::MatrixXd::Random(3, 10);
 	y.resize(10);
 	ASSERT_THROW(ridge<DoStandardise>(X, y, -1), std::domain_error);
 }
@@ -746,6 +746,7 @@ TEST_F(LinearRegressionTest, ridge_zero_lambda)
 	ASSERT_EQ(expected.dof, actual.effective_dof);
 	ASSERT_NEAR(expected.r2, actual.r2, tol);
 	ASSERT_NEAR(0, (expected.beta - actual.beta).norm(), tol) << actual.beta;
+	ASSERT_NEAR(0, (expected.cov - actual.cov).norm(), tol) << actual.cov;
 }
 
 TEST_F(LinearRegressionTest, ridge_nonzero_lambda)
@@ -777,6 +778,12 @@ TEST_F(LinearRegressionTest, ridge_nonzero_lambda)
 	ASSERT_LT(unregularised.dof, regularised.effective_dof);
 	ASSERT_LT(0, regularised.effective_dof);
 	test_sse_minimisation(X0, y, lambda, regularised.beta, Eigen::VectorXd::Constant(d + 1, 1e-8));
+	ASSERT_EQ(d + 1, regularised.cov.rows());
+	ASSERT_EQ(d + 1, regularised.cov.cols());
+	for (unsigned int i = 0; i <= d; ++i) {
+		ASSERT_LE(0, regularised.cov(i, i)) << i;
+		ASSERT_GE(unregularised.cov(i, i) + 2e-10, regularised.cov(i, i)) << i << ": " << unregularised.cov(i, i) - regularised.cov(i, i);
+	}
 }
 
 TEST_F(LinearRegressionTest, ridge_yuge_lambda)
@@ -800,6 +807,11 @@ TEST_F(LinearRegressionTest, ridge_yuge_lambda)
 	ASSERT_NEAR(0, result.beta.head(d).norm(), tol);
 	ASSERT_NEAR(n - 1, result.effective_dof, tol);
 	test_sse_minimisation(X0, y, lambda, result.beta, Eigen::VectorXd::Constant(d + 1, 1e-8));
+	for (unsigned int i = 0; i < d; ++i) {
+		ASSERT_LE(0, result.cov(i, i)) << i;
+		ASSERT_NEAR(0, result.cov(i, i), tol) << i;
+	}
+	ASSERT_NEAR(result.var_y / n, result.cov(d, d), tol);
 }
 
 TEST_F(LinearRegressionTest, ridge_very_small_slopes)
@@ -824,4 +836,8 @@ TEST_F(LinearRegressionTest, ridge_very_small_slopes)
 	ASSERT_NEAR(expected.r2, actual.r2, tol);
 	ASSERT_NEAR(0, (expected.beta - actual.beta).norm(), tol) << actual.beta;
 	test_sse_minimisation(X0, y, lambda, actual.beta, Eigen::VectorXd::Constant(d + 1, 1e-8));
+	for (unsigned int i = 0; i <= d; ++i) {
+		ASSERT_LE(0, actual.cov(i, i)) << i;
+		ASSERT_GE(expected.cov(i, i) + 1e-10, actual.cov(i, i)) << i << ": " << expected.cov(i, i) - actual.cov(i, i);
+	}
 }
