@@ -141,8 +141,8 @@ namespace ml
 		@param[in] y Y vector with length N.
 		@param[in] lambda Regularisation strength.
 		@tparam DoStandardise Whether to standardise `X` internally.
-		@return RidgeRegressionResult object with `beta.size() == X.rows() + 1`. If `DoStandardise == true`, the `slopes` and `intercept`
-		fields will be rescaled and shifted to original `X` units and origins.
+		@return RidgeRegressionResult object with `beta.size() == X.rows() + 1`. If `DoStandardise == true`, `beta`
+		will be rescaled and shifted to original `X` units and origins, and `cov` will be transformed accordingly.
 		@throw std::invalid_argument If `y.size() != X.cols()` or `X.cols() < X.rows()`.
 		@throw std::domain_error If `lambda < 0`.
 		@see standardise()

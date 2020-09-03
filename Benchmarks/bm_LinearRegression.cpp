@@ -125,29 +125,37 @@ BENCHMARK(recursive_multivariate_linear_regression_random_sample_size_5d)->Range
 BENCHMARK(recursive_multivariate_linear_regression_random_sample_size_500d)->RangeMultiplier(2)->Range(1, 32)->Complexity();
 
 
-template <unsigned int D> static void ridge_regression(benchmark::State& state)
+template <bool DoStandardise, unsigned int D> static void ridge_regression(benchmark::State& state)
 {
 	const auto sample_size = state.range(0);	
 	constexpr double lambda = 1e-2;
 	for (auto _ : state) {
 		state.PauseTiming();
 		Eigen::MatrixXd X(Eigen::MatrixXd::Random(D, sample_size));
+		if (!DoStandardise) {
+			ml::LinearRegression::standardise(X);
+		}		
 		const Eigen::VectorXd beta(Eigen::VectorXd::Random(D));
-		const Eigen::VectorXd y(X.transpose() * beta + 0.02 * Eigen::VectorXd::Random(sample_size));
+		const Eigen::VectorXd y(X.transpose() * beta + 0.02 * Eigen::VectorXd::Random(sample_size) + Eigen::VectorXd::Constant(sample_size, 0.16));
 		state.ResumeTiming();
-		ml::LinearRegression::ridge<true>(X, y, lambda);
+		ml::LinearRegression::ridge<DoStandardise>(X, y, lambda);
 	}
 	state.SetComplexityN(state.range(0));
 }
 
-constexpr auto ridge_regression_1d = ridge_regression<1>;
-constexpr auto ridge_regression_2d = ridge_regression<2>;
-constexpr auto ridge_regression_5d = ridge_regression<5>;
-constexpr auto ridge_regression_10d = ridge_regression<10>;
-constexpr auto ridge_regression_50d = ridge_regression<50>;
+constexpr auto ridge_regression_no_standardise_4d = ridge_regression<false, 4>;
+constexpr auto ridge_regression_no_standardise_12d = ridge_regression<false, 12>;
+constexpr auto ridge_regression_no_standardise_36d = ridge_regression<false, 36>;
 
-BENCHMARK(ridge_regression_1d)->RangeMultiplier(10)->Range(10, 10000)->Complexity();
-BENCHMARK(ridge_regression_2d)->RangeMultiplier(10)->Range(10, 10000)->Complexity();
-BENCHMARK(ridge_regression_5d)->RangeMultiplier(10)->Range(10, 10000)->Complexity();
-BENCHMARK(ridge_regression_10d)->RangeMultiplier(10)->Range(100, 10000)->Complexity();
-BENCHMARK(ridge_regression_50d)->RangeMultiplier(10)->Range(100, 10000)->Complexity();
+BENCHMARK(ridge_regression_no_standardise_4d)->RangeMultiplier(4)->Range(8, 16384)->Complexity();
+BENCHMARK(ridge_regression_no_standardise_12d)->RangeMultiplier(4)->Range(16, 16384)->Complexity();
+BENCHMARK(ridge_regression_no_standardise_36d)->RangeMultiplier(4)->Range(64, 16384)->Complexity();
+
+
+constexpr auto ridge_regression_do_standardise_4d = ridge_regression<true, 4>;
+constexpr auto ridge_regression_do_standardise_12d = ridge_regression<true, 12>;
+constexpr auto ridge_regression_do_standardise_36d = ridge_regression<true, 36>;
+
+BENCHMARK(ridge_regression_do_standardise_4d)->RangeMultiplier(4)->Range(8, 16384)->Complexity();
+BENCHMARK(ridge_regression_do_standardise_12d)->RangeMultiplier(4)->Range(16, 16384)->Complexity();
+BENCHMARK(ridge_regression_do_standardise_36d)->RangeMultiplier(4)->Range(64, 16384)->Complexity();

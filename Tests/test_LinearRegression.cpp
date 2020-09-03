@@ -81,15 +81,17 @@ static void test_sse_minimisation(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Re
 	}
 }
 
-static void test_sse_minimisation(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, const double lambda, Eigen::Ref<const Eigen::VectorXd> beta, Eigen::Ref<const Eigen::VectorXd> beta_deltas)
+static void test_sse_minimisation(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, const double lambda, Eigen::Ref<const Eigen::VectorXd> beta, Eigen::Ref<const Eigen::VectorXd> beta_deltas, const double tol)
 {
 	const double min_sse = calc_sse(X, y, lambda, beta);
 	for (Eigen::Index i = 0; i < beta.size(); ++i) {
 		const double delta = beta_deltas[i];
 		if (delta > 0) {
 			const auto v_delta = Eigen::VectorXd::Unit(beta.size(), i) * delta;
-			ASSERT_LE(min_sse, calc_sse(X, y, lambda, beta + v_delta));
-			ASSERT_LE(min_sse, calc_sse(X, y, lambda, beta - v_delta));
+			double sse = calc_sse(X, y, lambda, beta + v_delta);
+			ASSERT_LE(min_sse, sse + tol) << "diff: " << sse - min_sse;
+			sse = calc_sse(X, y, lambda, beta - v_delta);
+			ASSERT_LE(min_sse, sse + tol) << "diff: " << sse - min_sse;
 		}
 	}	
 }
@@ -776,7 +778,7 @@ TEST_F(LinearRegressionTest, ridge_nonzero_lambda)
 	ASSERT_GT(unregularised.beta.norm(), regularised.beta.norm());
 	ASSERT_LT(unregularised.dof, regularised.effective_dof);
 	ASSERT_LT(0, regularised.effective_dof);
-	test_sse_minimisation(X0, y, lambda, regularised.beta, Eigen::VectorXd::Constant(d + 1, 1e-8));
+	test_sse_minimisation(X0, y, lambda, regularised.beta, Eigen::VectorXd::Constant(d + 1, 1e-8), 0);
 	ASSERT_EQ(d + 1, regularised.cov.rows());
 	ASSERT_EQ(d + 1, regularised.cov.cols());
 	for (unsigned int i = 0; i < d; ++i) {
@@ -806,7 +808,7 @@ TEST_F(LinearRegressionTest, ridge_yuge_lambda)
 	ASSERT_NEAR(y.mean(), result.beta[d], tol);
 	ASSERT_NEAR(0, result.beta.head(d).norm(), tol);
 	ASSERT_NEAR(n - 1, result.effective_dof, tol);
-	test_sse_minimisation(X0, y, lambda, result.beta, Eigen::VectorXd::Constant(d + 1, 1e-8));
+	test_sse_minimisation(X0, y, lambda, result.beta, Eigen::VectorXd::Constant(d + 1, 1e-8), 0);
 	for (unsigned int i = 0; i < d; ++i) {
 		ASSERT_LE(0, result.cov(i, i)) << i;
 		ASSERT_NEAR(0, result.cov(i, i), tol) << i;
@@ -835,10 +837,136 @@ TEST_F(LinearRegressionTest, ridge_very_small_slopes)
 	ASSERT_NEAR(expected.dof, actual.effective_dof, lambda);
 	ASSERT_NEAR(expected.r2, actual.r2, tol);
 	ASSERT_NEAR(0, (expected.beta - actual.beta).norm(), tol) << actual.beta;
-	test_sse_minimisation(X0, y, lambda, actual.beta, Eigen::VectorXd::Constant(d + 1, 1e-8));
+	test_sse_minimisation(X0, y, lambda, actual.beta, Eigen::VectorXd::Constant(d + 1, 1e-8), 0);
 	for (unsigned int i = 0; i < d; ++i) {
 		ASSERT_LE(0, actual.cov(i, i)) << i;
 		ASSERT_GE(expected.cov(i, i) + 1e-20, actual.cov(i, i)) << i << ": " << expected.cov(i, i) - actual.cov(i, i);
 	}
 	ASSERT_NEAR(actual.var_y / n, actual.cov(d, d), tol);	
+}
+
+TEST_F(LinearRegressionTest, ridge_do_standardise_zero_lambda)
+{
+	constexpr unsigned int n = 10;
+	constexpr unsigned int d = 3;
+	Eigen::MatrixXd X0(Eigen::MatrixXd::Random(d, n));
+	X0.row(0) *= 2;
+	X0.row(1) /= 2;
+	const Eigen::MatrixXd X(add_ones(X0));
+	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d + 1));
+	const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
+	const auto expected = multivariate(X, y);
+	const auto actual = ridge<true>(X0, y, 0);
+	ASSERT_EQ(expected.n, actual.n);
+	ASSERT_EQ(expected.dof, actual.dof);
+	constexpr double tol = 1e-15;
+	ASSERT_NEAR(expected.var_y, actual.var_y, tol);
+	ASSERT_EQ(expected.dof, actual.effective_dof);
+	ASSERT_NEAR(expected.r2, actual.r2, tol);
+	ASSERT_NEAR(0, (expected.beta - actual.beta).norm(), tol) << actual.beta;
+	ASSERT_NEAR(0, (expected.cov - actual.cov).norm(), tol) << expected.cov << "\n\n" << actual.cov;
+}
+
+
+TEST_F(LinearRegressionTest, ridge_do_standardise_nonzero_lambda)
+{
+	constexpr unsigned int n = 10;
+	constexpr unsigned int d = 3;
+	Eigen::MatrixXd X0(Eigen::MatrixXd::Random(d, n));
+	X0.row(0) *= 2;
+	X0.row(1) /= 2;
+	const Eigen::MatrixXd X(add_ones(X0));
+	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d + 1));
+	const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
+	const auto unregularised = multivariate(X, y);
+	const double lambda = 1e-4;
+	const auto regularised = ridge<true>(X0, y, lambda);
+	ASSERT_EQ(unregularised.n, regularised.n);
+	ASSERT_EQ(unregularised.dof, regularised.dof);
+	ASSERT_LT(unregularised.var_y, regularised.var_y);
+	ASSERT_GT(unregularised.r2, regularised.r2);
+	ASSERT_LT(0, regularised.r2);
+	const Eigen::VectorXd beta_diff(unregularised.beta - regularised.beta);
+	const double beta_diff_norm = beta_diff.norm();
+	ASSERT_LT(0, beta_diff_norm) << beta_diff;
+	ASSERT_GT(1e-4, beta_diff_norm) << beta_diff;
+	ASSERT_GT(unregularised.beta.norm(), regularised.beta.norm());
+	ASSERT_LT(unregularised.dof, regularised.effective_dof);
+	ASSERT_LT(0, regularised.effective_dof);
+	test_sse_minimisation(X0, y, lambda, regularised.beta, Eigen::VectorXd::Constant(d + 1, 1e-8), 1e-11);
+	ASSERT_EQ(d + 1, regularised.cov.rows());
+	ASSERT_EQ(d + 1, regularised.cov.cols());
+	for (unsigned int i = 0; i < d; ++i) {
+		ASSERT_LE(0, regularised.cov(i, i)) << i;
+		ASSERT_GT(unregularised.cov(i, i), regularised.cov(i, i)) << i << ": " << unregularised.cov(i, i) - regularised.cov(i, i);
+	}
+}
+
+TEST_F(LinearRegressionTest, ridge_covariance)
+{
+	constexpr unsigned int n = 1000;
+	constexpr unsigned int d = 3;
+	Eigen::MatrixXd X(Eigen::MatrixXd::Random(d, n));
+	standardise(X);
+	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d));
+	const Eigen::VectorXd y_hat(X.transpose() * true_beta + Eigen::VectorXd::Constant(n, -0.24));
+	Eigen::VectorXd y(n);
+	std::default_random_engine rng(784957984);
+	std::normal_distribution<double> noise_dist(0, 0.1);
+	auto sample_noise_and_run_regression = [&]() -> RidgeRegressionResult {
+		for (unsigned int i = 0; i < n; ++i) {
+			y[i] = y_hat[i] + noise_dist(rng);
+		}
+		return ridge<false>(X, y, 0.1);
+	};
+	const auto result = sample_noise_and_run_regression();
+	// Calculate sample statistics of estimators.
+	const unsigned int n_samples = 1000;
+	Eigen::MatrixXd betas(n_samples, d + 1);
+	for (unsigned int i = 0; i < n_samples; ++i) {
+		const auto result_i = sample_noise_and_run_regression();
+		betas.row(i) = result_i.beta;
+	}
+	Eigen::MatrixXd sample_cov(d + 1, d + 1);
+	for (unsigned int i = 0; i <= d; ++i) {
+		for (unsigned int j = 0; j <= i; ++j) {
+			const double cov_ij = ml::Statistics::covariance(betas.col(i), betas.col(j));
+			sample_cov(i, j) = sample_cov(j, i) = cov_ij;			
+		}
+	}
+	ASSERT_NEAR(0, (sample_cov - result.cov).norm(), 2e-6) << "estimate:\n" << result.cov << "\n\nsample:\n" << sample_cov << "\n\ndifference:\n" << (sample_cov - result.cov);
+}
+
+TEST_F(LinearRegressionTest, ridge_do_standardise_covariance)
+{
+	constexpr unsigned int n = 1000;
+	constexpr unsigned int d = 3;
+	const Eigen::MatrixXd X(Eigen::MatrixXd::Random(d, n));
+	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d));
+	const Eigen::VectorXd y_hat(X.transpose() * true_beta + Eigen::VectorXd::Constant(n, -0.24));
+	Eigen::VectorXd y(n);
+	std::default_random_engine rng(784957984);
+	std::normal_distribution<double> noise_dist(0, 0.1);
+	auto sample_noise_and_run_regression = [&]() -> RidgeRegressionResult {
+		for (unsigned int i = 0; i < n; ++i) {
+			y[i] = y_hat[i] + noise_dist(rng);
+		}
+		return ridge<true>(X, y, 0.1);
+	};
+	const auto result = sample_noise_and_run_regression();
+	// Calculate sample statistics of estimators.
+	const unsigned int n_samples = 1000;
+	Eigen::MatrixXd betas(n_samples, d + 1);
+	for (unsigned int i = 0; i < n_samples; ++i) {
+		const auto result_i = sample_noise_and_run_regression();
+		betas.row(i) = result_i.beta;
+	}
+	Eigen::MatrixXd sample_cov(d + 1, d + 1);
+	for (unsigned int i = 0; i <= d; ++i) {
+		for (unsigned int j = 0; j <= i; ++j) {
+			const double cov_ij = ml::Statistics::covariance(betas.col(i), betas.col(j));
+			sample_cov(i, j) = sample_cov(j, i) = cov_ij;
+		}
+	}
+	ASSERT_NEAR(0, (sample_cov - result.cov).norm(), 5e-6) << "estimate:\n" << result.cov << "\n\nsample:\n" << sample_cov << "\n\ndifference:\n" << (sample_cov - result.cov);
 }

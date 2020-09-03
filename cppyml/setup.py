@@ -22,7 +22,7 @@ args, unknown = argparser.parse_known_args()
 sys.argv = [sys.argv[0]] + unknown
 
 # Package version.
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 
 # Whether to install a Debug version of the binary files.
 DEBUG_BINARIES = args.debug

@@ -245,8 +245,21 @@ namespace ml
 			auto result = ridge<false>(workX, y, lambda);
 			const auto q = X.rows();
 			auto slopes = result.beta.head(q);
+			// Using Matlab notation: ./ and .* are elementwise / and *.
+			// new_slopes = slopes ./ standard_deviations
 			slopes.array() /= standard_deviations.array();
-			result.beta[q] -= slopes.dot(means);			
+			auto cov_slopes = result.cov.block(0, 0, q, q);
+			// We only need to rescale this part, because Cov(slopes, intercept) == 0.
+			// Cov(new_slopes, new_slopes) = Cov(slopes, slopes) ./ (standard_deviations * standard_deviations^T)
+			// Cov(new_slopes, intercept) = Cov(slopes, intercept) = 0
+			cov_slopes.array() /= (standard_deviations * standard_deviations.transpose()).array();
+			// new_intercept = intercept - new_slopes^T * means
+			// Cov(new_slopes, new_intercept) = - Cov(new_slopes) * means
+			// Var(new_intercept) = Cov(intercept - new_slopes^T * means, intercept - new_slopes^T * means) = Var(intercept) + means^T * Cov(new_slopes, new_slopes) * means
+			result.beta[q] -= slopes.dot(means);
+			result.cov.col(q).head(q) = - cov_slopes * means;
+			result.cov.row(q).head(q) = result.cov.col(q).head(q);
+			result.cov(q, q) += means.transpose() * (cov_slopes * means);
 			return result;
 		}
 

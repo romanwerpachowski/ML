@@ -297,7 +297,7 @@ Args:
 	do_standardise: Whether to automatically subtract the mean from each row in `X` and divide it by its standard deviation.
 
 Returns:
-	Instance of `RidgeRegressionResult`. If `do_standardise` was `True`, the `slopes` and `intercept` fields will be rescaled and shifted
-	to original `X` units and origins.
+	Instance of `RidgeRegressionResult`. If `do_standardise` was `True`, the `beta` vector will be rescaled and shifted
+	to original `X` units and origins, and the `cov` matrix will be transformed accordingly.
 )");
 }
