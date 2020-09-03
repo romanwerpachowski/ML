@@ -6,7 +6,12 @@
 
 namespace ml 
 {
-	/** @brief Linear regression algorithms. */
+	/** @brief Linear regression algorithms. 
+	
+	For multivariate regression we depart from the textbook convention and assume 
+	that independent variables X are laid out columnwise, i.e., data points are
+	in columns.
+	*/
 	namespace LinearRegression {
 
 		/** @brief Result of linear regression. */
