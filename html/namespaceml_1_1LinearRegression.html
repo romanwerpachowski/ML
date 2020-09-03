@@ -415,7 +415,7 @@ template&lt;bool DoStandardise&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html" title="Result of a (multivariate) ridge regression with intercept.">RidgeRegressionResult</a> object with <code>beta.size() == X.rows() + 1</code>. If <code>DoStandardise == true</code>, the <code>slopes</code> and <code>intercept</code> fields will be rescaled and shifted to original <code>X</code> units and origins. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html" title="Result of a (multivariate) ridge regression with intercept.">RidgeRegressionResult</a> object with <code>beta.size() == X.rows() + 1</code>. If <code>DoStandardise == true</code>, <code>beta</code> will be rescaled and shifted to original <code>X</code> units and origins, and <code>cov</code> will be transformed accordingly. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::invalid_argument</td><td>If <code>y.size() != X.cols()</code> or <code>X.cols() &lt; X.rows()</code>. </td></tr>
