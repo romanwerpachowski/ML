@@ -9,6 +9,7 @@
 #include <Eigen/Dense>
 #include "Clustering.hpp"
 #include "EM.hpp"
+#include "LinearAlgebra.hpp"
 
 #define PI 3.14159265358979323846
 
@@ -172,21 +173,6 @@ namespace ml
 		return covariance;
 	}
 
-	static inline double xTx(const Eigen::MatrixXd& T, const Eigen::VectorXd& x) {
-		assert(T.rows() == T.cols());
-		assert(x.size() == T.rows());
-		double sum = 0;
-		const auto dim = T.rows();
-		for (Eigen::Index i = 0; i < dim; ++i) {
-			const auto x_i = x[i];
-			sum += T(i, i) * x_i * x_i;
-			for (Eigen::Index j = 0; j < i; ++j) {
-				sum += 2 * T(j, i) * x_i * x[j];
-			}
-		}
-		return sum;
-	}
-
 	void EM::expectation_stage(Eigen::Ref<const Eigen::MatrixXd> data)
 	{
 		const auto number_dimensions = data.rows();
@@ -206,7 +192,7 @@ namespace ml
 			auto component_weights = responsibilities_.col(k);
 			for (Eigen::Index i = 0; i < sample_size; ++i) {
 				work_vector_ = data.col(i) - mean;
-				component_weights[i] = std::exp(-0.5 * xTx(work_matrix_, work_vector_));
+				component_weights[i] = std::exp(-0.5 * LinearAlgebra::xAx_symmetric(work_matrix_, work_vector_));
 			}
 			double sqrt_covariance_determinant = 1;
 			for (Eigen::Index i = 0; i < number_dimensions; ++i) {

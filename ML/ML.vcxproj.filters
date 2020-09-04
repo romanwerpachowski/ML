@@ -51,6 +51,9 @@
     <ClInclude Include="doc.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LinearAlgebra.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EM.cpp">
@@ -72,6 +75,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RecursiveMultivariateOLS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LinearAlgebra.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

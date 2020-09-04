@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <sstream>
 #include <Eigen/Cholesky>
+#include "LinearAlgebra.hpp"
 #include "LinearRegression.hpp"
 
 namespace ml
@@ -259,7 +260,7 @@ namespace ml
 			result.beta[q] -= slopes.dot(means);
 			result.cov.col(q).head(q) = - cov_slopes * means;
 			result.cov.row(q).head(q) = result.cov.col(q).head(q);
-			result.cov(q, q) += means.transpose() * (cov_slopes * means);
+			result.cov(q, q) += LinearAlgebra::xAx_symmetric(cov_slopes, means);
 			return result;
 		}
 

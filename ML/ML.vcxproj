@@ -168,6 +168,7 @@
     <ClInclude Include="dll.hpp" />
     <ClInclude Include="doc.hpp" />
     <ClInclude Include="EM.hpp" />
+    <ClInclude Include="LinearAlgebra.hpp" />
     <ClInclude Include="LinearRegression.hpp" />
     <ClInclude Include="RecursiveMultivariateOLS.hpp" />
     <ClInclude Include="Statistics.hpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Crossvalidation.cpp" />
     <ClCompile Include="DecisionTrees.cpp" />
     <ClCompile Include="EM.cpp" />
+    <ClCompile Include="LinearAlgebra.cpp" />
     <ClCompile Include="LinearRegression.cpp" />
     <ClCompile Include="RecursiveMultivariateOLS.cpp" />
     <ClCompile Include="Statistics.cpp" />
