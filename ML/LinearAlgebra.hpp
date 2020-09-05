@@ -9,7 +9,7 @@ namespace ml
 	*/
 	namespace LinearAlgebra
 	{
-		/** #brief Calculates x^T A x for a symmetric matrix A.
+		/** @brief Calculates x^T A x for a symmetric matrix A.
 		@param A Symmetric square matrix.
 		@param x Vector.
 		@return Value of \f$ \vec{x}^T A \vec{x} \f$.
