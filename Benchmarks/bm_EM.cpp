@@ -45,4 +45,4 @@ static void em_mousie(benchmark::State& state)
 	state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(em_mousie)->RangeMultiplier(10)->Range(100, 100000)->Complexity()->Repetitions(3);
+BENCHMARK(em_mousie)->RangeMultiplier(10)->Range(100, 100000)->Complexity();

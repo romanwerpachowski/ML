@@ -33,6 +33,9 @@
     <ClCompile Include="bm_LinearRegression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="bm_LinearAlgebra.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SConscript" />

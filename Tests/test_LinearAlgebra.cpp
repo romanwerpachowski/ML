@@ -14,13 +14,22 @@ TEST(LinearAlgebraTest, xAx_symmetric_errors)
 	ASSERT_THROW(xAx_symmetric(A, x), std::invalid_argument);
 }
 
-TEST(LinearAlgebraTest, xAx_symmetric)
+static void test_xAx_symmetric(const unsigned int n)
 {
-	constexpr auto n = 120;
 	const Eigen::MatrixXd A0 = Eigen::MatrixXd::Random(n, n);
 	const Eigen::MatrixXd A = (A0 + A0.transpose()) / 2;
 	const Eigen::VectorXd x = Eigen::VectorXd::Random(n);
 	const double actual = xAx_symmetric(A, x);
 	const double expected = x.transpose() * A * x;
-	ASSERT_NEAR(expected, actual, 1e-13);
+	ASSERT_NEAR(expected, actual, std::abs(expected) * 1e-14);
+}
+
+TEST(LinearAlgebraTest, xAx_symmetric_1024)
+{
+	test_xAx_symmetric(1024);
+}
+
+TEST(LinearAlgebraTest, xAx_symmetric_4)
+{
+	test_xAx_symmetric(4);
 }
