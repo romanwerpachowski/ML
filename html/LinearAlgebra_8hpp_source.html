@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MLpp: ML/dll.hpp File Reference</title>
+<title>MLpp: ML/LinearAlgebra.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -79,7 +79,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('dll_8hpp.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('LinearAlgebra_8hpp_source.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -98,38 +98,30 @@ $(document).ready(function(){initNavTree('dll_8hpp.html',''); initResizable(); }
 </div>
 
 <div class="header">
-  <div class="summary">
-<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
-<div class="title">dll.hpp File Reference</div>  </div>
+<div class="title">LinearAlgebra.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="dll_8hpp__dep__incl.png" border="0" usemap="#ML_2dll_8hppdep" alt=""/></div>
-<map name="ML_2dll_8hppdep" id="ML_2dll_8hppdep">
-<area shape="rect" title=" " alt="" coords="557,5,646,32"/>
-<area shape="rect" href="Clustering_8hpp_source.html" title=" " alt="" coords="5,80,144,107"/>
-<area shape="rect" href="Crossvalidation_8hpp_source.html" title=" " alt="" coords="169,80,343,107"/>
-<area shape="rect" href="DecisionTrees_8hpp_source.html" title=" " alt="" coords="368,80,531,107"/>
-<area shape="rect" href="EM_8hpp_source.html" title=" " alt="" coords="555,80,648,107"/>
-<area shape="rect" href="LinearAlgebra_8hpp_source.html" title=" " alt="" coords="672,80,835,107"/>
-<area shape="rect" href="LinearRegression_8hpp_source.html" title=" " alt="" coords="859,80,1045,107"/>
-<area shape="rect" href="Statistics_8hpp_source.html" title=" " alt="" coords="1069,80,1203,107"/>
-<area shape="rect" href="RecursiveMultivariateOLS_8hpp_source.html" title=" " alt="" coords="858,155,1046,196"/>
-</map>
-</div>
-</div>
-<p><a href="dll_8hpp_source.html">Go to the source code of this file.</a></p>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Preprocessor declarations used to export functions and classes in the shared library. </p>
-</div></div><!-- contents -->
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* (C) 2020 Roman Werpachowski. */</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;Eigen/Core&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="dll_8hpp.html">dll.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>ml</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;{</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="namespaceml_1_1LinearAlgebra.html">   10</a></span>&#160;    <span class="keyword">namespace </span>LinearAlgebra</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    {</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        DLL_DECLSPEC <span class="keywordtype">double</span> <a class="code" href="namespaceml_1_1LinearAlgebra.html#aabfcdc7cafaf981fadf892ac67ad67a4">xAx_symmetric</a>(<span class="keyword">const</span> Eigen::MatrixXd&amp; A, <span class="keyword">const</span> Eigen::VectorXd&amp; x);</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    }</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;}</div>
+</div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="adll_8hpp_html"><div class="ttname"><a href="dll_8hpp.html">dll.hpp</a></div></div>
+<div class="ttc" id="anamespaceml_1_1LinearAlgebra_html_aabfcdc7cafaf981fadf892ac67ad67a4"><div class="ttname"><a href="namespaceml_1_1LinearAlgebra.html#aabfcdc7cafaf981fadf892ac67ad67a4">ml::LinearAlgebra::xAx_symmetric</a></div><div class="ttdeci">double xAx_symmetric(const Eigen::MatrixXd &amp;A, const Eigen::VectorXd &amp;x)</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_6efd14ba659829a180da85912847468f.html">ML</a></li><li class="navelem"><a class="el" href="dll_8hpp.html">dll.hpp</a></li>
+    <li class="navelem"><a class="el" href="dir_6efd14ba659829a180da85912847468f.html">ML</a></li><li class="navelem"><b>LinearAlgebra.hpp</b></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>

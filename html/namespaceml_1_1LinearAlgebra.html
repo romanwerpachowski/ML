@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MLpp: ML/dll.hpp File Reference</title>
+<title>MLpp: ml::LinearAlgebra Namespace Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -79,7 +79,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('dll_8hpp.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('namespaceml_1_1LinearAlgebra.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -99,37 +99,71 @@ $(document).ready(function(){initNavTree('dll_8hpp.html',''); initResizable(); }
 
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">dll.hpp File Reference</div>  </div>
+<div class="title">ml::LinearAlgebra Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="dll_8hpp__dep__incl.png" border="0" usemap="#ML_2dll_8hppdep" alt=""/></div>
-<map name="ML_2dll_8hppdep" id="ML_2dll_8hppdep">
-<area shape="rect" title=" " alt="" coords="557,5,646,32"/>
-<area shape="rect" href="Clustering_8hpp_source.html" title=" " alt="" coords="5,80,144,107"/>
-<area shape="rect" href="Crossvalidation_8hpp_source.html" title=" " alt="" coords="169,80,343,107"/>
-<area shape="rect" href="DecisionTrees_8hpp_source.html" title=" " alt="" coords="368,80,531,107"/>
-<area shape="rect" href="EM_8hpp_source.html" title=" " alt="" coords="555,80,648,107"/>
-<area shape="rect" href="LinearAlgebra_8hpp_source.html" title=" " alt="" coords="672,80,835,107"/>
-<area shape="rect" href="LinearRegression_8hpp_source.html" title=" " alt="" coords="859,80,1045,107"/>
-<area shape="rect" href="Statistics_8hpp_source.html" title=" " alt="" coords="1069,80,1203,107"/>
-<area shape="rect" href="RecursiveMultivariateOLS_8hpp_source.html" title=" " alt="" coords="858,155,1046,196"/>
-</map>
-</div>
-</div>
-<p><a href="dll_8hpp_source.html">Go to the source code of this file.</a></p>
+
+<p>Linear algebra helper functions.  
+<a href="namespaceml_1_1LinearAlgebra.html#details">More...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:aabfcdc7cafaf981fadf892ac67ad67a4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearAlgebra.html#aabfcdc7cafaf981fadf892ac67ad67a4">xAx_symmetric</a> (const Eigen::MatrixXd &amp;A, const Eigen::VectorXd &amp;x)</td></tr>
+<tr class="separator:aabfcdc7cafaf981fadf892ac67ad67a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Preprocessor declarations used to export functions and classes in the shared library. </p>
-</div></div><!-- contents -->
+<div class="textblock"><p>Linear algebra helper functions. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="aabfcdc7cafaf981fadf892ac67ad67a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabfcdc7cafaf981fadf892ac67ad67a4">&#9670;&nbsp;</a></span>xAx_symmetric()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double ml::LinearAlgebra::xAx_symmetric </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::MatrixXd &amp;&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::VectorXd &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>#brief Calculates x^T A x for a symmetric matrix A. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">A</td><td>Symmetric square matrix. </td></tr>
+    <tr><td class="paramname">x</td><td>Vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Value of \( \vec{x}^T A \vec{x} \). </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>A</code> is not square or <code>x.size() != A.rows()</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_6efd14ba659829a180da85912847468f.html">ML</a></li><li class="navelem"><a class="el" href="dll_8hpp.html">dll.hpp</a></li>
+    <li class="navelem"><b>ml</b></li><li class="navelem"><a class="el" href="namespaceml_1_1LinearAlgebra.html">LinearAlgebra</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
