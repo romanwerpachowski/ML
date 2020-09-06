@@ -14,25 +14,25 @@ namespace ml
 {
 	namespace LinearRegression
 	{
-		/** @brief Version of MultivariateOLSResult accepting and returning covariance matrix in row-major order. 
-		
-		@tparam R MultivariateOLSResult or a struct derived from it.
+		/** @brief Linear regression result accepting and returning covariance matrix in row-major order.
+
+		@tparam R Wrapped result struct.
 		*/
-		template <class R> struct MultivariateOLSResultRowMajor : public R
+		template <class R> struct ResultWithCovariance : public R
 		{
+			/** Construct the result from user data. */
+			template <class ... Types> ResultWithCovariance(Types ... args)
+				: R{ args... }
+			{}
+
 			/** Wrap C++ result. */
-			MultivariateOLSResultRowMajor(R&& wrapped)
+			ResultWithCovariance(R&& wrapped)
 				: R(std::move(wrapped))
 			{}
 
 			/** Wrap const C++ result. */
-			MultivariateOLSResultRowMajor(const R& wrapped)
+			ResultWithCovariance(const R& wrapped)
 				: R(wrapped)
-			{}
-
-			/** Construct the result from user data. */
-			MultivariateOLSResultRowMajor(unsigned int n, unsigned int dof, double var_y, double r2, const Eigen::Ref<const Eigen::VectorXd> beta, const Eigen::Ref<const MatrixXdR> cov)
-				: R{ n, dof, var_y, r2, beta, cov.transpose() }
 			{}
 
 			Eigen::Ref<const MatrixXdR> cov_row_major() const
@@ -41,28 +41,36 @@ namespace ml
 			}
 		};
 
-		struct RidgeRegressionResultRowMajor : public MultivariateOLSResultRowMajor<RidgeRegressionResult>
+		/** @brief Version of MultivariateOLSResult accepting and returning covariance matrix in row-major order. 
+		*/
+		struct MultivariateOLSResultRowMajor : public ResultWithCovariance<MultivariateOLSResult>
 		{
-			using MultivariateOLSResultRowMajor<RidgeRegressionResult>::MultivariateOLSResultRowMajor;
+			using ResultWithCovariance<MultivariateOLSResult>::ResultWithCovariance;
 
-			/** Construct the result from user data. */
-			RidgeRegressionResultRowMajor(unsigned int n, unsigned int dof, double var_y, double r2, const Eigen::Ref<const Eigen::VectorXd> beta, const Eigen::Ref<const MatrixXdR> cov, double effective_dof)
-				: MultivariateOLSResultRowMajor<RidgeRegressionResult>{ n, dof, var_y, r2, beta, cov }
-			{
-				this->effective_dof = effective_dof;
-			}
+			MultivariateOLSResultRowMajor(unsigned int n, unsigned int dof, unsigned int base_dof, double rss, double tss, Eigen::Ref<const Eigen::VectorXd> beta, Eigen::Ref<const MatrixXdR> cov)
+				: ResultWithCovariance<MultivariateOLSResult>(n, dof, base_dof, rss, tss, beta, cov.transpose())
+			{}
+		};
+
+		struct RidgeRegressionResultRowMajor : public ResultWithCovariance<RidgeRegressionResult>
+		{
+			using ResultWithCovariance<RidgeRegressionResult>::ResultWithCovariance;
+
+			RidgeRegressionResultRowMajor(unsigned int n, unsigned int dof, unsigned int base_dof, double rss, double tss, Eigen::Ref<const Eigen::VectorXd> beta, Eigen::Ref<const MatrixXdR> cov, double effective_dof)
+				: ResultWithCovariance<RidgeRegressionResult>(n, dof, base_dof, rss, tss, beta, cov.transpose(), effective_dof)
+			{}
 		};
 
 		/** Version of "multivariate" taking an X with row-major order. */
-		static MultivariateOLSResultRowMajor<MultivariateOLSResult> multivariate_row_major(const Eigen::Ref<const MatrixXdR> X, const Eigen::Ref<const Eigen::VectorXd> y, const bool add_ones)
+		static MultivariateOLSResultRowMajor multivariate_row_major(const Eigen::Ref<const MatrixXdR> X, const Eigen::Ref<const Eigen::VectorXd> y, const bool add_ones)
 		{
 			Eigen::Ref<const Eigen::MatrixXd> XT = X.transpose();
 			if (!add_ones) {
-				return MultivariateOLSResultRowMajor<MultivariateOLSResult>(multivariate(XT, y));
+				return MultivariateOLSResultRowMajor(multivariate(XT, y));
 			}
 			else {
 				const auto XT_with_ones = LinearRegression::add_ones(XT);
-				return MultivariateOLSResultRowMajor<MultivariateOLSResult>(multivariate(XT_with_ones, y));
+				return MultivariateOLSResultRowMajor(multivariate(XT_with_ones, y));
 			}			
 		}
 
@@ -101,17 +109,28 @@ void init_linear_regression(py::module& m)
 {
 	auto m_lin_reg = m.def_submodule("linear_regression", "Linear regression algorithms.");
 
-	py::class_<ml::LinearRegression::UnivariateOLSResult>(m_lin_reg, "UnivariateOLSResult")
-		.def(py::init<unsigned int, unsigned int, double, double, double, double, double, double, double>(),
-			py::arg("n"), py::arg("dof"), py::arg("var_y"), py::arg("r2"), py::arg("slope"), py::arg("intercept"),
+	py::class_<ml::LinearRegression::Result> result(m_lin_reg, "Result");
+	result.def_readonly("n", &ml::LinearRegression::Result::n, "Number of data points.")
+		.def_readonly("dof", &ml::LinearRegression::Result::dof, "Number of residual degrees of freedom (e.g. `n - 2` or `n - 1` for univariate regression with or without intercept).")
+		.def_readonly("base_dof", &ml::LinearRegression::Result::base_dof, "Number of degrees of freedom for the base model (e.g. `n - 1` or `n` for univariate regression with or without intercept).")
+		.def_readonly("rss", &ml::LinearRegression::Result::rss, R"("Residual sum of squares: \sum_{i=1}^N (\hat{y}_i - y_i)^2.)")
+		.def_readonly("tss", &ml::LinearRegression::Result::tss, R"(Total sum of squares. For fitting with intercept: \sum_{i=1}^N (y_i - N^{-1} \sum_{j=1}^N y_j)^2. For fitting without intercept: \sum_{i=1}^N y_i^2.)")
+		.def_property_readonly("var_y", &ml::LinearRegression::Result::var_y, "Estimated variance of observations Y, equal to `rss / dof`.")
+		.def_property_readonly("r2", &ml::LinearRegression::Result::r2, "1 - fraction of variance unexplained relative to the base model. Equal to `1 - rss / tss`.")
+		.def_property_readonly("adjusted_r2", &ml::LinearRegression::Result::adjusted_r2, "1 - fraction of variance unexplained relative to the base model. Uses sample variances. Equal to `1 - rss * base_dof / tss / dof`.");
+
+	py::class_<ml::LinearRegression::UnivariateOLSResult>(m_lin_reg, "UnivariateOLSResult", result)
+		.def(py::init<unsigned int, unsigned int, unsigned int, double, double, double, double, double, double, double>(),
+			py::arg("n"), py::arg("dof"), py::arg("base_dof"), py::arg("rss"), py::arg("tss"), py::arg("slope"), py::arg("intercept"),
 			py::arg("var_slope"), py::arg("var_intercept"), py::arg("cov_slope_intercept"),
 			R"(Constructs a new instance of UnivariateOLSResult.
 
 Args:
 	n: Number of data points.
 	dof: Number of residual degrees of freedom.
-	var_y: Estimated variance of observations Y.
-	r2: R2 = 1 - fraction of variance unexplained relative to a "base model" (method-dependent).
+	base_dof: Number of residual degrees of freedom for the base model.
+	rss: Residual sum of squares.
+	tss: Total sum of squares.
 	slope: Coefficient multiplying X values when predicting Y.
 	intercept: Constant added to slope * X when predicting Y.
 	var_slope: Estimated variance of the slope.
@@ -119,10 +138,6 @@ Args:
 	cov_slope_intercept: Estimated covariance of the slope and the intercept.
 )")
 		.def("__repr__", &ml::LinearRegression::UnivariateOLSResult::to_string)
-		.def_readonly("n", &ml::LinearRegression::UnivariateOLSResult::n, "Number of data points.")
-		.def_readonly("dof", &ml::LinearRegression::UnivariateOLSResult::dof, "Number of residual degrees of freedom.")
-		.def_readonly("var_y", &ml::LinearRegression::UnivariateOLSResult::var_y, "Estimated variance of observations Y.")
-		.def_readonly("r2", &ml::LinearRegression::UnivariateOLSResult::r2, "R2 = 1 - fraction of variance unexplained relative to a \"base model\".")
 		.def_readonly("slope", &ml::LinearRegression::UnivariateOLSResult::slope, "Coefficient multiplying X values when predicting Y.")
 		.def_readonly("intercept", &ml::LinearRegression::UnivariateOLSResult::intercept, "Constant added to slope * X when predicting Y.")
 		.def_readonly("var_slope", &ml::LinearRegression::UnivariateOLSResult::var_slope, "Estimated variance of the slope.")
@@ -132,50 +147,42 @@ Args:
 
 The following properties assume independent Gaussian error terms: `var_slope`, `var_intercept` and `cov_slope_intercept`.)";
 
-	py::class_<ml::LinearRegression::MultivariateOLSResultRowMajor<ml::LinearRegression::MultivariateOLSResult>>(m_lin_reg, "MultivariateOLSResult")
-		.def(py::init<unsigned int, unsigned int, double, double, const Eigen::Ref<const Eigen::VectorXd>, const Eigen::Ref<const MatrixXdR>>(),
-			py::arg("n"), py::arg("dof"), py::arg("var_y"), py::arg("r2"), py::arg("beta"), py::arg("cov"),
+	py::class_<ml::LinearRegression::MultivariateOLSResultRowMajor>(m_lin_reg, "MultivariateOLSResult", result)
+		.def(py::init<unsigned int, unsigned int, unsigned int, double, double, const Eigen::Ref<const Eigen::VectorXd>, const Eigen::Ref<const MatrixXdR>>(),
+			py::arg("n"), py::arg("dof"), py::arg("base_dof"), py::arg("rss"), py::arg("tss"), py::arg("beta"), py::arg("cov"),
 			R"(Constructs a new instance of MultivariateOLSResult.
 
 Args:
 	n: Number of data points.
 	dof: Number of residual degrees of freedom.
-	var_y: Estimated variance of observations Y.
-	r2: R2 = 1 - fraction of variance unexplained relative to a "base model" (method-dependent).
+	rss: Residual sum of squares.
+	tss: Total sum of squares.
 	beta: Fitted coefficients of the model y_i = beta^T X_i.
 	cov: Covariance matrix of beta coefficients.
 )")
-		.def("__repr__", &ml::LinearRegression::MultivariateOLSResultRowMajor<ml::LinearRegression::MultivariateOLSResult>::to_string)
-		.def_readonly("n", &ml::LinearRegression::MultivariateOLSResultRowMajor<ml::LinearRegression::MultivariateOLSResult>::n, "Number of data points.")
-		.def_readonly("dof", &ml::LinearRegression::MultivariateOLSResultRowMajor<ml::LinearRegression::MultivariateOLSResult>::dof, "Number of residual degrees of freedom.")
-		.def_readonly("var_y", &ml::LinearRegression::MultivariateOLSResultRowMajor<ml::LinearRegression::MultivariateOLSResult>::var_y, "Estimated variance of observations Y.")
-		.def_readonly("r2", &ml::LinearRegression::MultivariateOLSResultRowMajor<ml::LinearRegression::MultivariateOLSResult>::r2, "R2 = 1 - fraction of variance unexplained relative to a \"base model\".")
-		.def_readonly("beta", &ml::LinearRegression::MultivariateOLSResultRowMajor<ml::LinearRegression::MultivariateOLSResult>::beta, "Fitted coefficients of the model y_i = beta^T X_i.")
-		.def_property_readonly("cov", &ml::LinearRegression::MultivariateOLSResultRowMajor<ml::LinearRegression::MultivariateOLSResult>::cov_row_major, "Covariance matrix of beta coefficients.")
+		.def("__repr__", &ml::LinearRegression::MultivariateOLSResultRowMajor::to_string)
+		.def_readonly("beta", &ml::LinearRegression::MultivariateOLSResultRowMajor::beta, "Fitted coefficients of the model y_i = beta^T X_i.")
+		.def_property_readonly("cov", &ml::LinearRegression::MultivariateOLSResultRowMajor::cov_row_major, "Covariance matrix of beta coefficients.")
 		.doc() = R"(Result of multivariate Ordinary Least Squares regression.
 
 The `cov` property assumes independent Gaussian error terms.
 )";
 
-	py::class_<ml::LinearRegression::RidgeRegressionResultRowMajor>(m_lin_reg, "RidgeRegressionResult")
-		.def(py::init<unsigned int, unsigned int, double, double, const Eigen::Ref<const Eigen::VectorXd>, const Eigen::Ref<const MatrixXdR>, double>(),
-			py::arg("n"), py::arg("dof"), py::arg("var_y"), py::arg("r2"), py::arg("beta"), py::arg("cov"), py::arg("effective_dof"),
+	py::class_<ml::LinearRegression::RidgeRegressionResultRowMajor>(m_lin_reg, "RidgeRegressionResult", result)
+		.def(py::init<unsigned int, unsigned int, unsigned int, double, double, const Eigen::Ref<const Eigen::VectorXd>, const Eigen::Ref<const MatrixXdR>, double>(),
+			py::arg("n"), py::arg("dof"), py::arg("base_dof"), py::arg("rss"), py::arg("tss"), py::arg("beta"), py::arg("cov"), py::arg("effective_dof"),
 			R"(Constructs a new instance of RidgeRegressionResult.
 
 Args:
 	n: Number of data points.
 	dof: Number of residual degrees of freedom.
-	var_y: Estimated variance of observations Y.
-	r2: R2 = 1 - fraction of variance unexplained relative to a "base model" (method-dependent).
+	rss: Residual sum of squares.
+	tss: Total sum of squares.
 	beta: Fitted coefficients of the model y_i = beta^T X_i.
 	cov: Covariance matrix of beta coefficients.
 	effective_dof: Effective number of residual degrees of freedom: N - tr [ X^T (X * X^T + lambda * I)^{-1} X ] - 1.
 )")
 		.def("__repr__", &ml::LinearRegression::RidgeRegressionResultRowMajor::to_string)
-		.def_readonly("n", &ml::LinearRegression::RidgeRegressionResultRowMajor::n, "Number of data points.")
-		.def_readonly("dof", &ml::LinearRegression::RidgeRegressionResultRowMajor::dof, "Number of residual degrees of freedom.")
-		.def_readonly("var_y", &ml::LinearRegression::RidgeRegressionResultRowMajor::var_y, "Estimated variance of observations Y.")
-		.def_readonly("r2", &ml::LinearRegression::RidgeRegressionResultRowMajor::r2, "R2 = 1 - fraction of variance unexplained relative to a \"base model\".")
 		.def_readonly("beta", &ml::LinearRegression::RidgeRegressionResultRowMajor::beta, "Fitted coefficients of the model y_i = beta^T X_i.")
 		.def_property_readonly("cov", &ml::LinearRegression::RidgeRegressionResultRowMajor::cov_row_major, "Covariance matrix of beta coefficients.")
 		.def_readonly("effective_dof", &ml::LinearRegression::RidgeRegressionResultRowMajor::effective_dof, "Effective number of residual degrees of freedom: N - tr [ X^T (X * X^T + lambda * I)^{-1} X ] - 1.")

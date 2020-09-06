@@ -12,14 +12,20 @@
 namespace ml
 {
 	namespace LinearRegression
-	{		
+	{	
+		static void members_to_string(const Result& result, std::stringstream& s)
+		{
+			s << "n=" << result.n << ", dof=" << result.dof << ", base_dof=" << result.base_dof << ", rss=" << result.rss << ", tss=" << result.tss;
+		}
+
 		std::string UnivariateOLSResult::to_string() const
 		{
 			std::stringstream s;
 			s << "UnivariateOLSResult(";
-			s << "n=" << n << ", dof=" << dof << ", r2=" << r2 << ", var_y=" << var_y;
+			members_to_string(static_cast<const Result&>(*this), s);
 			s << ", slope=" << slope << ", intercept=" << intercept;
-			s << ", var_slope=" << var_slope << ", var_intercept=" << var_intercept << ", cov_slope_intercept=" << cov_slope_intercept << ")";
+			s << ", var_slope=" << var_slope << ", var_intercept=" << var_intercept << ", cov_slope_intercept=" << cov_slope_intercept;
+			s << ")";
 			return s.str();
 		}
 
@@ -27,9 +33,10 @@ namespace ml
 		{
 			std::stringstream s;
 			s << "MultivariateOLSResult(";
-			s << "n=" << n << ", dof=" << dof << ", r2=" << r2 << ", var_y=" << var_y;
+			s << "n=" << n << ", dof=" << dof << ", r2=" << r2() << ", var_y=" << var_y();
 			s << ", beta=[" << beta.transpose() << "]";
-			s << ", cov=[" << cov << "])";
+			s << ", cov=[" << cov << "]";
+			s << ")";
 			return s.str();
 		}
 
@@ -37,14 +44,16 @@ namespace ml
 		{
 			std::stringstream s;
 			s << "RidgeRegressionResult(";
-			s << "n=" << n << ", dof=" << dof << ", effective_dof=" << effective_dof << ", r2=" << r2 << ", var_y=" << var_y;
+			members_to_string(static_cast<const Result&>(*this), s);
 			s << ", beta=[" << beta.transpose() << "]";
-			s << ", cov=[" << cov << "])";
+			s << ", cov=[" << cov << "]";
+			s << ", effective_dof=" << effective_dof;
+			s << ")";
 			return s.str();
 		}
 
 		static UnivariateOLSResult calc_univariate_linear_regression_result(
-			const double sxx, const double sxy, const double syy, const double mx,
+			const double sxx, const double sxy, const double tss, const double mx,
 			const double my, const unsigned int n, const bool with_intercept)
 		{
 			UnivariateOLSResult result;
@@ -53,22 +62,19 @@ namespace ml
 			result.dof = n - num_params;
 			result.slope = sxy / sxx;
 			result.intercept = my - result.slope * mx;
-			const double sse = std::max(0., (syy + result.slope * result.slope * sxx - 2 * result.slope * sxy));
-			result.r2 = 1 - sse / syy;
-			if (n > num_params) {
-				result.var_y = sse / result.dof;
-			}
-			else {
-				result.var_y = std::numeric_limits<double>::quiet_NaN();
-			}
-			result.var_slope = result.var_y / sxx;
+			// Residual sum of squares.			
+			result.rss = std::max(0., (tss + result.slope * result.slope * sxx - 2 * result.slope * sxy));
+			result.tss = tss;
+			result.var_slope = result.var_y() / sxx;
 			// sum_{i=1}^n x_i^2 = sxx + n * mx * mx;
 			// result.var_intercept = (sxx + n * mx * mx) * result.var_y / sxx / n;
 			if (with_intercept) {
-				result.var_intercept = result.var_y * (1. / n + mx * mx / sxx);
-				result.cov_slope_intercept = -mx * result.var_y / sxx;
+				result.base_dof = n - 1;
+				result.var_intercept = result.var_y() * (1. / n + mx * mx / sxx);
+				result.cov_slope_intercept = -mx * result.var_y() / sxx;
 			}
 			else {
+				result.base_dof = n;
 				result.var_intercept = result.cov_slope_intercept = 0;
 			}			
 			return result;
@@ -89,8 +95,9 @@ namespace ml
 			const auto y_centred = y.array() - my;			
 			const auto sxy = (x_centred * y_centred).sum();
 			const auto sxx = (x_centred * x_centred).sum();
-			const auto syy = (y_centred * y_centred).sum();
-			return calc_univariate_linear_regression_result(sxx, sxy, syy, mx, my, n, true);
+			// Total sum of squares:
+			const auto tss = (y_centred * y_centred).sum();
+			return calc_univariate_linear_regression_result(sxx, sxy, tss, mx, my, n, true);
 		}
 
 		UnivariateOLSResult univariate(const double x0, const double dx, const Eigen::Ref<const Eigen::VectorXd> y)
@@ -109,8 +116,9 @@ namespace ml
 			const auto indices = Eigen::VectorXd::LinSpaced(y.size(), 0, n - 1);
 			const auto sxy = dx * (y_centred * indices.array()).sum();
 			const auto sxx = dx * dx * n * (n * n - 1) / 12.;
-			const auto syy = (y_centred * y_centred).sum();
-			return calc_univariate_linear_regression_result(sxx, sxy, syy, mx, my, n, true);
+			// Total sum of squares:
+			const auto tss = (y_centred * y_centred).sum();
+			return calc_univariate_linear_regression_result(sxx, sxy, tss, mx, my, n, true);
 		}
 
 		UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y)
@@ -124,8 +132,9 @@ namespace ml
 			}
 			const auto sxy = (x.array() * y.array()).sum();
 			const auto sxx = (x.array() * x.array()).sum();
-			const auto syy = (y.array() * y.array()).sum();
-			return calc_univariate_linear_regression_result(sxx, sxy, syy, 0, 0, n, false);
+			// Total sum of squares:
+			const auto tss = (y.array() * y.array()).sum();
+			return calc_univariate_linear_regression_result(sxx, sxy, tss, 0, 0, n, false);
 		}
 
 		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<Eigen::MatrixXd> XXt, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp, const double lambda)
@@ -165,21 +174,21 @@ namespace ml
 			result.beta = calculate_XXt_beta(X, y, XXt, xxt_decomp, 0);
 			result.n = n;
 			result.dof = n - q;
+			result.base_dof = n - 1;
 			assert(result.beta.size() == X.rows());
-			const double sse = (y - X.transpose() * result.beta).squaredNorm();
+			// Residual sum of squares:
+			result.rss = (y - X.transpose() * result.beta).squaredNorm();
 			if (result.dof) {
-				result.var_y = sse / result.dof;
 				result.cov = xxt_decomp.solve(Eigen::MatrixXd::Identity(q, q));
-				result.cov *= result.var_y;
+				result.cov *= result.var_y();
 			} else {
-				result.var_y = std::numeric_limits<double>::quiet_NaN();
-				result.cov = Eigen::MatrixXd::Constant(q, q, result.var_y);
+				result.cov = Eigen::MatrixXd::Constant(q, q, std::numeric_limits<double>::quiet_NaN());
 			}
 			
 			const auto my = y.mean();
 			const auto y_centred = y.array() - my;
-			const auto syy = y_centred.square().sum();
-			result.r2 = 1 - sse / syy;
+			// Total sum of squares:
+			result.tss = y_centred.square().sum();
 			return result;
 		}
 
@@ -191,6 +200,7 @@ namespace ml
 			RidgeRegressionResult result;
 			result.n = static_cast<unsigned int>(n);
 			result.dof = static_cast<unsigned int>(n - q - 1); // -1 for the intercept.
+			result.base_dof = result.n - 1;
 			result.beta.resize(q + 1);
 			const double intercept = y.mean();
 			result.beta[q] = intercept;
@@ -199,15 +209,10 @@ namespace ml
 			result.beta.head(q) = calculate_XXt_beta(X, y, XXt, xxt_decomp, lambda);			
 			// Use the fact that intercept == mean(y).
 			const Eigen::VectorXd y_centred(y.array() - intercept);
-			const double sse = (y_centred - X.transpose() * result.beta.head(q)).squaredNorm();
-			const auto syy = y_centred.squaredNorm();
-			result.r2 = 1 - sse / syy;
-			if (result.dof) {
-				result.var_y = sse / result.dof;
-			}
-			else {
-				result.var_y = std::numeric_limits<double>::quiet_NaN();
-			}
+			// Residual sum of squares:
+			result.rss = (y_centred - X.transpose() * result.beta.head(q)).squaredNorm();
+			// Total sum of squares:
+			result.tss = y_centred.squaredNorm();
 			if (lambda > 0) {
 				result.effective_dof = std::max(static_cast<double>(n) - (X.transpose() * xxt_decomp.solve(X)).trace() - 1, static_cast<double>(result.dof));
 			}
@@ -233,7 +238,7 @@ namespace ml
 			result.cov.col(q).head(q).setZero();
 			result.cov.row(q).head(q).setZero();
 			// Scale by Var(Y):
-			result.cov *= result.var_y;
+			result.cov *= result.var_y();
 			return result;
 		}
 

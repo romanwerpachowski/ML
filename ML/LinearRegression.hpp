@@ -18,9 +18,42 @@ namespace ml
 		struct Result
 		{
 			unsigned int n; /**< Number of data points. */
-			unsigned int dof; /**< Number of residual degrees of freedom (e.g. `n - 2` for univariate regression with intercept). */
-			double var_y; /**< Estimated variance of observations Y. */
-			double r2; /**< R2 coefficient: 1 - fraction of variance unexplained relative to a "base model". */
+			unsigned int dof; /**< Number of residual degrees of freedom (e.g. `n - 2` or `n - 1` for univariate regression with or without intercept). */
+			unsigned int base_dof; /**< Number of degrees of freedom for the base model (e.g. `n - 1` or `n` for univariate regression with or without intercept). */
+			double rss; /**< Residual sum of squares: \f$ \sum_{i=1}^N (\hat{y}_i - y_i)^2 \f$. */
+			double tss; /**< Total sum of squares. For fitting with intercept: \f$ \mathrm{TSS} = \sum_{i=1}^N (y_i - N^{-1} \sum_{j=1}^N y_j)^2 \f$. For fitting without intercept: \f$ \mathrm{TSS} = \sum_{i=1}^N y_i^2 \f$. */
+
+			/** @base Estimated variance of observations Y, equal to `rss / dof`. */
+			double var_y() const {
+				if (dof) {
+					return rss / static_cast<double>(dof);
+				}
+				else {
+					return std::numeric_limits<double>::quiet_NaN();
+				}
+			}
+
+			/**< @brief R2 coefficient.
+			
+			1 - fraction of variance unexplained relative to a "base model", estimated as population variance. Equal to `1 - rss / tss`.
+			
+			*/
+			double r2() const {
+				return 1 - rss / tss;
+			}
+			
+			/** @brief Adjusted R2 coefficient.
+			
+			1 - fraction of variance unexplained relative to a "base model", estimated as sample variance. Equal to `1 - rss * base_dof / tss / dof`.
+			*/
+			double adjusted_r2() const {
+				if (dof) {
+					return 1 - (rss / static_cast<double>(dof)) / (tss / static_cast<double>(base_dof));
+				}
+				else {
+					return std::numeric_limits<double>::quiet_NaN();
+				}
+			}
 		};
 
 		/** @brief Result of 1D Ordinary Least Squares regression (with or without intercept).
@@ -61,8 +94,10 @@ namespace ml
 
 		#var_y is calculated using #dof as the denominator.
 		*/
-		struct RidgeRegressionResult : public MultivariateOLSResult
+		struct RidgeRegressionResult : public Result
 		{
+			Eigen::VectorXd beta; /**< Fitted coefficients of the model \f$\hat{y} = \vec{\beta'} \cdot \vec{x} + \beta_0 \f$, concatenated as \f$ (\vec{\beta'}, \beta_0) \f$. */
+			Eigen::MatrixXd cov;  /**< Covariance matrix of beta coefficients. */
 			double effective_dof; /**< Effective number of residual degrees of freedom \f$ N - \mathrm{tr} [ X^T (X X^T + \lambda I)^{-1} X ] - 1 \f$. */			
 
 			/** @brief Formats the result as string. */
@@ -71,11 +106,7 @@ namespace ml
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept.
 
-		R2 is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:
-		
-		\f$ R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2} \f$
-
-		where \f$ \bar{y} = n^{-1} \sum_{i=1}^n y_i \f$.
+		The "base model" returns average Y.
 
 		@param[in] x X vector.
 		@param[in] y Y vector.
@@ -86,11 +117,7 @@ namespace ml
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept on regularly spaced points.
 
-		R2 is calculated w/r to a model returning average Y, and is equal to correlation of X and Y squared:
-
-		\f$ R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n (y_i - \bar{y})^2} \f$
-
-		where \f$ \bar{y} = n^{-1} \sum_{i=1}^n y_i \f$.
+		The "base model" returns average Y.
 
 		@param[in] x0 First X value.
 		@param[in] dx Positive X increment.
@@ -103,9 +130,7 @@ namespace ml
 
 		/** @brief Carries out univariate (aka simple) linear regression without intercept.
 
-		R2 is calculated w/r to a model returning average Y, and is therefore _not_ equal to correlation of X and Y squared:
-
-		\f$ R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2} {\sum_{i=1}^n y_i^2} \f$.
+		The "base model" returns 0.
 		
 		@param[in] x X vector.
 		@param[in] y Y vector.
@@ -118,7 +143,7 @@ namespace ml
 
 		Given X and y, finds \f$ \vec{\beta} \f$ minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 \f$.
 
-		R2 is always calculated w/r to model returning average y.
+		The "base model" returns average Y.
 
 		If fitting with intercept is desired, include a row of 1's in the X values.
 
@@ -132,10 +157,14 @@ namespace ml
 
 		/** @brief Carries out multivariate ridge regression with intercept.
 
-		Given X and y, finds \f$ \vec{\beta} \f$ and \f$ \beta_0 \f$ minimising \f$ \lVert \vec{y} - X^T \vec{\beta} - \beta_0 \rVert^2 + \lambda \lVert \vec{\beta} \rVert^2 \f$.
+		Given X and y, finds \f$ \vec{\beta'} \f$ and \f$ \beta_0 \f$ minimising \f$ \lVert \vec{y} - X^T \vec{\beta'} - \beta_0 \rVert^2 + \lambda \lVert \vec{\beta'} \rVert^2 \f$,
+		where \f$ \vec{\beta'} \f$ and \f$ \beta_0 \f$ are concatenated as RidgeRegressionResult#beta in the returned RidgeRegressionResult object.
 
-		R2 is always calculated w/r to model returning average y. The matrix `X` is either assumed to be standardised (`DoStandardise == false`)
+		The "base model" returns average Y.
+
+		The matrix `X` is either assumed to be standardised (`DoStandardise == false`)
 		or is standardised internally (`DoStandardise == true`; requires a matrix copy).
+
 
 		@param[in] X D x N matrix of X values, with data points in columns.
 		@param[in] y Y vector with length N.
