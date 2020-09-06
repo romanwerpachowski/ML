@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['r2_223',['r2',['../structml_1_1LinearRegression_1_1Result.html#a1356a98d9cf754e5f8520531fe893c64',1,'ml::LinearRegression::Result']]]
+  ['rss_227',['rss',['../structml_1_1LinearRegression_1_1Result.html#a3e0bff5cb2d11ab07031323000229f44',1,'ml::LinearRegression::Result']]]
 ];

@@ -1,5 +1,4 @@
 <map id="ml::LinearRegression::RidgeRegressionResult" name="ml::LinearRegression::RidgeRegressionResult">
-<area shape="rect" id="node1" title="Result of a (multivariate) ridge regression with intercept." alt="" coords="5,184,185,225"/>
-<area shape="rect" id="node2" href="$structml_1_1LinearRegression_1_1MultivariateOLSResult.html" title="Result of multivariate Ordinary Least Squares regression." alt="" coords="8,95,183,136"/>
-<area shape="rect" id="node3" href="$structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression." alt="" coords="16,5,175,47"/>
+<area shape="rect" id="node1" title="Result of a (multivariate) ridge regression with intercept." alt="" coords="5,95,185,136"/>
+<area shape="rect" id="node2" href="$structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression." alt="" coords="16,5,175,47"/>
 </map>
