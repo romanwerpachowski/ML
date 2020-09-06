@@ -33,7 +33,7 @@ namespace ml
 				}
 			}
 
-			/**< @brief R2 coefficient.
+			/** @brief R2 coefficient.
 			
 			1 - fraction of variance unexplained relative to a "base model", estimated as population variance. Equal to `1 - rss / tss`.
 			
