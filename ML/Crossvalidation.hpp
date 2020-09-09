@@ -19,6 +19,8 @@ namespace ml
 		@param[in] num_folds Total number of folds with `num_folds <= total_len`.
 		@param[out] i0 Lower fold bound (inclusive).
 		@param[out] i1 Upper fold bound (exclusive).
+
+		@throw std::invalid_argument If `num_folds > total_len` or `k >= num_folds`.
 		*/
 		DLL_DECLSPEC void calc_fold_indices(size_t total_len, unsigned int k, unsigned int num_folds, size_t& i0, size_t& i1);
 
@@ -29,6 +31,8 @@ namespace ml
 		@param[in] num_folds Total number of folds with `num_folds <= data.cols()`.
 
 		@return Data from the `k`-th fold.
+
+		@throw std::invalid_argument If `num_folds > data.cols()` or `k >= num_folds`.
 		*/
 		DLL_DECLSPEC Eigen::MatrixXd only_kth_fold_2d(Eigen::Ref<const Eigen::MatrixXd> data, unsigned int k, unsigned int num_folds);
 
@@ -39,6 +43,8 @@ namespace ml
 		@param[in] num_folds Total number of folds with `num_folds <= data.size()`.
 
 		@return Data from the `k`-th fold.
+
+		@throw std::invalid_argument If `num_folds > data.size()` or `k >= num_folds`.
 		*/
 		DLL_DECLSPEC Eigen::VectorXd only_kth_fold_1d(Eigen::Ref<const Eigen::VectorXd> data, unsigned int k, unsigned int num_folds);
 
@@ -50,6 +56,8 @@ namespace ml
 		@tparam T Scalar data type.
 
 		@return Data from the `k`-th fold.
+
+		@throw std::invalid_argument If `num_folds > data.size()` or `k >= num_folds`.
 		*/
 		template <class T> std::vector<T> only_kth_fold_1d(const std::vector<T>& data, const unsigned int k, const unsigned int num_folds) {
 			
@@ -65,6 +73,8 @@ namespace ml
 		@param[in] num_folds Total number of folds with `num_folds <= data.size()`.
 
 		@return Data from all folds except the `k`-th one.
+
+		@throw std::invalid_argument If `num_folds > data.cols()` or `k >= num_folds`.
 		*/
 		DLL_DECLSPEC Eigen::MatrixXd without_kth_fold_2d(Eigen::Ref<const Eigen::MatrixXd> data, unsigned int k, unsigned int num_folds);
 
@@ -75,6 +85,8 @@ namespace ml
 		@param[in] num_folds Total number of folds with `num_folds <= data.size()`.
 
 		@return Data from all folds except the `k`-th one.
+
+		@throw std::invalid_argument If `num_folds > data.size()` or `k >= num_folds`.
 		*/
 		DLL_DECLSPEC Eigen::VectorXd without_kth_fold_1d(Eigen::Ref<const Eigen::VectorXd> data, unsigned int k, unsigned int num_folds);
 
@@ -86,6 +98,8 @@ namespace ml
 		@tparam T Scalar data type.
 
 		@return Data from all folds except the `k`-th one.
+
+		@throw std::invalid_argument If `num_folds > data.size()` or `k >= num_folds`.
 		*/
 		template <class T> std::vector<T> without_kth_fold_1d(const std::vector<T>& data, unsigned int k, unsigned int num_folds) {
 			size_t i0, i1;
@@ -102,16 +116,21 @@ namespace ml
 		@param[in] X Matrix with all features (data points in columns).
 		@param[in] y Vector with all responses (scalars).
 		@param[in] train_func Functor returning a trained model given training features and responses as arguments.
-		@param[in] test_func Functor calculating test error given the model, test features and test responses as arguments.
+		@param[in] test_func Functor calculating test error per data point given the model, test features and test responses as arguments.
 		@param[in] num_folds Number of folds.
 
 		@tparam Trainer Functor type for model training.
 		@tparam Tester Functor type for calculating test error.
 
 		@return Error value per data point.
+
+		@throw std::invalid_argument If `num_folds > X.cols()` or `y.size() != X.cols()`.
 		*/
-		template <class Trainer, class Tester> double calc_test_error(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Trainer train_func, Tester test_func, const unsigned int num_folds)
+		template <class Trainer, class Tester> double k_fold(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Trainer train_func, Tester test_func, const unsigned int num_folds)
 		{
+			if (X.cols() != y.size()) {
+				throw std::invalid_argument("Data size mismatch");
+			}
 			double sum_weighted_errors = 0;
 			for (unsigned int k = 0; k < num_folds; ++k) {
 				const Eigen::MatrixXd train_X(without_kth_fold_2d(X, k, num_folds));
@@ -123,6 +142,49 @@ namespace ml
 				sum_weighted_errors += test_error * static_cast<double>(test_y.size());
 			}
 			return sum_weighted_errors / static_cast<double>(y.size());
+		}
+
+		/** @brief Calculates model test error using leave-one-out cross-validation.
+
+		@param[in] X Matrix with all features (data points in columns).
+		@param[in] y Vector with all responses (scalars).
+		@param[in] train_func Functor returning a trained model given training features and responses as arguments.
+		@param[in] test_func Functor calculating test error per data point given the model, test features and test responses as arguments.
+
+		@tparam Trainer Functor type for model training.
+		@tparam Tester Functor type for calculating test error.
+
+		@return Error value per data point.
+
+		@throw std::invalid_argument If `y.size() < 2` or `y.size() != X.cols()`.
+		*/
+		template <class Trainer, class Tester> double leave_one_out(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Trainer train_func, Tester test_func)
+		{
+			const Eigen::Index n = y.size();
+			if (n < 2) {
+				throw std::invalid_argument("Too few data points");
+			}
+			if (X.cols() != n) {
+				throw std::invalid_argument("Data size mismatch");
+			}
+			double sum_weighted_errors = 0;			
+			Eigen::MatrixXd train_X(X.rows(), n - 1);
+			Eigen::VectorXd train_y(n - 1);
+			for (Eigen::Index k = 0; k < n; ++k) {
+				if (k) {
+					train_X.leftCols(k) = X.leftCols(k);
+					train_y.head(k) = y.head(k);
+				}
+				if (k + 1 < n) {
+					const auto l = n - k - 1;
+					train_X.rightCols(l) = X.rightCols(l);
+					train_y.tail(l) = y.tail(l);
+				}
+				auto trained_model = train_func(train_X, train_y);
+				const double test_error = test_func(trained_model, X.block(0, k, X.rows(), 1), y.segment(k, 1));
+				sum_weighted_errors += test_error;
+			}
+			return sum_weighted_errors / static_cast<double>(n);
 		}
 	}
 }

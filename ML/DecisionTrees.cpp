@@ -351,7 +351,7 @@ namespace ml
 					cost_complexity_prune(tree, alpha);
 					return tree;
 				};
-				const double cv_test_error = Crossvalidation::calc_test_error(X, y, train_func, test_error_function, num_folds);
+				const double cv_test_error = Crossvalidation::k_fold(X, y, train_func, test_error_function, num_folds);
 				if (cv_test_error < min_cv_test_error) {
 					min_cv_test_error = cv_test_error;
 					best_alpha = alpha;

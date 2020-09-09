@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <gtest/gtest.h>
 #include "ML/Crossvalidation.hpp"
+#include "ML/LinearRegression.hpp"
 
 using namespace ml;
 
@@ -125,14 +126,14 @@ TEST(CrossvalidationTest, without_kth_fold_2d)
 	ASSERT_EQ(expected, Crossvalidation::without_kth_fold_2d(data, 1, 3));
 }
 
-TEST(CrossvalidationTest, calc_test_error)
+TEST(CrossvalidationTest, k_fold)
 {
 	const int sample_size = 100;
 	const int dim = 4;
 	const Eigen::MatrixXd X(Eigen::MatrixXd::Random(dim, sample_size));
 	const Eigen::VectorXd y(Eigen::VectorXd::Random(sample_size));
 	const int num_folds = 9;
-	const double error = Crossvalidation::calc_test_error(X, y,
+	const double error = Crossvalidation::k_fold(X, y,
 		[](const Eigen::MatrixXd& /*train_X*/, const Eigen::VectorXd& train_y) -> double {
 			return train_y.mean();
 		},
@@ -141,4 +142,23 @@ TEST(CrossvalidationTest, calc_test_error)
 		}, num_folds);
 	ASSERT_GE(error, 0);
 	ASSERT_LE(error, 0.01);
+}
+
+TEST(CrossvalidationTest, leave_one_out)
+{
+	Eigen::MatrixXd X(2, 3);
+	X << -1, 0, 1,
+		1, 1, 1;
+	Eigen::VectorXd y(3);
+	y << 1, 0, 1;
+	const auto trainer = [](const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y) -> LinearRegression::MultivariateOLSResult {
+		return LinearRegression::multivariate(X, y);
+	};
+	const auto tester = [](const LinearRegression::MultivariateOLSResult& model, const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y) -> double {
+		return (y - X.transpose() * model.beta).squaredNorm() / static_cast<double>(y.size());
+	};
+	const double loocv_error = Crossvalidation::leave_one_out(X, y, trainer, tester);
+	ASSERT_NEAR((4 + 1 + 4) / 3, loocv_error, 1e-15);
+	const double kfold_error = Crossvalidation::k_fold(X, y, trainer, tester, 3);
+	ASSERT_NEAR(kfold_error, loocv_error, 1e-15);
 }
