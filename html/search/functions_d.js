@@ -1,15 +1,13 @@
 var searchData=
 [
-  ['set_5fabsolute_5ftolerance_193',['set_absolute_tolerance',['../classml_1_1EM.html#aa96ca693fe035199c1a96b294f55d41b',1,'ml::EM']]],
-  ['set_5fmaximise_5ffirst_194',['set_maximise_first',['../classml_1_1EM.html#a7c72f938c3a98046c4f6a8b39cfc9610',1,'ml::EM']]],
-  ['set_5fmaximum_5fsteps_195',['set_maximum_steps',['../classml_1_1EM.html#a1d1d0bb18430813dc7fb623438b422cd',1,'ml::EM']]],
-  ['set_5fmeans_5finitialiser_196',['set_means_initialiser',['../classml_1_1EM.html#a713d5f664a384c91e6f4e8d16e8d8c26',1,'ml::EM']]],
-  ['set_5frelative_5ftolerance_197',['set_relative_tolerance',['../classml_1_1EM.html#a0e486bd2ab7e9355dd3bbf5eca2faa9a',1,'ml::EM']]],
-  ['set_5fresponsibilities_5finitialiser_198',['set_responsibilities_initialiser',['../classml_1_1EM.html#ae8601fa4215df8e4fd3bc0f4bc294bc5',1,'ml::EM']]],
-  ['set_5fseed_199',['set_seed',['../classml_1_1EM.html#a9d15f4af05825d1a5f15de8c06058dea',1,'ml::EM']]],
-  ['set_5fverbose_200',['set_verbose',['../classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89',1,'ml::EM']]],
-  ['splitnode_201',['SplitNode',['../structml_1_1DecisionTrees_1_1SplitNode.html#a55d25c9f674d08c8d5f96b4bcc967627',1,'ml::DecisionTrees::SplitNode']]],
-  ['sse_202',['sse',['../namespaceml_1_1Statistics.html#af476cfe2fdc1e8e4e73794534d403d8e',1,'ml::Statistics']]],
-  ['sse_5fand_5fmean_203',['sse_and_mean',['../namespaceml_1_1Statistics.html#a20e1ce7f355c7255b9e81fe379fcbc4d',1,'ml::Statistics']]],
-  ['standardise_204',['standardise',['../namespaceml_1_1LinearRegression.html#abef3640a6bb4c244c9f7e01060edd0a8',1,'ml::LinearRegression::standardise(Eigen::Ref&lt; Eigen::MatrixXd &gt; X)'],['../namespaceml_1_1LinearRegression.html#add0fe95143e605bb7ff69982eee6d804',1,'ml::LinearRegression::standardise(Eigen::Ref&lt; Eigen::MatrixXd &gt; X, Eigen::VectorXd &amp;means, Eigen::VectorXd &amp;standard_deviations)']]]
+  ['r2_185',['r2',['../structml_1_1LinearRegression_1_1Result.html#a9688fd38ebf84c1c34c8c30637694d68',1,'ml::LinearRegression::Result']]],
+  ['recursivemultivariateols_186',['RecursiveMultivariateOLS',['../classml_1_1LinearRegression_1_1RecursiveMultivariateOLS.html#abeef4f383bd42d1c42aa455512f3c471',1,'ml::LinearRegression::RecursiveMultivariateOLS::RecursiveMultivariateOLS()'],['../classml_1_1LinearRegression_1_1RecursiveMultivariateOLS.html#a2b79607d0a04d046382f41b55e174708',1,'ml::LinearRegression::RecursiveMultivariateOLS::RecursiveMultivariateOLS(Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)']]],
+  ['regression_5ftree_187',['regression_tree',['../namespaceml_1_1DecisionTrees.html#a3ffd5a3fdc83ec6d30c220c4cb6028af',1,'ml::DecisionTrees']]],
+  ['regression_5ftree_5fauto_5fprune_188',['regression_tree_auto_prune',['../namespaceml_1_1DecisionTrees.html#a1e01b877cf69e72277d01733af974c25',1,'ml::DecisionTrees']]],
+  ['regression_5ftree_5fmean_5fsquared_5ferror_189',['regression_tree_mean_squared_error',['../namespaceml_1_1DecisionTrees.html#ac7ddc796c2839b1817c325829af14ee4',1,'ml::DecisionTrees']]],
+  ['remove_5fweakest_5flink_190',['remove_weakest_link',['../classml_1_1DecisionTree.html#a978b18656760bc602a601e00fc78bf2f',1,'ml::DecisionTree']]],
+  ['responsibilities_191',['responsibilities',['../classml_1_1EM.html#ad00fd3573c2078707aeaacebb1a40f14',1,'ml::EM']]],
+  ['ridge_192',['ridge',['../namespaceml_1_1LinearRegression.html#a8c4c56fac8ea09d8323f3386a0c3a02b',1,'ml::LinearRegression']]],
+  ['ridge_3c_20false_20_3e_193',['ridge&lt; false &gt;',['../namespaceml_1_1LinearRegression.html#a9ca28ddff2cefee923c517e52b1f3e71',1,'ml::LinearRegression']]],
+  ['ridge_3c_20true_20_3e_194',['ridge&lt; true &gt;',['../namespaceml_1_1LinearRegression.html#af7b70c29c6236e9ae0fd7ceb3a5f0200',1,'ml::LinearRegression']]]
 ];

@@ -133,10 +133,14 @@ Functions</h2></td></tr>
 <tr class="memitem:a639a94a413997207b149403aa1564d4c"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#a639a94a413997207b149403aa1564d4c">without_kth_fold_1d</a> (const std::vector&lt; T &gt; &amp;data, unsigned int k, unsigned int num_folds)</td></tr>
 <tr class="memdesc:a639a94a413997207b149403aa1564d4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the contents of all except the k-th fold for scalar data.  <a href="namespaceml_1_1Crossvalidation.html#a639a94a413997207b149403aa1564d4c">More...</a><br /></td></tr>
 <tr class="separator:a639a94a413997207b149403aa1564d4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2d2d7f876db433e0a16221ce051d9e9"><td class="memTemplParams" colspan="2">template&lt;class Trainer , class Tester &gt; </td></tr>
-<tr class="memitem:af2d2d7f876db433e0a16221ce051d9e9"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#af2d2d7f876db433e0a16221ce051d9e9">calc_test_error</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, Trainer train_func, Tester test_func, const unsigned int num_folds)</td></tr>
-<tr class="memdesc:af2d2d7f876db433e0a16221ce051d9e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates model test error using k-fold cross-validation.  <a href="namespaceml_1_1Crossvalidation.html#af2d2d7f876db433e0a16221ce051d9e9">More...</a><br /></td></tr>
-<tr class="separator:af2d2d7f876db433e0a16221ce051d9e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbae3e6d0d3d159d28ea97c98c37be4d"><td class="memTemplParams" colspan="2">template&lt;class Trainer , class Tester &gt; </td></tr>
+<tr class="memitem:afbae3e6d0d3d159d28ea97c98c37be4d"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#afbae3e6d0d3d159d28ea97c98c37be4d">k_fold</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, Trainer train_func, Tester test_func, const unsigned int num_folds)</td></tr>
+<tr class="memdesc:afbae3e6d0d3d159d28ea97c98c37be4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates model test error using k-fold cross-validation.  <a href="namespaceml_1_1Crossvalidation.html#afbae3e6d0d3d159d28ea97c98c37be4d">More...</a><br /></td></tr>
+<tr class="separator:afbae3e6d0d3d159d28ea97c98c37be4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52be767b7ee570fb2795860484527132"><td class="memTemplParams" colspan="2">template&lt;class Trainer , class Tester &gt; </td></tr>
+<tr class="memitem:a52be767b7ee570fb2795860484527132"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#a52be767b7ee570fb2795860484527132">leave_one_out</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, Trainer train_func, Tester test_func)</td></tr>
+<tr class="memdesc:a52be767b7ee570fb2795860484527132"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates model test error using leave-one-out cross-validation.  <a href="namespaceml_1_1Crossvalidation.html#a52be767b7ee570fb2795860484527132">More...</a><br /></td></tr>
+<tr class="separator:a52be767b7ee570fb2795860484527132"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Methods used for cross-validation. </p>
@@ -193,7 +197,13 @@ Functions</h2></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>Fold index with <code>0 &lt;= k &lt; num_folds</code>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">num_folds</td><td>Total number of folds with <code>num_folds &lt;= total_len</code>. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">i0</td><td>Lower fold bound (inclusive). </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">i1</td><td>Upper fold bound (exclusive). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">i1</td><td>Upper fold bound (exclusive).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>num_folds &gt; total_len</code> or <code>k &gt;= num_folds</code>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -241,7 +251,13 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Data from the <code>k</code>-th fold. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Data from the <code>k</code>-th fold.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>num_folds &gt; data.cols()</code> or <code>k &gt;= num_folds</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -286,7 +302,13 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Data from the <code>k</code>-th fold. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Data from the <code>k</code>-th fold.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>num_folds &gt; data.size()</code> or <code>k &gt;= num_folds</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -339,7 +361,13 @@ template&lt;class T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Data from the <code>k</code>-th fold. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Data from the <code>k</code>-th fold.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>num_folds &gt; data.size()</code> or <code>k &gt;= num_folds</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -384,7 +412,13 @@ template&lt;class T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Data from all folds except the <code>k</code>-th one. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Data from all folds except the <code>k</code>-th one.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>num_folds &gt; data.cols()</code> or <code>k &gt;= num_folds</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -429,7 +463,13 @@ template&lt;class T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Data from all folds except the <code>k</code>-th one. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Data from all folds except the <code>k</code>-th one.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>num_folds &gt; data.size()</code> or <code>k &gt;= num_folds</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -482,12 +522,18 @@ template&lt;class T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Data from all folds except the <code>k</code>-th one. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Data from all folds except the <code>k</code>-th one.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>num_folds &gt; data.size()</code> or <code>k &gt;= num_folds</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="af2d2d7f876db433e0a16221ce051d9e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2d2d7f876db433e0a16221ce051d9e9">&#9670;&nbsp;</a></span>calc_test_error()</h2>
+<a id="afbae3e6d0d3d159d28ea97c98c37be4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbae3e6d0d3d159d28ea97c98c37be4d">&#9670;&nbsp;</a></span>k_fold()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -495,7 +541,7 @@ template&lt;class T &gt; </div>
 template&lt;class Trainer , class Tester &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">double ml::Crossvalidation::calc_test_error </td>
+          <td class="memname">double ml::Crossvalidation::k_fold </td>
           <td>(</td>
           <td class="paramtype">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td>
           <td class="paramname"><em>X</em>, </td>
@@ -538,7 +584,7 @@ template&lt;class Trainer , class Tester &gt; </div>
     <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>Matrix with all features (data points in columns). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Vector with all responses (scalars). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">train_func</td><td>Functor returning a trained model given training features and responses as arguments. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">test_func</td><td>Functor calculating test error given the model, test features and test responses as arguments. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">test_func</td><td>Functor calculating test error per data point given the model, test features and test responses as arguments. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">num_folds</td><td>Number of folds.</td></tr>
   </table>
   </dd>
@@ -550,7 +596,80 @@ template&lt;class Trainer , class Tester &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Error value per data point. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Error value per data point.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>num_folds &gt; X.cols()</code> or <code>y.size() != X.cols()</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a52be767b7ee570fb2795860484527132"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52be767b7ee570fb2795860484527132">&#9670;&nbsp;</a></span>leave_one_out()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Trainer , class Tester &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">double ml::Crossvalidation::leave_one_out </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Trainer&#160;</td>
+          <td class="paramname"><em>train_func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Tester&#160;</td>
+          <td class="paramname"><em>test_func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates model test error using leave-one-out cross-validation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>Matrix with all features (data points in columns). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Vector with all responses (scalars). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">train_func</td><td>Functor returning a trained model given training features and responses as arguments. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">test_func</td><td>Functor calculating test error per data point given the model, test features and test responses as arguments.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Trainer</td><td>Functor type for model training. </td></tr>
+    <tr><td class="paramname">Tester</td><td>Functor type for calculating test error.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Error value per data point.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>y.size() &lt; 2</code> or <code>y.size() != X.cols()</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

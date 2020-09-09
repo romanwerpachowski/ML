@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['calc_5ffold_5findices_144',['calc_fold_indices',['../namespaceml_1_1Crossvalidation.html#a67c05fd55b29744589e81f96c6fb2ce1',1,'ml::Crossvalidation']]],
-  ['calc_5ftest_5ferror_145',['calc_test_error',['../namespaceml_1_1Crossvalidation.html#af2d2d7f876db433e0a16221ce051d9e9',1,'ml::Crossvalidation']]],
+  ['calc_5ffold_5findices_145',['calc_fold_indices',['../namespaceml_1_1Crossvalidation.html#a67c05fd55b29744589e81f96c6fb2ce1',1,'ml::Crossvalidation']]],
   ['classification_5ftree_146',['classification_tree',['../namespaceml_1_1DecisionTrees.html#a601b69b50358eee24266b790f51bff0a',1,'ml::DecisionTrees']]],
   ['classification_5ftree_5faccuracy_147',['classification_tree_accuracy',['../namespaceml_1_1DecisionTrees.html#aae4aed3d6aa0665b21ee576472ee1be7',1,'ml::DecisionTrees']]],
   ['classification_5ftree_5fauto_5fprune_148',['classification_tree_auto_prune',['../namespaceml_1_1DecisionTrees.html#a62e6e08496dbeeea787ff5c147337cf9',1,'ml::DecisionTrees']]],
