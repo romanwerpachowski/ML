@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['univariate_209',['univariate',['../namespaceml_1_1LinearRegression.html#a61677a38f2298a663a3d4e3149f6f2df',1,'ml::LinearRegression::univariate(Eigen::Ref&lt; const Eigen::VectorXd &gt; x, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)'],['../namespaceml_1_1LinearRegression.html#a20d2862856e93a22a656e71cf4e51077',1,'ml::LinearRegression::univariate(double x0, double dx, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)']]],
-  ['univariate_5fwithout_5fintercept_210',['univariate_without_intercept',['../namespaceml_1_1LinearRegression.html#ab7ae29fe8bdde51f2b8c060d4278ec59',1,'ml::LinearRegression']]],
-  ['unstandardise_211',['unstandardise',['../namespaceml_1_1LinearRegression.html#ac16bc14f275c279f7007c7ca61d4264c',1,'ml::LinearRegression']]],
-  ['update_212',['update',['../classml_1_1LinearRegression_1_1RecursiveMultivariateOLS.html#a459f258fd086528bf1e06f3eac5b99d5',1,'ml::LinearRegression::RecursiveMultivariateOLS']]]
+  ['to_5fstring_209',['to_string',['../structml_1_1LinearRegression_1_1UnivariateOLSResult.html#a52433efb49f525bab75194f002f5c584',1,'ml::LinearRegression::UnivariateOLSResult::to_string()'],['../structml_1_1LinearRegression_1_1MultivariateOLSResult.html#a26ffa71d42d6096249245a1bdf30e8e4',1,'ml::LinearRegression::MultivariateOLSResult::to_string()'],['../structml_1_1LinearRegression_1_1RidgeRegressionResult.html#a0b54939f9e62747ee7c15dc30fa7bf56',1,'ml::LinearRegression::RidgeRegressionResult::to_string()']]],
+  ['total_5fleaf_5ferror_210',['total_leaf_error',['../classml_1_1DecisionTree.html#ad0edfc03127cafe89870d2d3b06fff06',1,'ml::DecisionTree::total_leaf_error()'],['../structml_1_1DecisionTrees_1_1Node.html#a34b405acc8111208f5ac84aa7bb58c6b',1,'ml::DecisionTrees::Node::total_leaf_error()'],['../structml_1_1DecisionTrees_1_1LeafNode.html#a704bf03b82454a503089921cad39a038',1,'ml::DecisionTrees::LeafNode::total_leaf_error()']]]
 ];

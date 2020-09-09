@@ -136,6 +136,9 @@ Public Member Functions</h2></td></tr>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LinearRegression_1_1UnivariateOLSResult.html#a52433efb49f525bab75194f002f5c584">to_string</a> () const</td></tr>
 <tr class="memdesc:a52433efb49f525bab75194f002f5c584"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats the result as string. <br /></td></tr>
 <tr class="separator:a52433efb49f525bab75194f002f5c584"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c6f0a69255598bba3c380ad820a122b"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LinearRegression_1_1UnivariateOLSResult.html#a4c6f0a69255598bba3c380ad820a122b">predict</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X) const</td></tr>
+<tr class="memdesc:a4c6f0a69255598bba3c380ad820a122b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Predicts Y given X.  <a href="structml_1_1LinearRegression_1_1UnivariateOLSResult.html#a4c6f0a69255598bba3c380ad820a122b">More...</a><br /></td></tr>
+<tr class="separator:a4c6f0a69255598bba3c380ad820a122b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_structml_1_1LinearRegression_1_1Result"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structml_1_1LinearRegression_1_1Result')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structml_1_1LinearRegression_1_1Result.html">ml::LinearRegression::Result</a></td></tr>
 <tr class="memitem:a30e75a614b52889f7bb0963ef2b7c8a7 inherit pub_methods_structml_1_1LinearRegression_1_1Result"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LinearRegression_1_1Result.html#a30e75a614b52889f7bb0963ef2b7c8a7">var_y</a> () const</td></tr>
 <tr class="separator:a30e75a614b52889f7bb0963ef2b7c8a7 inherit pub_methods_structml_1_1LinearRegression_1_1Result"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,7 +180,41 @@ Public Attributes</h2></td></tr>
 <li><a class="el" href="structml_1_1LinearRegression_1_1UnivariateOLSResult.html#ae671fb36c1768026d371197687ed82f7">var_intercept</a></li>
 <li><a class="el" href="structml_1_1LinearRegression_1_1UnivariateOLSResult.html#aa42a56aea0b5c5ecf006d485c200a23d">cov_slope_intercept</a> </li>
 </ul>
-</div><h2 class="groupheader">Member Data Documentation</h2>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4c6f0a69255598bba3c380ad820a122b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c6f0a69255598bba3c380ad820a122b">&#9670;&nbsp;</a></span>predict()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::VectorXd ml::LinearRegression::UnivariateOLSResult::predict </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td>
+          <td class="paramname"><em>X</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Predicts Y given X. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X</td><td>1 x N matrix of independent variables. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of predicted Y(X) with size <code>X.cols()</code>. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>X.rows() != 1</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
 <a id="a11aab575ba5a2836af1c7f92bbdb53a5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a11aab575ba5a2836af1c7f92bbdb53a5">&#9670;&nbsp;</a></span>slope</h2>
 
