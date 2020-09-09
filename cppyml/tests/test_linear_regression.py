@@ -279,6 +279,20 @@ class LinearRegressionTest(unittest.TestCase):
         self.assertAlmostEqual(adjusted_r2, result2.adjusted_r2, delta=1e-14)
         self.assertAlmostEqual(adjusted_r2, result3.adjusted_r2, delta=1e-14)
 
+    def test_press_univariate_with_intercept(self):
+        x = np.array([-1, 0, 1])
+        y = np.array([1, 0, 1])
+        actual1 = linear_regression.press_univariate(x, y, True)
+        actual2 = linear_regression.press_univariate(x, y)
+        self.assertEqual(actual1, actual2)
+        self.assertAlmostEqual(9, actual1, delta=1e-15)
+
+    def test_press_univariate_without_intercept(self):
+        x = np.array([-1, 0, 1])
+        y = np.array([1, 0, 1])
+        actual = linear_regression.press_univariate(x, y, False)
+        self.assertAlmostEqual(8, actual, delta=1e-15)
+
 
 if __name__ == "__main__": 
     unittest.main()    

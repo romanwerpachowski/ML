@@ -101,6 +101,15 @@ namespace ml
 				return RidgeRegressionResultRowMajor(ridge<false>(X.transpose(), y, lambda));
 			}			
 		}
+
+		static double press_univariate_cppyml(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y, const bool with_intercept)
+		{
+			if (with_intercept) {
+				return press_univariate<true>(x, y);
+			} else {
+				return press_univariate<false>(x, y);
+			}
+		}
 	}	
 }
 
@@ -306,5 +315,20 @@ Args:
 Returns:
 	Instance of `RidgeRegressionResult`. If `do_standardise` was `True`, the `beta` vector will be rescaled and shifted
 	to original `X` units and origins, and the `cov` matrix will be transformed accordingly.
+)");
+
+	m_lin_reg.def("press_univariate", &ml::LinearRegression::press_univariate_cppyml,
+		py::arg("x"), py::arg("y"), py::arg("with_intercept") = true,
+		R"(Calculates the PRESS statistic (Predicted Residual Error Sum of Squares) for univariate regression.
+
+See https://en.wikipedia.org/wiki/PRESS_statistic for details.
+
+Args:
+	x: X vector with length N.
+	y: Y vector with same length as `x`.
+	with_intercept: Whether the regression is with intercept or not (defaults to True).
+
+Returns:
+	Value of the PRESS statistic.
 )");
 }

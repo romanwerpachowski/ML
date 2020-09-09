@@ -237,7 +237,6 @@ namespace ml
 
 		@param[in] x X vector with length N.
 		@param[in] y Y vector with same length as `x`.
-		@param[in] regression Regression functor. `regression(X, y)` should return a UnivariateOLSResult instance.
 		@tparam WithIntercept Whether the regression is with intercept or not.
 		@return Value of the PRESS statistic.
 		@throw std::invalid_argument If `x.size() != y.size()`.
