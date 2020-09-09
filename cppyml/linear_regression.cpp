@@ -102,6 +102,21 @@ namespace ml
 			}			
 		}
 
+		static double press_cppyml(Eigen::Ref<const MatrixXdR> X, Eigen::Ref<const Eigen::VectorXd> y, const char* regularisation, const double reg_lambda)
+		{
+			if (!strcmp(regularisation, "ridge")) {
+				return press(X.transpose(), y, [reg_lambda](Eigen::Ref<const Eigen::MatrixXd> train_X, Eigen::Ref<const Eigen::VectorXd> train_y) {
+					return ridge<true>(train_X, train_y, reg_lambda);
+					});				
+			} else if (!strcmp(regularisation, "none")) {
+				return press(X.transpose(), y, [](Eigen::Ref<const Eigen::MatrixXd> train_X, Eigen::Ref<const Eigen::VectorXd> train_y) {
+					return multivariate(train_X, train_y);
+					});
+			} else {
+				throw std::invalid_argument("Unknown regression type. Valid types: \"none\" or \"ridge\".");
+			}
+		}
+
 		static double press_univariate_cppyml(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y, const bool with_intercept)
 		{
 			if (with_intercept) {
@@ -117,6 +132,8 @@ namespace ml
 void init_linear_regression(py::module& m)
 {
 	auto m_lin_reg = m.def_submodule("linear_regression", "Linear regression algorithms.");
+
+	constexpr bool default_do_standardise = false;
 
 	py::class_<ml::LinearRegression::Result> result(m_lin_reg, "Result");
 	result.def_readonly("n", &ml::LinearRegression::Result::n, "Number of data points.")
@@ -299,7 +316,7 @@ Throws:
 )";
 
 	m_lin_reg.def("ridge", &ml::LinearRegression::ridge_row_major,
-		py::arg("X"), py::arg("y"), py::arg("lambda"), py::arg("do_standardise") = false,
+		py::arg("X"), py::arg("y"), py::arg("lambda"), py::arg("do_standardise") = default_do_standardise,
 		R"(Carries out multivariate ridge regression with intercept.
 
 Given X and y, finds beta and beta0 minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 + \lambda \lVert \vec{\beta} \rVert^2 \f$.
@@ -310,11 +327,29 @@ The matrix `X` is assumed to be standardised unless `do_standardise` is set to `
 Args:
 	X: X matrix (shape N x D, with D <= N), with data points in rows.
 	y: Y vector with length N.
-	do_standardise: Whether to automatically subtract the mean from each row in `X` and divide it by its standard deviation.
+	do_standardise: Whether to automatically subtract the mean from each row in `X` and divide it by its standard deviation (defaults to False).
 
 Returns:
 	Instance of `RidgeRegressionResult`. If `do_standardise` was `True`, the `beta` vector will be rescaled and shifted
 	to original `X` units and origins, and the `cov` matrix will be transformed accordingly.
+)");
+
+	m_lin_reg.def("press", &ml::LinearRegression::press_cppyml,
+		py::arg("X"), py::arg("y"), py::arg("regularisation") = "none", py::arg("reg_lambda") = 0.,
+		R"(Calculates the PRESS statistic (Predicted Residual Error Sum of Squares).
+
+See https://en.wikipedia.org/wiki/PRESS_statistic for details.
+
+NOTE: Training data will be standardised internally if using regularisation.
+
+Args:
+	X: X matrix (shape N x D, with D <= N), with data points in rows. Unstandardised.
+	y: Y vector with length N.
+	regularisation: Type of regularisation: "none" or "ridge". Defaults to "none".
+	reg_lambda: Non-negative regularisation strength. Defaults to 0. Ignored if `regularisation == "none"`.
+
+Returns:
+	Value of the PRESS statistic.
 )");
 
 	m_lin_reg.def("press_univariate", &ml::LinearRegression::press_univariate_cppyml,

@@ -213,10 +213,12 @@ namespace ml
 
 		See https://en.wikipedia.org/wiki/PRESS_statistic for details.
 
+		@warning When calculating PRESS for regularised OLS, `regression` must standardise the data internally (call ridge() with `DoStandardise == true`).
+
 		@tparam Regression Functor type implementing particular regression.
 		@param[in] X D x N matrix of X values, with data points in columns.
 		@param[in] y Y vector with length N.
-		@param[in] regression Regression functor. `regression(X, y)` should return a result object supporting a `predict(X)` call (e.g. MultivariateOLSResult).
+		@param[in] regression Regression functor. `regression(X, y)` should return a result object supporting a `predict(X)` call (e.g. MultivariateOLSResult). Must standardise the data internally if necessary.
 		@return Value of the PRESS statistic.
 		@throw std::invalid_argument If `X.cols() != y.size()`.
 		*/

@@ -293,6 +293,28 @@ class LinearRegressionTest(unittest.TestCase):
         actual = linear_regression.press_univariate(x, y, False)
         self.assertAlmostEqual(8, actual, delta=1e-15)
 
+    def test_press_no_regularisation(self):
+        X = np.array([[-1, 1], [0, 1], [1, 1]])
+        y = np.array([1, 0, 1])
+        actual1 = linear_regression.press(X, y)
+        actual2 = linear_regression.press(X, y, "none")        
+        self.assertEqual(actual1, actual2)
+        self.assertAlmostEqual(9, actual1, delta=1e-15)
+
+    def test_press_ridge_zero_strength(self):
+        X = np.array([[-1], [0], [1]])
+        y = np.array([1, 0, 1])
+        actual1 = linear_regression.press(X, y, "ridge")
+        actual2 = linear_regression.press(X, y, "ridge", 0)
+        self.assertEqual(actual1, actual2)
+        self.assertAlmostEqual(9, actual1, delta=1e-15)
+
+    def test_press_ridge(self):
+        X = np.array([[-1], [0], [1]])
+        y = np.array([1, 0, 1])
+        actual = linear_regression.press(X, y, "ridge", 0.1)
+        self.assertGreater(9, actual)
+
 
 if __name__ == "__main__": 
     unittest.main()    

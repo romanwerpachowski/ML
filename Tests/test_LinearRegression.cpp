@@ -1134,7 +1134,7 @@ TEST_F(LinearRegressionTest, ridge_do_standardise_covariance)
 	ASSERT_NEAR(0, (sample_cov - result.cov).norm(), 5e-6) << "estimate:\n" << result.cov << "\n\nsample:\n" << sample_cov << "\n\ndifference:\n" << (sample_cov - result.cov);
 }
 
-TEST_F(LinearRegressionTest, press)
+TEST_F(LinearRegressionTest, press_multivariate)
 {
 	Eigen::MatrixXd X(2, 3);
 	X << -1, 0, 1,
@@ -1142,6 +1142,30 @@ TEST_F(LinearRegressionTest, press)
 	Eigen::VectorXd y(3);
 	y << 1, 0, 1;
 	const double press_statistic = press(X, y, multivariate);
+	ASSERT_NEAR(4 + 1 + 4, press_statistic, 1e-15);
+}
+
+TEST_F(LinearRegressionTest, press_ridge_zero_lambda)
+{
+	Eigen::MatrixXd X(1, 3);
+	X << -1, 0, 1;
+	Eigen::VectorXd y(3);
+	y << 1, 0, 1;
+	const double press_statistic = press(X, y, [](Eigen::Ref<const Eigen::MatrixXd> train_X, Eigen::Ref<const Eigen::VectorXd> train_y) {
+		return ridge<true>(train_X, train_y, 0);
+		});
+	ASSERT_NEAR(4 + 1 + 4, press_statistic, 1e-15);
+}
+
+TEST_F(LinearRegressionTest, press_ridge)
+{
+	Eigen::MatrixXd X(1, 3);
+	X << -1, 0, 1;
+	Eigen::VectorXd y(3);
+	y << 1, 0, 1;
+	const double press_statistic = press(X, y, [](Eigen::Ref<const Eigen::MatrixXd> train_X, Eigen::Ref<const Eigen::VectorXd> train_y) {
+		return ridge<true>(train_X, train_y, 0);
+		});
 	ASSERT_NEAR(4 + 1 + 4, press_statistic, 1e-15);
 }
 
