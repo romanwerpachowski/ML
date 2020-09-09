@@ -3,6 +3,7 @@
 #include <string>
 #include <Eigen/Core>
 #include "dll.hpp"
+#include "Crossvalidation.hpp"
 
 namespace ml 
 {
@@ -75,11 +76,10 @@ namespace ml
 			DLL_DECLSPEC std::string to_string() const;
 
 			/** @brief Predicts Y given X.
-			 @param X 1 x N matrix of independent variables.
+			 @param x Vector of independent variable values.
 			 @return Vector of predicted Y(X) with size `X.cols()`.
-			 @throw std::invalid_argument If `X.rows() != 1`.
 			*/
-			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;
+			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::VectorXd> x) const;
 		};
 
 		/** @brief Result of multivariate Ordinary Least Squares regression.		
@@ -208,6 +208,50 @@ namespace ml
 		@see ridge().
 		*/
 		template <> DLL_DECLSPEC RidgeRegressionResult ridge<false>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda);
+
+		/** @brief Calculates the PRESS statistic (Predicted Residual Error Sum of Squares). 
+
+		See https://en.wikipedia.org/wiki/PRESS_statistic for details.
+
+		@tparam Regression Functor type implementing particular regression.
+		@param[in] X D x N matrix of X values, with data points in columns.
+		@param[in] y Y vector with length N.
+		@param[in] regression Regression functor. `regression(X, y)` should return a result object supporting a `predict(X)` call (e.g. MultivariateOLSResult).
+		@return Value of the PRESS statistic.
+		@throw std::invalid_argument If `X.cols() != y.size()`.
+		*/
+		template <class Regression> double calc_press_statistic(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Regression regression)
+		{
+			const auto trainer = [&regression](const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y) -> auto {
+				return regression(X, y);
+			};
+			const auto tester = [](const decltype(regression(X, y))& result, const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y) -> double {
+				return (y - result.predict(X)).squaredNorm() / static_cast<double>(y.size());
+			};
+			return Crossvalidation::leave_one_out(X, y, trainer, tester) * static_cast<double>(y.size());
+		}
+
+		/** @brief Calculates the PRESS statistic (Predicted Residual Error Sum of Squares) for univariate regression.
+
+		See https://en.wikipedia.org/wiki/PRESS_statistic for details.
+
+		@tparam UnivariateRegression Functor type implementing particular univariate regression.
+		@param[in] x X vector with length N.
+		@param[in] y Y vector with same length as `x`.
+		@param[in] regression Regression functor. `regression(X, y)` should return a UnivariateOLSResult instance.
+		@return Value of the PRESS statistic.
+		@throw std::invalid_argument If `x.size() != y.size()`.
+		*/
+		template <class UnivariateRegression> double calc_press_statistic(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y, UnivariateRegression regression)
+		{
+			const auto trainer = [&regression](const Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y) -> UnivariateOLSResult {
+				return regression(x, y);
+			};
+			const auto tester = [](const UnivariateOLSResult& result, const Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y) -> double {
+				return (y - result.predict(x)).squaredNorm() / static_cast<double>(y.size());
+			};
+			return Crossvalidation::leave_one_out_scalar(x, y, trainer, tester) * static_cast<double>(y.size());
+		}
 
 		/** @brief Adds another row with 1s in every column to X.
 		@param[in] X Matrix of independent variables with data points in columns.

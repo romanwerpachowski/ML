@@ -200,7 +200,7 @@ TEST_F(LinearRegressionTest, univariate_two_points)
 	const Eigen::Vector2d y(0.5, 0.3);
 	const UnivariateOLSResult result = univariate(x, y);
 	test_result(result);
-	ASSERT_NEAR(0, (y - result.predict(x.transpose())).norm(), 1e-15);
+	ASSERT_NEAR(0, (y - result.predict(x)).norm(), 1e-15);
 	ASSERT_EQ(2u, result.n);
 	ASSERT_EQ(0u, result.dof);
 	ASSERT_EQ(1u, result.base_dof);
@@ -224,7 +224,7 @@ TEST_F(LinearRegressionTest, univariate_two_points_regular)
 	const UnivariateOLSResult result = univariate(x0, dx, y);
 	test_result(result);
 	const Eigen::Vector2d x(0.1, 0.2);
-	ASSERT_NEAR(0, (y - result.predict(x.transpose())).squaredNorm(), 1e-15);
+	ASSERT_NEAR(0, (y - result.predict(x)).squaredNorm(), 1e-15);
 	ASSERT_EQ(2u, result.n);
 	ASSERT_EQ(0u, result.dof);
 	ASSERT_EQ(1u, result.base_dof);
@@ -256,7 +256,7 @@ TEST_F(LinearRegressionTest, univariate_high_noise)
 	}
 	const auto result = univariate(x, y);
 	test_result(result);
-	ASSERT_NEAR(result.rss, (y - result.predict(x.transpose())).squaredNorm(), 1e-15 * result.rss);
+	ASSERT_NEAR(result.rss, (y - result.predict(x)).squaredNorm(), 1e-15 * result.rss);
 	ASSERT_EQ(n, result.n);
 	ASSERT_EQ(n - 2, result.dof);
 	ASSERT_EQ(n - 1, result.base_dof);
@@ -289,8 +289,8 @@ TEST_F(LinearRegressionTest, univariate_regular_vs_standard)
 	const auto r2 = univariate(x0, dx, y);
 	test_result(r1);
 	test_result(r2);
-	ASSERT_NEAR(r1.rss, (y - r1.predict(x.transpose())).squaredNorm(), 1e-15 * r1.rss);
-	ASSERT_NEAR(r2.rss, (y - r2.predict(x.transpose())).squaredNorm(), 1e-15 * r2.rss);
+	ASSERT_NEAR(r1.rss, (y - r1.predict(x)).squaredNorm(), 1e-15 * r1.rss);
+	ASSERT_NEAR(r2.rss, (y - r2.predict(x)).squaredNorm(), 1e-15 * r2.rss);
 	constexpr double tol = 1e-15;
 	ASSERT_NEAR(r1.slope, r2.slope, tol);
 	ASSERT_NEAR(r1.intercept, r2.intercept, tol);
@@ -354,7 +354,7 @@ TEST_F(LinearRegressionTest, univariate_true_model)
 	const auto result = sample_noise_and_run_regression();
 	test_result(result);
 	test_sse_minimisation(x, y, result.slope, result.intercept, 1e-8, 1e-8);
-	ASSERT_NEAR(result.rss, (y - result.predict(x.transpose())).squaredNorm(), 1e-14 * result.rss);
+	ASSERT_NEAR(result.rss, (y - result.predict(x)).squaredNorm(), 1e-14 * result.rss);
 	ASSERT_EQ(n, result.n);
 	ASSERT_EQ(n - 2, result.dof);
 	ASSERT_EQ(n - 1, result.base_dof);
@@ -458,7 +458,7 @@ TEST_F(LinearRegressionTest, univariate_without_intercept_one_point)
 	y << -1;
 	const UnivariateOLSResult result = univariate_without_intercept(x, y);
 	test_result(result);
-	ASSERT_NEAR(result.rss, (y - result.predict(x.transpose())).squaredNorm(), 1e-15 * result.rss);
+	ASSERT_NEAR(result.rss, (y - result.predict(x)).squaredNorm(), 1e-15 * result.rss);
 	ASSERT_EQ(1u, result.n);
 	ASSERT_EQ(0u, result.dof);
 	ASSERT_EQ(1u, result.base_dof);

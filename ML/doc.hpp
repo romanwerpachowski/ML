@@ -40,7 +40,9 @@ Implemented in ml::LinearRegression namespace.
 
 @subsection Cross-validation
 
-<a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)#k-fold_cross-validation">k-fold cross-validation</a>.
+Methods:
+- <a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)#k-fold_cross-validation">k-fold</a>
+- <a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)#Leave-one-out_cross-validation">leave-one-out</a>
 
 Implemented in ml::Crossvalidation namespace.
 

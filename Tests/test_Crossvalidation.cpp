@@ -137,7 +137,7 @@ TEST(CrossvalidationTest, k_fold)
 		[](const Eigen::MatrixXd& /*train_X*/, const Eigen::VectorXd& train_y) -> double {
 			return train_y.mean();
 		},
-		[](double model, const Eigen::MatrixXd& /*train_X*/, const Eigen::VectorXd& test_y) -> double {
+		[](double model, const Eigen::MatrixXd& /*train_X*/, const Eigen::Ref<const Eigen::VectorXd> test_y) -> double {
 			return std::pow(test_y.mean() - model, 2) / static_cast<double>(test_y.size());
 		}, num_folds);
 	ASSERT_GE(error, 0);
@@ -155,10 +155,28 @@ TEST(CrossvalidationTest, leave_one_out)
 		return LinearRegression::multivariate(X, y);
 	};
 	const auto tester = [](const LinearRegression::MultivariateOLSResult& model, const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y) -> double {
-		return (y - X.transpose() * model.beta).squaredNorm() / static_cast<double>(y.size());
+		return (y - model.predict(X)).squaredNorm() / static_cast<double>(y.size());
 	};
 	const double loocv_error = Crossvalidation::leave_one_out(X, y, trainer, tester);
 	ASSERT_NEAR((4 + 1 + 4) / 3, loocv_error, 1e-15);
 	const double kfold_error = Crossvalidation::k_fold(X, y, trainer, tester, 3);
+	ASSERT_NEAR(kfold_error, loocv_error, 1e-15);
+}
+
+TEST(CrossvalidationTest, cv_scalar)
+{
+	Eigen::VectorXd x(3);
+	x << -1, 0, 1;
+	Eigen::VectorXd y(3);
+	y << 1, 0, 1;
+	const auto trainer = [](const Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y) {
+		return LinearRegression::univariate(x, y);
+	};
+	const auto tester = [](const LinearRegression::UnivariateOLSResult& model, const Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y) -> double {
+		return (y - model.predict(x)).squaredNorm() / static_cast<double>(y.size());
+	};
+	const double loocv_error = Crossvalidation::leave_one_out_scalar(x, y, trainer, tester);
+	ASSERT_NEAR((4 + 1 + 4) / 3, loocv_error, 1e-15);
+	const double kfold_error = Crossvalidation::k_fold_scalar(x, y, trainer, tester, 3);
 	ASSERT_NEAR(kfold_error, loocv_error, 1e-15);
 }

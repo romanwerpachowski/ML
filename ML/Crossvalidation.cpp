@@ -24,7 +24,7 @@ namespace ml
 			assert(i1 <= total_len);
 		}
 
-		Eigen::MatrixXd only_kth_fold_2d(Eigen::Ref<const Eigen::MatrixXd, 0> data, const unsigned int k, const unsigned int num_folds)
+		Eigen::Ref<const Eigen::MatrixXd> only_kth_fold_2d(Eigen::Ref<const Eigen::MatrixXd, 0> data, const unsigned int k, const unsigned int num_folds)
 		{
 			size_t i0, i1;
 			const auto total_size = data.cols();
@@ -34,7 +34,7 @@ namespace ml
 			return data.block(0, i0, data.rows(), taken_len);
 		}
 
-		Eigen::VectorXd only_kth_fold_1d(Eigen::Ref<const Eigen::VectorXd, 0> data, const unsigned int k, const unsigned int num_folds)
+		Eigen::Ref < const Eigen::VectorXd> only_kth_fold_1d(Eigen::Ref<const Eigen::VectorXd, 0> data, const unsigned int k, const unsigned int num_folds)
 		{
 			size_t i0, i1;
 			const auto total_size = data.size();

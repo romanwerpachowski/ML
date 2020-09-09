@@ -29,12 +29,9 @@ namespace ml
 			return s.str();
 		}
 
-		Eigen::VectorXd UnivariateOLSResult::predict(Eigen::Ref<const Eigen::MatrixXd> X) const
+		Eigen::VectorXd UnivariateOLSResult::predict(Eigen::Ref<const Eigen::VectorXd> x) const
 		{
-			if (X.rows() != 1) {
-				throw std::invalid_argument("Expected a 1 x N matrix");
-			}
-			return Eigen::VectorXd::Constant(X.cols(), intercept) + slope * X.row(0).transpose();
+			return Eigen::VectorXd::Constant(x.size(), intercept) + slope * x;
 		}
 
 		std::string MultivariateOLSResult::to_string() const
