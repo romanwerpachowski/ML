@@ -548,6 +548,7 @@ template&lt;class Regression &gt; </div>
 
 <p>Calculates the PRESS statistic (Predicted Residual Error Sum of Squares). </p>
 <p>See <a href="https://en.wikipedia.org/wiki/PRESS_statistic">https://en.wikipedia.org/wiki/PRESS_statistic</a> for details.</p>
+<dl class="section warning"><dt>Warning</dt><dd>When calculating PRESS for regularised OLS, <code>regression</code> must standardise the data internally (call <a class="el" href="namespaceml_1_1LinearRegression.html#a8c4c56fac8ea09d8323f3386a0c3a02b" title="Carries out multivariate ridge regression with intercept.">ridge()</a> with <code>DoStandardise == true</code>).</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Regression</td><td>Functor type implementing particular regression. </td></tr>
@@ -558,7 +559,7 @@ template&lt;class Regression &gt; </div>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>D x N matrix of X values, with data points in columns. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Y vector with length N. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">regression</td><td>Regression functor. <code>regression(X, y)</code> should return a result object supporting a <code>predict(X)</code> call (e.g. <a class="el" href="structml_1_1LinearRegression_1_1MultivariateOLSResult.html" title="Result of multivariate Ordinary Least Squares regression.">MultivariateOLSResult</a>). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">regression</td><td>Regression functor. <code>regression(X, y)</code> should return a result object supporting a <code>predict(X)</code> call (e.g. <a class="el" href="structml_1_1LinearRegression_1_1MultivariateOLSResult.html" title="Result of multivariate Ordinary Least Squares regression.">MultivariateOLSResult</a>). Must standardise the data internally if necessary. </td></tr>
   </table>
   </dd>
 </dl>
