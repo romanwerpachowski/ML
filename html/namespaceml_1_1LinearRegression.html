@@ -154,6 +154,14 @@ Functions</h2></td></tr>
 <tr class="memitem:a9ca28ddff2cefee923c517e52b1f3e71"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html">RidgeRegressionResult</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#a9ca28ddff2cefee923c517e52b1f3e71">ridge&lt; false &gt;</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, double lambda)</td></tr>
 <tr class="memdesc:a9ca28ddff2cefee923c517e52b1f3e71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Carries out multivariate ridge regression with intercept, assuming standardised <code>X</code> inputs.  <a href="namespaceml_1_1LinearRegression.html#a9ca28ddff2cefee923c517e52b1f3e71">More...</a><br /></td></tr>
 <tr class="separator:a9ca28ddff2cefee923c517e52b1f3e71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5606b5c9445518704de006badf0e4328"><td class="memTemplParams" colspan="2">template&lt;class Regression &gt; </td></tr>
+<tr class="memitem:a5606b5c9445518704de006badf0e4328"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#a5606b5c9445518704de006badf0e4328">press</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, Regression regression)</td></tr>
+<tr class="memdesc:a5606b5c9445518704de006badf0e4328"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the PRESS statistic (Predicted Residual Error Sum of Squares).  <a href="namespaceml_1_1LinearRegression.html#a5606b5c9445518704de006badf0e4328">More...</a><br /></td></tr>
+<tr class="separator:a5606b5c9445518704de006badf0e4328"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90e8c4154c009d179035ca74d47bb5d0"><td class="memTemplParams" colspan="2">template&lt;bool WithIntercept&gt; </td></tr>
+<tr class="memitem:a90e8c4154c009d179035ca74d47bb5d0"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#a90e8c4154c009d179035ca74d47bb5d0">press_univariate</a> (Eigen::Ref&lt; const Eigen::VectorXd &gt; x, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)</td></tr>
+<tr class="memdesc:a90e8c4154c009d179035ca74d47bb5d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the PRESS statistic (Predicted Residual Error Sum of Squares) for univariate regression.  <a href="namespaceml_1_1LinearRegression.html#a90e8c4154c009d179035ca74d47bb5d0">More...</a><br /></td></tr>
+<tr class="separator:a90e8c4154c009d179035ca74d47bb5d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae433e433f0b72b81521f1eb3a733e66e"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#ae433e433f0b72b81521f1eb3a733e66e">add_ones</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X)</td></tr>
 <tr class="memdesc:ae433e433f0b72b81521f1eb3a733e66e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds another row with 1s in every column to X.  <a href="namespaceml_1_1LinearRegression.html#ae433e433f0b72b81521f1eb3a733e66e">More...</a><br /></td></tr>
 <tr class="separator:ae433e433f0b72b81521f1eb3a733e66e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -501,6 +509,120 @@ template&lt;&gt; </div>
 
 <p>Carries out multivariate ridge regression with intercept, assuming standardised <code>X</code> inputs. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceml_1_1LinearRegression.html#a8c4c56fac8ea09d8323f3386a0c3a02b" title="Carries out multivariate ridge regression with intercept.">ridge()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a5606b5c9445518704de006badf0e4328"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5606b5c9445518704de006badf0e4328">&#9670;&nbsp;</a></span>press()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Regression &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">double ml::LinearRegression::press </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Regression&#160;</td>
+          <td class="paramname"><em>regression</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the PRESS statistic (Predicted Residual Error Sum of Squares). </p>
+<p>See <a href="https://en.wikipedia.org/wiki/PRESS_statistic">https://en.wikipedia.org/wiki/PRESS_statistic</a> for details.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Regression</td><td>Functor type implementing particular regression. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>D x N matrix of X values, with data points in columns. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Y vector with length N. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">regression</td><td>Regression functor. <code>regression(X, y)</code> should return a result object supporting a <code>predict(X)</code> call (e.g. <a class="el" href="structml_1_1LinearRegression_1_1MultivariateOLSResult.html" title="Result of multivariate Ordinary Least Squares regression.">MultivariateOLSResult</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Value of the PRESS statistic. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>X.cols() != y.size()</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a90e8c4154c009d179035ca74d47bb5d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90e8c4154c009d179035ca74d47bb5d0">&#9670;&nbsp;</a></span>press_univariate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;bool WithIntercept&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">double ml::LinearRegression::press_univariate </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the PRESS statistic (Predicted Residual Error Sum of Squares) for univariate regression. </p>
+<p>See <a href="https://en.wikipedia.org/wiki/PRESS_statistic">https://en.wikipedia.org/wiki/PRESS_statistic</a> for details.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>X vector with length N. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Y vector with same length as <code>x</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">regression</td><td>Regression functor. <code>regression(X, y)</code> should return a <a class="el" href="structml_1_1LinearRegression_1_1UnivariateOLSResult.html" title="Result of 1D Ordinary Least Squares regression (with or without intercept).">UnivariateOLSResult</a> instance. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">WithIntercept</td><td>Whether the regression is with intercept or not. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Value of the PRESS statistic. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>x.size() != y.size()</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

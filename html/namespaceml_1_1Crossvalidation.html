@@ -113,12 +113,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a67c05fd55b29744589e81f96c6fb2ce1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#a67c05fd55b29744589e81f96c6fb2ce1">calc_fold_indices</a> (size_t total_len, unsigned int k, unsigned int num_folds, size_t &amp;i0, size_t &amp;i1)</td></tr>
 <tr class="memdesc:a67c05fd55b29744589e81f96c6fb2ce1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates indices delimiting a fold.  <a href="namespaceml_1_1Crossvalidation.html#a67c05fd55b29744589e81f96c6fb2ce1">More...</a><br /></td></tr>
 <tr class="separator:a67c05fd55b29744589e81f96c6fb2ce1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6af2ec9f61abd828946bda9e3315e9bc"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#a6af2ec9f61abd828946bda9e3315e9bc">only_kth_fold_2d</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; data, unsigned int k, unsigned int num_folds)</td></tr>
-<tr class="memdesc:a6af2ec9f61abd828946bda9e3315e9bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns k-th fold contents for vector data.  <a href="namespaceml_1_1Crossvalidation.html#a6af2ec9f61abd828946bda9e3315e9bc">More...</a><br /></td></tr>
-<tr class="separator:a6af2ec9f61abd828946bda9e3315e9bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e1d8fe1b7d7ee0bb1fa19f670e847a7"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#a3e1d8fe1b7d7ee0bb1fa19f670e847a7">only_kth_fold_1d</a> (Eigen::Ref&lt; const Eigen::VectorXd &gt; data, unsigned int k, unsigned int num_folds)</td></tr>
-<tr class="memdesc:a3e1d8fe1b7d7ee0bb1fa19f670e847a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns k-th fold contents for scalar data.  <a href="namespaceml_1_1Crossvalidation.html#a3e1d8fe1b7d7ee0bb1fa19f670e847a7">More...</a><br /></td></tr>
-<tr class="separator:a3e1d8fe1b7d7ee0bb1fa19f670e847a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeeed5686518b8436abb3be97fd6c6fbe"><td class="memItemLeft" align="right" valign="top">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#aeeed5686518b8436abb3be97fd6c6fbe">only_kth_fold_2d</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; data, unsigned int k, unsigned int num_folds)</td></tr>
+<tr class="memdesc:aeeed5686518b8436abb3be97fd6c6fbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns k-th fold contents for vector data.  <a href="namespaceml_1_1Crossvalidation.html#aeeed5686518b8436abb3be97fd6c6fbe">More...</a><br /></td></tr>
+<tr class="separator:aeeed5686518b8436abb3be97fd6c6fbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a400f02c300fad1283a333c8c08d7d35d"><td class="memItemLeft" align="right" valign="top">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#a400f02c300fad1283a333c8c08d7d35d">only_kth_fold_1d</a> (Eigen::Ref&lt; const Eigen::VectorXd &gt; data, unsigned int k, unsigned int num_folds)</td></tr>
+<tr class="memdesc:a400f02c300fad1283a333c8c08d7d35d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns k-th fold contents for scalar data.  <a href="namespaceml_1_1Crossvalidation.html#a400f02c300fad1283a333c8c08d7d35d">More...</a><br /></td></tr>
+<tr class="separator:a400f02c300fad1283a333c8c08d7d35d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62eba99d5ec6414fce078132d6b12261"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a62eba99d5ec6414fce078132d6b12261"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#a62eba99d5ec6414fce078132d6b12261">only_kth_fold_1d</a> (const std::vector&lt; T &gt; &amp;data, const unsigned int k, const unsigned int num_folds)</td></tr>
 <tr class="memdesc:a62eba99d5ec6414fce078132d6b12261"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns k-th fold contents for scalar data.  <a href="namespaceml_1_1Crossvalidation.html#a62eba99d5ec6414fce078132d6b12261">More...</a><br /></td></tr>
@@ -137,10 +137,18 @@ Functions</h2></td></tr>
 <tr class="memitem:afbae3e6d0d3d159d28ea97c98c37be4d"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#afbae3e6d0d3d159d28ea97c98c37be4d">k_fold</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, Trainer train_func, Tester test_func, const unsigned int num_folds)</td></tr>
 <tr class="memdesc:afbae3e6d0d3d159d28ea97c98c37be4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates model test error using k-fold cross-validation.  <a href="namespaceml_1_1Crossvalidation.html#afbae3e6d0d3d159d28ea97c98c37be4d">More...</a><br /></td></tr>
 <tr class="separator:afbae3e6d0d3d159d28ea97c98c37be4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dc4e42b9851951ecfe6bd7c964ca644"><td class="memTemplParams" colspan="2">template&lt;class Trainer , class Tester &gt; </td></tr>
+<tr class="memitem:a0dc4e42b9851951ecfe6bd7c964ca644"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#a0dc4e42b9851951ecfe6bd7c964ca644">k_fold_scalar</a> (Eigen::Ref&lt; const Eigen::VectorXd &gt; x, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, Trainer train_func, Tester test_func, const unsigned int num_folds)</td></tr>
+<tr class="memdesc:a0dc4e42b9851951ecfe6bd7c964ca644"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates model test error using k-fold cross-validation (scalar X version).  <a href="namespaceml_1_1Crossvalidation.html#a0dc4e42b9851951ecfe6bd7c964ca644">More...</a><br /></td></tr>
+<tr class="separator:a0dc4e42b9851951ecfe6bd7c964ca644"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52be767b7ee570fb2795860484527132"><td class="memTemplParams" colspan="2">template&lt;class Trainer , class Tester &gt; </td></tr>
 <tr class="memitem:a52be767b7ee570fb2795860484527132"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#a52be767b7ee570fb2795860484527132">leave_one_out</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, Trainer train_func, Tester test_func)</td></tr>
 <tr class="memdesc:a52be767b7ee570fb2795860484527132"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates model test error using leave-one-out cross-validation.  <a href="namespaceml_1_1Crossvalidation.html#a52be767b7ee570fb2795860484527132">More...</a><br /></td></tr>
 <tr class="separator:a52be767b7ee570fb2795860484527132"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45ebc8c35196b24488e2bff8ab34d54b"><td class="memTemplParams" colspan="2">template&lt;class Trainer , class Tester &gt; </td></tr>
+<tr class="memitem:a45ebc8c35196b24488e2bff8ab34d54b"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1Crossvalidation.html#a45ebc8c35196b24488e2bff8ab34d54b">leave_one_out_scalar</a> (const Eigen::Ref&lt; const Eigen::VectorXd &gt; x, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, Trainer train_func, Tester test_func)</td></tr>
+<tr class="memdesc:a45ebc8c35196b24488e2bff8ab34d54b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates model test error using leave-one-out cross-validation (scalar X version).  <a href="namespaceml_1_1Crossvalidation.html#a45ebc8c35196b24488e2bff8ab34d54b">More...</a><br /></td></tr>
+<tr class="separator:a45ebc8c35196b24488e2bff8ab34d54b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Methods used for cross-validation. </p>
@@ -210,14 +218,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a6af2ec9f61abd828946bda9e3315e9bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6af2ec9f61abd828946bda9e3315e9bc">&#9670;&nbsp;</a></span>only_kth_fold_2d()</h2>
+<a id="aeeed5686518b8436abb3be97fd6c6fbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeeed5686518b8436abb3be97fd6c6fbe">&#9670;&nbsp;</a></span>only_kth_fold_2d()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::MatrixXd ml::Crossvalidation::only_kth_fold_2d </td>
+          <td class="memname">Eigen::Ref&lt;const Eigen::MatrixXd&gt; ml::Crossvalidation::only_kth_fold_2d </td>
           <td>(</td>
           <td class="paramtype">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td>
           <td class="paramname"><em>data</em>, </td>
@@ -251,7 +259,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Data from the <code>k</code>-th fold.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Reference to data from the <code>k</code>-th fold.</dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::invalid_argument</td><td>If <code>num_folds &gt; data.cols()</code> or <code>k &gt;= num_folds</code>. </td></tr>
@@ -261,14 +269,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a3e1d8fe1b7d7ee0bb1fa19f670e847a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e1d8fe1b7d7ee0bb1fa19f670e847a7">&#9670;&nbsp;</a></span>only_kth_fold_1d() <span class="overload">[1/2]</span></h2>
+<a id="a400f02c300fad1283a333c8c08d7d35d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a400f02c300fad1283a333c8c08d7d35d">&#9670;&nbsp;</a></span>only_kth_fold_1d() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::VectorXd ml::Crossvalidation::only_kth_fold_1d </td>
+          <td class="memname">Eigen::Ref&lt;const Eigen::VectorXd&gt; ml::Crossvalidation::only_kth_fold_1d </td>
           <td>(</td>
           <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
           <td class="paramname"><em>data</em>, </td>
@@ -302,7 +310,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Data from the <code>k</code>-th fold.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Reference to data from the <code>k</code>-th fold.</dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::invalid_argument</td><td>If <code>num_folds &gt; data.size()</code> or <code>k &gt;= num_folds</code>. </td></tr>
@@ -579,6 +587,8 @@ template&lt;class Trainer , class Tester &gt; </div>
 </div><div class="memdoc">
 
 <p>Calculates model test error using k-fold cross-validation. </p>
+<p>See <a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)#k-fold_cross-validation">https://en.wikipedia.org/wiki/Cross-validation_(statistics)#k-fold_cross-validation</a></p>
+<p><code>train_func</code> and <code>test_func</code> functors should accept X data as <code>Eigen::Ref&lt;const Eigen::MatrixXd&gt;</code> reference, and y data as <code>Eigen::Ref&lt;const Eigen::VectorXd&gt;</code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>Matrix with all features (data points in columns). </td></tr>
@@ -600,6 +610,82 @@ template&lt;class Trainer , class Tester &gt; </div>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::invalid_argument</td><td>If <code>num_folds &gt; X.cols()</code> or <code>y.size() != X.cols()</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0dc4e42b9851951ecfe6bd7c964ca644"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dc4e42b9851951ecfe6bd7c964ca644">&#9670;&nbsp;</a></span>k_fold_scalar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Trainer , class Tester &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">double ml::Crossvalidation::k_fold_scalar </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Trainer&#160;</td>
+          <td class="paramname"><em>train_func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Tester&#160;</td>
+          <td class="paramname"><em>test_func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned int&#160;</td>
+          <td class="paramname"><em>num_folds</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates model test error using k-fold cross-validation (scalar X version). </p>
+<p>See <a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)#k-fold_cross-validation">https://en.wikipedia.org/wiki/Cross-validation_(statistics)#k-fold_cross-validation</a></p>
+<p><code>train_func</code> and <code>test_func</code> functors should accept X and y data as <code>Eigen::Ref&lt;const Eigen::VectorXd&gt;</code> references.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Vector with all features (scalars). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Vector with all responses (scalars). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">train_func</td><td>Functor returning a trained model given training features and responses as arguments. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">test_func</td><td>Functor calculating test error per data point given the model, test features and test responses as arguments. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">num_folds</td><td>Number of folds.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Trainer</td><td>Functor type for model training. </td></tr>
+    <tr><td class="paramname">Tester</td><td>Functor type for calculating test error.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Error value per data point.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>num_folds &gt; X.cols()</code> or <code>y.size() != y.size()</code>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -647,6 +733,8 @@ template&lt;class Trainer , class Tester &gt; </div>
 </div><div class="memdoc">
 
 <p>Calculates model test error using leave-one-out cross-validation. </p>
+<p>See <a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)#Leave-one-out_cross-validation">https://en.wikipedia.org/wiki/Cross-validation_(statistics)#Leave-one-out_cross-validation</a></p>
+<p><code>train_func</code> and <code>test_func</code> functors should accept X data as <code>Eigen::Ref&lt;const Eigen::MatrixXd&gt;</code> reference, and y data as <code>Eigen::Ref&lt;const Eigen::VectorXd&gt;</code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>Matrix with all features (data points in columns). </td></tr>
@@ -667,6 +755,75 @@ template&lt;class Trainer , class Tester &gt; </div>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::invalid_argument</td><td>If <code>y.size() &lt; 2</code> or <code>y.size() != X.cols()</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a45ebc8c35196b24488e2bff8ab34d54b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45ebc8c35196b24488e2bff8ab34d54b">&#9670;&nbsp;</a></span>leave_one_out_scalar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Trainer , class Tester &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">double ml::Crossvalidation::leave_one_out_scalar </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Trainer&#160;</td>
+          <td class="paramname"><em>train_func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Tester&#160;</td>
+          <td class="paramname"><em>test_func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates model test error using leave-one-out cross-validation (scalar X version). </p>
+<p>See <a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)#Leave-one-out_cross-validation">https://en.wikipedia.org/wiki/Cross-validation_(statistics)#Leave-one-out_cross-validation</a></p>
+<p><code>train_func</code> and <code>test_func</code> functors should accept X and y data as <code>Eigen::Ref&lt;const Eigen::VectorXd&gt;</code> references.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Vector with all features (scalars). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Vector with all responses (scalars). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">train_func</td><td>Functor returning a trained model given training features and responses as arguments. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">test_func</td><td>Functor calculating test error per data point given the model, test features and test responses as arguments.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Trainer</td><td>Functor type for model training. </td></tr>
+    <tr><td class="paramname">Tester</td><td>Functor type for calculating test error.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Error value per data point.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>y.size() &lt; 2</code> or <code>y.size() != x.size()</code>. </td></tr>
   </table>
   </dd>
 </dl>

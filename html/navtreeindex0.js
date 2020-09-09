@@ -168,10 +168,10 @@ var NAVTREEINDEX0 =
 "structml_1_1LinearRegression_1_1RidgeRegressionResult.html#ab23532aa96a52743ee12b70ab133193e":[2,0,0,2,3,3],
 "structml_1_1LinearRegression_1_1UnivariateOLSResult.html":[2,0,0,2,4],
 "structml_1_1LinearRegression_1_1UnivariateOLSResult.html#a11aab575ba5a2836af1c7f92bbdb53a5":[2,0,0,2,4,2],
-"structml_1_1LinearRegression_1_1UnivariateOLSResult.html#a4c6f0a69255598bba3c380ad820a122b":[2,0,0,2,4,1],
 "structml_1_1LinearRegression_1_1UnivariateOLSResult.html#a51c3f7921cc39f96d06ffe5f4d14c372":[2,0,0,2,4,3],
 "structml_1_1LinearRegression_1_1UnivariateOLSResult.html#a52433efb49f525bab75194f002f5c584":[2,0,0,2,4,0],
 "structml_1_1LinearRegression_1_1UnivariateOLSResult.html#aa42a56aea0b5c5ecf006d485c200a23d":[2,0,0,2,4,6],
 "structml_1_1LinearRegression_1_1UnivariateOLSResult.html#adc0550ccccc84b8efb358f9f1538e9c4":[2,0,0,2,4,4],
+"structml_1_1LinearRegression_1_1UnivariateOLSResult.html#ae05bfacb8951f992a065ce64d963686e":[2,0,0,2,4,1],
 "structml_1_1LinearRegression_1_1UnivariateOLSResult.html#ae671fb36c1768026d371197687ed82f7":[2,0,0,2,4,5]
 };
