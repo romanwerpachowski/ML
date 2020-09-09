@@ -73,6 +73,13 @@ namespace ml
 
 			/** @brief Formats the result as string. */
 			DLL_DECLSPEC std::string to_string() const;
+
+			/** @brief Predicts Y given X.
+			 @param X 1 x N matrix of independent variables.
+			 @return Vector of predicted Y(X) with size `X.cols()`.
+			 @throw std::invalid_argument If `X.rows() != 1`.
+			*/
+			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;
 		};
 
 		/** @brief Result of multivariate Ordinary Least Squares regression.		
@@ -86,6 +93,13 @@ namespace ml
 
 			/** @brief Formats the result as string. */
 			DLL_DECLSPEC std::string to_string() const;
+
+			/** @brief Predicts Y given X.
+			 @param X Matrix of independent variables with data points in columns.
+			 @return Vector of predicted Y(X) with size `X.cols()`.
+			 @throw std::invalid_argument If `X.rows() != beta.size()`.
+			*/
+			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;
 		};
 
 		/** @brief Result of a (multivariate) ridge regression with intercept.
@@ -102,6 +116,13 @@ namespace ml
 
 			/** @brief Formats the result as string. */
 			DLL_DECLSPEC std::string to_string() const;
+
+			/** @brief Predicts Y given X.
+			 @param X Matrix of independent variables with data points in columns.
+			 @return Vector of predicted Y(X) with size `X.cols()`.
+			 @throw std::invalid_argument If `X.rows() + 1 != beta.size()`.
+			*/
+			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;
 		};
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept.

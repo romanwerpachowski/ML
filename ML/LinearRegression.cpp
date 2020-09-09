@@ -29,6 +29,14 @@ namespace ml
 			return s.str();
 		}
 
+		Eigen::VectorXd UnivariateOLSResult::predict(Eigen::Ref<const Eigen::MatrixXd> X) const
+		{
+			if (X.rows() != 1) {
+				throw std::invalid_argument("Expected a 1 x N matrix");
+			}
+			return Eigen::VectorXd::Constant(X.cols(), intercept) + slope * X.row(0).transpose();
+		}
+
 		std::string MultivariateOLSResult::to_string() const
 		{
 			std::stringstream s;
@@ -38,6 +46,14 @@ namespace ml
 			s << ", cov=[" << cov << "]";
 			s << ")";
 			return s.str();
+		}
+
+		Eigen::VectorXd MultivariateOLSResult::predict(Eigen::Ref<const Eigen::MatrixXd> X) const
+		{
+			if (X.rows() != beta.size()) {
+				throw std::invalid_argument("X has wrong number of rows");
+			}
+			return X.transpose() * beta;
 		}
 
 		std::string RidgeRegressionResult::to_string() const
@@ -50,6 +66,14 @@ namespace ml
 			s << ", effective_dof=" << effective_dof;
 			s << ")";
 			return s.str();
+		}
+
+		Eigen::VectorXd RidgeRegressionResult::predict(Eigen::Ref<const Eigen::MatrixXd> X) const
+		{
+			if (X.rows() + 1 != beta.size()) {
+				throw std::invalid_argument("X has wrong number of rows");
+			}
+			return X.transpose() * beta.head(beta.size() - 1) + Eigen::VectorXd::Constant(X.cols(), beta[beta.size() - 1]);
 		}
 
 		static UnivariateOLSResult calc_univariate_linear_regression_result(
