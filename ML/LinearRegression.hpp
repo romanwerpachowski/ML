@@ -220,7 +220,7 @@ namespace ml
 		@return Value of the PRESS statistic.
 		@throw std::invalid_argument If `X.cols() != y.size()`.
 		*/
-		template <class Regression> double calc_press_statistic(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Regression regression)
+		template <class Regression> double press(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Regression regression)
 		{
 			const auto trainer = [&regression](const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y) -> auto {
 				return regression(X, y);
@@ -235,17 +235,21 @@ namespace ml
 
 		See https://en.wikipedia.org/wiki/PRESS_statistic for details.
 
-		@tparam UnivariateRegression Functor type implementing particular univariate regression.
 		@param[in] x X vector with length N.
 		@param[in] y Y vector with same length as `x`.
 		@param[in] regression Regression functor. `regression(X, y)` should return a UnivariateOLSResult instance.
+		@tparam WithIntercept Whether the regression is with intercept or not.
 		@return Value of the PRESS statistic.
 		@throw std::invalid_argument If `x.size() != y.size()`.
 		*/
-		template <class UnivariateRegression> double calc_press_statistic(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y, UnivariateRegression regression)
+		template <bool WithIntercept> double press_univariate(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y)
 		{
-			const auto trainer = [&regression](const Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y) -> UnivariateOLSResult {
-				return regression(x, y);
+			const auto trainer = [](const Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y) -> UnivariateOLSResult {
+				if (WithIntercept) {
+					return univariate(x, y);
+				} else {
+					return univariate_without_intercept(x, y);
+				}
 			};
 			const auto tester = [](const UnivariateOLSResult& result, const Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y) -> double {
 				return (y - result.predict(x)).squaredNorm() / static_cast<double>(y.size());

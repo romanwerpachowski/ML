@@ -1133,3 +1133,34 @@ TEST_F(LinearRegressionTest, ridge_do_standardise_covariance)
 	}
 	ASSERT_NEAR(0, (sample_cov - result.cov).norm(), 5e-6) << "estimate:\n" << result.cov << "\n\nsample:\n" << sample_cov << "\n\ndifference:\n" << (sample_cov - result.cov);
 }
+
+TEST_F(LinearRegressionTest, press)
+{
+	Eigen::MatrixXd X(2, 3);
+	X << -1, 0, 1,
+		1, 1, 1;
+	Eigen::VectorXd y(3);
+	y << 1, 0, 1;
+	const double press_statistic = press(X, y, multivariate);
+	ASSERT_NEAR(4 + 1 + 4, press_statistic, 1e-15);
+}
+
+TEST_F(LinearRegressionTest, press_univariate_with_intercept)
+{
+	Eigen::VectorXd x(3);
+	x << -1, 0, 1;
+	Eigen::VectorXd y(3);
+	y << 1, 0, 1;
+	const double press_statistic = press_univariate<true>(x, y);
+	ASSERT_NEAR(4 + 1 + 4, press_statistic, 1e-15);
+}
+
+TEST_F(LinearRegressionTest, press_univariate_without_intercept)
+{
+	Eigen::VectorXd x(3);
+	x << -1, 0, 1;
+	Eigen::VectorXd y(3);
+	y << 1, 0, 1;
+	const double press_statistic = press_univariate<false>(x, y);
+	ASSERT_NEAR(4 + 0 + 4, press_statistic, 1e-15);
+}

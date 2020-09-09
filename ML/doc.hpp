@@ -35,6 +35,7 @@ Only Ordinary Least Squares for now:
 - multivariate
 - <a href="https://cpb-us-w2.wpmucdn.com/sites.gatech.edu/dist/2/436/files/2017/07/22-notes-6250-f16.pdf">recursive multivariate</a>
 - ridge regression
+- PRESS statistic
 
 Implemented in ml::LinearRegression namespace.
 
