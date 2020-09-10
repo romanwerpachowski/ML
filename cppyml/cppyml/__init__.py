@@ -1,6 +1,6 @@
 """Efficient implementations of selected ML algorithms for Python.
 
-(C) 2020 Roman Werpachowski.
+© 2020 Roman Werpachowski.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
