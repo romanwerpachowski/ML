@@ -131,8 +131,8 @@ Collaboration diagram for ml::Clustering::ClosestCentroid:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6ced455514fa60daff2e17ab745adcff"><td class="memItemLeft" align="right" valign="top"><a id="a6ced455514fa60daff2e17ab745adcff"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ClosestCentroid</b> (std::shared_ptr&lt; const <a class="el" href="classml_1_1Clustering_1_1CentroidsInitialiser.html">CentroidsInitialiser</a> &gt; centroids_initialiser)</td></tr>
+<tr class="memitem:a6ced455514fa60daff2e17ab745adcff"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1Clustering_1_1ClosestCentroid.html#a6ced455514fa60daff2e17ab745adcff">ClosestCentroid</a> (std::shared_ptr&lt; const <a class="el" href="classml_1_1Clustering_1_1CentroidsInitialiser.html">CentroidsInitialiser</a> &gt; centroids_initialiser)</td></tr>
+<tr class="memdesc:a6ced455514fa60daff2e17ab745adcff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="classml_1_1Clustering_1_1ClosestCentroid.html#a6ced455514fa60daff2e17ab745adcff">More...</a><br /></td></tr>
 <tr class="separator:a6ced455514fa60daff2e17ab745adcff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7874c1e73b323d07cc6b391f354cc19"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1Clustering_1_1ClosestCentroid.html#ab7874c1e73b323d07cc6b391f354cc19">init</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; data, std::default_random_engine &amp;prng, unsigned int number_components, Eigen::Ref&lt; Eigen::MatrixXd &gt; responsibilities) const override</td></tr>
 <tr class="memdesc:ab7874c1e73b323d07cc6b391f354cc19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises component responsibilities.  <a href="classml_1_1Clustering_1_1ClosestCentroid.html#ab7874c1e73b323d07cc6b391f354cc19">More...</a><br /></td></tr>
@@ -145,7 +145,40 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Initialises centroids and then assigns the responsibility for each point to its closest centroid. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a6ced455514fa60daff2e17ab745adcff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ced455514fa60daff2e17ab745adcff">&#9670;&nbsp;</a></span>ClosestCentroid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ml::Clustering::ClosestCentroid::ClosestCentroid </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; const <a class="el" href="classml_1_1Clustering_1_1CentroidsInitialiser.html">CentroidsInitialiser</a> &gt;&#160;</td>
+          <td class="paramname"><em>centroids_initialiser</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">centroids_initialiser</td><td>Non-null pointer to <a class="el" href="classml_1_1Clustering_1_1CentroidsInitialiser.html" title="Chooses initial locations of centroids.">CentroidsInitialiser</a> implementation used to initialise the centroids. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>centroids_initialiser</code> is null. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="ab7874c1e73b323d07cc6b391f354cc19"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab7874c1e73b323d07cc6b391f354cc19">&#9670;&nbsp;</a></span>init()</h2>
 

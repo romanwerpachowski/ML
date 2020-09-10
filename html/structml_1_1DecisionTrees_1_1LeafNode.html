@@ -132,8 +132,7 @@ Collaboration diagram for ml::DecisionTrees::LeafNode&lt; Y &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a847938d61ef2efe2845fd2846673f96d"><td class="memItemLeft" align="right" valign="top"><a id="a847938d61ef2efe2845fd2846673f96d"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>arg_type</b> = typename <a class="el" href="structml_1_1DecisionTrees_1_1Node.html">Node</a>&lt; Y &gt;::<a class="el" href="structml_1_1DecisionTrees_1_1Node.html#a0194df585aada7276e94ac0a366a02b9">arg_type</a></td></tr>
+<tr class="memitem:a847938d61ef2efe2845fd2846673f96d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1DecisionTrees_1_1LeafNode.html#a847938d61ef2efe2845fd2846673f96d">arg_type</a> = typename <a class="el" href="structml_1_1DecisionTrees_1_1Node.html">Node</a>&lt; Y &gt;::<a class="el" href="structml_1_1DecisionTrees_1_1Node.html#a0194df585aada7276e94ac0a366a02b9">arg_type</a></td></tr>
 <tr class="separator:a847938d61ef2efe2845fd2846673f96d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_structml_1_1DecisionTrees_1_1Node"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structml_1_1DecisionTrees_1_1Node')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="structml_1_1DecisionTrees_1_1Node.html">ml::DecisionTrees::Node&lt; Y &gt;</a></td></tr>
 <tr class="memitem:a0194df585aada7276e94ac0a366a02b9 inherit pub_types_structml_1_1DecisionTrees_1_1Node"><td class="memItemLeft" align="right" valign="top">typedef Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1DecisionTrees_1_1Node.html#a0194df585aada7276e94ac0a366a02b9">arg_type</a></td></tr>
@@ -144,9 +143,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a107859f6c0a2a5d7da0c207c9b842dce"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1DecisionTrees_1_1LeafNode.html#a107859f6c0a2a5d7da0c207c9b842dce">LeafNode</a> (double n_error, Y n_value, <a class="el" href="structml_1_1DecisionTrees_1_1SplitNode.html">SplitNode</a>&lt; Y &gt; *n_parent)</td></tr>
 <tr class="memdesc:a107859f6c0a2a5d7da0c207c9b842dce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="structml_1_1DecisionTrees_1_1LeafNode.html#a107859f6c0a2a5d7da0c207c9b842dce">More...</a><br /></td></tr>
 <tr class="separator:a107859f6c0a2a5d7da0c207c9b842dce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a2519df2c4a69ff0fe20f2a728b36aa"><td class="memItemLeft" align="right" valign="top"><a id="a3a2519df2c4a69ff0fe20f2a728b36aa"></a>
-Y&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1DecisionTrees_1_1LeafNode.html#a3a2519df2c4a69ff0fe20f2a728b36aa">operator()</a> (<a class="el" href="structml_1_1DecisionTrees_1_1Node.html#a0194df585aada7276e94ac0a366a02b9">arg_type</a>) const override</td></tr>
-<tr class="memdesc:a3a2519df2c4a69ff0fe20f2a728b36aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a prediction given a feature vector. <br /></td></tr>
+<tr class="memitem:a3a2519df2c4a69ff0fe20f2a728b36aa"><td class="memItemLeft" align="right" valign="top">Y&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1DecisionTrees_1_1LeafNode.html#a3a2519df2c4a69ff0fe20f2a728b36aa">operator()</a> (<a class="el" href="structml_1_1DecisionTrees_1_1Node.html#a0194df585aada7276e94ac0a366a02b9">arg_type</a>) const override</td></tr>
+<tr class="memdesc:a3a2519df2c4a69ff0fe20f2a728b36aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a prediction given a feature vector.  <a href="structml_1_1DecisionTrees_1_1LeafNode.html#a3a2519df2c4a69ff0fe20f2a728b36aa">More...</a><br /></td></tr>
 <tr class="separator:a3a2519df2c4a69ff0fe20f2a728b36aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73657be8d5dfe4762150153131788a8b"><td class="memItemLeft" align="right" valign="top"><a id="a73657be8d5dfe4762150153131788a8b"></a>
 unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1DecisionTrees_1_1LeafNode.html#a73657be8d5dfe4762150153131788a8b">count_lower_nodes</a> () const override</td></tr>
@@ -193,7 +191,25 @@ Additional Inherited Members</h2></td></tr>
 struct ml::DecisionTrees::LeafNode&lt; Y &gt;</h3>
 
 <p>Terminal node, which returns a constant prediction value for features which ended up on it. </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a847938d61ef2efe2845fd2846673f96d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a847938d61ef2efe2845fd2846673f96d">&#9670;&nbsp;</a></span>arg_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Y &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structml_1_1DecisionTrees_1_1LeafNode.html">ml::DecisionTrees::LeafNode</a>&lt; Y &gt;::<a class="el" href="structml_1_1DecisionTrees_1_1Node.html#a0194df585aada7276e94ac0a366a02b9">arg_type</a> =  typename <a class="el" href="structml_1_1DecisionTrees_1_1Node.html">Node</a>&lt;Y&gt;::<a class="el" href="structml_1_1DecisionTrees_1_1Node.html#a0194df585aada7276e94ac0a366a02b9">arg_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Type for feature vector. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a107859f6c0a2a5d7da0c207c9b842dce"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a107859f6c0a2a5d7da0c207c9b842dce">&#9670;&nbsp;</a></span>LeafNode()</h2>
 
@@ -255,6 +271,45 @@ template&lt;class Y &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3a2519df2c4a69ff0fe20f2a728b36aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a2519df2c4a69ff0fe20f2a728b36aa">&#9670;&nbsp;</a></span>operator()()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Y &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Y <a class="el" href="structml_1_1DecisionTrees_1_1LeafNode.html">ml::DecisionTrees::LeafNode</a>&lt; Y &gt;::operator() </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structml_1_1DecisionTrees_1_1Node.html#a0194df585aada7276e94ac0a366a02b9">arg_type</a>&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a prediction given a feature vector. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Feature vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Prediction value. </dd></dl>
+
+<p>Implements <a class="el" href="structml_1_1DecisionTrees_1_1Node.html#a31530449dcaeea6791a5b01a8598d74f">ml::DecisionTrees::Node&lt; Y &gt;</a>.</p>
+
+</div>
+</div>
 <a id="a704bf03b82454a503089921cad39a038"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a704bf03b82454a503089921cad39a038">&#9670;&nbsp;</a></span>total_leaf_error()</h2>
 
@@ -281,7 +336,7 @@ template&lt;class Y &gt; </div>
 </div><div class="memdoc">
 
 <p>Total error of the training samples seen by the leaf nodes reachable from this node (including its own if leaf). </p>
-<p>Has the invariant <a class="el" href="structml_1_1DecisionTrees_1_1LeafNode.html#a704bf03b82454a503089921cad39a038" title="Total error of the training samples seen by the leaf nodes reachable from this node (including its ow...">total_leaf_error()</a> &lt;= <a class="el" href="structml_1_1DecisionTrees_1_1Node.html#a50c0135f8de2878781daa7735b90adcb">error</a>. </p>
+<p>Has the invariant <code><a class="el" href="structml_1_1DecisionTrees_1_1LeafNode.html#a704bf03b82454a503089921cad39a038" title="Total error of the training samples seen by the leaf nodes reachable from this node (including its ow...">total_leaf_error()</a> &lt;= error</code>. </p>
 
 <p>Implements <a class="el" href="structml_1_1DecisionTrees_1_1Node.html#a34b405acc8111208f5ac84aa7bb58c6b">ml::DecisionTrees::Node&lt; Y &gt;</a>.</p>
 
