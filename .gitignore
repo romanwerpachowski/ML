@@ -359,3 +359,4 @@ healthchecksdb
 /docs/cppyml
 /docs/sphinx/_build
 /mousie.pdf
+.vscode
