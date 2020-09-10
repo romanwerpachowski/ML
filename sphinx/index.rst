@@ -2,13 +2,21 @@ Welcome to cppyml's documentation!
 ==================================
 
 .. automodule:: cppyml
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
-.. toctree::
-    :maxdepth: 2
-    :caption: Contents:
+All modules listed below should be imported as `cppyml.<module name>`, e.g. `cppyml.linear_regression`.
+
+Clustering
+----------
+.. automodule:: cppyml.cppyml.clustering
+
+Decision trees
+--------------
+.. automodule:: cppyml.cppyml.decision_trees
+
+
+Linear regression
+-----------------
+.. automodule:: cppyml.cppyml.linear_regression
 
 
 Indices and tables
