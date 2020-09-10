@@ -13,7 +13,7 @@ Optimised Python extension for machine learning based on the [ML++](https://gith
 
 ## Documentation
 
-Automatically generated documentation is [here]()
+Automatically generated documentation is [here](cppyml/html/index.html)
 
 ## Installation
 
