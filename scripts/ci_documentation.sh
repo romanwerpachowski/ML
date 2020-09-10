@@ -10,5 +10,5 @@ make clean
 make html
 cd ..
 mv -f sphinx/_build cppyml
-cd ..
 rm -rf sphinx
+cd ..
