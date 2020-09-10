@@ -65,6 +65,7 @@ namespace ml
 
 		/** @brief  Performs cost-complexity pruning in-place.
 
+		@param[in, out] tree Tree to be pruned.
 		@param[in] alpha Cost of complexity per node.
 		@tparam Y Decision tree output value type.
 		@throw std::domain_error If alpha < 0.

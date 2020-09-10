@@ -24,7 +24,7 @@ namespace ml
 			double rss; /**< Residual sum of squares: \f$ \sum_{i=1}^N (\hat{y}_i - y_i)^2 \f$. */
 			double tss; /**< Total sum of squares. For fitting with intercept: \f$ \mathrm{TSS} = \sum_{i=1}^N (y_i - N^{-1} \sum_{j=1}^N y_j)^2 \f$. For fitting without intercept: \f$ \mathrm{TSS} = \sum_{i=1}^N y_i^2 \f$. */
 
-			/** @base Estimated variance of observations Y, equal to `rss / dof`. */
+			/** @brief Estimated variance of observations Y, equal to `rss / dof`. */
 			double var_y() const {
 				if (dof) {
 					return rss / static_cast<double>(dof);

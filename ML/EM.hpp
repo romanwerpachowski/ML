@@ -79,7 +79,7 @@ namespace ml
 		}
 
 		/** @brief Fits the model.
-		@param]in] data Matrix (column-major order) with a data point in every column.
+		@param[in] data Matrix (column-major order) with a data point in every column.
 		@return `true` if fitting converged successfully.
 		*/
 		DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data);		

@@ -71,6 +71,10 @@ namespace ml
 		class ClosestCentroid : public ResponsibilitiesInitialiser
 		{
 		public:
+			/** @brief Constructor.
+			 @param centroids_initialiser Non-null pointer to CentroidsInitialiser implementation used to initialise the centroids.
+			 @throw std::invalid_argument If `centroids_initialiser` is null.
+			*/
 			DLL_DECLSPEC ClosestCentroid(std::shared_ptr<const CentroidsInitialiser> centroids_initialiser);
 
 			void init(Eigen::Ref<const Eigen::MatrixXd> data, std::default_random_engine& prng, unsigned int number_components, Eigen::Ref<Eigen::MatrixXd> responsibilities) const override;

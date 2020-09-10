@@ -40,7 +40,10 @@ namespace ml
 			/** @brief Virtual destructor. */
 			virtual ~Node() {}
 
-			/** @brief Returns a prediction given a feature vector. */
+			/** @brief Returns a prediction given a feature vector. 
+			@param x Feature vector.
+			@return Prediction value.
+			*/
 			virtual Y operator()(arg_type x) const = 0;
 
 			/** @brief Total number of nodes reachable from this one. */
@@ -51,7 +54,7 @@ namespace ml
 
 			/** @brief Total error of the training samples seen by the leaf nodes reachable from this node (including its own if leaf).
 
-			Has the invariant total_leaf_error() <= #error.
+			Has the invariant `total_leaf_error() <= error`.
 			*/
 			virtual double total_leaf_error() const = 0;
 
@@ -76,12 +79,12 @@ namespace ml
 		/** @brief Non-terminal node, which splits data depending on a threshold value of some feature. */
 		template <class Y> struct SplitNode : public Node<Y>
 		{
-			std::unique_ptr<Node<Y>> lower; /**< Followed if x[feature_index] < threshold. */
-			std::unique_ptr<Node<Y>> higher; /**< Followed if x[feature_index] >= threshold. */
+			std::unique_ptr<Node<Y>> lower; /**< Followed if `x[feature_index] < threshold`. */
+			std::unique_ptr<Node<Y>> higher; /**< Followed if `x[feature_index] >= threshold`. */
 			double threshold; /**< Split threshold value. */
 			unsigned int feature_index; /**< Index of the feature on which this node splits data. */
 
-			using arg_type = typename Node<Y>::arg_type;
+			using arg_type = typename Node<Y>::arg_type; /**< Type for feature vector. */
 			using Node<Y>::error;
 			using Node<Y>::value;
 			using Node<Y>::parent;
@@ -98,6 +101,7 @@ namespace ml
 				: Node<Y>(n_error, n_value, n_parent), threshold(n_threshold), feature_index(n_feature_index)
 			{}
 
+			/** @copydoc Node<Y>::operator()() */
 			Y operator()(arg_type x) const override
 			{
 				assert(lower);
@@ -111,6 +115,7 @@ namespace ml
 				}
 			}
 
+			/** @copydoc Node<Y>::count_lower_nodes() */
 			unsigned int count_lower_nodes() const override
 			{
 				assert(lower);
@@ -120,6 +125,7 @@ namespace ml
 				return 2 + lower->count_lower_nodes() + higher->count_lower_nodes();
 			}
 
+			/** @copydoc Node<Y>::count_leaf_nodes() */
 			unsigned int count_leaf_nodes() const override
 			{
 				assert(lower);
@@ -129,6 +135,7 @@ namespace ml
 				return lower->count_leaf_nodes() + higher->count_leaf_nodes();
 			}
 
+			/** @copydoc Node<Y>::total_leaf_error() */
 			double total_leaf_error() const override
 			{
 				assert(lower);
@@ -138,6 +145,7 @@ namespace ml
 				return lower->total_leaf_error() + higher->total_leaf_error();
 			}
 
+			/** @copydoc Node<Y>::clone() */
 			SplitNode<Y>* clone(SplitNode<Y>* cloned_parent) const override
 			{
 				assert(lower);
@@ -150,11 +158,13 @@ namespace ml
 				return copy.release();
 			}
 
+			/** @copydoc Node<Y>::is_leaf() */
 			bool is_leaf() const override
 			{
 				return false;
 			}
 
+			/** @copydoc Node<Y>::collect_lowest_split_nodes() */
 			void collect_lowest_split_nodes(std::unordered_set<SplitNode<Y>*>& s) override
 			{
 				assert(lower);
@@ -193,7 +203,7 @@ namespace ml
 				: Node<Y>(n_error, n_value, n_parent)
 			{}
 
-			using arg_type = typename Node<Y>::arg_type;
+			using arg_type = typename Node<Y>::arg_type; /**< Type for feature vector. */
 			using Node<Y>::error;
 			using Node<Y>::value;
 			using Node<Y>::parent;
