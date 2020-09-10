@@ -11,6 +11,10 @@ Optimised Python extension for machine learning based on the [ML++](https://gith
 - classification and regression decision trees with pruning
 - Gaussian E-M clustering
 
+## Documentation
+
+Automatically generated documentation is [here]()
+
 ## Installation
 
 ### Linux

@@ -36,7 +36,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{D2DB
 	ProjectSection(SolutionItems) = preProject
 		scripts\ci_debug_build.sh = scripts\ci_debug_build.sh
 		scripts\ci_dependencies.sh = scripts\ci_dependencies.sh
+		scripts\ci_documentation.sh = scripts\ci_documentation.sh
 		scripts\ci_release_build.sh = scripts\ci_release_build.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sphinx", "sphinx", "{8F862320-4B06-4EEC-9A26-B3C50CC052B4}"
+	ProjectSection(SolutionItems) = preProject
+		docs\sphinx\conf.py = docs\sphinx\conf.py
+		docs\sphinx\index.rst = docs\sphinx\index.rst
 	EndProjectSection
 EndProject
 Global
@@ -99,6 +106,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{AAC07B84-0EFE-492B-A7F1-2DA5B40D5BE9} = {F8C3EA91-4CE0-41D4-A366-E7A7BF7DE880}
 		{D2DB1DD7-90DA-4840-A39F-7BF57D47E6F9} = {F8C3EA91-4CE0-41D4-A366-E7A7BF7DE880}
+		{8F862320-4B06-4EEC-9A26-B3C50CC052B4} = {AAC07B84-0EFE-492B-A7F1-2DA5B40D5BE9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78EF6927-9462-4C40-8A49-38F2C839C6B8}

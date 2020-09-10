@@ -23,9 +23,11 @@ jobs:
     - stage: documentation
       before_install:
         - sudo apt-get update
-        - sudo apt-get -y install doxygen graphviz
-      name: "Generate Doxygen documentation and deploy it to GitHub pages"
-      script: doxygen Doxyfile
+        - sudo apt-get -y install doxygen graphviz python3-sphinx sphinx-common
+      name: "Generate documentation and deploy it to GitHub pages"
+      workspaces:
+        use: release-binaries
+      script: ./scripts/ci_documentation.sh
       deploy:
         edge: true
         provider: pages
