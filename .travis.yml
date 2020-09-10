@@ -11,11 +11,15 @@ jobs:
     - stage: build
       before_install: ./scripts/ci_dependencies.sh
       name: "Debug build"
-      script: ./scripts/ci_debug_build.sh      
+      script: ./scripts/ci_debug_build.sh
     - # continue in build
       before_install: ./scripts/ci_dependencies.sh
       name: "Release build"
       script: ./scripts/ci_release_build.sh
+      workspaces:
+        create:
+          name: release-binaries
+          paths: .
     - stage: documentation
       before_install:
         - sudo apt-get update
@@ -30,7 +34,13 @@ jobs:
         token: $GH_REPO_TOKEN
         on:
           branch: master
+    - stage: benchmarks
+      name: "Run benchmarks"
+      workspaces:
+        use: release-binaries
+      script: ./Benchmarks/build/Release/Benchmarks
 
 stages:
   - build
   - documentation
+  - benchmarks

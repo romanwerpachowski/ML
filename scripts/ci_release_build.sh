@@ -18,6 +18,3 @@ nosetests3 --exe -w cppyml/tests
 
 #*** Python demos ***
 for demo in Demo/*.py; do python3 $demo; done
-
-#*** Benchmarks ***
-./Benchmarks/build/Release/Benchmarks
