@@ -24,9 +24,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="clustering.cpp">
-      <Filter>C++\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="decision_trees.cpp">
       <Filter>C++\Source Files</Filter>
     </ClCompile>
@@ -34,6 +31,9 @@
       <Filter>C++\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cppyml.cpp">
+      <Filter>C++\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="clustering.cpp">
       <Filter>C++\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
