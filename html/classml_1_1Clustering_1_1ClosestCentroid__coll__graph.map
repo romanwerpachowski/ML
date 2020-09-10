@@ -1,0 +1,4 @@
+<map id="ml::Clustering::ClosestCentroid" name="ml::Clustering::ClosestCentroid">
+<area shape="rect" id="node1" title="Initialises centroids and then assigns the responsibility for each point to its closest centroid." alt="" coords="5,95,229,121"/>
+<area shape="rect" id="node2" href="$classml_1_1Clustering_1_1ResponsibilitiesInitialiser.html" title="Chooses initial component responsibilities." alt="" coords="5,5,229,47"/>
+</map>
