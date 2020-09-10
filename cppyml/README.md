@@ -2,7 +2,7 @@
 
 Optimised Python extension for machine learning based on the [ML++](https://github.com/romanwerpachowski/ML) C++ library.
 
-(C) 2020 Roman Werpachowski.
+© 2020 Roman Werpachowski.
 
 ## Licence
 
