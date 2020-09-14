@@ -676,10 +676,10 @@ TEST_F(LinearRegressionTest, recursive_multivariate_ols_one_sample)
 	RecursiveMultivariateOLS rmols1;
 	rmols1.update(X, y);
 	ASSERT_EQ(n, rmols1.n());
-	ASSERT_EQ(d, rmols1.beta().size());
+	ASSERT_EQ(d, static_cast<unsigned int>(rmols1.beta().size()));
 	RecursiveMultivariateOLS rmols2(X, y);
 	ASSERT_EQ(n, rmols2.n());
-	ASSERT_EQ(d, rmols2.beta().size());
+	ASSERT_EQ(d, static_cast<unsigned int>(rmols2.beta().size()));
 	ASSERT_EQ(0, (rmols1.beta() - rmols2.beta()).norm()) << rmols1.beta() << " vs " << rmols2.beta();
 	const auto expected_beta = multivariate(X, y).beta;
 	constexpr double eps1 = 1e-16;
@@ -797,8 +797,8 @@ TEST_F(LinearRegressionTest, standardise_with_params)
 	expected << -a, 0, a,
 		-b, -b, 2 * b;
 	ASSERT_NEAR(0, (X - expected).norm(), 1e-15) << X;
-	ASSERT_EQ(2u, means.size());
-	ASSERT_EQ(2u, standard_deviations.size());
+	ASSERT_EQ(2, means.size());
+	ASSERT_EQ(2, standard_deviations.size());
 	Eigen::VectorXd w(2);
 	w << 1, 2. / 3;
 	ASSERT_NEAR(0, (w - means).norm(), 1e-15) << means;
@@ -821,7 +821,7 @@ TEST_F(LinearRegressionTest, standardise_with_params_same_vector)
 	expected << -a, 0, a,
 		-b, -b, 2 * b;
 	ASSERT_NEAR(0, (X - expected).norm(), 1e-15) << X;
-	ASSERT_EQ(2u, standard_deviations.size());
+	ASSERT_EQ(2, standard_deviations.size());
 	Eigen::VectorXd w(2);
 	w << std::sqrt(2 / 3.), 2 * std::sqrt(2) / 3;
 	ASSERT_NEAR(0, (w - standard_deviations).norm(), 1e-15) << standard_deviations;
@@ -921,8 +921,8 @@ TEST_F(LinearRegressionTest, ridge_nonzero_lambda)
 	ASSERT_LT(unregularised.dof, regularised.effective_dof);
 	ASSERT_LT(0, regularised.effective_dof);
 	test_sse_minimisation(X0, y, lambda, regularised.beta, Eigen::VectorXd::Constant(d + 1, 1e-8), 0);
-	ASSERT_EQ(d + 1, regularised.cov.rows());
-	ASSERT_EQ(d + 1, regularised.cov.cols());
+	ASSERT_EQ(d + 1, static_cast<unsigned int>(regularised.cov.rows()));
+	ASSERT_EQ(d + 1, static_cast<unsigned int>(regularised.cov.cols()));
 	for (unsigned int i = 0; i < d; ++i) {
 		ASSERT_LE(0, regularised.cov(i, i)) << i;
 		ASSERT_GT(unregularised.cov(i, i), regularised.cov(i, i)) << i << ": " << unregularised.cov(i, i) - regularised.cov(i, i);
@@ -1055,8 +1055,8 @@ TEST_F(LinearRegressionTest, ridge_do_standardise_nonzero_lambda)
 	ASSERT_LT(unregularised.dof, regularised.effective_dof);
 	ASSERT_LT(0, regularised.effective_dof);
 	test_sse_minimisation(X0, y, lambda, regularised.beta, Eigen::VectorXd::Constant(d + 1, 1e-8), 1e-11);
-	ASSERT_EQ(d + 1, regularised.cov.rows());
-	ASSERT_EQ(d + 1, regularised.cov.cols());
+	ASSERT_EQ(d + 1, static_cast<unsigned int>(regularised.cov.rows()));
+	ASSERT_EQ(d + 1, static_cast<unsigned int>(regularised.cov.cols()));
 	for (unsigned int i = 0; i < d; ++i) {
 		ASSERT_LE(0, regularised.cov(i, i)) << i;
 		ASSERT_GT(unregularised.cov(i, i), regularised.cov(i, i)) << i << ": " << unregularised.cov(i, i) - regularised.cov(i, i);

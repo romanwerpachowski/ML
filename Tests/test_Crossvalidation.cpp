@@ -10,28 +10,28 @@ TEST(CrossvalidationTest, calc_fold_indices)
 {
 	size_t i0, i1;
 	Crossvalidation::calc_fold_indices(10, 0, 5, i0, i1);
-	ASSERT_EQ(0, i0);
-	ASSERT_EQ(2, i1);
+	ASSERT_EQ(0u, i0);
+	ASSERT_EQ(2u, i1);
 	// Rounding down.
 	Crossvalidation::calc_fold_indices(10, 0, 3, i0, i1);
-	ASSERT_EQ(0, i0);
-	ASSERT_EQ(3, i1);
+	ASSERT_EQ(0u, i0);
+	ASSERT_EQ(3u, i1);
 	Crossvalidation::calc_fold_indices(10, 1, 3, i0, i1);
-	ASSERT_EQ(3, i0);
-	ASSERT_EQ(6, i1);
+	ASSERT_EQ(3u, i0);
+	ASSERT_EQ(6u, i1);
 	Crossvalidation::calc_fold_indices(10, 2, 3, i0, i1);
-	ASSERT_EQ(6, i0);
-	ASSERT_EQ(10, i1);
+	ASSERT_EQ(6u, i0);
+	ASSERT_EQ(10u, i1);
 	// Rounding up.
 	Crossvalidation::calc_fold_indices(5, 0, 3, i0, i1);
-	ASSERT_EQ(0, i0);
-	ASSERT_EQ(2, i1);
+	ASSERT_EQ(0u, i0);
+	ASSERT_EQ(2u, i1);
 	Crossvalidation::calc_fold_indices(5, 1, 3, i0, i1);
-	ASSERT_EQ(2, i0);
-	ASSERT_EQ(4, i1);
+	ASSERT_EQ(2u, i0);
+	ASSERT_EQ(4u, i1);
 	Crossvalidation::calc_fold_indices(5, 2, 3, i0, i1);
-	ASSERT_EQ(4, i0);
-	ASSERT_EQ(5, i1);
+	ASSERT_EQ(4u, i0);
+	ASSERT_EQ(5u, i1);
 }
 
 TEST(CrossvalidationTest, calc_fold_indices_throws)

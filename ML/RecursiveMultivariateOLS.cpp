@@ -32,21 +32,21 @@ namespace ml
 				}
 				// Update P.
 				K_.noalias() = P_ * X;
-				assert(K_.rows() == d_);
-				assert(K_.cols() == n_i);
+				assert(static_cast<unsigned int>(K_.rows()) == d_);
+				assert(static_cast<unsigned int>(K_.cols()) == n_i);
 				W_.noalias() = X.transpose() * K_;
-				assert(W_.rows() == n_i);
-				assert(W_.cols() == n_i);
+				assert(static_cast<unsigned int>(W_.rows()) == n_i);
+				assert(static_cast<unsigned int>(W_.cols()) == n_i);
 				W_ += Eigen::MatrixXd::Identity(n_i, n_i);
 				helper_decomp_.compute(W_);
 				V_ = helper_decomp_.solve(K_.transpose());
-				assert(V_.rows() == n_i);
-				assert(V_.cols() == d_);
+				assert(static_cast<unsigned int>(V_.rows()) == n_i);
+				assert(static_cast<unsigned int>(V_.cols()) == d_);
 				P_.noalias() -= K_ * V_;
 				// Update beta.
 				K_.noalias() = P_ * X;
-				assert(K_.rows() == d_);
-				assert(K_.cols() == n_i);
+				assert(static_cast<unsigned int>(K_.rows()) == d_);
+				assert(static_cast<unsigned int>(K_.cols()) == n_i);
 				residuals_ = y - X.transpose() * beta_;
 				beta_ += K_ * residuals_;
 				n_ += n_i;

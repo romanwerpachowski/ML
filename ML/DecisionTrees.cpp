@@ -112,11 +112,11 @@ namespace ml
 			const VectorRange<IndexedFeatureValue> features,
 			const unsigned int max_num_threads)
 		{
-			const auto sample_size = unsorted_y.size();
-			assert(unsorted_X.cols() == sample_size);
+			const auto sample_size = static_cast<unsigned int>(unsorted_y.size());
+			assert(static_cast<unsigned int>(unsorted_X.cols()) == sample_size);
 			assert(unsorted_X.rows() == sorted_X.rows());
 			assert(unsorted_X.cols() == sorted_X.cols());
-			assert(sorted_y.size() == sample_size);
+			assert(static_cast<unsigned int>(sorted_y.size()) == sample_size);
 			const auto unsorted_y_end = unsorted_y.data() + sample_size;
 			const auto error_and_value = metrics.error_and_value(unsorted_y.data(), unsorted_y_end);
 			const double error = error_and_value.first;
@@ -133,14 +133,14 @@ namespace ml
 					const auto X_f = unsorted_X.row(split.first);
 
 					auto features_it = features.first;
-					for (Eigen::Index i = 0; i < sample_size; ++i, ++features_it) {
+					for (unsigned int i = 0; i < sample_size; ++i, ++features_it) {
 						*features_it = std::make_pair(i, X_f[i]);
 					}
 					assert(features_it == features.second);
 					std::sort(features.first, features.second, SORTED_FEATURE_COMPARATOR);
 
 					features_it = features.first;
-					for (Eigen::Index i = 0; i < sample_size; ++i, ++features_it) {
+					for (unsigned int i = 0; i < sample_size; ++i, ++features_it) {
 						const auto src_idx = features_it->first;
 						sorted_y[i] = unsorted_y[src_idx];
 						sorted_X.col(i) = unsorted_X.col(src_idx);

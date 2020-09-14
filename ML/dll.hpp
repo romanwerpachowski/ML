@@ -5,6 +5,9 @@
 Preprocessor declarations used to export functions and classes in the shared library.
 */
 
+#ifdef MLPP_IS_STATIC
+#define DLL_DECLSPEC 
+#else
 #ifdef _MSC_VER
 #ifdef _EXPORTING
 #define DLL_DECLSPEC    __declspec(dllexport)
@@ -14,3 +17,4 @@ Preprocessor declarations used to export functions and classes in the shared lib
 #else
 #define DLL_DECLSPEC 
 #endif // _MSV_VER
+#endif // MLPP_IS_STATIC

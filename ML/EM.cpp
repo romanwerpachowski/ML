@@ -86,8 +86,8 @@ namespace ml
 
 	bool EM::fit(const Eigen::Ref<const Eigen::MatrixXd> data)
 	{
-		const auto number_dimensions = data.rows();
-		const auto sample_size = data.cols();
+		const auto number_dimensions = static_cast<unsigned int>(data.rows());
+		const auto sample_size = static_cast<unsigned int>(data.cols());
 		if (!number_dimensions) {
 			throw std::invalid_argument("EM: At least one dimension required");
 		}
@@ -103,7 +103,7 @@ namespace ml
 			// An exact deterministic fit is possible.
 			// Center each Gaussian on a different sample point, and set variance to 0.
 			responsibilities_ = Eigen::MatrixXd::Identity(sample_size, sample_size);
-			for (Eigen::Index i = 0; i < sample_size; ++i) {
+			for (unsigned int i = 0; i < sample_size; ++i) {
 				means_.col(i) = data.col(i);
 				covariances_[i].setZero(number_dimensions, number_dimensions);
 				log_likelihood_ = std::numeric_limits<double>::infinity();
@@ -121,8 +121,8 @@ namespace ml
 			// Initialise means and covariances to sensible guesses.
 			means_initialiser_->init(data, prng_, number_components_, means_);
 			const Eigen::MatrixXd sample_covariance(calculate_sample_covariance(data));
-			assert(sample_covariance.rows() == number_dimensions);
-			assert(sample_covariance.cols() == number_dimensions);
+			assert(static_cast<unsigned int>(sample_covariance.rows()) == number_dimensions);
+			assert(static_cast<unsigned int>(sample_covariance.cols()) == number_dimensions);
 			for (unsigned int k = 0; k < number_components_; ++k) {
 				covariances_[k] = sample_covariance;
 			}
@@ -148,7 +148,7 @@ namespace ml
 					std::cout << "Mean[" << k << "] == " << means_.col(k).transpose() << "\n";
 				}
 				std::cout << "Responsibilities (first 10 rows):\n";
-				std::cout << responsibilities_.topRows(std::min(sample_size, static_cast<Eigen::Index>(10)));
+				std::cout << responsibilities_.topRows(std::min(sample_size, 10u));
 				std::cout << std::endl;
 			}
 
@@ -177,7 +177,7 @@ namespace ml
 	{
 		const auto number_dimensions = data.rows();
 		assert(number_dimensions);
-		const auto sample_size = data.cols();
+		const auto sample_size = static_cast<unsigned int>(data.cols());
 		assert(sample_size >= number_components_);
 		
 		static const double log_2_pi = std::log(2. * PI);
@@ -190,7 +190,7 @@ namespace ml
 			work_matrix_ = llt.solve(Eigen::MatrixXd::Identity(number_dimensions, number_dimensions));
 			const auto mean = means_.col(k);
 			auto component_weights = responsibilities_.col(k);
-			for (Eigen::Index i = 0; i < sample_size; ++i) {
+			for (unsigned int i = 0; i < sample_size; ++i) {
 				work_vector_ = data.col(i) - mean;
 				component_weights[i] = std::exp(-0.5 * LinearAlgebra::xAx_symmetric(work_matrix_, work_vector_));
 			}
@@ -203,7 +203,7 @@ namespace ml
 		log_likelihood_ = responsibilities_.rowwise().sum().array().log().mean() - log_likelihood_normalisation_constant;
 
 		// Normalise responsibilities for each datapoint.
-		for (Eigen::Index i = 0; i < sample_size; ++i) {
+		for (unsigned int i = 0; i < sample_size; ++i) {
 			auto datapoint_responsibilities = responsibilities_.row(i);
 			const double sum_weights = datapoint_responsibilities.sum();
 			datapoint_responsibilities /= sum_weights;
@@ -230,13 +230,13 @@ namespace ml
 	{
 		const auto number_dimensions = data.rows();
 		assert(number_dimensions);
-		const auto sample_size = data.cols();
+		const auto sample_size = static_cast<unsigned int>(data.cols());
 		assert(sample_size >= number_components_);
 
 		// Calculate new means.
 		means_.noalias() = data * responsibilities_; // Unnormalised!
 		assert(means_.rows() == number_dimensions);
-		assert(means_.cols() == number_components_);
+		assert(static_cast<unsigned int>(means_.cols()) == number_components_);
 
 		// Calculate new covariances.
 		for (unsigned int k = 0; k < number_components_; ++k) {
@@ -251,7 +251,7 @@ namespace ml
 
 			// Accumulate covariance.
 			work_matrix_.resize(number_dimensions, number_dimensions);
-			for (Eigen::Index i = 0; i < sample_size; ++i) {
+			for (unsigned int i = 0; i < sample_size; ++i) {
 				work_vector_ = data.col(i) - mean;
 				Txx(work_vector_, work_matrix_);
 				covariance += component_weights[i] * work_matrix_;

@@ -104,7 +104,7 @@ namespace ml
 		UnivariateOLSResult univariate(const Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y)
 		{
 			const auto n = static_cast<unsigned int>(x.size());
-			if (n != y.size()) {
+			if (n != static_cast<unsigned int>(y.size())) {
 				throw std::invalid_argument("X and Y vectors have different sizes");
 			}
 			if (n < 2) {
@@ -145,7 +145,7 @@ namespace ml
 		UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y)
 		{
 			const auto n = static_cast<unsigned int>(x.size());
-			if (n != y.size()) {
+			if (n != static_cast<unsigned int>(y.size())) {
 				throw std::invalid_argument("X and Y vectors have different sizes");
 			}
 			if (n < 1) {
@@ -165,7 +165,7 @@ namespace ml
 			}
 			// X is an q x N matrix and y is a N-size vector.
 			const auto n = static_cast<unsigned int>(X.cols());
-			if (n != y.size()) {
+			if (n != static_cast<unsigned int>(y.size())) {
 				throw std::invalid_argument("X matrix has different number of data points than Y has values");
 			}
 			const auto q = static_cast<unsigned int>(X.rows());

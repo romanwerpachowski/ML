@@ -258,6 +258,8 @@ namespace ml
 			return Crossvalidation::leave_one_out_scalar(x, y, trainer, tester) * static_cast<double>(y.size());
 		}
 
+
+
 		/** @brief Adds another row with 1s in every column to X.
 		@param[in] X Matrix of independent variables with data points in columns.
 		@return New matrix with a row filled with 1's added at the end.
