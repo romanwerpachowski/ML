@@ -214,17 +214,19 @@ $(document).ready(function(){initNavTree('LinearRegression_8hpp_source.html','')
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespaceml_1_1Crossvalidation.html#a45ebc8c35196b24488e2bff8ab34d54b">Crossvalidation::leave_one_out_scalar</a>(x, y, trainer, tester) * <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(y.size());</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        }</div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        DLL_DECLSPEC Eigen::MatrixXd <a class="code" href="namespaceml_1_1LinearRegression.html#ae433e433f0b72b81521f1eb3a733e66e">add_ones</a>(Eigen::Ref&lt;const Eigen::MatrixXd&gt; X);</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160; </div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="namespaceml_1_1LinearRegression.html#abef3640a6bb4c244c9f7e01060edd0a8">standardise</a>(Eigen::Ref&lt;Eigen::MatrixXd&gt; X);</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160; </div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="namespaceml_1_1LinearRegression.html#abef3640a6bb4c244c9f7e01060edd0a8">standardise</a>(Eigen::Ref&lt;Eigen::MatrixXd&gt; X, Eigen::VectorXd&amp; means, Eigen::VectorXd&amp; standard_deviations);</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="namespaceml_1_1LinearRegression.html#ac16bc14f275c279f7007c7ca61d4264c">unstandardise</a>(Eigen::Ref&lt;Eigen::MatrixXd&gt; X, Eigen::Ref&lt;const Eigen::VectorXd&gt; means, Eigen::Ref&lt;const Eigen::VectorXd&gt; standard_deviations);</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        Eigen::VectorXd calculate_XXt_beta(<span class="keyword">const</span> Eigen::Ref&lt;const Eigen::MatrixXd&gt; X, <span class="keyword">const</span> Eigen::Ref&lt;const Eigen::VectorXd&gt; y, Eigen::Ref&lt;Eigen::MatrixXd&gt; XXt, Eigen::LDLT&lt;Eigen::MatrixXd&gt;&amp; xxt_decomp, <span class="keywordtype">double</span> lambda);</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    }</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;}</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160; </div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160; </div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        DLL_DECLSPEC Eigen::MatrixXd <a class="code" href="namespaceml_1_1LinearRegression.html#ae433e433f0b72b81521f1eb3a733e66e">add_ones</a>(Eigen::Ref&lt;const Eigen::MatrixXd&gt; X);</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="namespaceml_1_1LinearRegression.html#abef3640a6bb4c244c9f7e01060edd0a8">standardise</a>(Eigen::Ref&lt;Eigen::MatrixXd&gt; X);</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="namespaceml_1_1LinearRegression.html#abef3640a6bb4c244c9f7e01060edd0a8">standardise</a>(Eigen::Ref&lt;Eigen::MatrixXd&gt; X, Eigen::VectorXd&amp; means, Eigen::VectorXd&amp; standard_deviations);</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160; </div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="namespaceml_1_1LinearRegression.html#ac16bc14f275c279f7007c7ca61d4264c">unstandardise</a>(Eigen::Ref&lt;Eigen::MatrixXd&gt; X, Eigen::Ref&lt;const Eigen::VectorXd&gt; means, Eigen::Ref&lt;const Eigen::VectorXd&gt; standard_deviations);</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        Eigen::VectorXd calculate_XXt_beta(<span class="keyword">const</span> Eigen::Ref&lt;const Eigen::MatrixXd&gt; X, <span class="keyword">const</span> Eigen::Ref&lt;const Eigen::VectorXd&gt; y, Eigen::Ref&lt;Eigen::MatrixXd&gt; XXt, Eigen::LDLT&lt;Eigen::MatrixXd&gt;&amp; xxt_decomp, <span class="keywordtype">double</span> lambda);</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    }</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespaceml_1_1LinearRegression_html_af7b70c29c6236e9ae0fd7ceb3a5f0200"><div class="ttname"><a href="namespaceml_1_1LinearRegression.html#af7b70c29c6236e9ae0fd7ceb3a5f0200">ml::LinearRegression::ridge&lt; true &gt;</a></div><div class="ttdeci">RidgeRegressionResult ridge&lt; true &gt;(Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, double lambda)</div><div class="ttdoc">Carries out multivariate ridge regression with intercept, standardising X inputs internally.</div></div>
