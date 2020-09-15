@@ -217,6 +217,18 @@ namespace ml
 		*/
 		template <> DLL_DECLSPEC RidgeRegressionResult ridge<false>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda);
 
+		/** @brief Carries out multivariate ridge regression with intercept, allowing the user switch internal standardisation of `X` data on or off. 
+		@see ridge().
+		*/
+		inline RidgeRegressionResult ridge(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda, bool do_standardise)
+		{
+			if (do_standardise) {
+				return ridge<true>(X, y, lambda);
+			} else {
+				return ridge<false>(X, y, lambda);
+			}
+		}
+
 		/** @brief Calculates the PRESS statistic (Predicted Residual Error Sum of Squares). 
 
 		See https://en.wikipedia.org/wiki/PRESS_statistic for details.

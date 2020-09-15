@@ -986,6 +986,8 @@ TEST_F(LinearRegressionTest, ridge_nonzero_lambda)
 		ASSERT_GT(unregularised.cov(i, i), regularised.cov(i, i)) << i << ": " << unregularised.cov(i, i) - regularised.cov(i, i);
 	}
 	ASSERT_NEAR(regularised.var_y() / n, regularised.cov(d, d), tol);
+	const auto regularised2 = ridge(X0, y, lambda, false);
+	ASSERT_EQ(0., (regularised.beta - regularised2.beta).norm());
 }
 
 TEST_F(LinearRegressionTest, ridge_yuge_lambda)
@@ -1119,6 +1121,8 @@ TEST_F(LinearRegressionTest, ridge_do_standardise_nonzero_lambda)
 		ASSERT_LE(0, regularised.cov(i, i)) << i;
 		ASSERT_GT(unregularised.cov(i, i), regularised.cov(i, i)) << i << ": " << unregularised.cov(i, i) - regularised.cov(i, i);
 	}
+	const auto regularised2 = ridge(X0, y, lambda, true);
+	ASSERT_EQ(0., (regularised.beta - regularised2.beta).norm());
 }
 
 TEST_F(LinearRegressionTest, ridge_covariance)

@@ -94,12 +94,7 @@ namespace ml
 
         static RidgeRegressionResultRowMajor ridge_row_major(Eigen::Ref<const MatrixXdR> X, Eigen::Ref<const Eigen::VectorXd> y, const double lambda, const bool do_standardise)
         {
-            if (do_standardise) {
-                return RidgeRegressionResultRowMajor(ridge<true>(X.transpose(), y, lambda));
-            }
-            else {
-                return RidgeRegressionResultRowMajor(ridge<false>(X.transpose(), y, lambda));
-            }			
+            return RidgeRegressionResultRowMajor(ridge(X.transpose(), y, lambda, do_standardise));
         }
 
         static double press_cppyml(Eigen::Ref<const MatrixXdR> X, Eigen::Ref<const Eigen::VectorXd> y, const char* regularisation, const double reg_lambda)
