@@ -136,9 +136,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a20d2862856e93a22a656e71cf4e51077"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structml_1_1LinearRegression_1_1UnivariateOLSResult.html">UnivariateOLSResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#a20d2862856e93a22a656e71cf4e51077">univariate</a> (double x0, double dx, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)</td></tr>
 <tr class="memdesc:a20d2862856e93a22a656e71cf4e51077"><td class="mdescLeft">&#160;</td><td class="mdescRight">Carries out univariate (aka simple) linear regression with intercept on regularly spaced points.  <a href="namespaceml_1_1LinearRegression.html#a20d2862856e93a22a656e71cf4e51077">More...</a><br /></td></tr>
 <tr class="separator:a20d2862856e93a22a656e71cf4e51077"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7ae29fe8bdde51f2b8c060d4278ec59"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structml_1_1LinearRegression_1_1UnivariateOLSResult.html">UnivariateOLSResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#ab7ae29fe8bdde51f2b8c060d4278ec59">univariate_without_intercept</a> (Eigen::Ref&lt; const Eigen::VectorXd &gt; x, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)</td></tr>
-<tr class="memdesc:ab7ae29fe8bdde51f2b8c060d4278ec59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Carries out univariate (aka simple) linear regression without intercept.  <a href="namespaceml_1_1LinearRegression.html#ab7ae29fe8bdde51f2b8c060d4278ec59">More...</a><br /></td></tr>
-<tr class="separator:ab7ae29fe8bdde51f2b8c060d4278ec59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac610b3a1ce10ab9c4e17e8e3b4aca5de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structml_1_1LinearRegression_1_1UnivariateOLSResult.html">UnivariateOLSResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#ac610b3a1ce10ab9c4e17e8e3b4aca5de">univariate_without_intercept</a> (Eigen::Ref&lt; const Eigen::VectorXd &gt; x, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, bool base_model_returns_zero=true)</td></tr>
+<tr class="memdesc:ac610b3a1ce10ab9c4e17e8e3b4aca5de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Carries out univariate (aka simple) linear regression without intercept.  <a href="namespaceml_1_1LinearRegression.html#ac610b3a1ce10ab9c4e17e8e3b4aca5de">More...</a><br /></td></tr>
+<tr class="separator:ac610b3a1ce10ab9c4e17e8e3b4aca5de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad36b2e75f9b2ba79ce0cdd7b49ed2f33"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structml_1_1LinearRegression_1_1MultivariateOLSResult.html">MultivariateOLSResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#ad36b2e75f9b2ba79ce0cdd7b49ed2f33">multivariate</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)</td></tr>
 <tr class="memdesc:ad36b2e75f9b2ba79ce0cdd7b49ed2f33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Carries out multivariate linear regression.  <a href="namespaceml_1_1LinearRegression.html#ad36b2e75f9b2ba79ce0cdd7b49ed2f33">More...</a><br /></td></tr>
 <tr class="separator:ad36b2e75f9b2ba79ce0cdd7b49ed2f33"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -206,7 +206,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Carries out univariate (aka simple) linear regression with intercept. </p>
-<p>The "base model" returns average Y.</p>
+<p>The "base model" used to calculate R2 returns average Y.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>X vector. </td></tr>
@@ -257,7 +257,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Carries out univariate (aka simple) linear regression with intercept on regularly spaced points. </p>
-<p>The "base model" returns average Y.</p>
+<p>The "base model" used to calculate R2 returns average Y.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">x0</td><td>First X value. </td></tr>
@@ -277,8 +277,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab7ae29fe8bdde51f2b8c060d4278ec59"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7ae29fe8bdde51f2b8c060d4278ec59">&#9670;&nbsp;</a></span>univariate_without_intercept()</h2>
+<a id="ac610b3a1ce10ab9c4e17e8e3b4aca5de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac610b3a1ce10ab9c4e17e8e3b4aca5de">&#9670;&nbsp;</a></span>univariate_without_intercept()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -293,7 +293,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
-          <td class="paramname"><em>y</em>&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>base_model_returns_zero</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -304,11 +310,12 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Carries out univariate (aka simple) linear regression without intercept. </p>
-<p>The "base model" returns 0.</p>
+<p>The "base model" used to calculate R2 returns 0 or average Y.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>X vector. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Y vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">base_model_returns_zero</td><td>Whether the base model used to calculate R2 returns 0 (true) or average Y (false). Defaults to true. </td></tr>
   </table>
   </dd>
 </dl>

@@ -777,11 +777,13 @@ to original <cite>X</cite> units and origins, and the <cite>cov</cite> matrix wi
 
 <dl class="function">
 <dt id="cppyml.cppyml.linear_regression.univariate_without_intercept">
-<code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">univariate_without_intercept</code><span class="sig-paren">(</span><em>x: numpy.ndarray[float64[m, 1]], y: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; cppyml.cppyml.linear_regression.UnivariateOLSResult<a class="headerlink" href="#cppyml.cppyml.linear_regression.univariate_without_intercept" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">univariate_without_intercept</code><span class="sig-paren">(</span><em>x: numpy.ndarray[float64[m, 1]], y: numpy.ndarray[float64[m, 1]], base_model_returns_zero: bool = True</em><span class="sig-paren">)</span> &#x2192; cppyml.cppyml.linear_regression.UnivariateOLSResult<a class="headerlink" href="#cppyml.cppyml.linear_regression.univariate_without_intercept" title="Permalink to this definition">¶</a></dt>
 <dd><p>Carries out univariate (aka simple) linear regression without intercept.</p>
 <dl class="docutils">
-<dt>R2 coefficient is calculated w/r to a model returning 0 and is therefore not equal to Corr(X, Y)^2:</dt>
+<dt>If <cite>base_model_returns_zero == True</cite>, the R2 coefficient is calculated w/r to a model returning 0:</dt>
 <dd>R2 = 1 - sum_{i=1}^n (y_i - hat{y}_i)^2 / sum_{i=1}^n (y_i)^2.</dd>
+<dt>If <cite>base_model_returns_zero == False</cite>, the R2 coefficient is calculated w/r to a model returning average Y:</dt>
+<dd>R2 = 1 - sum_{i=1}^n (y_i - hat{y}_i)^2 / sum_{i=1}^n (y_i - avg(Y))^2.</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -790,6 +792,7 @@ to original <cite>X</cite> units and origins, and the <cite>cov</cite> matrix wi
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>x</strong> – X vector.</li>
 <li><strong>y</strong> – Y vector. <cite>x</cite> and <cite>y</cite> must have same length not less than 1.</li>
+<li><strong>base_model_returns_zero</strong> – Whether the base model used to calculate R2 returns 0 (True) or average Y (False). Defaults to True.</li>
 </ul>
 </td>
 </tr>

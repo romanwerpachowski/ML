@@ -151,6 +151,9 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression.">Result</a> of linear regression. </p>
+<p>Supports R2 calculated w/r to a "base model" returning 0 or average Y. R2 is defined as 1 - RSS / TSS, where RSS is the residual sum of squares for the fitted model and TSS is the RSS for the "base model".</p>
+<p>If <code>base_dof == n - 1</code>, the "base model" returns average Y and TSS is defined as \( \mathrm{TSS} = \sum_{i=1}^N (y_i - N^{-1} \sum_{j=1}^N y_j)^2 \).</p>
+<p>If <code>base_dof == n</code>, we have \( \mathrm{TSS} = \sum_{i=1}^N y_i^2 \). </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a9688fd38ebf84c1c34c8c30637694d68"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9688fd38ebf84c1c34c8c30637694d68">&#9670;&nbsp;</a></span>r2()</h2>
@@ -280,7 +283,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Total sum of squares. For fitting with intercept: \( \mathrm{TSS} = \sum_{i=1}^N (y_i - N^{-1} \sum_{j=1}^N y_j)^2 \). For fitting without intercept: \( \mathrm{TSS} = \sum_{i=1}^N y_i^2 \). </p>
+<p>Total sum of squares (RSS for the "base model" which we compare our regression results with). </p>
 
 </div>
 </div>
