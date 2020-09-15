@@ -313,7 +313,7 @@ Throws:
         py::arg("X"), py::arg("y"), py::arg("lambda"), py::arg("do_standardise") = default_do_standardise,
         R"(Carries out multivariate ridge regression with intercept.
 
-Given X and y, finds beta and beta0 minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 + \lambda \lVert \vec{\beta} \rVert^2 \f$.
+Given X and y, finds beta' and beta0 minimising || y - \beta'^T X - beta0 ||^2 + lambda * || beta' ||^2.
 
 R2 is always calculated w/r to model returning average y. 
 The matrix `X` is assumed to be standardised unless `do_standardise` is set to `True`.
