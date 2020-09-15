@@ -549,18 +549,18 @@ y_1 = X_1^T * beta + e_1
 <dd><p>Bases: <a class="reference internal" href="#cppyml.cppyml.linear_regression.Result" title="cppyml.cppyml.linear_regression.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.cppyml.linear_regression.Result</span></code></a></p>
 <p>Result of a (multivariate) ridge regression with intercept.</p>
 <p>Does not contain error estimates because they are not easy to estimate reliably for regularised regression.</p>
-<p>Intercept is reported separately because it has a special status: it’s not regularised.</p>
+<p>Intercept is the last coefficient in <cite>beta</cite>.</p>
 <p><cite>var_y</cite> is calculated using <cite>dof</cite> as the denominator.</p>
 <dl class="attribute">
 <dt id="cppyml.cppyml.linear_regression.RidgeRegressionResult.beta">
 <code class="descname">beta</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.RidgeRegressionResult.beta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fitted coefficients of the model y_i = beta^T X_i.</p>
+<dd><p>Fitted coefficients of the model y_i = beta’^T X_i, followed by beta0.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="cppyml.cppyml.linear_regression.RidgeRegressionResult.cov">
 <code class="descname">cov</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.RidgeRegressionResult.cov" title="Permalink to this definition">¶</a></dt>
-<dd><p>Covariance matrix of beta coefficients.</p>
+<dd><p>Covariance matrix of (beta’, beta0) coefficients.</p>
 </dd></dl>
 
 <dl class="attribute">
