@@ -187,7 +187,7 @@ namespace ml
 		or is standardised internally (`DoStandardise == true`; requires a matrix copy).
 
 
-		@param[in] X D x N matrix of X values, with data points in columns.
+		@param[in] X D x N matrix of X values, with data points in columns. Should not contain a row with all 1's.
 		@param[in] y Y vector with length N.
 		@param[in] lambda Regularisation strength.
 		@tparam DoStandardise Whether to standardise `X` internally.
