@@ -15,7 +15,7 @@ namespace ml
 	{	
 		static void members_to_string(const Result& result, std::stringstream& s)
 		{
-			s << "n=" << result.n << ", dof=" << result.dof << ", base_dof=" << result.base_dof << ", rss=" << result.rss << ", tss=" << result.tss;
+			s << "n=" << result.n << ", dof=" << result.dof << ", rss=" << result.rss << ", tss=" << result.tss;
 		}
 
 		std::string UnivariateOLSResult::to_string() const
@@ -88,7 +88,6 @@ namespace ml
 			result.var_slope = result.var_y() / sxx;
 			// sum_{i=1}^n x_i^2 = sxx + n * mx * mx;
 			// result.var_intercept = (sxx + n * mx * mx) * result.var_y / sxx / n;
-			result.base_dof = n - 1;
 			result.var_intercept = result.var_y() * (1. / n + mx * mx / sxx);
 			result.cov_slope_intercept = -mx * result.var_y() / sxx;
 			return result;
@@ -135,7 +134,7 @@ namespace ml
 			return calc_univariate_linear_regression_result(sxx, sxy, tss, mx, my, n);
 		}
 
-		UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y, const bool base_model_returns_zero)
+		UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y)
 		{
 			const auto n = static_cast<unsigned int>(x.size());
 			if (n != static_cast<unsigned int>(y.size())) {
@@ -149,14 +148,8 @@ namespace ml
 			const auto syy = y.squaredNorm();
 			// Total sum of squares:
 			UnivariateOLSResult result;
-			if (base_model_returns_zero) {
-				result.tss = syy;
-				result.base_dof = n;
-			} else {
-				const auto my = y.mean();
-				result.tss = std::max(syy - static_cast<double>(n) * my * my, 0.0);
-				result.base_dof = n - 1;
-			}			
+			const auto my = y.mean();
+			result.tss = std::max(syy - static_cast<double>(n) * my * my, 0.0);
 			result.n = n;
 			result.dof = n - 1;
 			result.slope = sxy / sxx;
@@ -205,7 +198,6 @@ namespace ml
 			result.beta = calculate_XXt_beta(X, y, XXt, xxt_decomp, 0);
 			result.n = n;
 			result.dof = n - q;
-			result.base_dof = n - 1;
 			assert(result.beta.size() == X.rows());
 			// Residual sum of squares:
 			result.rss = (y - X.transpose() * result.beta).squaredNorm();
@@ -231,7 +223,6 @@ namespace ml
 			RidgeRegressionResult result;
 			result.n = static_cast<unsigned int>(n);
 			result.dof = static_cast<unsigned int>(n - q - 1); // -1 for the intercept.
-			result.base_dof = result.n - 1;
 			result.beta.resize(q + 1);
 			const double intercept = y.mean();
 			result.beta[q] = intercept;

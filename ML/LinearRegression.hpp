@@ -17,19 +17,21 @@ namespace ml
 
 		/** @brief Result of linear regression. 
 		
-		Supports R2 calculated w/r to a "base model" returning 0 or average Y. R2 is defined as 1 - RSS / TSS, where RSS is the residual sum of squares for the fitted model and TSS is the RSS for the "base model".
+		Supports R2 calculated w/r to a "base model" returning average Y. 
+		R2 is defined as 1 - RSS / TSS, where RSS is the residual sum of squares for the fitted model:
 
-		If `base_dof == n - 1`, the "base model" returns average Y and TSS is defined as \f$ \mathrm{TSS} = \sum_{i=1}^N (y_i - N^{-1} \sum_{j=1}^N y_j)^2 \f$.
+		\f$ \sum_{i=1}^N (\hat{y}_i - y_i)^2 \f$
 		
-		If `base_dof == n`, we have \f$ \mathrm{TSS} = \sum_{i=1}^N y_i^2 \f$.
+		and TSS is the RSS for the "base model":
+
+		\f$ \mathrm{TSS} = \sum_{i=1}^N (y_i - N^{-1} \sum_{j=1}^N y_j)^2 \f$.
 		*/
 		struct Result
 		{
 			unsigned int n; /**< Number of data points. */
 			unsigned int dof; /**< Number of residual degrees of freedom (e.g. `n - 2` or `n - 1` for univariate regression with or without intercept). */
-			unsigned int base_dof; /**< Number of degrees of freedom for the base model (e.g. `n - 1` or `n` for univariate regression with or without intercept). */
-			double rss; /**< Residual sum of squares: \f$ \sum_{i=1}^N (\hat{y}_i - y_i)^2 \f$. */
-			double tss; /**< Total sum of squares (RSS for the "base model" which we compare our regression results with).*/
+			double rss; /**< Residual sum of squares (RSS). */
+			double tss; /**< Total sum of squares (TSS, equal to the RSS for the "base model" always returning average Y).*/
 
 			/** @brief Estimated variance of observations Y, equal to `rss / dof`. */
 			double var_y() const {
@@ -43,7 +45,7 @@ namespace ml
 
 			/** @brief R2 coefficient.
 			
-			1 - fraction of variance unexplained relative to a "base model", estimated as population variance. Equal to `1 - rss / tss`.
+			1 - fraction of variance unexplained relative to a "base model" (returning average Y), estimated as population variance. Equal to `1 - rss / tss`.
 			
 			*/
 			double r2() const {
@@ -52,11 +54,11 @@ namespace ml
 			
 			/** @brief Adjusted R2 coefficient.
 			
-			1 - fraction of variance unexplained relative to a "base model", estimated as sample variance. Equal to `1 - rss * base_dof / tss / dof`.
+			1 - fraction of variance unexplained relative to a "base model" (returning average Y), estimated as sample variance. Equal to `1 - (rss / dof) / (tss / (n - 1))`.
 			*/
 			double adjusted_r2() const {
 				if (dof) {
-					return 1 - (rss / static_cast<double>(dof)) / (tss / static_cast<double>(base_dof));
+					return 1 - (rss / static_cast<double>(dof)) / (tss / static_cast<double>(n - 1));
 				}
 				else {
 					return std::numeric_limits<double>::quiet_NaN();
@@ -134,8 +136,6 @@ namespace ml
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept.
 
-		The "base model" used to calculate R2 returns average Y.
-
 		@param[in] x X vector.
 		@param[in] y Y vector.
 		@return UnivariateOLSResult object.
@@ -144,8 +144,6 @@ namespace ml
 		DLL_DECLSPEC UnivariateOLSResult univariate(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y);
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept on regularly spaced points.
-
-		The "base model" used to calculate R2 returns average Y.
 
 		@param[in] x0 First X value.
 		@param[in] dx Positive X increment.
@@ -158,21 +156,16 @@ namespace ml
 
 		/** @brief Carries out univariate (aka simple) linear regression without intercept.
 
-		The "base model" used to calculate R2 returns 0 or average Y.
-		
 		@param[in] x X vector.
 		@param[in] y Y vector.
-		@param[in] base_model_returns_zero Whether the base model used to calculate R2 returns 0 (true) or average Y (false). Defaults to true.
 		@return UnivariateOLSResult object with `intercept`, `var_intercept` and `cov_slope_intercept` set to 0.
 		@throw std::invalid_argument If `x` and `y` have different sizes, or if their size is less than 1.
 		*/
-		DLL_DECLSPEC UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y, bool base_model_returns_zero = true);
+		DLL_DECLSPEC UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y);
 
 		/** @brief Carries out multivariate linear regression.
 
 		Given X and y, finds \f$ \vec{\beta} \f$ minimising \f$ \lVert \vec{y} - X^T \vec{\beta} \rVert^2 \f$.
-
-		The "base model" returns average Y.
 
 		If fitting with intercept is desired, include a row of 1's in the X values.
 
@@ -188,8 +181,6 @@ namespace ml
 
 		Given X and y, finds \f$ \vec{\beta'} \f$ and \f$ \beta_0 \f$ minimising \f$ \lVert \vec{y} - X^T \vec{\beta'} - \beta_0 \rVert^2 + \lambda \lVert \vec{\beta'} \rVert^2 \f$,
 		where \f$ \vec{\beta'} \f$ and \f$ \beta_0 \f$ are concatenated as RidgeRegressionResult#beta in the returned RidgeRegressionResult object.
-
-		The "base model" returns average Y.
 
 		The matrix `X` is either assumed to be standardised (`DoStandardise == false`)
 		or is standardised internally (`DoStandardise == true`; requires a matrix copy).

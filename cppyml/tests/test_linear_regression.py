@@ -20,7 +20,6 @@ class LinearRegressionTest(unittest.TestCase):
     def test_univariate_ols_result(self):
         n = 100
         dof = 98
-        base_dof = 99
         rss = 0.01
         tss = 0.1
         slope = -0.1
@@ -30,12 +29,11 @@ class LinearRegressionTest(unittest.TestCase):
         cov_slope_intercept = -0.0005
         var_y = rss / dof
         r2 = 1 - rss / tss
-        adjusted_r2 = 1 - (rss / dof) / (tss / base_dof)
+        adjusted_r2 = 1 - (rss / dof) / (tss / (n - 1))
         result = linear_regression.UnivariateOLSResult(
-            n, dof, base_dof, rss, tss, slope, intercept, var_slope, var_intercept, cov_slope_intercept)
+            n, dof, rss, tss, slope, intercept, var_slope, var_intercept, cov_slope_intercept)
         self.assertEqual(n, result.n)
         self.assertEqual(dof, result.dof)
-        self.assertEqual(base_dof, result.base_dof)
         self.assertEqual(var_y, result.var_y)
         self.assertEqual(r2, result.r2)
         self.assertEqual(adjusted_r2, result.adjusted_r2)
@@ -47,22 +45,20 @@ class LinearRegressionTest(unittest.TestCase):
 
     def test_multivariate_ols_result(self):
         n = 100
-        dof = 98
-        base_dof = 99
+        dof = 98        
         rss = 0.01
         tss = 0.1
         var_y = rss / dof
         r2 = 1 - rss / tss
-        adjusted_r2 = 1 - (rss / dof) / (tss / base_dof)
+        adjusted_r2 = 1 - (rss / dof) / (tss / (n - 1))
         beta = np.array([-0.4, 0.2])
         cov = np.array([[0.004, -0.0001],
                         [-0.00010001, 0.03]])
         result = linear_regression.MultivariateOLSResult(
-            n, dof, base_dof, rss, tss, beta, cov)
+            n, dof, rss, tss, beta, cov)
         self.assertTrue(result.cov.flags["C_CONTIGUOUS"])
         self.assertEqual(n, result.n)
         self.assertEqual(dof, result.dof)
-        self.assertEqual(base_dof, result.base_dof)
         self.assertEqual(var_y, result.var_y)
         self.assertEqual(r2, result.r2)
         self.assertEqual(adjusted_r2, result.adjusted_r2)
@@ -72,22 +68,20 @@ class LinearRegressionTest(unittest.TestCase):
     def test_ridge_regression_result(self):
         n = 100
         dof = 98
-        base_dof = 99
         rss = 0.01
         tss = 0.1
         var_y = rss / dof
         r2 = 1 - rss / tss
-        adjusted_r2 = 1 - (rss / dof) / (tss / base_dof)
+        adjusted_r2 = 1 - (rss / dof) / (tss / (n - 1))
         beta = np.array([-0.4, 0.2])
         cov = np.array([[0.004, -0.0001],
                         [-0.00010001, 0.03]])
         effective_dof = 99
         result = linear_regression.RidgeRegressionResult(
-            n, dof, base_dof, rss, tss, beta, cov, effective_dof)
+            n, dof, rss, tss, beta, cov, effective_dof)
         self.assertTrue(result.cov.flags["C_CONTIGUOUS"])
         self.assertEqual(n, result.n)
         self.assertEqual(dof, result.dof)
-        self.assertEqual(base_dof, result.base_dof)
         self.assertEqual(var_y, result.var_y)
         self.assertEqual(r2, result.r2)
         self.assertEqual(adjusted_r2, result.adjusted_r2)
@@ -106,7 +100,6 @@ class LinearRegressionTest(unittest.TestCase):
         slope, intercept, rvalue, _, stderr = stats.linregress(x, y)
         self.assertEqual(n, result.n)
         self.assertEqual(n - 2, result.dof)
-        self.assertEqual(n - 1, result.base_dof)
         self.assertAlmostEqual(slope, result.slope, delta=1e-15)
         self.assertAlmostEqual(intercept, result.intercept, delta=1e-15)
         self.assertAlmostEqual(rvalue**2, result.r2, delta=1e-15)
@@ -127,7 +120,6 @@ class LinearRegressionTest(unittest.TestCase):
         slope, intercept, rvalue, _, stderr = stats.linregress(x, y)
         self.assertEqual(n, result.n)
         self.assertEqual(n - 2, result.dof)
-        self.assertEqual(n - 1, result.base_dof)
         self.assertAlmostEqual(slope, result.slope, delta=1e-15)
         self.assertAlmostEqual(intercept, result.intercept, delta=1e-15)
         self.assertAlmostEqual(rvalue**2, result.r2, delta=1e-15)
@@ -148,19 +140,11 @@ class LinearRegressionTest(unittest.TestCase):
         lr.fit(X, y)
         self.assertEqual(n, result.n)
         self.assertEqual(n - 1, result.dof)
-        self.assertEqual(n, result.base_dof)
         self.assertAlmostEqual(lr.coef_[0], result.slope, delta=1e-15)
         self.assertEqual(0, result.intercept)
         self.assertEqual(0, result.var_intercept)
         self.assertEqual(0, result.cov_slope_intercept)
-        adjusted_r2 = 1 - n * (1 - result.r2) / (n - 1)
-        self.assertAlmostEqual(adjusted_r2, result.adjusted_r2, delta=1e-15)
-
-        result1 = linear_regression.univariate_without_intercept(x, y, True)
-        self.assertEqual(result.r2, result1.r2)
-
-        result2 = linear_regression.univariate_without_intercept(x, y, False)
-        self.assertEqual(result.dof, result2.base_dof)
+        self.assertAlmostEqual(result.r2, result.adjusted_r2, delta=1e-15)
 
     def test_multivariate_add_ones(self):
         n = 25
@@ -267,8 +251,7 @@ class LinearRegressionTest(unittest.TestCase):
         result3 = linear_regression.ridge(X, y, lam, do_standardise=True)
         for result in (result1, result2, result3):
             self.assertEqual(n, result.n)
-            self.assertEqual(n - d - 1, result.dof)
-            self.assertEqual(n - 1, result.base_dof)
+            self.assertEqual(n - d - 1, result.dof)            
         for idx, result in enumerate((result1, result2)):
             self.assertEqual(d + 1, len(result.beta), msg=str(idx))
             np.testing.assert_array_almost_equal(ridge.coef_, result.beta[:d], 14, err_msg=str(idx))            
