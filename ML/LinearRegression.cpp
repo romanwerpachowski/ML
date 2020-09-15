@@ -75,12 +75,11 @@ namespace ml
 
 		static UnivariateOLSResult calc_univariate_linear_regression_result(
 			const double sxx, const double sxy, const double tss, const double mx,
-			const double my, const unsigned int n, const bool with_intercept)
+			const double my, const unsigned int n)
 		{
 			UnivariateOLSResult result;
 			result.n = n;
-			const unsigned int num_params = with_intercept ? 2 : 1;
-			result.dof = n - num_params;
+			result.dof = n - 2;
 			result.slope = sxy / sxx;
 			result.intercept = my - result.slope * mx;
 			// Residual sum of squares.			
@@ -89,15 +88,9 @@ namespace ml
 			result.var_slope = result.var_y() / sxx;
 			// sum_{i=1}^n x_i^2 = sxx + n * mx * mx;
 			// result.var_intercept = (sxx + n * mx * mx) * result.var_y / sxx / n;
-			if (with_intercept) {
-				result.base_dof = n - 1;
-				result.var_intercept = result.var_y() * (1. / n + mx * mx / sxx);
-				result.cov_slope_intercept = -mx * result.var_y() / sxx;
-			}
-			else {
-				result.base_dof = n;
-				result.var_intercept = result.cov_slope_intercept = 0;
-			}			
+			result.base_dof = n - 1;
+			result.var_intercept = result.var_y() * (1. / n + mx * mx / sxx);
+			result.cov_slope_intercept = -mx * result.var_y() / sxx;
 			return result;
 		}
 
@@ -118,7 +111,7 @@ namespace ml
 			const auto sxx = (x_centred * x_centred).sum();
 			// Total sum of squares:
 			const auto tss = (y_centred * y_centred).sum();
-			return calc_univariate_linear_regression_result(sxx, sxy, tss, mx, my, n, true);
+			return calc_univariate_linear_regression_result(sxx, sxy, tss, mx, my, n);
 		}
 
 		UnivariateOLSResult univariate(const double x0, const double dx, const Eigen::Ref<const Eigen::VectorXd> y)
@@ -139,10 +132,10 @@ namespace ml
 			const auto sxx = dx * dx * n * (n * n - 1) / 12.;
 			// Total sum of squares:
 			const auto tss = (y_centred * y_centred).sum();
-			return calc_univariate_linear_regression_result(sxx, sxy, tss, mx, my, n, true);
+			return calc_univariate_linear_regression_result(sxx, sxy, tss, mx, my, n);
 		}
 
-		UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y)
+		UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, const Eigen::Ref<const Eigen::VectorXd> y, const bool base_model_returns_zero)
 		{
 			const auto n = static_cast<unsigned int>(x.size());
 			if (n != static_cast<unsigned int>(y.size())) {
@@ -151,11 +144,28 @@ namespace ml
 			if (n < 1) {
 				throw std::invalid_argument("Need at least 1 point for regresssion without intercept");
 			}
-			const auto sxy = (x.array() * y.array()).sum();
-			const auto sxx = (x.array() * x.array()).sum();
+			const auto sxy = x.dot(y);
+			const auto sxx = x.squaredNorm();
+			const auto syy = y.squaredNorm();
 			// Total sum of squares:
-			const auto tss = (y.array() * y.array()).sum();
-			return calc_univariate_linear_regression_result(sxx, sxy, tss, 0, 0, n, false);
+			UnivariateOLSResult result;
+			if (base_model_returns_zero) {
+				result.tss = syy;
+				result.base_dof = n;
+			} else {
+				const auto my = y.mean();
+				result.tss = std::max(syy - static_cast<double>(n) * my * my, 0.0);
+				result.base_dof = n - 1;
+			}			
+			result.n = n;
+			result.dof = n - 1;
+			result.slope = sxy / sxx;
+			result.intercept = 0;
+			// Residual sum of squares.			
+			result.rss = std::max(0., (syy + result.slope * result.slope * sxx - 2 * result.slope * sxy));
+			result.var_slope = result.var_y() / sxx;
+			result.var_intercept = result.cov_slope_intercept = 0;
+			return result;
 		}
 
 		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<Eigen::MatrixXd> XXt, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp, const double lambda)

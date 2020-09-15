@@ -156,6 +156,12 @@ class LinearRegressionTest(unittest.TestCase):
         adjusted_r2 = 1 - n * (1 - result.r2) / (n - 1)
         self.assertAlmostEqual(adjusted_r2, result.adjusted_r2, delta=1e-15)
 
+        result1 = linear_regression.univariate_without_intercept(x, y, True)
+        self.assertEqual(result.r2, result1.r2)
+
+        result2 = linear_regression.univariate_without_intercept(x, y, False)
+        self.assertEqual(result.dof, result2.base_dof)
+
     def test_multivariate_add_ones(self):
         n = 25
         d = 4

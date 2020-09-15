@@ -250,15 +250,20 @@ Returns:
     Instance of `UnivariateOLSResult`.
 )");
 
-    m_lin_reg.def("univariate_without_intercept", static_cast<ml::LinearRegression::UnivariateOLSResult(*)(Eigen::Ref<const Eigen::VectorXd>, Eigen::Ref<const Eigen::VectorXd>)>(ml::LinearRegression::univariate_without_intercept),
-        py::arg("x"), py::arg("y"), R"(Carries out univariate (aka simple) linear regression without intercept.
+    m_lin_reg.def("univariate_without_intercept", static_cast<ml::LinearRegression::UnivariateOLSResult(*)(Eigen::Ref<const Eigen::VectorXd>, Eigen::Ref<const Eigen::VectorXd>, bool)>(ml::LinearRegression::univariate_without_intercept),
+        py::arg("x"), py::arg("y"), py::arg("base_model_returns_zero") = true,
+        R"(Carries out univariate (aka simple) linear regression without intercept.
 
-R2 coefficient is calculated w/r to a model returning 0 and is therefore not equal to Corr(X, Y)^2:
+If `base_model_returns_zero == True`, the R2 coefficient is calculated w/r to a model returning 0:
     R2 = 1 - \sum_{i=1}^n (y_i - hat{y}_i)^2 / \sum_{i=1}^n (y_i)^2.
+
+If `base_model_returns_zero == False`, the R2 coefficient is calculated w/r to a model returning average Y:
+    R2 = 1 - \sum_{i=1}^n (y_i - hat{y}_i)^2 / \sum_{i=1}^n (y_i - avg(Y))^2.
 
 Args:
     x: X vector.
     y: Y vector. `x` and `y` must have same length not less than 1.
+    base_model_returns_zero: Whether the base model used to calculate R2 returns 0 (True) or average Y (False). Defaults to True.
 
 Returns:
     Instance of `UnivariateOLSResult` with `intercept`, `var_intercept` and `cov_slope_intercept` set to 0.

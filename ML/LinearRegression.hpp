@@ -15,14 +15,21 @@ namespace ml
 	*/
 	namespace LinearRegression {
 
-		/** @brief Result of linear regression. */
+		/** @brief Result of linear regression. 
+		
+		Supports R2 calculated w/r to a "base model" returning 0 or average Y. R2 is defined as 1 - RSS / TSS, where RSS is the residual sum of squares for the fitted model and TSS is the RSS for the "base model".
+
+		If `base_dof == n - 1`, the "base model" returns average Y and TSS is defined as \f$ \mathrm{TSS} = \sum_{i=1}^N (y_i - N^{-1} \sum_{j=1}^N y_j)^2 \f$.
+		
+		If `base_dof == n`, we have \f$ \mathrm{TSS} = \sum_{i=1}^N y_i^2 \f$.
+		*/
 		struct Result
 		{
 			unsigned int n; /**< Number of data points. */
 			unsigned int dof; /**< Number of residual degrees of freedom (e.g. `n - 2` or `n - 1` for univariate regression with or without intercept). */
 			unsigned int base_dof; /**< Number of degrees of freedom for the base model (e.g. `n - 1` or `n` for univariate regression with or without intercept). */
 			double rss; /**< Residual sum of squares: \f$ \sum_{i=1}^N (\hat{y}_i - y_i)^2 \f$. */
-			double tss; /**< Total sum of squares. For fitting with intercept: \f$ \mathrm{TSS} = \sum_{i=1}^N (y_i - N^{-1} \sum_{j=1}^N y_j)^2 \f$. For fitting without intercept: \f$ \mathrm{TSS} = \sum_{i=1}^N y_i^2 \f$. */
+			double tss; /**< Total sum of squares (RSS for the "base model" which we compare our regression results with).*/
 
 			/** @brief Estimated variance of observations Y, equal to `rss / dof`. */
 			double var_y() const {
@@ -127,7 +134,7 @@ namespace ml
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept.
 
-		The "base model" returns average Y.
+		The "base model" used to calculate R2 returns average Y.
 
 		@param[in] x X vector.
 		@param[in] y Y vector.
@@ -138,7 +145,7 @@ namespace ml
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept on regularly spaced points.
 
-		The "base model" returns average Y.
+		The "base model" used to calculate R2 returns average Y.
 
 		@param[in] x0 First X value.
 		@param[in] dx Positive X increment.
@@ -151,14 +158,15 @@ namespace ml
 
 		/** @brief Carries out univariate (aka simple) linear regression without intercept.
 
-		The "base model" returns 0.
+		The "base model" used to calculate R2 returns 0 or average Y.
 		
 		@param[in] x X vector.
 		@param[in] y Y vector.
+		@param[in] base_model_returns_zero Whether the base model used to calculate R2 returns 0 (true) or average Y (false). Defaults to true.
 		@return UnivariateOLSResult object with `intercept`, `var_intercept` and `cov_slope_intercept` set to 0.
 		@throw std::invalid_argument If `x` and `y` have different sizes, or if their size is less than 1.
 		*/
-		DLL_DECLSPEC UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y);
+		DLL_DECLSPEC UnivariateOLSResult univariate_without_intercept(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<const Eigen::VectorXd> y, bool base_model_returns_zero = true);
 
 		/** @brief Carries out multivariate linear regression.
 

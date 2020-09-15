@@ -100,16 +100,33 @@ static void test_sse_minimisation(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Re
 static void test_result(const Result& result, double tol = 1e-15)
 {
 	ASSERT_LT(result.dof, result.n);
+	ASSERT_LE(result.dof, result.base_dof);
 	ASSERT_LE(result.base_dof, result.n);
-	ASSERT_LT(result.dof, result.base_dof);
+	const unsigned int num_params = result.n - result.dof;
+	if (num_params > 1) {
+		ASSERT_LT(result.dof, result.base_dof);
+	} else {
+		ASSERT_LE(result.dof, result.base_dof);
+	}
 	ASSERT_LE(0, result.rss);
-	ASSERT_LE(0, result.tss);
-	ASSERT_GE(1, result.r2());	
-	ASSERT_NEAR(1 - result.rss / result.tss, result.r2(), tol);
+	if (result.dof < result.base_dof) {
+		ASSERT_LE(result.rss, result.tss);
+	}
+	if (result.tss > 0) {
+		ASSERT_GE(1, result.r2());
+		ASSERT_NEAR(1 - result.rss / result.tss, result.r2(), tol);
+	} else {
+		ASSERT_EQ(1u, num_params);
+		ASSERT_TRUE(std::isnan(result.r2()));
+	}	
 	if (result.dof) {
 		ASSERT_NEAR(result.rss / result.dof, result.var_y(), tol);
 		ASSERT_NEAR(1 - result.base_dof * result.rss / (result.tss * result.dof), result.adjusted_r2(), tol);
-		ASSERT_LT(result.adjusted_r2(), result.r2());
+		if (result.base_dof > result.dof) {
+			ASSERT_LT(result.adjusted_r2(), result.r2());
+		} else {
+			ASSERT_NEAR(result.adjusted_r2(), result.r2(), tol);
+		}
 		ASSERT_GE(1, result.adjusted_r2());
 	} else {
 		ASSERT_TRUE(std::isnan(result.adjusted_r2())) << result.adjusted_r2();
@@ -256,6 +273,10 @@ TEST_F(LinearRegressionTest, univariate_high_noise)
 	}
 	const auto result = univariate(x, y);
 	test_result(result);
+	const double rss = ((y - x * result.slope).array() - result.intercept).square().sum();
+	const double tss = (y.array() - y.mean()).square().sum();
+	ASSERT_NEAR(rss, result.rss, 1e-14 * result.rss);
+	ASSERT_NEAR(tss, result.tss, 1e-14 * result.tss);
 	ASSERT_NEAR(result.rss, (y - result.predict(x)).squaredNorm(), 1e-15 * result.rss);
 	ASSERT_EQ(n, result.n);
 	ASSERT_EQ(n - 2, result.dof);
@@ -354,7 +375,11 @@ TEST_F(LinearRegressionTest, univariate_true_model)
 	const auto result = sample_noise_and_run_regression();
 	test_result(result);
 	test_sse_minimisation(x, y, result.slope, result.intercept, 1e-8, 1e-8);
-	ASSERT_NEAR(result.rss, (y - result.predict(x)).squaredNorm(), 1e-14 * result.rss);
+	const double rss = ((y - x * result.slope).array() - result.intercept).square().sum();
+	const double tss = (y.array() - y.mean()).square().sum();
+	ASSERT_NEAR(rss, result.rss, 1e-14 * result.rss);
+	ASSERT_NEAR(tss, result.tss, 1e-14 * result.tss);
+	ASSERT_NEAR(result.rss, (y - result.predict(x)).squaredNorm(), 1e-14 * result.rss);	
 	ASSERT_EQ(n, result.n);
 	ASSERT_EQ(n - 2, result.dof);
 	ASSERT_EQ(n - 1, result.base_dof);
@@ -465,6 +490,7 @@ TEST_F(LinearRegressionTest, univariate_without_intercept_one_point)
 	ASSERT_NEAR(-2, result.slope, 1e-15);
 	ASSERT_EQ(0, result.intercept);
 	ASSERT_NEAR(1, result.r2(), 1e-15);
+	ASSERT_TRUE(std::isnan(result.adjusted_r2()));
 	ASSERT_NEAR(0, result.rss, 1e-15);
 	ASSERT_NEAR(1, result.tss, 1e-15);
 	ASSERT_TRUE(std::isnan(result.var_y())) << result.var_y();
@@ -472,6 +498,11 @@ TEST_F(LinearRegressionTest, univariate_without_intercept_one_point)
 	ASSERT_EQ(0, result.var_intercept);
 	ASSERT_EQ(0, result.cov_slope_intercept);
 	test_sse_minimisation(x, y, result.slope, result.intercept, 1e-8, 0);
+	const UnivariateOLSResult result_std_base = univariate_without_intercept(x, y, false);
+	test_result(result_std_base);
+	ASSERT_EQ(0u, result_std_base.base_dof);
+	ASSERT_EQ(0, result_std_base.tss);
+	ASSERT_TRUE(std::isnan(result_std_base.r2()));
 }
 
 TEST_F(LinearRegressionTest, univariate_without_intercept_high_noise)
@@ -496,9 +527,24 @@ TEST_F(LinearRegressionTest, univariate_without_intercept_high_noise)
 	EXPECT_EQ(0, result.intercept);
 	EXPECT_NEAR(0, result.r2(), 3e-5);
 	EXPECT_GE(result.r2(), 0);
+	const double rss = (y - x * result.slope).squaredNorm();
+	const double tss = y.squaredNorm();
+	ASSERT_NEAR(rss, result.rss, 1e-13 * rss);
+	ASSERT_NEAR(tss, result.tss, 1e-15 * tss);
+	EXPECT_NEAR(1 - rss / tss, result.r2(), 1e-15);
+	ASSERT_NEAR(rss / result.dof, result.var_y(), 1e-15 * rss / result.dof);
 	const double expected_observation_variance = noise_strength * noise_strength / 4;
 	EXPECT_NEAR(expected_observation_variance, result.var_y(), expected_observation_variance * 1e-2);
 	test_sse_minimisation(x, y, result.slope, result.intercept, 1e-6, 0);
+	const UnivariateOLSResult result_std_base = univariate_without_intercept(x, y, false);
+	test_result(result_std_base);
+	const double tss_std_base = (y.array() - y.mean()).square().sum();
+	ASSERT_EQ(result.rss, result_std_base.rss);
+	ASSERT_EQ(result.dof, result_std_base.dof);
+	ASSERT_NEAR(tss_std_base, result_std_base.tss, 1e-15 * tss_std_base);
+	ASSERT_EQ(result_std_base.dof, result_std_base.base_dof);
+	ASSERT_LT(result_std_base.r2(), result.r2());
+	EXPECT_NEAR(1 - rss / tss_std_base, result_std_base.r2(), 1e-14);
 }
 
 TEST_F(LinearRegressionTest, univariate_without_intercept_true_model)
@@ -528,11 +574,22 @@ TEST_F(LinearRegressionTest, univariate_without_intercept_true_model)
 	ASSERT_EQ(n - 1, result.dof);
 	ASSERT_EQ(n, result.base_dof);
 	EXPECT_NEAR(slope, result.slope, 3e-3);
-	const double mean_x = x_range / 2;
-	const double var_x = x_range * x_range / 12;
-	const double expected_r2 = 1 - noise_std_dev * noise_std_dev / (slope * slope * (var_x + mean_x * mean_x)  + noise_std_dev * noise_std_dev);
-	EXPECT_NEAR(expected_r2, result.r2(), 2e-3);
-	EXPECT_NEAR(noise_std_dev * noise_std_dev, result.var_y(), 3e-3);
+	const double rss = (y - x * result.slope).squaredNorm();
+	const double tss = y.squaredNorm();
+	ASSERT_NEAR(rss, result.rss, 1e-13 * rss);
+	ASSERT_NEAR(tss, result.tss, 1e-15 * tss);
+	EXPECT_NEAR(1 - rss / tss, result.r2(), 1e-15);
+	ASSERT_NEAR(rss / result.dof, result.var_y(), 1e-14);
+	EXPECT_NEAR(noise_std_dev * noise_std_dev, result.var_y(), 3e-3);	
+	const UnivariateOLSResult result_std_base = univariate_without_intercept(x, y, false);
+	test_result(result_std_base);
+	const double tss_std_base = (y.array() - y.mean()).square().sum();
+	ASSERT_EQ(result.rss, result_std_base.rss);
+	ASSERT_EQ(result.dof, result_std_base.dof);
+	ASSERT_NEAR(tss_std_base, result_std_base.tss, 1e-15 * tss_std_base);
+	ASSERT_EQ(result_std_base.dof, result_std_base.base_dof);
+	ASSERT_LT(result_std_base.r2(), result.r2());
+	EXPECT_NEAR(1 - rss / tss_std_base, result_std_base.r2(), 1e-14);
 
 	// Calculate sample statistics of estimators.
 	const unsigned int n_samples = 1000;
@@ -571,6 +628,7 @@ TEST_F(LinearRegressionTest, multivariate_exact_fit)
 	ASSERT_NEAR(-2, result.beta[0], 1e-14);
 	ASSERT_NEAR(0.7, result.beta[1], 1e-15);
 	ASSERT_NEAR(1, result.r2(), 1e-15);
+	ASSERT_TRUE(std::isnan(result.adjusted_r2()));
 	ASSERT_NEAR(0, result.rss, 1e-15);
 	ASSERT_NEAR(2e-2, result.tss, 1e-15);
 	ASSERT_TRUE(std::isnan(result.var_y())) << result.var_y();
