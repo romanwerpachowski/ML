@@ -1,11 +1,14 @@
 #!/bin/bash
 set -ev
 
+# Target architecture.
+ARCH="$1"
+
 #*** Debug build ***
-scons -j 2
+scons -j 2 arch=${ARCH}
 
 #*** C++ unit tests ***
-./Tests/build/Debug/Tests
+./Tests/build/Debug/${ARCH}/Tests
 
 #*** Deploy Python module locally (the debug version) ***
 CWD="${PWD}"

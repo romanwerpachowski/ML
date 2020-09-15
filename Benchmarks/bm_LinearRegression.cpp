@@ -7,7 +7,7 @@
 
 static void univariate_linear_regression(benchmark::State& state)
 {
-	const auto sample_size = state.range(0);
+	const auto sample_size = static_cast<Eigen::Index>(state.range(0));
 	const Eigen::VectorXd x(Eigen::VectorXd::Random(sample_size));
 	const Eigen::VectorXd y(0.1 * x.array().sin() + x.array());
 	for (auto _ : state) {
@@ -21,7 +21,7 @@ BENCHMARK(univariate_linear_regression)->RangeMultiplier(10)->Range(10, 10000)->
 
 static void univariate_linear_regression_regular(benchmark::State& state)
 {
-	const auto sample_size = state.range(0);
+	const auto sample_size = static_cast<Eigen::Index>(state.range(0));
 	const Eigen::VectorXd y(Eigen::VectorXd::Random(sample_size));
 	for (auto _ : state) {
 		ml::LinearRegression::univariate(0.05, 0.1, y);
@@ -34,7 +34,7 @@ BENCHMARK(univariate_linear_regression_regular)->RangeMultiplier(10)->Range(10, 
 
 static void univariate_linear_regression_without_intercept(benchmark::State& state)
 {
-	const auto sample_size = state.range(0);
+	const auto sample_size = static_cast<Eigen::Index>(state.range(0));
 	const Eigen::VectorXd x(Eigen::VectorXd::Random(sample_size));
 	const Eigen::VectorXd y(0.1 * x.array().sin() + x.array());
 	for (auto _ : state) {
@@ -48,7 +48,7 @@ BENCHMARK(univariate_linear_regression_without_intercept)->RangeMultiplier(10)->
 
 static void univariate_linear_regression_without_intercept_standard_base_model(benchmark::State& state)
 {
-	const auto sample_size = state.range(0);
+	const auto sample_size = static_cast<Eigen::Index>(state.range(0));
 	const Eigen::VectorXd x(Eigen::VectorXd::Random(sample_size));
 	const Eigen::VectorXd y(0.1 * x.array().sin() + x.array());
 	for (auto _ : state) {
@@ -62,7 +62,7 @@ BENCHMARK(univariate_linear_regression_without_intercept_standard_base_model)->R
 
 template <unsigned int D> static void multivariate_linear_regression(benchmark::State& state)
 {
-	const auto sample_size = state.range(0);
+	const auto sample_size = static_cast<Eigen::Index>(state.range(0));
 	const Eigen::MatrixXd X(Eigen::MatrixXd::Random(D, sample_size));
 	const Eigen::VectorXd beta(Eigen::VectorXd::Random(D));
 	const Eigen::VectorXd y(X.transpose() * beta + 0.02 * Eigen::VectorXd::Random(sample_size));
@@ -87,7 +87,7 @@ BENCHMARK(multivariate_linear_regression_50d)->RangeMultiplier(10)->Range(100, 1
 
 template <unsigned int D> static void recursive_multivariate_linear_regression_constant_sample_size(benchmark::State& state)
 {
-	const auto sample_size = state.range(0);
+	const auto sample_size = static_cast<Eigen::Index>(state.range(0));
 	const Eigen::VectorXd beta(Eigen::VectorXd::Random(D));
 	Eigen::MatrixXd X(D, sample_size);
 	Eigen::VectorXd y(sample_size);
@@ -141,7 +141,7 @@ BENCHMARK(recursive_multivariate_linear_regression_random_sample_size_500d)->Ran
 
 template <bool DoStandardise, unsigned int D> static void ridge_regression(benchmark::State& state)
 {
-	const auto sample_size = state.range(0);	
+	const auto sample_size = static_cast<Eigen::Index>(state.range(0));
 	constexpr double lambda = 1e-2;
 	for (auto _ : state) {
 		state.PauseTiming();

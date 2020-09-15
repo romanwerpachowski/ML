@@ -5,7 +5,7 @@
 
 static void k_fold(benchmark::State& state)
 {
-	const auto sample_size = state.range(0);
+	const auto sample_size = static_cast<Eigen::Index>(state.range(0));
 	const int dim = 4;
 	const Eigen::MatrixXd X(Eigen::MatrixXd::Random(dim, sample_size));
 	const Eigen::VectorXd y(Eigen::VectorXd::Random(sample_size));
@@ -27,7 +27,7 @@ BENCHMARK(k_fold)->RangeMultiplier(10)->Range(100, 1000000)->Complexity();
 
 static void leave_one_out(benchmark::State& state)
 {
-	const auto sample_size = state.range(0);
+	const auto sample_size = static_cast<Eigen::Index>(state.range(0));
 	const int dim = 4;
 	const Eigen::MatrixXd X(Eigen::MatrixXd::Random(dim, sample_size));
 	const Eigen::VectorXd y(Eigen::VectorXd::Random(sample_size));

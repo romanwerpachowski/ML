@@ -5,7 +5,7 @@
 
 static void xAx_symmetric(benchmark::State& state)
 {
-	const auto n = state.range(0);
+	const auto n = static_cast<Eigen::Index>(state.range(0));
 	const Eigen::MatrixXd A0 = Eigen::MatrixXd::Random(n, n);
 	const Eigen::MatrixXd A = (A0 + A0.transpose()) / 2;
 	const Eigen::VectorXd x = Eigen::VectorXd::Random(n);

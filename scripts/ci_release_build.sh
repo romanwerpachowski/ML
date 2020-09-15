@@ -1,11 +1,14 @@
 #!/bin/bash
 set -ev
 
+# Target architecture.
+ARCH="$1"
+
 #*** Release build ***
-scons mode=release -j 2
+scons mode=release -j 2 arch=${ARCH}
 
 #*** C++ demos ***
-./Demo/build/Release/Demo
+./Demo/build/Release/${ARCH}/Demo
 
 #*** Deploy Python module locally ***
 CWD="${PWD}"

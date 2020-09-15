@@ -39,17 +39,20 @@ SETUP_DIRNAME = os.path.abspath(os.path.dirname(__file__))
 # Base directory of the whole project.
 BASE_DIRECTORY = os.path.abspath(os.path.join(SETUP_DIRNAME, ".."))
 
+
+ARCHITECTURE = "x64"
+
 # Filenames and paths of binary files needed.
 if os.name == "posix":
     PYML_FILENAME = "cppyml.so"
     PYML_PATH = os.path.join(BASE_DIRECTORY, "cppyml",
-                             "build", CPP_BUILD_MODE, PYML_FILENAME)
+                             "build", CPP_BUILD_MODE, ARCHITECTURE, PYML_FILENAME)
     BINARY_FILENAMES = [PYML_FILENAME]
     SRC_PATHS = [PYML_PATH]
 else:
     ML_FILENAME = "ML.dll"
     PYML_FILENAME = "cppyml.pyd"
-    BINARY_DIRECTORY = os.path.join(BASE_DIRECTORY, "x64", CPP_BUILD_MODE)
+    BINARY_DIRECTORY = os.path.join(BASE_DIRECTORY, ARCHITECTURE, CPP_BUILD_MODE)
     ML_PATH = os.path.join(BINARY_DIRECTORY, ML_FILENAME)
     PYML_PATH = os.path.join(BINARY_DIRECTORY, PYML_FILENAME)
     BINARY_FILENAMES = [ML_FILENAME, PYML_FILENAME]

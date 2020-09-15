@@ -5,7 +5,7 @@
 
 static void sse(benchmark::State& state)
 {
-	std::vector<double> data(state.range(0));
+	std::vector<double> data(static_cast<size_t>(state.range(0)));
 	std::default_random_engine rng;
 	rng.seed(340934091);
 	std::normal_distribution normal;
@@ -22,7 +22,7 @@ BENCHMARK(sse)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
 
 static void sse_and_mean(benchmark::State& state)
 {
-	std::vector<double> data(state.range(0));
+	std::vector<double> data(static_cast<size_t>(state.range(0)));
 	std::default_random_engine rng;
 	rng.seed(340934091);
 	std::normal_distribution normal;
@@ -39,7 +39,7 @@ BENCHMARK(sse_and_mean)->RangeMultiplier(10)->Range(10, 100000)->Complexity();
 
 template <typename T> static void gini_index(benchmark::State& state)
 {
-	std::vector<T> data(state.range(0));
+	std::vector<T> data(static_cast<size_t>(state.range(0)));
 	std::default_random_engine rng;
 	rng.seed(340934091);
 	const unsigned int K = 10;
@@ -58,7 +58,7 @@ BENCHMARK_TEMPLATE(gini_index, int)->RangeMultiplier(10)->Range(10, 100000)->Com
 
 template <typename T> static void gini_index_and_mode(benchmark::State& state)
 {
-	std::vector<T> data(state.range(0));
+	std::vector<T> data(static_cast<size_t>(state.range(0)));
 	std::default_random_engine rng;
 	rng.seed(340934091);
 	const unsigned int K = 10;
