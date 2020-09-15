@@ -410,7 +410,7 @@ template&lt;bool DoStandardise&gt; </div>
 <p>The matrix <code>X</code> is either assumed to be standardised (<code>DoStandardise == false</code>) or is standardised internally (<code>DoStandardise == true</code>; requires a matrix copy).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>D x N matrix of X values, with data points in columns. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>D x N matrix of X values, with data points in columns. Should not contain a row with all 1's. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Y vector with length N. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">lambda</td><td>Regularisation strength. </td></tr>
   </table>
