@@ -154,6 +154,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a9ca28ddff2cefee923c517e52b1f3e71"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html">RidgeRegressionResult</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#a9ca28ddff2cefee923c517e52b1f3e71">ridge&lt; false &gt;</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, double lambda)</td></tr>
 <tr class="memdesc:a9ca28ddff2cefee923c517e52b1f3e71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Carries out multivariate ridge regression with intercept, assuming standardised <code>X</code> inputs.  <a href="namespaceml_1_1LinearRegression.html#a9ca28ddff2cefee923c517e52b1f3e71">More...</a><br /></td></tr>
 <tr class="separator:a9ca28ddff2cefee923c517e52b1f3e71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a8b9771f0278cce6b80bc9f4a0928a2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html">RidgeRegressionResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#a1a8b9771f0278cce6b80bc9f4a0928a2">ridge</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, double lambda, bool do_standardise)</td></tr>
+<tr class="memdesc:a1a8b9771f0278cce6b80bc9f4a0928a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Carries out multivariate ridge regression with intercept, allowing the user switch internal standardisation of <code>X</code> data on or off.  <a href="namespaceml_1_1LinearRegression.html#a1a8b9771f0278cce6b80bc9f4a0928a2">More...</a><br /></td></tr>
+<tr class="separator:a1a8b9771f0278cce6b80bc9f4a0928a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5606b5c9445518704de006badf0e4328"><td class="memTemplParams" colspan="2">template&lt;class Regression &gt; </td></tr>
 <tr class="memitem:a5606b5c9445518704de006badf0e4328"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearRegression.html#a5606b5c9445518704de006badf0e4328">press</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, Regression regression)</td></tr>
 <tr class="memdesc:a5606b5c9445518704de006badf0e4328"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the PRESS statistic (Predicted Residual Error Sum of Squares).  <a href="namespaceml_1_1LinearRegression.html#a5606b5c9445518704de006badf0e4328">More...</a><br /></td></tr>
@@ -378,7 +381,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a8c4c56fac8ea09d8323f3386a0c3a02b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c4c56fac8ea09d8323f3386a0c3a02b">&#9670;&nbsp;</a></span>ridge()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c4c56fac8ea09d8323f3386a0c3a02b">&#9670;&nbsp;</a></span>ridge() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -515,6 +518,57 @@ template&lt;&gt; </div>
 </div><div class="memdoc">
 
 <p>Carries out multivariate ridge regression with intercept, assuming standardised <code>X</code> inputs. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceml_1_1LinearRegression.html#a8c4c56fac8ea09d8323f3386a0c3a02b" title="Carries out multivariate ridge regression with intercept.">ridge()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a1a8b9771f0278cce6b80bc9f4a0928a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a8b9771f0278cce6b80bc9f4a0928a2">&#9670;&nbsp;</a></span>ridge() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html">RidgeRegressionResult</a> ml::LinearRegression::ridge </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>lambda</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>do_standardise</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Carries out multivariate ridge regression with intercept, allowing the user switch internal standardisation of <code>X</code> data on or off. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceml_1_1LinearRegression.html#a8c4c56fac8ea09d8323f3386a0c3a02b" title="Carries out multivariate ridge regression with intercept.">ridge()</a>. </dd></dl>
 
 </div>

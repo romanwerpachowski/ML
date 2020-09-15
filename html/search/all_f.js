@@ -10,7 +10,7 @@ var searchData=
   ['responsibilities_80',['responsibilities',['../classml_1_1EM.html#ad00fd3573c2078707aeaacebb1a40f14',1,'ml::EM']]],
   ['responsibilitiesinitialiser_81',['ResponsibilitiesInitialiser',['../classml_1_1Clustering_1_1ResponsibilitiesInitialiser.html',1,'ml::Clustering']]],
   ['result_82',['Result',['../structml_1_1LinearRegression_1_1Result.html',1,'ml::LinearRegression']]],
-  ['ridge_83',['ridge',['../namespaceml_1_1LinearRegression.html#a8c4c56fac8ea09d8323f3386a0c3a02b',1,'ml::LinearRegression']]],
+  ['ridge_83',['ridge',['../namespaceml_1_1LinearRegression.html#a8c4c56fac8ea09d8323f3386a0c3a02b',1,'ml::LinearRegression::ridge(Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, double lambda)'],['../namespaceml_1_1LinearRegression.html#a1a8b9771f0278cce6b80bc9f4a0928a2',1,'ml::LinearRegression::ridge(Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, double lambda, bool do_standardise)']]],
   ['ridge_3c_20false_20_3e_84',['ridge&lt; false &gt;',['../namespaceml_1_1LinearRegression.html#a9ca28ddff2cefee923c517e52b1f3e71',1,'ml::LinearRegression']]],
   ['ridge_3c_20true_20_3e_85',['ridge&lt; true &gt;',['../namespaceml_1_1LinearRegression.html#af7b70c29c6236e9ae0fd7ceb3a5f0200',1,'ml::LinearRegression']]],
   ['ridgeregressionresult_86',['RidgeRegressionResult',['../structml_1_1LinearRegression_1_1RidgeRegressionResult.html',1,'ml::LinearRegression']]],
