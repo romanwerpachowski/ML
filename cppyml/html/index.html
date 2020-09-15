@@ -694,7 +694,7 @@ or set the parameter <cite>add_ones</cite> to <cite>True</cite>.</p>
 <dt id="cppyml.cppyml.linear_regression.ridge">
 <code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">ridge</code><span class="sig-paren">(</span><em>X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]], lambda: float, do_standardise: bool = False</em><span class="sig-paren">)</span> &#x2192; cppyml.cppyml.linear_regression.RidgeRegressionResult<a class="headerlink" href="#cppyml.cppyml.linear_regression.ridge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Carries out multivariate ridge regression with intercept.</p>
-<p>Given X and y, finds beta and beta0 minimising f$ lVert vec{y} - X^T vec{beta} rVert^2 + lambda lVert vec{beta} rVert^2 f$.</p>
+<p>Given X and y, finds beta’ and beta0 minimising || y - beta’^T X - beta0 ||^2 + lambda * || beta’ ||^2.</p>
 <p>R2 is always calculated w/r to model returning average y.
 The matrix <cite>X</cite> is assumed to be standardised unless <cite>do_standardise</cite> is set to <cite>True</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
