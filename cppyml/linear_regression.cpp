@@ -197,19 +197,19 @@ Args:
     dof: Number of residual degrees of freedom.
     rss: Residual sum of squares.
     tss: Total sum of squares.
-    beta: Fitted coefficients of the model y_i = beta^T X_i.
+    beta: Fitted coefficients of the model y_i = beta'^T X_i + beta0, in which beta' is regularised and beta0 is not.
     cov: Covariance matrix of beta coefficients.
     effective_dof: Effective number of residual degrees of freedom: N - tr [ X^T (X * X^T + lambda * I)^{-1} X ] - 1.
 )")
         .def("__repr__", &ml::LinearRegression::RidgeRegressionResultRowMajor::to_string)
-        .def_readonly("beta", &ml::LinearRegression::RidgeRegressionResultRowMajor::beta, "Fitted coefficients of the model y_i = beta^T X_i.")
-        .def_property_readonly("cov", &ml::LinearRegression::RidgeRegressionResultRowMajor::cov_row_major, "Covariance matrix of beta coefficients.")
+        .def_readonly("beta", &ml::LinearRegression::RidgeRegressionResultRowMajor::beta, "Fitted coefficients of the model y_i = beta'^T X_i, followed by beta0.")
+        .def_property_readonly("cov", &ml::LinearRegression::RidgeRegressionResultRowMajor::cov_row_major, "Covariance matrix of (beta', beta0) coefficients.")
         .def_readonly("effective_dof", &ml::LinearRegression::RidgeRegressionResultRowMajor::effective_dof, "Effective number of residual degrees of freedom: N - tr [ X^T (X * X^T + lambda * I)^{-1} X ] - 1.")
         .doc() = R"(Result of a (multivariate) ridge regression with intercept.
 
 Does not contain error estimates because they are not easy to estimate reliably for regularised regression.
 
-Intercept is reported separately because it has a special status: it's not regularised.
+Intercept is the last coefficient in `beta`.
 
 `var_y` is calculated using `dof` as the denominator.
 )";
