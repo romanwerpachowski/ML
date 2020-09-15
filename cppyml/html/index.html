@@ -486,13 +486,7 @@ y_1 = X_1^T * beta + e_1
 <dl class="attribute">
 <dt id="cppyml.cppyml.linear_regression.Result.adjusted_r2">
 <code class="descname">adjusted_r2</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.Result.adjusted_r2" title="Permalink to this definition">¶</a></dt>
-<dd><p>1 - fraction of variance unexplained relative to the base model. Uses sample variances. Equal to <cite>1 - rss * base_dof / tss / dof</cite>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cppyml.cppyml.linear_regression.Result.base_dof">
-<code class="descname">base_dof</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.Result.base_dof" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of degrees of freedom for the base model (e.g. <cite>n - 1</cite> or <cite>n</cite> for univariate regression with or without intercept).</p>
+<dd><p>1 - fraction of variance unexplained relative to the base model. Uses sample variances. Equal to <cite>1 - rss * (n - 1) / tss / dof</cite>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -530,14 +524,12 @@ y_1 = X_1^T * beta + e_1
 <dl class="attribute">
 <dt id="cppyml.cppyml.linear_regression.Result.tss">
 <code class="descname">tss</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.Result.tss" title="Permalink to this definition">¶</a></dt>
-<dd><p>sum_{i=1}^N y_i^2.</p>
+<dd><p>sum_{i=1}^N (y_i - N^{-1} sum_{j=1}^N y_j)^2.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Total sum of squares. For fitting with intercept</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body">sum_{i=1}^N (y_i - N^{-1} sum_{j=1}^N y_j)^2. For fitting without intercept</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Total sum of squares</td>
 </tr>
 </tbody>
 </table>
@@ -777,12 +769,10 @@ to original <cite>X</cite> units and origins, and the <cite>cov</cite> matrix wi
 
 <dl class="function">
 <dt id="cppyml.cppyml.linear_regression.univariate_without_intercept">
-<code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">univariate_without_intercept</code><span class="sig-paren">(</span><em>x: numpy.ndarray[float64[m, 1]], y: numpy.ndarray[float64[m, 1]], base_model_returns_zero: bool = True</em><span class="sig-paren">)</span> &#x2192; cppyml.cppyml.linear_regression.UnivariateOLSResult<a class="headerlink" href="#cppyml.cppyml.linear_regression.univariate_without_intercept" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">univariate_without_intercept</code><span class="sig-paren">(</span><em>x: numpy.ndarray[float64[m, 1]], y: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; cppyml.cppyml.linear_regression.UnivariateOLSResult<a class="headerlink" href="#cppyml.cppyml.linear_regression.univariate_without_intercept" title="Permalink to this definition">¶</a></dt>
 <dd><p>Carries out univariate (aka simple) linear regression without intercept.</p>
 <dl class="docutils">
-<dt>If <cite>base_model_returns_zero == True</cite>, the R2 coefficient is calculated w/r to a model returning 0:</dt>
-<dd>R2 = 1 - sum_{i=1}^n (y_i - hat{y}_i)^2 / sum_{i=1}^n (y_i)^2.</dd>
-<dt>If <cite>base_model_returns_zero == False</cite>, the R2 coefficient is calculated w/r to a model returning average Y:</dt>
+<dt>The R2 coefficient is calculated w/r to a model returning average Y:</dt>
 <dd>R2 = 1 - sum_{i=1}^n (y_i - hat{y}_i)^2 / sum_{i=1}^n (y_i - avg(Y))^2.</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
@@ -792,7 +782,6 @@ to original <cite>X</cite> units and origins, and the <cite>cov</cite> matrix wi
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>x</strong> – X vector.</li>
 <li><strong>y</strong> – Y vector. <cite>x</cite> and <cite>y</cite> must have same length not less than 1.</li>
-<li><strong>base_model_returns_zero</strong> – Whether the base model used to calculate R2 returns 0 (True) or average Y (False). Defaults to True.</li>
 </ul>
 </td>
 </tr>
