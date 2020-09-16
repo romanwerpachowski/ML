@@ -113,6 +113,12 @@ Functions</h2></td></tr>
 <tr class="memitem:aabfcdc7cafaf981fadf892ac67ad67a4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearAlgebra.html#aabfcdc7cafaf981fadf892ac67ad67a4">xAx_symmetric</a> (const Eigen::MatrixXd &amp;A, const Eigen::VectorXd &amp;x)</td></tr>
 <tr class="memdesc:aabfcdc7cafaf981fadf892ac67ad67a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates x^T A x for a symmetric matrix A.  <a href="namespaceml_1_1LinearAlgebra.html#aabfcdc7cafaf981fadf892ac67ad67a4">More...</a><br /></td></tr>
 <tr class="separator:aabfcdc7cafaf981fadf892ac67ad67a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c9e448884c3bad1a72b137beb081cad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearAlgebra.html#a5c9e448884c3bad1a72b137beb081cad">xxT</a> (const Eigen::VectorXd &amp;x, Eigen::MatrixXd &amp;dest)</td></tr>
+<tr class="memdesc:a5c9e448884c3bad1a72b137beb081cad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates x * x^T and places it in dest.  <a href="namespaceml_1_1LinearAlgebra.html#a5c9e448884c3bad1a72b137beb081cad">More...</a><br /></td></tr>
+<tr class="separator:a5c9e448884c3bad1a72b137beb081cad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56523a716d64c3bacf8b4677bf44eadd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearAlgebra.html#a56523a716d64c3bacf8b4677bf44eadd">add_a_xxT</a> (const Eigen::VectorXd &amp;x, Eigen::MatrixXd &amp;dest, double a)</td></tr>
+<tr class="memdesc:a56523a716d64c3bacf8b4677bf44eadd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a * x * x^T to A.  <a href="namespaceml_1_1LinearAlgebra.html#a56523a716d64c3bacf8b4677bf44eadd">More...</a><br /></td></tr>
+<tr class="separator:a56523a716d64c3bacf8b4677bf44eadd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Linear algebra helper functions. </p>
@@ -152,6 +158,92 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Value of \( \vec{x}^T A \vec{x} \). </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>A</code> is not square or <code>x.size() != A.rows()</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5c9e448884c3bad1a72b137beb081cad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c9e448884c3bad1a72b137beb081cad">&#9670;&nbsp;</a></span>xxT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ml::LinearAlgebra::xxT </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::VectorXd &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::MatrixXd &amp;&#160;</td>
+          <td class="paramname"><em>dest</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates x * x^T and places it in dest. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Vector of length N. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dest</td><td>Output matrix, resized if necessary. Assumed to be non-aliasing with <code>x</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a56523a716d64c3bacf8b4677bf44eadd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56523a716d64c3bacf8b4677bf44eadd">&#9670;&nbsp;</a></span>add_a_xxT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ml::LinearAlgebra::add_a_xxT </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::VectorXd &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::MatrixXd &amp;&#160;</td>
+          <td class="paramname"><em>dest</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>a</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a * x * x^T to A. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Vector of length N. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">A</td><td>Existing N x N matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::invalid_argument</td><td>If <code>A</code> is not square or <code>x.size() != A.rows()</code>. </td></tr>
