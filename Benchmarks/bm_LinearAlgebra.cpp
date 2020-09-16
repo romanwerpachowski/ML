@@ -32,3 +32,18 @@ static void xxT(benchmark::State& state)
 
 BENCHMARK(xxT)->RangeMultiplier(4)->Range(4, 1024)->Complexity(benchmark::oNSquared);
 //BENCHMARK(xxT)->DenseRange(4, 25, 1)->Complexity(benchmark::oNSquared);
+
+
+static void add_a_xxT(benchmark::State& state)
+{
+	const auto n = static_cast<Eigen::Index>(state.range(0));
+	Eigen::MatrixXd A(n, n);
+	const Eigen::VectorXd x = Eigen::VectorXd::Random(n);
+	for (auto _ : state) {
+		ml::LinearAlgebra::add_a_xxT(x, A, 0.5);
+	}
+	state.SetComplexityN(state.range(0));
+}
+
+BENCHMARK(add_a_xxT)->RangeMultiplier(4)->Range(4, 1024)->Complexity(benchmark::oNSquared);
+//BENCHMARK(add_a_xxT)->DenseRange(4, 25, 1)->Complexity(benchmark::oNSquared);

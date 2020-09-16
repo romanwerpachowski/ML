@@ -52,3 +52,24 @@ TEST(LinearAlgebraTest, xxT_4)
 {
 	test_xxT(4);
 }
+
+static void test_add_a_xxT(const unsigned int n)
+{
+	const Eigen::MatrixXd A0 = Eigen::MatrixXd::Random(n, n);
+	const Eigen::VectorXd x = Eigen::VectorXd::Random(n);
+	Eigen::MatrixXd actual(A0);
+	constexpr double a = 0.6;
+	add_a_xxT(x, actual, a);
+	const Eigen::MatrixXd expected(A0 + a * x * x.transpose());
+	ASSERT_NEAR(0, (actual - expected).norm(), expected.norm() * 1e-15);
+}
+
+TEST(LinearAlgebraTest, add_a_xxT_1024)
+{
+	test_add_a_xxT(1024);
+}
+
+TEST(LinearAlgebraTest, add_a_xxT_4)
+{
+	test_add_a_xxT(4);
+}

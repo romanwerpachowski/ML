@@ -136,7 +136,6 @@ namespace ml
 		Eigen::VectorXd mixing_probabilities_;
 		Eigen::MatrixXd means_; /**< 2D matrix with size number_dimensions x number_components. */
 		Eigen::MatrixXd responsibilities_; /**< 2D matrix with size sample_size x number_components. */
-		Eigen::MatrixXd work_matrix_;
 		Eigen::VectorXd work_vector_;
 		std::vector<Eigen::MatrixXd> covariances_; /**< Vector of `number_components_` 2D matrices with size number_dimensions x number_dimensions. */
 		std::vector<Eigen::MatrixXd> inverse_covariances_; /**< Inverses of `covariance_` matrices. */

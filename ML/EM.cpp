@@ -133,7 +133,6 @@ namespace ml
 		}
 
 		// Work variables.
-		work_matrix_.resize(number_dimensions, number_dimensions);
 		work_vector_.resize(number_dimensions);
 		double old_log_likelihood = -std::numeric_limits<double>::infinity();
 		
@@ -223,11 +222,9 @@ namespace ml
 			mean /= sum_component_weights;
 
 			// Accumulate covariance.
-			work_matrix_.resize(number_dimensions, number_dimensions);
 			for (unsigned int i = 0; i < sample_size; ++i) {
 				work_vector_ = data.col(i) - mean;
-				LinearAlgebra::xxT(work_vector_, work_matrix_);
-				covariance += component_weights[i] * work_matrix_;				
+				LinearAlgebra::add_a_xxT(work_vector_, covariance, component_weights[i]);
 			}
 
 			covariance /= sum_component_weights;
