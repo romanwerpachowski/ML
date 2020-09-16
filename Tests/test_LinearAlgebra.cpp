@@ -33,3 +33,22 @@ TEST(LinearAlgebraTest, xAx_symmetric_4)
 {
 	test_xAx_symmetric(4);
 }
+
+static void test_xxT(const unsigned int n)
+{
+	Eigen::MatrixXd actual;
+	const Eigen::VectorXd x = Eigen::VectorXd::Random(n);
+	xxT(x, actual);
+	const Eigen::MatrixXd expected = x * x.transpose();
+	ASSERT_NEAR(0, (actual - expected).norm(), expected.norm() * 1e-15);
+}
+
+TEST(LinearAlgebraTest, xxT_1024)
+{
+	test_xxT(1024);
+}
+
+TEST(LinearAlgebraTest, xxT_4)
+{
+	test_xxT(4);
+}

@@ -20,6 +20,9 @@ namespace ml
 		, responsibilities_initialiser_(std::make_shared<Clustering::ClosestCentroid>(means_initialiser_))
 		, mixing_probabilities_(number_components)
 		, covariances_(number_components)
+		, inverse_covariances_(number_components)
+		, covariance_decompositions_(number_components)
+		, sqrt_covariance_determinants_(number_components)
 		, absolute_tolerance_(1e-8)
 		, relative_tolerance_(1e-8)
 		, number_components_(number_components)
@@ -126,6 +129,7 @@ namespace ml
 			for (unsigned int k = 0; k < number_components_; ++k) {
 				covariances_[k] = sample_covariance;
 			}
+			process_covariances(number_dimensions);
 		}
 
 		// Work variables.
@@ -162,15 +166,6 @@ namespace ml
 		}
 
 		return false;
-	}	
-
-	Eigen::MatrixXd EM::calculate_sample_covariance(Eigen::Ref<const Eigen::MatrixXd> data)
-	{
-		const Eigen::MatrixXd centred = data.colwise() - data.rowwise().mean();
-		const Eigen::MatrixXd covariance = (centred * centred.adjoint()) / (static_cast<double>(data.cols() - 1));
-		assert(covariance.rows() == covariance.cols());
-		assert(covariance.rows() == data.rows());
-		return covariance;
 	}
 
 	void EM::expectation_stage(Eigen::Ref<const Eigen::MatrixXd> data)
@@ -181,24 +176,18 @@ namespace ml
 		assert(sample_size >= number_components_);
 		
 		static const double log_2_pi = std::log(2. * PI);
-		const auto log_likelihood_normalisation_constant = static_cast<double>(number_dimensions) * log_2_pi / 2;
-		Eigen::LLT<Eigen::MatrixXd> llt;
+		const auto log_likelihood_normalisation_constant = static_cast<double>(number_dimensions) * log_2_pi / 2;		
 
 		// Calculate unnormalised responsibilities.
-		for (unsigned int k = 0; k < number_components_; ++k) {						
-			llt.compute(covariances_[k]);
-			work_matrix_ = llt.solve(Eigen::MatrixXd::Identity(number_dimensions, number_dimensions));
+		for (unsigned int k = 0; k < number_components_; ++k) {
 			const auto mean = means_.col(k);
 			auto component_weights = responsibilities_.col(k);
+			const auto& inverse_covariance = inverse_covariances_[k];
 			for (unsigned int i = 0; i < sample_size; ++i) {
 				work_vector_ = data.col(i) - mean;
-				component_weights[i] = std::exp(-0.5 * LinearAlgebra::xAx_symmetric(work_matrix_, work_vector_));
-			}
-			double sqrt_covariance_determinant = 1;
-			for (Eigen::Index i = 0; i < number_dimensions; ++i) {
-				sqrt_covariance_determinant *= llt.matrixL()(i, i);
-			}
-			component_weights *= mixing_probabilities_[k] / sqrt_covariance_determinant;
+				component_weights[i] = std::exp(-0.5 * LinearAlgebra::xAx_symmetric(inverse_covariance, work_vector_));
+			}			
+			component_weights *= mixing_probabilities_[k] / sqrt_covariance_determinants_[k];
 		}
 		log_likelihood_ = responsibilities_.rowwise().sum().array().log().mean() - log_likelihood_normalisation_constant;
 
@@ -207,22 +196,6 @@ namespace ml
 			auto datapoint_responsibilities = responsibilities_.row(i);
 			const double sum_weights = datapoint_responsibilities.sum();
 			datapoint_responsibilities /= sum_weights;
-		}
-	}
-
-	static void Txx(const Eigen::VectorXd& x, Eigen::MatrixXd& m)
-	{
-		//m.noalias() = x * x.transpose();
-		assert(m.rows() == m.cols());
-		assert(x.size() == m.rows());
-		for (Eigen::Index i = 0; i < x.size(); ++i) {
-			const auto x_i = x[i];
-			m(i, i) = x_i * x_i;
-			for (Eigen::Index j = 0; j < i; ++j) {
-				const auto x_i_x_j = x_i * x[j];
-				m(i, j) = x_i_x_j;
-				m(j, i) = x_i_x_j;
-			}
 		}
 	}
 
@@ -253,8 +226,8 @@ namespace ml
 			work_matrix_.resize(number_dimensions, number_dimensions);
 			for (unsigned int i = 0; i < sample_size; ++i) {
 				work_vector_ = data.col(i) - mean;
-				Txx(work_vector_, work_matrix_);
-				covariance += component_weights[i] * work_matrix_;
+				LinearAlgebra::xxT(work_vector_, work_matrix_);
+				covariance += component_weights[i] * work_matrix_;				
 			}
 
 			covariance /= sum_component_weights;
@@ -268,5 +241,31 @@ namespace ml
 			assert(covariance.rows() == number_dimensions);
 			assert(covariance.cols() == number_dimensions);
 		}
+
+		process_covariances(number_dimensions);
 	}
+
+	Eigen::MatrixXd EM::calculate_sample_covariance(Eigen::Ref<const Eigen::MatrixXd> data)
+	{
+		const Eigen::MatrixXd centred = data.colwise() - data.rowwise().mean();
+		const Eigen::MatrixXd covariance = (centred * centred.adjoint()) / (static_cast<double>(data.cols() - 1));
+		assert(covariance.rows() == covariance.cols());
+		assert(covariance.rows() == data.rows());
+		return covariance;
+	}
+
+	void EM::process_covariances(const Eigen::Index number_dimensions)
+	{
+		// Decompose and invert covariance matrices.
+		for (unsigned int k = 0; k < number_components_; ++k) {
+			auto& llt = covariance_decompositions_[k];
+			llt.compute(covariances_[k]);
+			inverse_covariances_[k] = llt.solve(Eigen::MatrixXd::Identity(number_dimensions, number_dimensions));
+			double sqrt_covariance_determinant = 1;
+			for (Eigen::Index i = 0; i < number_dimensions; ++i) {
+				sqrt_covariance_determinant *= llt.matrixL()(i, i);
+			}
+			sqrt_covariance_determinants_[k] = sqrt_covariance_determinant;
+		}
+	}	
 }

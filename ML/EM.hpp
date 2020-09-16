@@ -3,6 +3,7 @@
 #include <memory>
 #include <random>
 #include <vector>
+#include <Eigen/Cholesky>
 #include <Eigen/Core>
 #include "dll.hpp"
 
@@ -137,7 +138,10 @@ namespace ml
 		Eigen::MatrixXd responsibilities_; /**< 2D matrix with size sample_size x number_components. */
 		Eigen::MatrixXd work_matrix_;
 		Eigen::VectorXd work_vector_;
-		std::vector<Eigen::MatrixXd> covariances_; /**< Vector of number_components 2D matrices with size number_dimensions x number_dimensions. */
+		std::vector<Eigen::MatrixXd> covariances_; /**< Vector of `number_components_` 2D matrices with size number_dimensions x number_dimensions. */
+		std::vector<Eigen::MatrixXd> inverse_covariances_; /**< Inverses of `covariance_` matrices. */
+		std::vector<Eigen::LLT<Eigen::MatrixXd>> covariance_decompositions_; /**< Cholesky decompositions of `covariance_` matrices. */		
+		Eigen::VectorXd sqrt_covariance_determinants_; /**< Square roots of determinants of `covariance_` matrices. */
 		double absolute_tolerance_;
 		double relative_tolerance_;
 		double log_likelihood_;
@@ -147,6 +151,8 @@ namespace ml
 		bool maximise_first_;
 
 		static Eigen::MatrixXd calculate_sample_covariance(Eigen::Ref<const Eigen::MatrixXd> data);
+
+		void process_covariances(Eigen::Index number_dimensions);
 
 		void expectation_stage(Eigen::Ref<const Eigen::MatrixXd> data);
 
