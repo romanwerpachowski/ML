@@ -47,8 +47,8 @@ namespace ml
 				K_.noalias() = P_ * X;
 				assert(static_cast<unsigned int>(K_.rows()) == d_);
 				assert(static_cast<unsigned int>(K_.cols()) == n_i);
-				residuals_ = y - X.transpose() * beta_;
-				beta_ += K_ * residuals_;
+				residuals_.noalias() = y - X.transpose() * beta_;
+				beta_.noalias() += K_ * residuals_;
 				n_ += n_i;
 			}
 		}
