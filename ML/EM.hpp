@@ -146,7 +146,7 @@ namespace ml
 		@param[out] u Vector for responsibilities with length equal to #number_components().
 		@throw std::invalid_argument If `x.size() != means().rows()` or `u.size() != number_components()`.
 		*/
-		DLL_DECLSPEC void assign_responsibilities(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<Eigen::VectorXd> u) const;
+		DLL_DECLSPEC void assign_responsibilities(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<Eigen::VectorXd> u) const;		
 	private:
 		std::default_random_engine prng_;
 		std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser_;

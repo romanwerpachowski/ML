@@ -63,6 +63,13 @@ class ClusteringTest(unittest.TestCase):
 
         self.assertAlmostEqual(sklearn_ll, pyml_ll, delta=1e-10)
 
+        u = em.assign_responsibilities(np.array([0, 0]))
+        self.assertEqual(3, len(u))
+        self.assertAlmostEqual(1, sum(u), delta=1e-15)
+        self.assertLessEqual(0, min(u))
+        # (0, 0) is the middle of face.
+        self.assertAlmostEqual(1, max(u), delta=1e-9)
+
 
 if __name__ == "__main__": 
     unittest.main()

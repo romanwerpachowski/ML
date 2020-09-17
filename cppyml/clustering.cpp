@@ -22,6 +22,16 @@ namespace ml
         {
             return fit(data.transpose());
         }
+
+        /** @brief Given a data point x, calculate each component's responsibilities for x and return them.
+        @see assign_responsibilities().
+        */
+        Eigen::VectorXd calculate_responsibilities(Eigen::Ref<const Eigen::VectorXd> x) const
+        {
+            Eigen::VectorXd u(number_components());
+            EM::assign_responsibilities(x, u);
+            return u;
+        }
     };
 }
 
@@ -88,6 +98,15 @@ Args:
 
 Returns:
     2D square matrix with covariance coefficients.
+)")
+        .def("assign_responsibilities", &ml::EMPy::calculate_responsibilities, py::arg("x"),
+            R"(Given a data point x, calculate each component's responsibilities for x and return them.
+
+Args:
+    x: Data point with correct dimension.
+
+Returns:
+    Array of components' responsibilities.
 )")
         .doc() = "Gaussian Expectation-Maximisation algorithm.";
 }
