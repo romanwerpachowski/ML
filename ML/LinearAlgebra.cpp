@@ -5,7 +5,7 @@ namespace ml
 {
 	namespace LinearAlgebra
 	{
-		double xAx_symmetric(const Eigen::MatrixXd& A, const Eigen::VectorXd& x)
+		double xAx_symmetric(const Eigen::MatrixXd& A, const Eigen::Ref<const Eigen::VectorXd> x)
 		{
 			if (A.rows() != A.cols()) {
 				throw std::invalid_argument("A matrix is not square");

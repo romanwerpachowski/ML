@@ -167,6 +167,20 @@ namespace ml
 		return false;
 	}
 
+	void EM::assign_responsibilities(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<Eigen::VectorXd> u) const
+	{
+		if (x.size() != means().rows()) {
+			throw std::invalid_argument("Wrong x size");
+		}
+		if (u.size() != number_components()) {
+			throw std::invalid_argument("Wrong u size");
+		}
+		for (unsigned int k = 0; k < number_components_; ++k) {
+			u[k] = std::exp(-0.5 * LinearAlgebra::xAx_symmetric(inverse_covariances_[k], x - means_.col(k))) * mixing_probabilities_[k] / sqrt_covariance_determinants_[k];
+		}
+		u /= u.sum();
+	}
+
 	void EM::expectation_stage(Eigen::Ref<const Eigen::MatrixXd> data)
 	{
 		const auto number_dimensions = data.rows();
@@ -264,5 +278,5 @@ namespace ml
 			}
 			sqrt_covariance_determinants_[k] = sqrt_covariance_determinant;
 		}
-	}	
+	}
 }

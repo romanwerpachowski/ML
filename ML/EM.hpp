@@ -91,28 +91,38 @@ namespace ml
 			return number_components_;
 		}
 
-		/** @brief Returns a const reference to fitted component means. */
+		/** @brief Returns a const reference to matrix containing fitted component means. 
+		@return Const reference to `number_dimensions` x #number_components() matrix.
+		*/
 		const auto& means() const 
 		{
 			return means_;
 		}
 
-		/** @brief Returns a const reference to fitted component covariance matrices. */
+		/** @brief Returns a const reference to fitted component covariance matrices. 
+		@return Const reference to std::vector<Eigen::MatrixXd> with length equal to #number_components(). Each matrix has size `means().rows()` x `means().rows()`.
+		*/
 		const auto& covariances() const
 		{
 			return covariances_;
 		}
 
-		/** @brief Returns a const reference to fitted k-th component's covariance matrix. */
+		/** @brief Returns a const reference to fitted k-th component's covariance matrix.
+		@return Const reference to symmetric matrix with size `means().rows()` x `means().rows()`.
+		*/
 		DLL_DECLSPEC const Eigen::MatrixXd& covariance(unsigned int k) const;
 
-		/** @brief Returns a const reference to fitted component mixing probabilities. */
+		/** @brief Returns a const reference to fitted component mixing probabilities.
+		@return Const reference to vector with size #number_components().
+		*/
 		const auto& mixing_probabilities() const 
 		{
 			return mixing_probabilities_;
 		}
 
-		/** @brief Returns a const reference to resulting component responsibilities. */
+		/** @brief Returns a const reference to resulting component responsibilities. 
+		@return Const reference to `sample_size` x #number_components() matrix.
+		*/
 		const auto& responsibilities() const 
 		{
 			return responsibilities_;
@@ -128,7 +138,15 @@ namespace ml
 		std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser() const
 		{
 			return means_initialiser_;
-		}		
+		}
+
+		/** @brief Given a data point x, calculate each component's responsibilities for x and save them in u.
+
+		@param[in] x Data point with correct dimension.
+		@param[out] u Vector for responsibilities with length equal to #number_components().
+		@throw std::invalid_argument If `x.size() != means().rows()` or `u.size() != number_components()`.
+		*/
+		DLL_DECLSPEC void assign_responsibilities(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<Eigen::VectorXd> u) const;
 	private:
 		std::default_random_engine prng_;
 		std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser_;

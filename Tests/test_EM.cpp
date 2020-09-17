@@ -5,7 +5,7 @@
 #include "ML/EM.hpp"
 
 
-static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsInitialiser> means_initialiser, bool maximise_first)
+static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsInitialiser> means_initialiser, const bool maximise_first)
 {
 	std::default_random_engine rng;
 	std::uniform_real_distribution<double> u01(0, 1);
@@ -48,8 +48,15 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsIn
 	ASSERT_EQ(num_components, static_cast<unsigned int>(em.mixing_probabilities().size()));
 	ASSERT_EQ(num_components, static_cast<unsigned int>(em.means().cols()));
 	ASSERT_EQ(num_dimensions, static_cast<unsigned int>(em.means().rows()));
+	ASSERT_EQ(sample_size, static_cast<unsigned int>(em.responsibilities().rows()));
+	ASSERT_EQ(num_components, static_cast<unsigned int>(em.responsibilities().cols()));
 	const Eigen::MatrixXd means_col_major(em.means());
-	em.set_seed(seed);
+
+	Eigen::VectorXd u(num_components);
+	for (unsigned int i = 0; i < sample_size; ++i) {		
+		em.assign_responsibilities(data.col(i), u);
+		ASSERT_NEAR(0, (u - em.responsibilities().row(i).transpose()).norm(), 1e-15) << i;
+	}
 
 	std::vector<Eigen::MatrixXd> covariances(num_components);
 	for (unsigned int k = 0; k < num_components; ++k) {
@@ -84,6 +91,12 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsIn
 	em1.fit(data);
 	ASSERT_LE(em1.log_likelihood(), em.log_likelihood()) << em1.log_likelihood();
 	ASSERT_NEAR(0., (data.rowwise().mean() - em1.means().col(0)).norm(), 1e-14);
+
+	u.resize(1);
+	for (unsigned int i = 0; i < sample_size; ++i) {
+		em1.assign_responsibilities(data.col(i), u);
+		ASSERT_NEAR(0, (u - em1.responsibilities().row(i).transpose()).norm(), 1e-15) << i;
+	}
 }
 
 TEST(EMTest, two_gaussians_forgy)
