@@ -75,6 +75,22 @@ along with this program.  If not, see &lt;<a class="reference external" href="ht
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
 <p>Gaussian Expectation-Maximisation algorithm.</p>
 <dl class="method">
+<dt id="cppyml.cppyml.clustering.EM.assign_responsibilities">
+<code class="descname">assign_responsibilities</code><span class="sig-paren">(</span><em>self: cppyml.cppyml.clustering.EM, x: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray[float64[m, 1]]<a class="headerlink" href="#cppyml.cppyml.clustering.EM.assign_responsibilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a data point x, calculate each component’s responsibilities for x and return them.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – Data point with correct dimension.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Array of components’ responsibilities.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="cppyml.cppyml.clustering.EM.covariance">
 <code class="descname">covariance</code><span class="sig-paren">(</span><em>self: cppyml.cppyml.clustering.EM</em>, <em>k: int</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray[float64[m, n]]<a class="headerlink" href="#cppyml.cppyml.clustering.EM.covariance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns k-th covariance matrix.</p>

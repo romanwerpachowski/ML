@@ -110,9 +110,9 @@ $(document).ready(function(){initNavTree('namespaceml_1_1LinearAlgebra.html','')
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aabfcdc7cafaf981fadf892ac67ad67a4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearAlgebra.html#aabfcdc7cafaf981fadf892ac67ad67a4">xAx_symmetric</a> (const Eigen::MatrixXd &amp;A, const Eigen::VectorXd &amp;x)</td></tr>
-<tr class="memdesc:aabfcdc7cafaf981fadf892ac67ad67a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates x^T A x for a symmetric matrix A.  <a href="namespaceml_1_1LinearAlgebra.html#aabfcdc7cafaf981fadf892ac67ad67a4">More...</a><br /></td></tr>
-<tr class="separator:aabfcdc7cafaf981fadf892ac67ad67a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a974bc64c706388c0b8221c18c2190035"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearAlgebra.html#a974bc64c706388c0b8221c18c2190035">xAx_symmetric</a> (const Eigen::MatrixXd &amp;A, Eigen::Ref&lt; const Eigen::VectorXd &gt; x)</td></tr>
+<tr class="memdesc:a974bc64c706388c0b8221c18c2190035"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates x^T A x for a symmetric matrix A.  <a href="namespaceml_1_1LinearAlgebra.html#a974bc64c706388c0b8221c18c2190035">More...</a><br /></td></tr>
+<tr class="separator:a974bc64c706388c0b8221c18c2190035"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c9e448884c3bad1a72b137beb081cad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1LinearAlgebra.html#a5c9e448884c3bad1a72b137beb081cad">xxT</a> (const Eigen::VectorXd &amp;x, Eigen::MatrixXd &amp;dest)</td></tr>
 <tr class="memdesc:a5c9e448884c3bad1a72b137beb081cad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates x * x^T and places it in dest.  <a href="namespaceml_1_1LinearAlgebra.html#a5c9e448884c3bad1a72b137beb081cad">More...</a><br /></td></tr>
 <tr class="separator:a5c9e448884c3bad1a72b137beb081cad"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,8 +123,8 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Linear algebra helper functions. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="aabfcdc7cafaf981fadf892ac67ad67a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aabfcdc7cafaf981fadf892ac67ad67a4">&#9670;&nbsp;</a></span>xAx_symmetric()</h2>
+<a id="a974bc64c706388c0b8221c18c2190035"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a974bc64c706388c0b8221c18c2190035">&#9670;&nbsp;</a></span>xAx_symmetric()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -138,7 +138,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const Eigen::VectorXd &amp;&#160;</td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
           <td class="paramname"><em>x</em>&#160;</td>
         </tr>
         <tr>

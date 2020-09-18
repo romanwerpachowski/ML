@@ -17,5 +17,6 @@ var classml_1_1EM =
     [ "mixing_probabilities", "classml_1_1EM.html#ae42efce9e1af38322d157804c4a12cfc", null ],
     [ "responsibilities", "classml_1_1EM.html#ad00fd3573c2078707aeaacebb1a40f14", null ],
     [ "log_likelihood", "classml_1_1EM.html#aedac3544c55121d270e6d3bdca67b6a5", null ],
-    [ "means_initialiser", "classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e", null ]
+    [ "means_initialiser", "classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e", null ],
+    [ "assign_responsibilities", "classml_1_1EM.html#a18e66d65c816c2ff41aaadb670864ac9", null ]
 ];
