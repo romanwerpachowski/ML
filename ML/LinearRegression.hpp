@@ -269,7 +269,26 @@ namespace ml
 			return Crossvalidation::leave_one_out_scalar(x, y, trainer, tester) * static_cast<double>(y.size());
 		}
 
+		/** @brief Carries out Least Angle Regression.
+		
+		Implements the Least Angle Regression version of Lasso regression.
 
+		The matrix `X` is either assumed to be standardised (`DoStandardise == false`)
+		or is standardised internally (`DoStandardise == true`; requires a matrix copy).
+		
+		@param[in] X D x N matrix of X values, with data points in columns. Should not contain a row with all 1's.
+		@param[in] y Y vector with length N.
+		@tparam DoStandardise Whether to standardise `X` internally.
+		*/
+		template <bool DoStandardise> void least_angle_regression(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
+
+		/** @brief Carries out Least Angle Regression, standardising `X` inputs internally.
+		*/
+		template <> void least_angle_regression<true>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
+
+		/** @brief Carries out Least Angle Regression, without standardising `X` inputs internally.
+		*/
+		template <> void least_angle_regression<false>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
 		/** @brief Adds another row with 1s in every column to X.
 		@param[in] X Matrix of independent variables with data points in columns.
@@ -304,7 +323,7 @@ namespace ml
 
 		/** @brief Reverses the outcome of standardise().
 
-		From each row, `standardise` multiplies it by its standard deviation and adds its mean.
+		From each row, `unstandardise` multiplies it by its standard deviation and adds its mean.
 
 		@param[in, out] X D x N matrix of standardised independent variables with data points in columns.
 		@param[in] means Means of rows of `X`.

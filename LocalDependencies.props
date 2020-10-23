@@ -3,7 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>C:\Users\Roman\source\repos\benchmark\include;D:\local\eigen-3.3.7;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Roman\source\repos\benchmark\include;C:\local\eigen-3.3.7;$(IncludePath)</IncludePath>
     <_PropertySheetDisplayName>LocalDependencies</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemDefinitionGroup>

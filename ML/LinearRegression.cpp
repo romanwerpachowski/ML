@@ -8,6 +8,7 @@
 #include <Eigen/Cholesky>
 #include "LinearAlgebra.hpp"
 #include "LinearRegression.hpp"
+#include "Statistics.hpp"
 
 namespace ml
 {
@@ -289,6 +290,39 @@ namespace ml
 			result.cov.row(q).head(q) = result.cov.col(q).head(q);
 			result.cov(q, q) += LinearAlgebra::xAx_symmetric(cov_slopes, means);
 			return result;
+		}
+
+		template <> void least_angle_regression<false>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
+		{
+			// X is an q x N matrix and y is a N-size vector.
+			const auto q = X.rows();
+			const auto n = X.cols();
+			if (n != static_cast<unsigned int>(y.size())) {
+				throw std::invalid_argument("X and Y vectors have different sizes");
+			}
+			auto available_features = q;
+			std::vector<Eigen::Index> features(q, -1);
+			Eigen::VectorXd beta(Eigen::VectorXd::Zero(q));
+			Eigen::VectorXd residuals(y.array() - y.mean());
+			std::vector<std::pair<Eigen::Index, double>> indexed_absolute_covariances(q);
+			while (available_features) {
+				const auto used_features = q - available_features;
+
+			}
+			const auto sse_and_mean_y = Statistics::sse_and_mean(y.data(), y.data() + n);
+			const double mean_y = sse_and_mean_y.second;
+			const double var_y = sse_and_mean_y.first / (n - 1);
+			const double std_dev_y = std::sqrt(var_y);
+			
+			for (Eigen::Index i = 0; i < q; ++i) {
+				indexed_absolute_correlations[i] = std::make_pair(i, std::abs(Statistics::covariance(X.row(i), y)));
+			}
+			// Sort in descending order.
+			std::sort(indexed_absolute_correlations.begin(), indexed_absolute_correlations.end(), [](const std::pair<Eigen::Index, double>& p) {
+				return -p.second;
+				});
+			auto feature_it = indexed_absolute_correlations.begin();
+
 		}
 
 		Eigen::MatrixXd add_ones(const Eigen::Ref<const Eigen::MatrixXd> X)
