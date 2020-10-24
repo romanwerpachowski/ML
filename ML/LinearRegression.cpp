@@ -302,31 +302,64 @@ namespace ml
 			if (n != static_cast<unsigned int>(y.size())) {
 				throw std::invalid_argument("X and Y vectors have different sizes");
 			}
-			auto available_features = q;
 			std::vector<Eigen::Index> selected_features;
 			selected_features.reserve(q);
 			Eigen::VectorXd beta(Eigen::VectorXd::Zero(q));
 			Eigen::VectorXd residuals(y.array() - y.mean());
-			Eigen::VectorXd covariances_with_initial_residuals(q);
+			Eigen::VectorXd covariances_with_residuals(q);
 			Eigen::VectorXd solution(Eigen::VectorXd::Zero(n));
+			Eigen::MatrixXd X_sel(Eigen::MatrixXd::Zero(q, n));
+			Eigen::VectorXd ls_solution(n);
 			const Eigen::MatrixXd XXt = X * X.transpose();
 			const Eigen::MatrixXd X_cov = XXt / static_cast<double>(n);
 			for (Eigen::Index i = 0; i < q; ++i) {
 				const auto X_i = X.row(i);
-				covariances_with_initial_residuals[i] = residuals.dot(X.row(i)) / static_cast<double>(n);
+				covariances_with_residuals[i] = residuals.dot(X.row(i)) / static_cast<double>(n);
 			}
-			Eigen::VectorXd covariances_with_current_residuals(q);
-			typedef std::pair<Eigen::Index, double> indexed_value_t;
-			std::vector<indexed_value_t> indexed_covariances(q);
-			while (available_features) {
+			const Eigen::VectorXd covariances_with_initial_residuals(covariances_with_residuals);
+			Eigen::VectorXd covariances_with_ls_solution(q);
+			std::vector<double> gammas(q, 0);
+			// Selection of the first feature is a special case.
+			const auto most_correlated_feature_it = std::max_element(covariances_with_residuals.data(), covariances_with_residuals.data() + q, [](const double& l, const double& r) { return std::abs(l) < std::abs(r); });
+			selected_features.push_back(std::distance(covariances_with_residuals.data(), most_correlated_feature_it));
+			X_sel.row(0) = X.row(selected_features.front());
+			// +Inf means this feature was already selected.
+			gammas[selected_features.front()] = std::numeric_limits<double>::infinity(); 
+			// Select rest of the features.
+			while (selected_features.size() < q) {
 				residuals = y.array() - y.mean();
 				solution.setZero();
 				const auto nbr_selected_features = selected_features.size();
+				covariances_with_residuals = covariances_with_initial_residuals;
 				for (size_t i = 0; i < nbr_selected_features; ++i) {
-					residuals -= beta[i] * X.row(selected_features[i]);
-					solution += beta[i] * X.row(selected_features[i]);
+					const auto k = selected_features[i];
+					residuals -= beta[i] * X.row(k);
+					solution += beta[i] * X.row(k);
+					covariances_with_residuals -= beta[i] * X_cov.col(k);
 				}
+				// TODO: optimize.
+				const auto ls_result = multivariate(X_sel.topRows(nbr_selected_features), residuals);
+				ls_solution = ls_result.predict(X_sel.topRows(nbr_selected_features));
+				covariances_with_ls_solution.setZero();
+				double cov_r_ls_solution = 0;
+				double cov_r_solution = 0;
+				for (size_t i = 0; i < nbr_selected_features; ++i) {
+					const auto k = selected_features[i];
+					covariances_with_ls_solution += ls_result.beta[i] * X_cov.col(k);
+					cov_r_ls_solution += ls_result.beta[i] * covariances_with_residuals[k];
+					cov_r_solution += beta[i] * covariances_with_residuals[k];
+				}
+				// Because residuals.mean() and solution.mean() are zero, we can use squared norm to compute
+				// the variance.
 				const double var_r = residuals.squaredNorm() / static_cast<double>(n);
+				const double var_solution = solution.squaredNorm() / static_cast<double>(n);
+				for (Eigen::Index k = 0; k < q; ++k) {
+					if (std::isinf(gammas[k])) {
+						// Skip already selected gammas.
+						continue;
+					}
+
+				}
 			}
 		}
 
