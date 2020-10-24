@@ -1,4 +1,5 @@
 /* (C) 2020 Roman Werpachowski. */
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <iostream>
@@ -295,34 +296,38 @@ namespace ml
 		template <> void least_angle_regression<false>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
 		{
 			// X is an q x N matrix and y is a N-size vector.
+			// Rows of X are assumed to have mean 0 and population variance 1.
 			const auto q = X.rows();
 			const auto n = X.cols();
 			if (n != static_cast<unsigned int>(y.size())) {
 				throw std::invalid_argument("X and Y vectors have different sizes");
 			}
 			auto available_features = q;
-			std::vector<Eigen::Index> features(q, -1);
+			std::vector<Eigen::Index> selected_features;
+			selected_features.reserve(q);
 			Eigen::VectorXd beta(Eigen::VectorXd::Zero(q));
 			Eigen::VectorXd residuals(y.array() - y.mean());
-			std::vector<std::pair<Eigen::Index, double>> indexed_absolute_covariances(q);
-			while (available_features) {
-				const auto used_features = q - available_features;
-
-			}
-			const auto sse_and_mean_y = Statistics::sse_and_mean(y.data(), y.data() + n);
-			const double mean_y = sse_and_mean_y.second;
-			const double var_y = sse_and_mean_y.first / (n - 1);
-			const double std_dev_y = std::sqrt(var_y);
-			
+			Eigen::VectorXd covariances_with_initial_residuals(q);
+			Eigen::VectorXd solution(Eigen::VectorXd::Zero(n));
+			const Eigen::MatrixXd XXt = X * X.transpose();
+			const Eigen::MatrixXd X_cov = XXt / static_cast<double>(n);
 			for (Eigen::Index i = 0; i < q; ++i) {
-				indexed_absolute_correlations[i] = std::make_pair(i, std::abs(Statistics::covariance(X.row(i), y)));
+				const auto X_i = X.row(i);
+				covariances_with_initial_residuals[i] = residuals.dot(X.row(i)) / static_cast<double>(n);
 			}
-			// Sort in descending order.
-			std::sort(indexed_absolute_correlations.begin(), indexed_absolute_correlations.end(), [](const std::pair<Eigen::Index, double>& p) {
-				return -p.second;
-				});
-			auto feature_it = indexed_absolute_correlations.begin();
-
+			Eigen::VectorXd covariances_with_current_residuals(q);
+			typedef std::pair<Eigen::Index, double> indexed_value_t;
+			std::vector<indexed_value_t> indexed_covariances(q);
+			while (available_features) {
+				residuals = y.array() - y.mean();
+				solution.setZero();
+				const auto nbr_selected_features = selected_features.size();
+				for (size_t i = 0; i < nbr_selected_features; ++i) {
+					residuals -= beta[i] * X.row(selected_features[i]);
+					solution += beta[i] * X.row(selected_features[i]);
+				}
+				const double var_r = residuals.squaredNorm() / static_cast<double>(n);
+			}
 		}
 
 		Eigen::MatrixXd add_ones(const Eigen::Ref<const Eigen::MatrixXd> X)

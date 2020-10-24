@@ -286,7 +286,7 @@ namespace ml
 		*/
 		template <> void least_angle_regression<true>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
-		/** @brief Carries out Least Angle Regression, without standardising `X` inputs internally.
+		/** @brief Carries out Least Angle Regression, assuming `X` is already standardized.
 		*/
 		template <> void least_angle_regression<false>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
@@ -299,7 +299,7 @@ namespace ml
 
 		/** @brief Standardises independent variables.
 
-		From each row, `standardise` subtracts its mean and divides it by its standard deviation.
+		From each row, `standardise` subtracts its mean and divides it by its standard (population) deviation.
 
 		@param[in, out] X Matrix of independent variables with data points in columns.
 		@throw std::invalid_argument If any row of `X` has all values the same, or `X` is empty.
