@@ -326,7 +326,7 @@ namespace ml
 			// +Inf means this feature was already selected.
 			gammas[selected_features.front()] = std::numeric_limits<double>::infinity(); 
 			// Select rest of the features.
-			while (selected_features.size() < q) {
+			while (selected_features.size() < static_cast<size_t>(q)) {
 				residuals = y.array() - y.mean();
 				solution.setZero();
 				const auto nbr_selected_features = selected_features.size();
@@ -353,12 +353,20 @@ namespace ml
 				// the variance.
 				const double var_r = residuals.squaredNorm() / static_cast<double>(n);
 				const double var_solution = solution.squaredNorm() / static_cast<double>(n);
+				const double var_ls_solution = ls_solution.squaredNorm() / static_cast<double>(n);
 				for (Eigen::Index k = 0; k < q; ++k) {
 					if (std::isinf(gammas[k])) {
 						// Skip already selected gammas.
 						continue;
 					}
-
+					// Set up a quadratic equation for gamma, a * gamma^2 + b * gamma + c = 0.
+					const double a = var_r * var_solution * std::pow(covariances_with_ls_solution[k], 2) - var_ls_solution * std::pow(cov_r_solution, 2);
+					const double b = 2 * (
+						std::pow(cov_r_solution, 2) * cov_r_ls_solution
+						- covariances_with_residuals[k] * var_r * var_ls_solution * covariances_with_ls_solution[k]);
+					const double c = var_r * (
+						std::pow(covariances_with_residuals[k], 2) * var_solution
+						- std::pow(cov_r_solution, 2));
 				}
 			}
 		}
