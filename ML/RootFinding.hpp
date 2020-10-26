@@ -1,5 +1,6 @@
 /* (C) 2020 Roman Werpachowski. */
 #pragma once
+#include "dll.hpp"
 
 namespace ml
 {
@@ -18,6 +19,6 @@ namespace ml
         * @return Number of real roots.
         * @throw std::domain_error If `a == 0`.
         */
-        unsigned int solve_quadratic(double a, double b, double c, double& x1, double& x2);
+        DLL_DECLSPEC unsigned int solve_quadratic(double a, double b, double c, double& x1, double& x2);
     }
 }

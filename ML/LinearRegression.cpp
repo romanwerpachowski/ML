@@ -9,6 +9,7 @@
 #include <Eigen/Cholesky>
 #include "LinearAlgebra.hpp"
 #include "LinearRegression.hpp"
+#include "RootFinding.hpp"
 #include "Statistics.hpp"
 
 namespace ml
@@ -313,7 +314,6 @@ namespace ml
 			const Eigen::MatrixXd XXt = X * X.transpose();
 			const Eigen::MatrixXd X_cov = XXt / static_cast<double>(n);
 			for (Eigen::Index i = 0; i < q; ++i) {
-				const auto X_i = X.row(i);
 				covariances_with_residuals[i] = residuals.dot(X.row(i)) / static_cast<double>(n);
 			}
 			const Eigen::VectorXd covariances_with_initial_residuals(covariances_with_residuals);
@@ -367,6 +367,11 @@ namespace ml
 					const double c = var_r * (
 						std::pow(covariances_with_residuals[k], 2) * var_solution
 						- std::pow(cov_r_solution, 2));
+					double gamma1, gamma2;
+					const auto nbr_roots = ml::RootFinding::solve_quadratic(a, b, c, gamma1, gamma2);
+					if (!nbr_roots) {
+						throw std::runtime_error("No solutions found for gamma");
+					}
 				}
 			}
 		}
