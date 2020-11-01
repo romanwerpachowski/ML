@@ -172,7 +172,7 @@ namespace ml
 		if (x.size() != means().rows()) {
 			throw std::invalid_argument("Wrong x size");
 		}
-		if (u.size() != number_components()) {
+		if (u.size() != static_cast<Eigen::Index>(number_components())) {
 			throw std::invalid_argument("Wrong u size");
 		}
 		for (unsigned int k = 0; k < number_components_; ++k) {
