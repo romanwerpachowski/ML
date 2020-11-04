@@ -21,6 +21,9 @@ and [Sphinx documentation](cppyml/html/index.html) for the Python extensions.
 
 Tested with Visual Studio C++ 2019 and Python 3.7.7.
 
+Before building, copy the file `LocalDependencies.props.template` to `LocalDependencies.props`
+and add paths to required header files.
+
 ### Linux
 
 Tested with on Ubuntu 20.04.1 LTS (Focal Fossa).
