@@ -6,6 +6,7 @@
 #include <limits>
 #include <stdexcept>
 #include <sstream>
+#include <boost/format.hpp>
 #include <Eigen/Cholesky>
 #include "LinearAlgebra.hpp"
 #include "LinearRegression.hpp"
@@ -294,7 +295,7 @@ namespace ml
 			return result;
 		}
 
-		template <> void least_angle_regression<false>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
+		template <> LeastAngleRegressionResult least_angle_regression<false>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
 		{
 			// X is an q x N matrix and y is a N-size vector.
 			// Rows of X are assumed to have mean 0 and population variance 1.
@@ -367,12 +368,56 @@ namespace ml
 					const double c = var_r * (
 						std::pow(covariances_with_residuals[k], 2) * var_solution
 						- std::pow(cov_r_solution, 2));
-					double gamma1, gamma2;
-					const auto nbr_roots = ml::RootFinding::solve_quadratic(a, b, c, gamma1, gamma2);
-					if (!nbr_roots) {
-						throw std::runtime_error("No solutions found for gamma");
-					}
+					if (a != 0) {
+						double gamma1, gamma2;
+						const auto nbr_roots = ml::RootFinding::solve_quadratic(a, b, c, gamma1, gamma2);
+						if (!nbr_roots) {
+							throw std::runtime_error(boost::str(boost::format("No solutions found for gamma: A=%g, B=%g, C=%g") % a % b % c));
+						} else if (nbr_roots == 1) {
+							if (gamma1 < 0) {
+								throw std::runtime_error(boost::str(boost::format("No non-negative solutions found for gamma: A=%g, B=%g, C=%g") % a % b % c));
+							}
+							gammas[k] = gamma1;
+						} else {
+							assert(nbr_roots == 2);
+							if (gamma2 < gamma1) {
+								std::swap(gamma1, gamma2);
+							}
+							if (gamma2 < 0) {
+								throw std::runtime_error(boost::str(boost::format("No non-negative solutions found for gamma: A=%g, B=%g, C=%g") % a % b % c));
+							} else {
+								if (gamma1 < 0) {
+									gammas[k] = gamma2;
+								} else {
+									gammas[k] = gamma1;
+								}
+							}
+						}
+					} else {
+						// Solve linear equation b * gamma + c == 0.
+						if (b != 0 || c != 0) {
+							const double gamma = -c / b;
+							if (gamma >= 0) {
+								gammas[k] = 0;
+							} else {
+								throw std::runtime_error(boost::str(boost::format("No non-negative solutions found for gamma: A=%g, B=%g, C=%g") % a % b % c));
+							}
+						} else {
+							gammas[k] = 0;
+						}
+					} // find gammas[k]
+				} // loop over 0 <= k < q
+				const auto selected_feature_idx = std::distance(gammas.begin(), std::min_element(gammas.begin(), gammas.end()));
+				const auto gamma = gammas[selected_feature_idx];
+				if (std::isinf(gamma)) {
+					throw std::runtime_error("Cannot update the solution");
 				}
+				X_sel.row(nbr_selected_features) = X.row(selected_feature_idx);
+				for (size_t i = 0; i < nbr_selected_features; ++i) {
+					const auto k = selected_features[i];
+					beta[k] += gamma * ls_result.beta[i];
+				}
+				selected_features.push_back(selected_feature_idx);
 			}
 		}
 

@@ -111,17 +111,17 @@ namespace ml
 			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;
 		};
 
-		/** @brief Result of a (multivariate) ridge regression with intercept.
+		/** @brief Result of a multivariate regularised regression with unregulerised intercept.
 
 		Intercept is the last coefficient in `beta`.
 
 		#var_y is calculated using #dof as the denominator.
 		*/
-		struct RidgeRegressionResult : public Result
+		struct RegularisedRegressionResult : public Result
 		{
 			Eigen::VectorXd beta; /**< Fitted coefficients of the model \f$\hat{y} = \vec{\beta'} \cdot \vec{x} + \beta_0 \f$, concatenated as \f$ (\vec{\beta'}, \beta_0) \f$. */
 			Eigen::MatrixXd cov;  /**< Covariance matrix of beta coefficients. */
-			double effective_dof; /**< Effective number of residual degrees of freedom \f$ N - \mathrm{tr} [ X^T (X X^T + \lambda I)^{-1} X ] - 1 \f$. */			
+			double effective_dof; /**< Effective number of residual degrees of freedom. */
 
 			/** @brief Formats the result as string. */
 			DLL_DECLSPEC std::string to_string() const;
@@ -132,6 +132,33 @@ namespace ml
 			 @throw std::invalid_argument If `X.rows() + 1 != beta.size()`.
 			*/
 			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;
+		};
+
+		/** @brief Result of a multivariate ridge regression with unregularised intercept.
+
+		#effective_dof is given by the formula \f$ N - \mathrm{tr} [ X^T (X X^T + \lambda I)^{-1} X ] - 1 \f$.
+		
+		*/
+		struct RidgeRegressionResult : public RegularisedRegressionResult
+		{
+		};
+
+		/** @brief Result of a multivariate LASSO regression with unregularised intercept.
+		* 
+		* #effective_dof is equal to #n minus the number of non-zero linear coefficients.
+		*/
+		struct LassoRegressionResult : public RegularisedRegressionResult
+		{
+
+		};
+
+		struct LeastAngleRegressionResult
+		{
+			std::vector<LassoRegressionResult> lasso_path;
+			unsigned int n; /**< Number of data points. */
+			unsigned int dof; /**< Number of residual degrees of freedom (e.g. `n - 2` or `n - 1` for univariate regression with or without intercept). */
+			double rss; /**< Residual sum of squares (RSS). */
+			double tss; /**< Total sum of squares (TSS, equal to the RSS for the "base model" always returning average Y).*/
 		};
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept.
@@ -280,15 +307,15 @@ namespace ml
 		@param[in] y Y vector with length N.
 		@tparam DoStandardise Whether to standardise `X` internally.
 		*/
-		template <bool DoStandardise> void least_angle_regression(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
+		template <bool DoStandardise> LeastAngleRegressionResult least_angle_regression(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
 		/** @brief Carries out Least Angle Regression, standardising `X` inputs internally.
 		*/
-		template <> void least_angle_regression<true>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
+		template <> LeastAngleRegressionResult least_angle_regression<true>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
 		/** @brief Carries out Least Angle Regression, assuming `X` is already standardized.
 		*/
-		template <> void least_angle_regression<false>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
+		template <> LeastAngleRegressionResult least_angle_regression<false>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y);
 
 		/** @brief Adds another row with 1s in every column to X.
 		@param[in] X Matrix of independent variables with data points in columns.
