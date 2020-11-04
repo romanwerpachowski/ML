@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <IncludePath>C:\Users\Roman\source\repos\benchmark\include;D:\local\eigen-3.3.7;$(IncludePath)</IncludePath>
+    <_PropertySheetDisplayName>LocalDependencies</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Users\Roman\source\repos\benchmark\out\build\x64-Release\src;C:\Users\Roman\Anaconda3\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Roman\source\repos\googletest\googletest\include;C:\Users\Roman\source\repos\pybind11\include;C:\Users\Roman\Anaconda3\include;C:\local\eigen-3.3.7;D:\local\boost_1_67_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

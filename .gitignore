@@ -362,3 +362,4 @@ healthchecksdb
 /docs/sphinx/_build
 /mousie.pdf
 .vscode
+/LocalDependencies.props
