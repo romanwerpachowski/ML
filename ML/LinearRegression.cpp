@@ -57,7 +57,7 @@ namespace ml
 			return X.transpose() * beta;
 		}
 
-		std::string RidgeRegressionResult::to_string() const
+		std::string RegularisedRegressionResult::to_string() const
 		{
 			std::stringstream s;
 			s << "RidgeRegressionResult(";
@@ -69,7 +69,7 @@ namespace ml
 			return s.str();
 		}
 
-		Eigen::VectorXd RidgeRegressionResult::predict(Eigen::Ref<const Eigen::MatrixXd> X) const
+		Eigen::VectorXd RegularisedRegressionResult::predict(Eigen::Ref<const Eigen::MatrixXd> X) const
 		{
 			if (X.rows() + 1 != beta.size()) {
 				throw std::invalid_argument("X has wrong number of rows");

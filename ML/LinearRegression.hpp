@@ -149,7 +149,6 @@ namespace ml
 		*/
 		struct LassoRegressionResult : public RegularisedRegressionResult
 		{
-
 		};
 
 		struct LeastAngleRegressionResult
