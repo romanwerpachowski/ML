@@ -120,11 +120,7 @@ namespace ml
 		struct RegularisedRegressionResult : public Result
 		{
 			Eigen::VectorXd beta; /**< Fitted coefficients of the model \f$\hat{y} = \vec{\beta'} \cdot \vec{x} + \beta_0 \f$, concatenated as \f$ (\vec{\beta'}, \beta_0) \f$. */
-			Eigen::MatrixXd cov;  /**< Covariance matrix of beta coefficients. */
-			double effective_dof; /**< Effective number of residual degrees of freedom. */
-
-			/** @brief Formats the result as string. */
-			DLL_DECLSPEC std::string to_string() const;
+			double effective_dof; /**< Effective number of residual degrees of freedom. */			
 
 			/** @brief Predicts Y given X.
 			 @param X Matrix of independent variables with data points in columns.
@@ -141,6 +137,10 @@ namespace ml
 		*/
 		struct RidgeRegressionResult : public RegularisedRegressionResult
 		{
+			Eigen::MatrixXd cov;  /**< Covariance matrix of beta coefficients. */
+
+			/** @brief Formats the result as string. */
+			DLL_DECLSPEC std::string to_string() const;
 		};
 
 		/** @brief Result of a multivariate LASSO regression with unregularised intercept.
@@ -149,15 +149,20 @@ namespace ml
 		*/
 		struct LassoRegressionResult : public RegularisedRegressionResult
 		{
+			/** @brief Formats the result as string. */
+			DLL_DECLSPEC std::string to_string() const;
 		};
 
+		/** @brief LASSO solution path calculated using the Least Angle Regression algorithm. */
 		struct LeastAngleRegressionResult
 		{
-			std::vector<LassoRegressionResult> lasso_path;
+			std::vector<LassoRegressionResult> lasso_path; /**<  Solutions along the LASSO path. */
 			unsigned int n; /**< Number of data points. */
 			unsigned int dof; /**< Number of residual degrees of freedom (e.g. `n - 2` or `n - 1` for univariate regression with or without intercept). */
-			double rss; /**< Residual sum of squares (RSS). */
 			double tss; /**< Total sum of squares (TSS, equal to the RSS for the "base model" always returning average Y).*/
+
+			/** @brief Formats the result as string. */
+			DLL_DECLSPEC std::string to_string() const;
 		};
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept.

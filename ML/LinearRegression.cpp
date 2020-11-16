@@ -57,7 +57,7 @@ namespace ml
 			return X.transpose() * beta;
 		}
 
-		std::string RegularisedRegressionResult::to_string() const
+		std::string RidgeRegressionResult::to_string() const
 		{
 			std::stringstream s;
 			s << "RidgeRegressionResult(";
@@ -240,6 +240,8 @@ namespace ml
 			// Total sum of squares:
 			result.tss = y_centred.squaredNorm();
 			if (lambda > 0) {
+				// std::max to avoid numerical inaccuracies pushing effective_dof below dof.
+				// -1 to account for the intercept.
 				result.effective_dof = std::max(static_cast<double>(n) - (X.transpose() * xxt_decomp.solve(X)).trace() - 1, static_cast<double>(result.dof));
 			}
 			else {
@@ -306,6 +308,11 @@ namespace ml
 			}
 			std::vector<Eigen::Index> selected_features;
 			selected_features.reserve(q);
+			const double intercept = y.mean();			
+			LeastAngleRegressionResult lar_result;
+			lar_result.n = n;
+			lar_result.dof = static_cast<unsigned int>(n - q - 1); // -1 for the intercept.
+			lar_result.lasso_path.reserve(q);
 			Eigen::VectorXd beta(Eigen::VectorXd::Zero(q));
 			Eigen::VectorXd residuals(y.array() - y.mean());
 			Eigen::VectorXd covariances_with_residuals(q);
@@ -413,12 +420,24 @@ namespace ml
 					throw std::runtime_error("Cannot update the solution");
 				}
 				X_sel.row(nbr_selected_features) = X.row(selected_feature_idx);
+				unsigned int nbr_nonzero_betas = 0;
 				for (size_t i = 0; i < nbr_selected_features; ++i) {
 					const auto k = selected_features[i];
 					beta[k] += gamma * ls_result.beta[i];
+					if (beta[k] != 0) {
+						++nbr_nonzero_betas;
+					}
 				}
 				selected_features.push_back(selected_feature_idx);
+				LassoRegressionResult lasso_result;
+				lasso_result.n = n;
+				lasso_result.dof = lar_result.dof;
+				lasso_result.beta.resize(q + 1);
+				lasso_result.beta.head(q) = beta;
+				lasso_result.beta[q] = intercept;
+				lasso_result.effective_dof = n - nbr_nonzero_betas - 1; // -1 to account for the intercept.
 			}
+			return lar_result;
 		}
 
 		Eigen::MatrixXd add_ones(const Eigen::Ref<const Eigen::MatrixXd> X)
