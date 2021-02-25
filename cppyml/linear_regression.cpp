@@ -56,8 +56,8 @@ namespace ml
         {
             using ResultWithCovariance<RidgeRegressionResult>::ResultWithCovariance;
 
-            RidgeRegressionResultRowMajor(unsigned int n, unsigned int dof, double rss, double tss, Eigen::Ref<const Eigen::VectorXd> beta, Eigen::Ref<const MatrixXdR> cov, double effective_dof)
-                : ResultWithCovariance<RidgeRegressionResult>(n, dof, rss, tss, beta, cov.transpose(), effective_dof)
+            RidgeRegressionResultRowMajor(unsigned int n, unsigned int dof, double rss, double tss, Eigen::Ref<const Eigen::VectorXd> beta, double effective_dof, Eigen::Ref<const MatrixXdR> cov)
+                : ResultWithCovariance<RidgeRegressionResult>(n, dof, rss, tss, beta, effective_dof, cov.transpose())
             {}
         };
 

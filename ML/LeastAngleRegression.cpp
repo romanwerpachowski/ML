@@ -7,6 +7,8 @@ namespace ml
 {
     namespace LinearRegression
     {
+		static double calc_gamma(double a, double b, double c);
+
 		template <> LeastAngleRegressionResult least_angle_regression<false>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y)
 		{
 			// X is an q x N matrix and y is a N-size vector.
@@ -85,44 +87,7 @@ namespace ml
 					const double c = var_r * (
 						std::pow(covariances_with_residuals[k], 2) * var_solution
 						- std::pow(cov_r_solution, 2));
-					if (a != 0) {
-						double gamma1, gamma2;
-						const auto nbr_roots = ml::RootFinding::solve_quadratic(a, b, c, gamma1, gamma2);
-						if (!nbr_roots) {
-							throw std::runtime_error(boost::str(boost::format("No solutions found for gamma: A=%g, B=%g, C=%g") % a % b % c));
-						} else if (nbr_roots == 1) {
-							if (gamma1 < 0) {
-								throw std::runtime_error(boost::str(boost::format("No non-negative solutions found for gamma: A=%g, B=%g, C=%g") % a % b % c));
-							}
-							gammas[k] = gamma1;
-						} else {
-							assert(nbr_roots == 2);
-							if (gamma2 < gamma1) {
-								std::swap(gamma1, gamma2);
-							}
-							if (gamma2 < 0) {
-								throw std::runtime_error(boost::str(boost::format("No non-negative solutions found for gamma: A=%g, B=%g, C=%g") % a % b % c));
-							} else {
-								if (gamma1 < 0) {
-									gammas[k] = gamma2;
-								} else {
-									gammas[k] = gamma1;
-								}
-							}
-						}
-					} else {
-						// Solve linear equation b * gamma + c == 0.
-						if (b != 0 || c != 0) {
-							const double gamma = -c / b;
-							if (gamma >= 0) {
-								gammas[k] = 0;
-							} else {
-								throw std::runtime_error(boost::str(boost::format("No non-negative solutions found for gamma: A=%g, B=%g, C=%g") % a % b % c));
-							}
-						} else {
-							gammas[k] = 0;
-						}
-					} // find gammas[k]
+					gammas[k] = calc_gamma(a, b, c);
 				} // loop over 0 <= k < q
 				const auto selected_feature_idx = std::distance(gammas.begin(), std::min_element(gammas.begin(), gammas.end()));
 				const auto gamma = gammas[selected_feature_idx];
@@ -148,6 +113,48 @@ namespace ml
 				lasso_result.effective_dof = static_cast<double>(n - nbr_nonzero_betas - 1); // -1 to account for the intercept.
 			}
 			return lar_result;
+		}
+
+		static double calc_gamma(double a, double b, double c)
+		{
+			if (a != 0) {				
+				double gamma1, gamma2;
+				const auto nbr_roots = ml::RootFinding::solve_quadratic(a, b, c, gamma1, gamma2);
+				if (!nbr_roots) {
+					throw std::runtime_error(boost::str(boost::format("No solutions found for gamma: A=%g, B=%g, C=%g") % a % b % c));
+				} else if (nbr_roots == 1) {
+					if (gamma1 < 0) {
+						throw std::runtime_error(boost::str(boost::format("No non-negative solutions found for gamma: A=%g, B=%g, C=%g") % a % b % c));
+					}
+					return gamma1;
+				} else {
+					assert(nbr_roots == 2);
+					if (gamma2 < gamma1) {
+						std::swap(gamma1, gamma2);
+					}
+					if (gamma2 < 0) {
+						throw std::runtime_error(boost::str(boost::format("No non-negative solutions found for gamma: A=%g, B=%g, C=%g") % a % b % c));
+					} else {
+						if (gamma1 < 0) {
+							return gamma2;
+						} else {
+							return gamma1;
+						}
+					}
+				}
+			} else {
+				// Solve linear equation b * gamma + c == 0.
+				if (b != 0 || c != 0) {
+					const double gamma = -c / b;
+					if (gamma >= 0) {
+						return 0;
+					} else {
+						throw std::runtime_error(boost::str(boost::format("No non-negative solutions found for gamma: A=%g, B=%g, C=%g") % a % b % c));
+					}
+				} else {
+					return 0;
+				}
+			} // find gammas[k]
 		}
     }
 }

@@ -142,6 +142,8 @@ namespace ml
 
 			/** @brief Formats the result as string. */
 			DLL_DECLSPEC std::string to_string() const;
+
+			using RegularisedRegressionResult::predict;
 		};
 
 		/** @brief Result of a multivariate LASSO regression with unregularised intercept.
@@ -152,6 +154,8 @@ namespace ml
 		{
 			/** @brief Formats the result as string. */
 			DLL_DECLSPEC std::string to_string() const;
+
+			using RegularisedRegressionResult::predict;
 		};		
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept.
