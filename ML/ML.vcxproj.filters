@@ -57,6 +57,9 @@
     <ClInclude Include="RootFinding.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LeastAngleRegression.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EM.cpp">
@@ -84,6 +87,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RootFinding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LeastAngleRegression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
