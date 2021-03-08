@@ -56,8 +56,8 @@ namespace ml
         {
             using ResultWithCovariance<RidgeRegressionResult>::ResultWithCovariance;
 
-            RidgeRegressionResultRowMajor(unsigned int n, unsigned int dof, double rss, double tss, Eigen::Ref<const Eigen::VectorXd> beta, Eigen::Ref<const MatrixXdR> cov, double effective_dof)
-                : ResultWithCovariance<RidgeRegressionResult>(n, dof, rss, tss, beta, cov.transpose(), effective_dof)
+            RidgeRegressionResultRowMajor(unsigned int n, unsigned int dof, double rss, double tss, Eigen::Ref<const Eigen::VectorXd> beta, double effective_dof, Eigen::Ref<const MatrixXdR> cov)
+                : ResultWithCovariance<RidgeRegressionResult>(n, dof, rss, tss, beta, effective_dof, cov.transpose())
             {}
         };
 
@@ -188,8 +188,8 @@ The `cov` property assumes independent Gaussian error terms.
 )";
 
     py::class_<ml::LinearRegression::RidgeRegressionResultRowMajor>(m_lin_reg, "RidgeRegressionResult", result)
-        .def(py::init<unsigned int, unsigned int, double, double, const Eigen::Ref<const Eigen::VectorXd>, const Eigen::Ref<const MatrixXdR>, double>(),
-            py::arg("n"), py::arg("dof"), py::arg("rss"), py::arg("tss"), py::arg("beta"), py::arg("cov"), py::arg("effective_dof"),
+        .def(py::init<unsigned int, unsigned int, double, double, const Eigen::Ref<const Eigen::VectorXd>, double, const Eigen::Ref<const MatrixXdR>>(),
+            py::arg("n"), py::arg("dof"), py::arg("rss"), py::arg("tss"), py::arg("beta"), py::arg("effective_dof"), py::arg("cov"),
             R"(Constructs a new instance of RidgeRegressionResult.
 
 Args:

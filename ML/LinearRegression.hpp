@@ -111,20 +111,16 @@ namespace ml
 			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;
 		};
 
-		/** @brief Result of a (multivariate) ridge regression with intercept.
-
-		Intercept is the last coefficient in `beta`.
+		/** @brief Result of a regularised regression with intercept.
+		 
+		Regularisation is applied to everything except the intercept, which is the last coefficient in `beta`.
 
 		#var_y is calculated using #dof as the denominator.
 		*/
-		struct RidgeRegressionResult : public Result
+		struct RegularisedRegressionResult : public Result
 		{
 			Eigen::VectorXd beta; /**< Fitted coefficients of the model \f$\hat{y} = \vec{\beta'} \cdot \vec{x} + \beta_0 \f$, concatenated as \f$ (\vec{\beta'}, \beta_0) \f$. */
-			Eigen::MatrixXd cov;  /**< Covariance matrix of beta coefficients. */
-			double effective_dof; /**< Effective number of residual degrees of freedom \f$ N - \mathrm{tr} [ X^T (X X^T + \lambda I)^{-1} X ] - 1 \f$. */			
-
-			/** @brief Formats the result as string. */
-			DLL_DECLSPEC std::string to_string() const;
+			double effective_dof; /**< Effective number of residual degrees of freedom \f$ N - \mathrm{tr} [ X^T (X X^T + \lambda I)^{-1} X ] - 1 \f$. */
 
 			/** @brief Predicts Y given X.
 			 @param X Matrix of independent variables with data points in columns.
@@ -132,6 +128,21 @@ namespace ml
 			 @throw std::invalid_argument If `X.rows() + 1 != beta.size()`.
 			*/
 			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;
+		};
+
+		/** @brief Result of a (multivariate) ridge regression with intercept.		*/
+		struct RidgeRegressionResult : public RegularisedRegressionResult
+		{
+			Eigen::MatrixXd cov;  /**< Covariance matrix of beta coefficients. */
+			
+			/** @brief Formats the result as string. */
+			DLL_DECLSPEC std::string to_string() const;
+
+			/** @see RegularisedRegressionResult::predict(). */
+			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const
+			{
+				return RegularisedRegressionResult::predict(X);
+			}
 		};
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept.

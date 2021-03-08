@@ -51,6 +51,14 @@ namespace ml
 				throw std::invalid_argument("X has wrong number of rows");
 			}
 			return X.transpose() * beta;
+		}		
+
+		Eigen::VectorXd RegularisedRegressionResult::predict(Eigen::Ref<const Eigen::MatrixXd> X) const
+		{
+			if (X.rows() + 1 != beta.size()) {
+				throw std::invalid_argument("X has wrong number of rows");
+			}
+			return X.transpose() * beta.head(beta.size() - 1) + Eigen::VectorXd::Constant(X.cols(), beta[beta.size() - 1]);
 		}
 
 		std::string RidgeRegressionResult::to_string() const
@@ -59,18 +67,10 @@ namespace ml
 			s << "RidgeRegressionResult(";
 			members_to_string(static_cast<const Result&>(*this), s);
 			s << ", beta=[" << beta.transpose() << "]";
-			s << ", cov=[" << cov << "]";
 			s << ", effective_dof=" << effective_dof;
+			s << ", cov=[" << cov << "]";
 			s << ")";
 			return s.str();
-		}
-
-		Eigen::VectorXd RidgeRegressionResult::predict(Eigen::Ref<const Eigen::MatrixXd> X) const
-		{
-			if (X.rows() + 1 != beta.size()) {
-				throw std::invalid_argument("X has wrong number of rows");
-			}
-			return X.transpose() * beta.head(beta.size() - 1) + Eigen::VectorXd::Constant(X.cols(), beta[beta.size() - 1]);
 		}
 
 		static UnivariateOLSResult calc_univariate_linear_regression_result(
