@@ -16,7 +16,7 @@ LocalDependencies.props
 
 # Build results
 [Dd]ebug/
-[Dd]ebugPublic/
+[Dd]ebugStatic/
 [Rr]elease/
 [Rr]eleaseStatic/
 [Rr]eleases/
