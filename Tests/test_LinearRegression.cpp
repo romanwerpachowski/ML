@@ -1214,3 +1214,29 @@ TEST_F(LinearRegressionTest, press_univariate_without_intercept)
 	const double press_statistic = press_univariate<false>(x, y);
 	ASSERT_NEAR(4 + 0 + 4, press_statistic, 1e-15);
 }
+
+TEST_F(LinearRegressionTest, lasso_zero_lambda)
+{
+	constexpr unsigned int n = 10;
+	constexpr unsigned int d = 3;
+	Eigen::MatrixXd X0(Eigen::MatrixXd::Random(d, n));
+	standardise(X0);
+	const Eigen::MatrixXd X(add_ones(X0));
+	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d + 1));
+	const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
+	const auto expected = multivariate(X, y);
+	const auto actual = lasso<false>(X0, y, 0);
+	constexpr double tol = 1e-15;
+	test_result(actual);
+	const double tss = (y.array() - y.mean()).square().sum();
+	ASSERT_NEAR(tss, actual.tss, 1e-15);
+	ASSERT_NEAR(actual.rss, (y - actual.predict(X0)).squaredNorm(), tol);
+	ASSERT_EQ(expected.n, actual.n);
+	ASSERT_EQ(expected.dof, actual.dof);
+	ASSERT_NEAR(expected.var_y(), actual.var_y(), tol);
+	ASSERT_EQ(expected.dof, actual.effective_dof);
+	ASSERT_NEAR(expected.r2(), actual.r2(), tol);
+	ASSERT_NEAR(expected.rss, actual.rss, tol);
+	ASSERT_NEAR(expected.tss, actual.tss, tol);
+	ASSERT_NEAR(0, (expected.beta - actual.beta).norm(), tol) << actual.beta;	
+}

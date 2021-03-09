@@ -6,6 +6,10 @@
 #include <stdexcept>
 #include <sstream>
 #include <Eigen/Cholesky>
+#pragma warning(push)
+#pragma warning(disable : 4267)
+#include <nlopt.hpp>
+#pragma warning(pop)
 #include "LinearAlgebra.hpp"
 #include "LinearRegression.hpp"
 
@@ -69,6 +73,17 @@ namespace ml
 			s << ", beta=[" << beta.transpose() << "]";
 			s << ", effective_dof=" << effective_dof;
 			s << ", cov=[" << cov << "]";
+			s << ")";
+			return s.str();
+		}
+
+		std::string LassoRegressionResult::to_string() const
+		{
+			std::stringstream s;
+			s << "LassoRegressionResult(";
+			members_to_string(static_cast<const Result&>(*this), s);
+			s << ", beta=[" << beta.transpose() << "]";
+			s << ", effective_dof=" << effective_dof;
 			s << ")";
 			return s.str();
 		}
@@ -288,6 +303,102 @@ namespace ml
 			result.cov.col(q).head(q) = - cov_slopes * means;
 			result.cov.row(q).head(q) = result.cov.col(q).head(q);
 			result.cov(q, q) += LinearAlgebra::xAx_symmetric(cov_slopes, means);
+			return result;
+		}
+
+		/**
+		 * @brief Data for the Lasso objective function being minimised.
+		*/
+		struct LassoObjectiveData
+		{
+			Eigen::Ref<const Eigen::MatrixXd> X;
+			Eigen::Ref<const Eigen::VectorXd> y;			
+			double lambda;
+			Eigen::VectorXd y_hat; /**< Space of predicted Y. */
+		};
+
+		static double lasso_objective(const std::vector<double>& x, std::vector<double>& grad, void* data)
+		{
+			LassoObjectiveData* lasso_objective_data = (LassoObjectiveData*)data;
+			Eigen::Map<const Eigen::VectorXd> beta(&x[0], x.size());
+			lasso_objective_data->y_hat = lasso_objective_data->X.transpose() * beta;
+			const double sse = (lasso_objective_data->y - lasso_objective_data->y_hat).squaredNorm();
+			const double penalty = lasso_objective_data->lambda != 0 != 0 ? lasso_objective_data->lambda * beta.head(beta.size() - 1).lpNorm<1>() : 0;
+			if (!grad.empty()) {
+				// Calculate residua.
+				lasso_objective_data->y_hat -= lasso_objective_data->y;
+				Eigen::Map<Eigen::VectorXd> grad_beta(&grad[0], grad.size());
+				grad_beta = lasso_objective_data->X * lasso_objective_data->y_hat;
+				grad_beta *= 2;
+				if (lasso_objective_data->lambda != 0) {
+					for (Eigen::Index k = 0; k < grad_beta.size(); ++k) {
+						const double beta_k = beta[k];
+						if (beta_k > 0) {
+							grad_beta[k] += lasso_objective_data->lambda;
+						} else if (beta_k < 0) {
+							grad_beta[k] -= lasso_objective_data->lambda;
+						}
+					}
+				}
+			}
+			return sse + penalty;
+		}
+
+		template <> LassoRegressionResult lasso<false>(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const double lambda)
+		{
+			// X is an q x N matrix and y is a N-size vector.
+			const auto q = X.rows();
+			const auto n = X.cols();
+			LassoRegressionResult result;
+			result.n = static_cast<unsigned int>(n);
+			result.dof = static_cast<unsigned int>(n - q - 1); // -1 for the intercept.
+			result.beta.resize(q + 1);
+			const double intercept = y.mean();
+			result.beta[q] = intercept;
+			LassoObjectiveData lasso_objective_data{ X, y, lambda };
+			lasso_objective_data.y_hat.resize(n);
+			nlopt::opt optimiser(nlopt::LD_SLSQP, static_cast<unsigned int>(q));
+			optimiser.set_min_objective(lasso_objective, &lasso_objective_data);
+			optimiser.set_ftol_rel(1e-12);
+			optimiser.set_stopval(0);
+			optimiser.set_xtol_rel(1e-12);
+			std::vector<double> solution(q, 0.0);
+			double opt_value;
+			const auto opt_result = optimiser.optimize(solution, opt_value);
+			std::copy(solution.begin(), solution.end(), result.beta.data());
+			// Use the fact that intercept == mean(y).
+			const Eigen::VectorXd y_centred(y.array() - intercept);
+			// Residual sum of squares:
+			result.rss = (y_centred - X.transpose() * result.beta.head(q)).squaredNorm();
+			// Total sum of squares:
+			result.tss = y_centred.squaredNorm();
+			if (lambda > 0) {
+				unsigned int num_nonzero_slopes = 0;
+				for (Eigen::Index i = 0; i < q; ++i) {
+					if (result.beta[i] != 0) {
+						++num_nonzero_slopes;
+					}
+				}
+				result.effective_dof = static_cast<double>(n - 1 - num_nonzero_slopes);
+			} else {
+				result.effective_dof = result.dof;
+			}
+			return result;
+		}
+
+		template <> LassoRegressionResult lasso<true>(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const double lambda)
+		{
+			Eigen::MatrixXd workX(X);
+			Eigen::VectorXd means;
+			Eigen::VectorXd standard_deviations;
+			standardise(workX, means, standard_deviations);
+			auto result = lasso<false>(workX, y, lambda);
+			const auto q = X.rows();
+			auto slopes = result.beta.head(q);
+			// Using Matlab notation: ./ and .* are elementwise / and *.
+			// new_slopes = slopes ./ standard_deviations
+			slopes.array() /= standard_deviations.array();
+			result.beta[q] -= slopes.dot(means);
 			return result;
 		}
 

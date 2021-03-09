@@ -145,6 +145,19 @@ namespace ml
 			}
 		};
 
+		/** @brief Result of a (multivariate) Lasso regression with intercept.		*/
+		struct LassoRegressionResult : public RegularisedRegressionResult
+		{
+			/** @brief Formats the result as string. */
+			DLL_DECLSPEC std::string to_string() const;
+
+			/** @see LassoRegressionResult::predict(). */
+			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const
+			{
+				return RegularisedRegressionResult::predict(X);
+			}
+		};
+
 		/** @brief Carries out univariate (aka simple) linear regression with intercept.
 
 		@param[in] x X vector.
@@ -228,6 +241,49 @@ namespace ml
 				return ridge<true>(X, y, lambda);
 			} else {
 				return ridge<false>(X, y, lambda);
+			}
+		}
+
+		/** @brief Carries out multivariate Lasso regression with intercept.
+
+		Given X and y, finds \f$ \vec{\beta'} \f$ and \f$ \beta_0 \f$ minimising \f$ \lVert \vec{y} - X^T \vec{\beta'} - \beta_0 \rVert^2 + \lambda \lVert \vec{\beta'} \rVert^1 \f$,
+		where \f$ \vec{\beta'} \f$ and \f$ \beta_0 \f$ are concatenated as LassoRegressionResult#beta in the returned LassoRegressionResult object.
+
+		The matrix `X` is either assumed to be standardised (`DoStandardise == false`)
+		or is standardised internally (`DoStandardise == true`; requires a matrix copy).
+
+
+		@param[in] X D x N matrix of X values, with data points in columns. Should not contain a row with all 1's.
+		@param[in] y Y vector with length N.
+		@param[in] lambda Regularisation strength.
+		@tparam DoStandardise Whether to standardise `X` internally.
+		@return LassoRegressionResult object with `beta.size() == X.rows() + 1`. If `DoStandardise == true`, `beta`
+		will be rescaled and shifted to original `X` units and origins, and `cov` will be transformed accordingly.
+		@throw std::invalid_argument If `y.size() != X.cols()` or `X.cols() < X.rows()`.
+		@throw std::domain_error If `lambda < 0`.
+		@see standardise()
+		*/
+		template <bool DoStandardise> LassoRegressionResult lasso(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda);
+
+		/** @brief Carries out multivariate Lasso regression with intercept, standardising `X` inputs internally.
+		@see lasso().
+		*/
+		template <> DLL_DECLSPEC LassoRegressionResult lasso<true>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda);
+
+		/** @brief Carries out multivariate Lasso regression with intercept, assuming standardised `X` inputs.
+		@see lasso().
+		*/
+		template <> DLL_DECLSPEC LassoRegressionResult lasso<false>(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda);
+
+		/** @brief Carries out multivariate Lasso regression with intercept, allowing the user switch internal standardisation of `X` data on or off.
+		@see lasso().
+		*/
+		inline LassoRegressionResult lasso(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, double lambda, bool do_standardise)
+		{
+			if (do_standardise) {
+				return lasso<true>(X, y, lambda);
+			} else {
+				return lasso<false>(X, y, lambda);
 			}
 		}
 
