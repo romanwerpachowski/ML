@@ -9,7 +9,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-LocalDependencies.props
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
