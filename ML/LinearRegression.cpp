@@ -327,7 +327,7 @@ namespace ml
 			Eigen::Map<const Eigen::VectorXd> beta(&x[0], x.size());
 			lasso_objective_data->y_hat = lasso_objective_data->X.transpose() * beta;
 			const double sse = (lasso_objective_data->y - lasso_objective_data->y_hat).squaredNorm();
-			const double penalty = lasso_objective_data->lambda != 0 != 0 ? lasso_objective_data->lambda * beta.head(beta.size() - 1).lpNorm<1>() : 0;
+			const double penalty = lasso_objective_data->lambda != 0 ? lasso_objective_data->lambda * beta.head(beta.size() - 1).lpNorm<1>() : 0;
 			if (!grad.empty()) {
 				// Calculate residua.
 				lasso_objective_data->y_hat -= lasso_objective_data->y;
@@ -368,7 +368,7 @@ namespace ml
 			optimiser.set_xtol_rel(1e-12);
 			std::vector<double> solution(q, 0.0);
 			double opt_value;
-			const auto opt_result = optimiser.optimize(solution, opt_value);
+			optimiser.optimize(solution, opt_value);
 			std::copy(solution.begin(), solution.end(), result.beta.data());
 			// Use the fact that intercept == mean(y).
 			const Eigen::VectorXd y_centred(y.array() - intercept);

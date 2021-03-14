@@ -1,5 +1,7 @@
 Import('env')
 sources = Glob('*.cpp')
 MLObjs = env.SharedObject(sources)
-ML = env.SharedLibrary('ML', MLObjs)
+penv = env.Clone()
+penv.Append(LIBS=['nlopt'])
+ML = penv.SharedLibrary('ML', MLObjs)
 Return('ML', 'MLObjs')
