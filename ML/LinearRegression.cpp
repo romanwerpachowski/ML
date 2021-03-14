@@ -6,10 +6,14 @@
 #include <stdexcept>
 #include <sstream>
 #include <Eigen/Cholesky>
+#ifdef _MSC_VER // Only under Windows.
 #pragma warning(push)
 #pragma warning(disable : 4267)
+#endif // _MSC_VER
 #include <nlopt.hpp>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif // _MSC_VER
 #include "LinearAlgebra.hpp"
 #include "LinearRegression.hpp"
 
