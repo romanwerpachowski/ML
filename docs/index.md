@@ -59,7 +59,10 @@ For demos and tests:
 
 ### Windows binaries
 
-Use the Visual Studio build process.
+Use the Visual Studio build process, opening the solution `ML.sln`. Before opening this file, copy the 
+provided file `LocalDependencies.props.template` to `LocalDependencies.props` (otherwise the solution won't load).
+After loading the solution, adjust the additional include / library paths in this property sheet to point
+to the directories where you installed the dependencies (see above).
 
 Pre-built Python extension `cppyml` can be installed via `pip install cppyml` (requires Python 3.7.x).
 If you want to build it from source, see [cppyml documentation](cppyml.md).
