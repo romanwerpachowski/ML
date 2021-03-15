@@ -78,7 +78,7 @@ class LinearRegressionTest(unittest.TestCase):
                         [-0.00010001, 0.03]])
         effective_dof = 99
         result = linear_regression.RidgeRegressionResult(
-            n, dof, rss, tss, beta, cov, effective_dof)
+            n, dof, rss, tss, beta, effective_dof, cov)
         self.assertTrue(result.cov.flags["C_CONTIGUOUS"])
         self.assertEqual(n, result.n)
         self.assertEqual(dof, result.dof)

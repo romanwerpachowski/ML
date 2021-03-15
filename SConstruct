@@ -13,13 +13,6 @@ if not (build_mode in ['debug', 'release']):
     Exit(1)
 Export('build_mode')  
 print('**** Compiling in %s mode ****' % build_mode)
-# Target architecture:
-architecture = ARGUMENTS.get('arch', 'x64')
-if not (architecture in ['x64', 'x86']):
-    print("Error: expected 'x64' or 'x86' for 'arch' parameter, found: " + architecture)
-    Exit(1)
-Export('architecture')  
-print('**** Compiling for %s architecture ****' % architecture)
 
 # Extra compile flags for debug mode.
 debugcflags = ['-g']
@@ -34,16 +27,12 @@ enabled_warnings = ['-Wall', '-Werror', '-Wfatal-errors', '-Wpedantic', '-Wforma
 disabled_warnings = ['-Wno-missing-field-initializers']
 c_flags = system_include_paths + compilation_options + enabled_warnings + disabled_warnings
 linkflags = []
-if architecture == 'x64':
-    arch_switch = '-m64'
-elif architecture == 'x86':
-    arch_switch = '-m32'
-else:
-    raise ValueError("Unknown architecture: " + architecture)
+# We support 64-bit only.
+arch_switch = '-m64'
 c_flags.append(arch_switch)
 linkflags.append(arch_switch)
 flags = ["-std=c++17"] + c_flags
-BUILD_DIR = os.path.join('build', build_mode.capitalize(), architecture)
+BUILD_DIR = os.path.join('build', build_mode.capitalize())
 if build_mode == 'debug':
     flags += debugcflags
 else:
@@ -77,8 +66,7 @@ ML, MLObjs = call('ML')
 Export('ML')
 Export('MLObjs')
 call('Demo')
-if architecture == 'x64':
-    call('cppyml')
+call('cppyml')
 
 if build_mode == 'debug':
     top_dir = Dir('#').abspath   

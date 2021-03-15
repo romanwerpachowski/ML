@@ -1,5 +1,7 @@
 Import('env')
 Import('ML')
 sources = Glob('*.cpp')
-Demo = env.Program('Demo', sources + ML)
+penv = env.Clone()
+penv.Append(LIBS=['nlopt'])
+Demo = penv.Program('Demo', sources + ML)
 Return('Demo')
