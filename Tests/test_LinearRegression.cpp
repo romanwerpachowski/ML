@@ -1,4 +1,5 @@
 /* (C) 2020 Roman Werpachowski. */
+#include <cmath>
 #include <random>
 #include <Eigen/Eigenvalues>
 #include <gtest/gtest.h>
@@ -1330,4 +1331,24 @@ TEST_F(LinearRegressionTest, lasso_do_standardise_zero_lambda)
 	ASSERT_NEAR(expected.rss, actual.rss, tol);
 	ASSERT_NEAR(expected.tss, actual.tss, tol);
 	ASSERT_NEAR(0, (expected.beta - actual.beta).norm(), tol) << actual.beta;	
+}
+
+TEST_F(LinearRegressionTest, multivariate_polynomial)
+{
+	constexpr unsigned int n = 101;
+	Eigen::MatrixXd X(4, n);
+	Eigen::VectorXd y(n);
+	for (unsigned int i = 0; i < n; ++i) {
+		const double x = -1 + 0.02 * static_cast<double>(i);
+		X(0, i) = x;
+		X(1, i) = x * x;
+		X(2, i) = x * x * x;
+		X(3, i) = 1;
+		y[i] = std::abs(x) + 1 + 0.2 * std::sin(x);
+	}
+	const auto result = multivariate(X, y);
+	ASSERT_NEAR(0.944624786854704, result.r2(), 1e-15);
+	Eigen::VectorXd expected_beta(4);
+	expected_beta << 0.199600230558526, 0.928490907343161, -0.0314887196669726, 1.18926358655283;
+	ASSERT_NEAR(0, (result.beta - expected_beta).norm(), 1e-14) << result.beta;
 }
