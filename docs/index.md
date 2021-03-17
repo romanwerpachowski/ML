@@ -36,7 +36,6 @@ A list of required packages for is in the `ubuntu_required_packages.txt` file.
 - benchmark (Google C++ benchmarking library)
 - Python 3.x header files
 - Eigen++
-- NLopt
 - (Linux only) pthread
 
 
