@@ -13,7 +13,7 @@ make clean
 make html
 cd ..
 mv -f sphinx/_build cppyml
-rm -rf sphinx
+#rm -rf sphinx
 cd cppyml/html
 # Work around Jekyll's unwillingness to serve directories with names
 # beginning in underscores.
