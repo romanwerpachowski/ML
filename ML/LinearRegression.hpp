@@ -252,6 +252,8 @@ namespace ml
 		The matrix `X` is either assumed to be standardised (`DoStandardise == false`)
 		or is standardised internally (`DoStandardise == true`; requires a matrix copy).
 
+		Uses the iterated ridge regression method of Fan and Li (2001).
+
 
 		@param[in] X D x N matrix of X values, with data points in columns. Should NOT contain a row with all 1's.
 		@param[in] y Y vector with length N.

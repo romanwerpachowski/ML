@@ -6,6 +6,5 @@ penv = env.Clone()
 # pybind11 include directory should be under this:
 penv.Append(CXXFLAGS=['-isystem/usr/include/python%d.%d/' % (sys.version_info.major, sys.version_info.minor)])
 penv['SHLIBPREFIX'] = ''  # We need cppyml.so, not libPyML.so
-penv.Append(LIBS=['nlopt'])
 cppyml = penv.SharedLibrary('cppyml', Glob('*.cpp') + MLObjs)
 Return('cppyml')
