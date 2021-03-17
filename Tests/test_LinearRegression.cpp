@@ -1241,6 +1241,72 @@ TEST_F(LinearRegressionTest, lasso_zero_lambda)
 	ASSERT_NEAR(0, (expected.beta - actual.beta).norm(), tol) << actual.beta;	
 }
 
+TEST_F(LinearRegressionTest, lasso_nonzero_lambda)
+{
+	constexpr unsigned int n = 10;
+	constexpr unsigned int d = 3;
+	constexpr double tol = 1e-16;
+	Eigen::MatrixXd X0(Eigen::MatrixXd::Random(d, n));
+	standardise(X0);
+	const Eigen::MatrixXd X(add_ones(X0));
+	Eigen::VectorXd true_beta(d + 1);
+	true_beta << 0.4, 1e-8, -0.6, 0.1;
+	const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
+	const auto unregularised = multivariate(X, y);
+	const double lambda = 1.;
+	const auto regularised = lasso<false>(X0, y, lambda);
+	ASSERT_NEAR(0, regularised.beta[1], 1e-14) << regularised.beta;
+	test_result(regularised);
+	const double tss = (y.array() - y.mean()).square().sum();
+	ASSERT_NEAR(tss, regularised.tss, tol);
+	ASSERT_EQ(unregularised.n, regularised.n);
+	ASSERT_EQ(unregularised.dof, regularised.dof);
+	ASSERT_LT(unregularised.var_y(), regularised.var_y());
+	ASSERT_GT(unregularised.r2(), regularised.r2());
+	ASSERT_LT(0, regularised.r2());
+	const Eigen::VectorXd beta_diff(unregularised.beta - regularised.beta);
+	ASSERT_NEAR(regularised.rss, (y - regularised.predict(X0)).squaredNorm(), tol);
+	ASSERT_LE(unregularised.rss, regularised.rss);
+	ASSERT_NEAR(unregularised.tss, regularised.tss, tol);
+	ASSERT_NEAR(unregularised.beta[d], regularised.beta[d], tol);
+	ASSERT_NEAR(y.mean(), regularised.beta[d], tol);
+	const double beta_diff_norm = beta_diff.norm();
+	ASSERT_LT(0, beta_diff_norm) << beta_diff;
+	ASSERT_GT(unregularised.beta.lpNorm<1>(), regularised.beta.lpNorm<1>());
+	ASSERT_EQ(unregularised.dof + 1, regularised.effective_dof);
+	test_sse_minimisation(X0, y, lambda, regularised.beta, Eigen::VectorXd::Constant(d + 1, 1e-8), 1e-8);
+	const auto regularised2 = lasso(X0, y, lambda, false);
+	ASSERT_EQ(0., (regularised.beta - regularised2.beta).norm());
+}
+
+TEST_F(LinearRegressionTest, lasso_yuge_lambda)
+{
+	constexpr unsigned int n = 10;
+	constexpr unsigned int d = 3;
+	constexpr double tol = 1e-16;
+	Eigen::MatrixXd X0(Eigen::MatrixXd::Random(d, n));
+	standardise(X0);
+	const Eigen::MatrixXd X(add_ones(X0));
+	const Eigen::VectorXd true_beta(Eigen::VectorXd::Random(d + 1));
+	const Eigen::VectorXd y(X.transpose() * true_beta + 0.1 * Eigen::VectorXd::Random(n));
+	constexpr double lambda = 1e50;
+	const auto result = lasso<false>(X0, y, 1e50);
+	test_result(result);
+	const double tss = (y.array() - y.mean()).square().sum();
+	ASSERT_NEAR(tss, result.tss, tol);
+	ASSERT_EQ(n, result.n);
+	ASSERT_EQ(n - d - 1, result.dof);
+	const double sst = (y.array() - y.mean()).square().sum();
+	ASSERT_NEAR(result.rss, (y - result.predict(X0)).squaredNorm(), tol);
+	ASSERT_NEAR(sst / result.dof, result.var_y(), tol);
+	ASSERT_NEAR(0, result.r2(), tol);
+	ASSERT_NEAR(result.tss, result.rss, tol);
+	ASSERT_NEAR(y.mean(), result.beta[d], tol);
+	ASSERT_NEAR(0, result.beta.head(d).norm(), tol);
+	ASSERT_NEAR(n - 1, result.effective_dof, tol);
+	test_sse_minimisation(X0, y, lambda, result.beta, Eigen::VectorXd::Constant(d + 1, 1e-8), 0);
+}
+
 TEST_F(LinearRegressionTest, lasso_do_standardise_zero_lambda)
 {
 	constexpr unsigned int n = 10;

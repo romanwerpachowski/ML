@@ -6,14 +6,6 @@
 #include <stdexcept>
 #include <sstream>
 #include <Eigen/Cholesky>
-#ifdef _MSC_VER // Only under Windows.
-#pragma warning(push)
-#pragma warning(disable : 4267)
-#endif // _MSC_VER
-#include <nlopt.hpp>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif // _MSC_VER
 #include "LinearAlgebra.hpp"
 #include "LinearRegression.hpp"
 
@@ -180,25 +172,30 @@ namespace ml
 			return result;
 		}
 
-		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<Eigen::MatrixXd> XXt, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp, const double lambda)
+		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<Eigen::MatrixXd> XXt, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp, const Eigen::Ref<const Eigen::VectorXd> lambda)
 		{
-			if (lambda < 0) {
-				throw std::domain_error("Ridge regularisation constant cannot be negative");
-			}
 			// X is an q x N matrix and y is a N-size vector.
 			const auto n = static_cast<unsigned int>(X.cols());
+			const auto q = static_cast<unsigned int>(X.rows());
+			if (lambda.minCoeff() < 0) {
+				throw std::domain_error("Ridge regularisation constant cannot be negative");
+			}
+			if (lambda.size() != q) {
+				throw std::invalid_argument("Lambda vector must have the same size as the number of features");
+			}			
 			if (n != static_cast<unsigned int>(y.size())) {
 				throw std::invalid_argument("X matrix has different number of data points than Y has values");
-			}
-			const auto q = static_cast<unsigned int>(X.rows());
+			}			
 			if (n < q) {
 				throw std::invalid_argument("Not enough data points for regression");
 			}
 			const Eigen::VectorXd b(X * y);
 			assert(b.size() == X.rows());
 			XXt.noalias() = X * X.transpose();
-			if (lambda) {
-				XXt += lambda * Eigen::MatrixXd::Identity(q, q);
+			if (lambda.minCoeff()) {				
+				for (Eigen::Index i = 0; i < q; ++i) {
+					XXt(i, i) += lambda[i];
+				}
 			}
 			assert(XXt.rows() == XXt.cols());
 			assert(XXt.rows() == X.rows());
@@ -214,7 +211,7 @@ namespace ml
 			Eigen::LDLT<Eigen::MatrixXd> xxt_decomp;
 			MultivariateOLSResult result;
 			Eigen::MatrixXd XXt(q, q);
-			result.beta = calculate_XXt_beta(X, y, XXt, xxt_decomp, 0);
+			result.beta = calculate_XXt_beta(X, y, XXt, xxt_decomp, Eigen::VectorXd::Constant(q, 0.));
 			result.n = n;
 			result.dof = n - q;
 			assert(result.beta.size() == X.rows());
@@ -234,11 +231,14 @@ namespace ml
 			return result;
 		}
 
-		template <> RidgeRegressionResult ridge<false>(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const double lambda)
+		static RidgeRegressionResult weighted_ridge(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const Eigen::Ref<const Eigen::VectorXd> lambda)
 		{
 			// X is an q x N matrix and y is a N-size vector.
 			const auto q = X.rows();
 			const auto n = X.cols();
+			if (lambda.size() != q) {
+				throw std::invalid_argument("Lambda vector must have same size as the number of features");
+			}
 			RidgeRegressionResult result;
 			result.n = static_cast<unsigned int>(n);
 			result.dof = static_cast<unsigned int>(n - q - 1); // -1 for the intercept.
@@ -247,17 +247,16 @@ namespace ml
 			result.beta[q] = intercept;
 			Eigen::MatrixXd XXt(q, q);
 			Eigen::LDLT<Eigen::MatrixXd> xxt_decomp;
-			result.beta.head(q) = calculate_XXt_beta(X, y, XXt, xxt_decomp, lambda);			
+			result.beta.head(q) = calculate_XXt_beta(X, y, XXt, xxt_decomp, lambda);
 			// Use the fact that intercept == mean(y).
 			const Eigen::VectorXd y_centred(y.array() - intercept);
 			// Residual sum of squares:
 			result.rss = (y_centred - X.transpose() * result.beta.head(q)).squaredNorm();
 			// Total sum of squares:
 			result.tss = y_centred.squaredNorm();
-			if (lambda > 0) {
+			if (lambda.minCoeff() > 0) {
 				result.effective_dof = std::max(static_cast<double>(n) - (X.transpose() * xxt_decomp.solve(X)).trace() - 1, static_cast<double>(result.dof));
-			}
-			else {
+			} else {
 				result.effective_dof = result.dof;
 			}
 			result.cov.resize(q + 1, q + 1);
@@ -266,13 +265,12 @@ namespace ml
 			result.cov(q, q) = 1. / static_cast<double>(n);
 			// Cov(slopes):
 			auto cov_slopes = result.cov.block(0, 0, q, q);
-			if (lambda > 0) {				
+			if (lambda.minCoeff() > 0) {
 				const Eigen::MatrixXd inv_xxt_lambda(xxt_decomp.solve(Eigen::MatrixXd::Identity(q, q)));
 				cov_slopes.noalias() = XXt * inv_xxt_lambda;
 				XXt.noalias() = inv_xxt_lambda * cov_slopes;
 				cov_slopes = XXt;
-			}
-			else {
+			} else {
 				cov_slopes = xxt_decomp.solve(Eigen::MatrixXd::Identity(q, q));
 			}
 			// Cov(intercept, slopes) is zero by assumption of standardisation.
@@ -281,6 +279,11 @@ namespace ml
 			// Scale by Var(Y):
 			result.cov *= result.var_y();
 			return result;
+		}
+
+		template <> RidgeRegressionResult ridge<false>(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const double lambda)
+		{
+			return weighted_ridge(X, y, Eigen::VectorXd::Constant(X.rows(), lambda));
 		}
 
 		template <> RidgeRegressionResult ridge<true>(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const double lambda)
@@ -310,44 +313,6 @@ namespace ml
 			return result;
 		}
 
-		/**
-		 * @brief Data for the Lasso objective function being minimised.
-		*/
-		struct LassoObjectiveData
-		{
-			Eigen::Ref<const Eigen::MatrixXd> X;
-			Eigen::Ref<const Eigen::VectorXd> y;			
-			double lambda;
-			Eigen::VectorXd y_hat; /**< Space of predicted Y. */
-		};
-
-		static double lasso_objective(const std::vector<double>& x, std::vector<double>& grad, void* data)
-		{
-			LassoObjectiveData* lasso_objective_data = (LassoObjectiveData*)data;
-			Eigen::Map<const Eigen::VectorXd> beta(&x[0], x.size());
-			lasso_objective_data->y_hat = lasso_objective_data->X.transpose() * beta;
-			const double sse = (lasso_objective_data->y - lasso_objective_data->y_hat).squaredNorm();
-			const double penalty = lasso_objective_data->lambda != 0 ? lasso_objective_data->lambda * beta.head(beta.size() - 1).lpNorm<1>() : 0;
-			if (!grad.empty()) {
-				// Calculate residua.
-				lasso_objective_data->y_hat -= lasso_objective_data->y;
-				Eigen::Map<Eigen::VectorXd> grad_beta(&grad[0], grad.size());
-				grad_beta = lasso_objective_data->X * lasso_objective_data->y_hat;
-				grad_beta *= 2;
-				if (lasso_objective_data->lambda != 0) {
-					for (Eigen::Index k = 0; k < grad_beta.size(); ++k) {
-						const double beta_k = beta[k];
-						if (beta_k > 0) {
-							grad_beta[k] += lasso_objective_data->lambda;
-						} else if (beta_k < 0) {
-							grad_beta[k] -= lasso_objective_data->lambda;
-						}
-					}
-				}
-			}
-			return sse + penalty;
-		}
-
 		template <> LassoRegressionResult lasso<false>(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const double lambda)
 		{
 			// X is an q x N matrix and y is a N-size vector.
@@ -359,17 +324,36 @@ namespace ml
 			result.beta.resize(q + 1);
 			const double intercept = y.mean();
 			result.beta[q] = intercept;
-			LassoObjectiveData lasso_objective_data{ X, y, lambda };
-			lasso_objective_data.y_hat.resize(n);
-			nlopt::opt optimiser(nlopt::LD_SLSQP, static_cast<unsigned int>(q));
-			optimiser.set_min_objective(lasso_objective, &lasso_objective_data);
-			optimiser.set_ftol_rel(1e-12);
-			optimiser.set_stopval(0);
-			optimiser.set_xtol_rel(1e-12);
-			std::vector<double> solution(q, 0.0);
-			double opt_value;
-			optimiser.optimize(solution, opt_value);
-			std::copy(solution.begin(), solution.end(), result.beta.data());
+			{
+				const auto without_penalty = multivariate(X, y);
+				result.beta.head(q) = without_penalty.beta;
+			}
+			constexpr double rel_tol = 1e-15;
+			constexpr double abs_tol = 1e-15;
+			constexpr unsigned int max_iter = 100;
+			if (lambda > 0) {
+				Eigen::VectorXd ridge_lambda(q);
+				Eigen::MatrixXd XXt(q, q);
+				Eigen::LDLT<Eigen::MatrixXd> xxt_decomp;
+				Eigen::VectorXd next_beta(q);
+				bool converged = false;
+				unsigned int num_iters = 0;
+				while (!converged && num_iters < max_iter) {
+					ridge_lambda = Eigen::VectorXd::Constant(q, lambda / 2);
+					ridge_lambda.array() /= result.beta.head(q).array().abs();
+					next_beta = calculate_XXt_beta(X, y, XXt, xxt_decomp, ridge_lambda);
+					converged = true;
+					for (Eigen::Index i = 0; i < q; ++i) {
+						if (std::abs(next_beta[i] - result.beta[i]) > abs_tol + rel_tol * std::abs(result.beta[i])) {
+							converged = false;
+							break;
+						}
+					}
+					result.beta.head(q) = next_beta;
+					//std::cout << next_beta.transpose() << "\n";
+					++num_iters;
+				}				
+			}
 			// Use the fact that intercept == mean(y).
 			const Eigen::VectorXd y_centred(y.array() - intercept);
 			// Residual sum of squares:
@@ -379,7 +363,7 @@ namespace ml
 			if (lambda > 0) {
 				unsigned int num_nonzero_slopes = 0;
 				for (Eigen::Index i = 0; i < q; ++i) {
-					if (result.beta[i] != 0) {
+					if (std::abs(result.beta[i]) > abs_tol) {
 						++num_nonzero_slopes;
 					}
 				}

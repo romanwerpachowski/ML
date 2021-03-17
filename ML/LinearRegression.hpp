@@ -210,7 +210,7 @@ namespace ml
 		or is standardised internally (`DoStandardise == true`; requires a matrix copy).
 
 
-		@param[in] X D x N matrix of X values, with data points in columns. Should not contain a row with all 1's.
+		@param[in] X D x N matrix of X values, with data points in columns. Should NOT contain a row with all 1's.
 		@param[in] y Y vector with length N.
 		@param[in] lambda Regularisation strength.
 		@tparam DoStandardise Whether to standardise `X` internally.
@@ -253,7 +253,7 @@ namespace ml
 		or is standardised internally (`DoStandardise == true`; requires a matrix copy).
 
 
-		@param[in] X D x N matrix of X values, with data points in columns. Should not contain a row with all 1's.
+		@param[in] X D x N matrix of X values, with data points in columns. Should NOT contain a row with all 1's.
 		@param[in] y Y vector with length N.
 		@param[in] lambda Regularisation strength.
 		@tparam DoStandardise Whether to standardise `X` internally.
@@ -387,9 +387,9 @@ namespace ml
 
 		\f$ (X X^T + \lambda I)^{-1} X \vec{y} \f$.
 
-		@param lambda Regularisation constant for ridge regression.
+		@param lambda Ridge regularisation constant for every feature.
 		@private Shared between multiple linear regression algorithms.
 		*/
-		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<Eigen::MatrixXd> XXt, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp, double lambda);
+		Eigen::VectorXd calculate_XXt_beta(const Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<Eigen::MatrixXd> XXt, Eigen::LDLT<Eigen::MatrixXd>& xxt_decomp, const Eigen::Ref<const Eigen::VectorXd> lambda);
 	}
 }

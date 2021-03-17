@@ -58,7 +58,7 @@ namespace ml
 			d_ = static_cast<unsigned int>(X.rows());
 			n_ = static_cast<unsigned int>(X.cols());
 			P_.resize(d_, d_);
-			beta_ = calculate_XXt_beta(X, y, P_, helper_decomp_, 0);			
+			beta_ = calculate_XXt_beta(X, y, P_, helper_decomp_, Eigen::VectorXd::Constant(d_, 0.));
 			P_ = helper_decomp_.solve(Eigen::MatrixXd::Identity(d_, d_));
 		}
 	}
