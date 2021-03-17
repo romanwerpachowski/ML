@@ -22,7 +22,7 @@ args, unknown = argparser.parse_known_args()
 sys.argv = [sys.argv[0]] + unknown
 
 # Package version.
-VERSION = "0.4.1"
+VERSION = "0.5.0"
 
 # Whether to install a Debug version of the binary files.
 DEBUG_BINARIES = args.debug
@@ -46,16 +46,14 @@ if os.name == "posix":
     PYML_FILENAME = "cppyml.so"   
     PYML_PATH = os.path.join(BASE_DIRECTORY, "cppyml",
                              "build", CPP_BUILD_MODE, PYML_FILENAME)
-    BINARY_FILENAMES = [PYML_FILENAME]
-    SRC_PATHS = [PYML_PATH]
 else:
-    ML_FILENAME = "ML.dll"
     PYML_FILENAME = "cppyml.pyd"
-    BINARY_DIRECTORY = os.path.join(BASE_DIRECTORY, "x64", CPP_BUILD_MODE)
-    ML_PATH = os.path.join(BINARY_DIRECTORY, ML_FILENAME)
+    BINARY_DIRECTORY = os.path.join(BASE_DIRECTORY, "x64", CPP_BUILD_MODE + "Static")
     PYML_PATH = os.path.join(BINARY_DIRECTORY, PYML_FILENAME)
-    BINARY_FILENAMES = [ML_FILENAME, PYML_FILENAME]
-    SRC_PATHS = [ML_PATH, PYML_PATH]
+
+    
+BINARY_FILENAMES = [PYML_FILENAME]
+SRC_PATHS = [PYML_PATH]
 
 
 def get_binary_files():

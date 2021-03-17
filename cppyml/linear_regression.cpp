@@ -202,12 +202,33 @@ Args:
     effective_dof: Effective number of residual degrees of freedom: N - tr [ X^T (X * X^T + lambda * I)^{-1} X ] - 1.
 )")
         .def("__repr__", &ml::LinearRegression::RidgeRegressionResultRowMajor::to_string)
-        .def_readonly("beta", &ml::LinearRegression::RidgeRegressionResultRowMajor::beta, "Fitted coefficients of the model y_i = beta'^T X_i, followed by beta0.")
-        .def_property_readonly("cov", &ml::LinearRegression::RidgeRegressionResultRowMajor::cov_row_major, "Covariance matrix of (beta', beta0) coefficients.")
+        .def_readonly("beta", &ml::LinearRegression::RidgeRegressionResultRowMajor::beta, "Fitted coefficients of the model y_i = beta'^T X_i, followed by beta0.")        
         .def_readonly("effective_dof", &ml::LinearRegression::RidgeRegressionResultRowMajor::effective_dof, "Effective number of residual degrees of freedom: N - tr [ X^T (X * X^T + lambda * I)^{-1} X ] - 1.")
+        .def_property_readonly("cov", &ml::LinearRegression::RidgeRegressionResultRowMajor::cov_row_major, "Covariance matrix of (beta', beta0) coefficients.")
         .doc() = R"(Result of a (multivariate) ridge regression with intercept.
 
-Does not contain error estimates because they are not easy to estimate reliably for regularised regression.
+Intercept is the last coefficient in `beta`.
+
+`var_y` is calculated using `dof` as the denominator.
+)";
+
+    py::class_<ml::LinearRegression::LassoRegressionResult>(m_lin_reg, "LassoRegressionResult", result)
+        .def(py::init<unsigned int, unsigned int, double, double, const Eigen::Ref<const Eigen::VectorXd>, double>(),
+            py::arg("n"), py::arg("dof"), py::arg("rss"), py::arg("tss"), py::arg("beta"), py::arg("effective_dof"),
+            R"(Constructs a new instance of LassoRegressionResult.
+
+Args:
+    n: Number of data points.
+    dof: Number of residual degrees of freedom.
+    rss: Residual sum of squares.
+    tss: Total sum of squares.
+    beta: Fitted coefficients of the model y_i = beta'^T X_i + beta0, in which beta' is regularised and beta0 is not.
+    effective_dof: Effective number of residual degrees of freedom: N - tr [ X^T (X * X^T + lambda * I)^{-1} X ] - 1.
+)")
+.def("__repr__", &ml::LinearRegression::LassoRegressionResult::to_string)
+.def_readonly("beta", &ml::LinearRegression::LassoRegressionResult::beta, "Fitted coefficients of the model y_i = beta'^T X_i, followed by beta0.")
+.def_readonly("effective_dof", &ml::LinearRegression::LassoRegressionResult::effective_dof, "Effective number of residual degrees of freedom: N - tr [ X^T (X * X^T + lambda * I)^{-1} X ] - 1.")
+.doc() = R"(Result of a (multivariate) Lasso regression with intercept.
 
 Intercept is the last coefficient in `beta`.
 

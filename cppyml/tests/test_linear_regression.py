@@ -89,6 +89,26 @@ class LinearRegressionTest(unittest.TestCase):
         np.testing.assert_array_equal(cov, result.cov)
         self.assertEqual(effective_dof, result.effective_dof)
 
+    def test_lasso_regression_result(self):
+        n = 100
+        dof = 98
+        rss = 0.01
+        tss = 0.1
+        var_y = rss / dof
+        r2 = 1 - rss / tss
+        adjusted_r2 = 1 - (rss / dof) / (tss / (n - 1))
+        beta = np.array([-0.4, 0.2])
+        effective_dof = 99
+        result = linear_regression.LassoRegressionResult(
+            n, dof, rss, tss, beta, effective_dof)
+        self.assertEqual(n, result.n)
+        self.assertEqual(dof, result.dof)
+        self.assertEqual(var_y, result.var_y)
+        self.assertEqual(r2, result.r2)
+        self.assertEqual(adjusted_r2, result.adjusted_r2)
+        np.testing.assert_array_equal(beta, result.beta)
+        self.assertEqual(effective_dof, result.effective_dof)
+
     def test_univariate_with_intercept(self):
         n = 25
         slope = 0.1

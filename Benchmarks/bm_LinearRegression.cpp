@@ -159,3 +159,39 @@ constexpr auto ridge_regression_do_standardise_36d = ridge_regression<true, 36>;
 BENCHMARK(ridge_regression_do_standardise_4d)->RangeMultiplier(4)->Range(8, 16384)->Complexity();
 BENCHMARK(ridge_regression_do_standardise_12d)->RangeMultiplier(4)->Range(16, 16384)->Complexity();
 BENCHMARK(ridge_regression_do_standardise_36d)->RangeMultiplier(4)->Range(64, 16384)->Complexity();
+
+
+template <bool DoStandardise, unsigned int D> static void lasso_regression(benchmark::State& state)
+{
+	const auto sample_size = static_cast<Eigen::Index>(state.range(0));
+	constexpr double lambda = 1e-2;
+	for (auto _ : state) {
+		state.PauseTiming();
+		Eigen::MatrixXd X(Eigen::MatrixXd::Random(D, sample_size));
+		if (!DoStandardise) {
+			ml::LinearRegression::standardise(X);
+		}
+		const Eigen::VectorXd beta(Eigen::VectorXd::Random(D));
+		const Eigen::VectorXd y(X.transpose() * beta + 0.02 * Eigen::VectorXd::Random(sample_size) + Eigen::VectorXd::Constant(sample_size, 0.16));
+		state.ResumeTiming();
+		ml::LinearRegression::lasso<DoStandardise>(X, y, lambda);
+	}
+	state.SetComplexityN(state.range(0));
+}
+
+constexpr auto lasso_regression_no_standardise_4d = lasso_regression<false, 4>;
+constexpr auto lasso_regression_no_standardise_12d = lasso_regression<false, 12>;
+constexpr auto lasso_regression_no_standardise_36d = lasso_regression<false, 36>;
+
+BENCHMARK(lasso_regression_no_standardise_4d)->RangeMultiplier(4)->Range(8, 16384)->Complexity();
+BENCHMARK(lasso_regression_no_standardise_12d)->RangeMultiplier(4)->Range(16, 16384)->Complexity();
+BENCHMARK(lasso_regression_no_standardise_36d)->RangeMultiplier(4)->Range(64, 16384)->Complexity();
+
+
+constexpr auto lasso_regression_do_standardise_4d = lasso_regression<true, 4>;
+constexpr auto lasso_regression_do_standardise_12d = lasso_regression<true, 12>;
+constexpr auto lasso_regression_do_standardise_36d = lasso_regression<true, 36>;
+
+BENCHMARK(lasso_regression_do_standardise_4d)->RangeMultiplier(4)->Range(8, 16384)->Complexity();
+BENCHMARK(lasso_regression_do_standardise_12d)->RangeMultiplier(4)->Range(16, 16384)->Complexity();
+BENCHMARK(lasso_regression_do_standardise_36d)->RangeMultiplier(4)->Range(64, 16384)->Complexity();
