@@ -12,6 +12,7 @@ cd docs/sphinx
 make clean
 make html
 cd ..
+rm -rf cppyml
 mv -f sphinx/_build cppyml
 #rm -rf sphinx
 cd cppyml/html
@@ -23,3 +24,4 @@ sed -i -e 's/_static\//static\//g' *.html
 sed -i -e 's/_sources\//sources\//g' *.html
 # Go back to main directory.
 cd "${CWD}"
+git add docs/cppyml
