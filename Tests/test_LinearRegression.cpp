@@ -1347,8 +1347,51 @@ TEST_F(LinearRegressionTest, multivariate_polynomial)
 		y[i] = std::abs(x) + 1 + 0.2 * std::sin(x);
 	}
 	const auto result = multivariate(X, y);
+	// Test against: sklearn.linear_model.Ridge
 	ASSERT_NEAR(0.944624786854704, result.r2(), 1e-15);
 	Eigen::VectorXd expected_beta(4);
 	expected_beta << 0.199600230558526, 0.928490907343161, -0.0314887196669726, 1.18926358655283;
 	ASSERT_NEAR(0, (result.beta - expected_beta).norm(), 1e-14) << result.beta;
+}
+
+TEST_F(LinearRegressionTest, ridge_without_standardisation_polynomial)
+{
+	constexpr unsigned int n = 101;
+	Eigen::MatrixXd X(3, n);
+	Eigen::VectorXd y(n);
+	for (unsigned int i = 0; i < n; ++i) {
+		const double x = -1 + 0.02 * static_cast<double>(i);
+		X(0, i) = x;
+		X(1, i) = x * x;
+		X(2, i) = x * x * x;
+		y[i] = std::abs(x) + 1 + 0.2 * std::sin(x);
+	}
+	standardise(X);
+	const auto result = ridge<false>(X, y, 0.2);
+	// Test against: sklearn.linear_model.Ridge
+	ASSERT_NEAR(0.944617571172089, result.r2(), 1e-15);
+	Eigen::VectorXd expected_beta(4);
+	expected_beta << 0.114840832263246, 0.28175948879102, -0.0108204127651298, 1.5049504950495;
+	ASSERT_NEAR(0, (result.beta - expected_beta).norm(), 1e-14) << result.beta;
+}
+
+TEST_F(LinearRegressionTest, lasso_without_standardisation_polynomial)
+{
+	constexpr unsigned int n = 101;
+	Eigen::MatrixXd X(3, n);
+	Eigen::VectorXd y(n);
+	for (unsigned int i = 0; i < n; ++i) {
+		const double x = -1 + 0.02 * static_cast<double>(i);
+		X(0, i) = x;
+		X(1, i) = x * x;
+		X(2, i) = x * x * x;
+		y[i] = std::abs(x) + 1 + 0.2 * std::sin(x);
+	}
+	standardise(X);
+	const auto result = lasso<false>(X, y, 0.1 * static_cast<double>(n));
+	// Test against: sklearn.linear_model.Lasso
+	ASSERT_NEAR(0.892348728286198, result.r2(), 1e-15);
+	Eigen::VectorXd expected_beta(4);
+	expected_beta << 0.0551505195043211, 0.232317428372784, 0, 1.5049504950495;
+	ASSERT_NEAR(0, (result.beta - expected_beta).norm(), 2e-14) << result.beta;
 }
