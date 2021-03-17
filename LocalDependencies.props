@@ -8,14 +8,14 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\Roman\source\repos\benchmark\out\build\x64-Release\src;C:\Users\Roman\Anaconda3\libs;D:\local\NLopt.v2.6.1.x86_64-w64-mingw32\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Roman\source\repos\benchmark\out\build\x64-Release\src;C:\Users\Roman\Anaconda3\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Roman\source\repos\googletest\googletest\include;C:\Users\Roman\source\repos\pybind11\include;C:\Users\Roman\Anaconda3\include;D:\local\NLopt.v2.6.1.x86_64-w64-mingw32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Roman\source\repos\googletest\googletest\include;C:\Users\Roman\source\repos\pybind11\include;C:\Users\Roman\Anaconda3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib>
-      <AdditionalLibraryDirectories>D:\local\NLopt.v2.6.1.x86_64-w64-mingw32\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup />
