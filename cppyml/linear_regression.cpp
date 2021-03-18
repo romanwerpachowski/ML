@@ -97,6 +97,11 @@ namespace ml
             return RidgeRegressionResultRowMajor(ridge(X.transpose(), y, lambda, do_standardise));
         }
 
+        static LassoRegressionResult lasso_row_major(Eigen::Ref<const MatrixXdR> X, Eigen::Ref<const Eigen::VectorXd> y, const double lambda, const bool do_standardise)
+        {
+            return LassoRegressionResult(lasso(X.transpose(), y, lambda, do_standardise));
+        }
+
         static double press_cppyml(Eigen::Ref<const MatrixXdR> X, Eigen::Ref<const Eigen::VectorXd> y, const char* regularisation, const double reg_lambda)
         {
             if (!strcmp(regularisation, "ridge")) {
@@ -347,6 +352,44 @@ Args:
 Returns:
     Instance of `RidgeRegressionResult`. If `do_standardise` was `True`, the `beta` vector will be rescaled and shifted
     to original `X` units and origins, and the `cov` matrix will be transformed accordingly.
+)");
+
+    m_lin_reg.def("press", &ml::LinearRegression::press_cppyml,
+        py::arg("X"), py::arg("y"), py::arg("regularisation") = "none", py::arg("reg_lambda") = 0.,
+        R"(Calculates the PRESS statistic (Predicted Residual Error Sum of Squares).
+
+See https://en.wikipedia.org/wiki/PRESS_statistic for details.
+
+NOTE: Training data will be standardised internally if using regularisation.
+
+Args:
+    X: X matrix (shape N x D, with D <= N), with data points in rows. Unstandardised.
+    y: Y vector with length N.
+    regularisation: Type of regularisation: "none" or "ridge". Defaults to "none".
+    reg_lambda: Non-negative regularisation strength. Defaults to 0. Ignored if `regularisation == "none"`.
+
+Returns:
+    Value of the PRESS statistic.
+)");
+
+    m_lin_reg.def("lasso", &ml::LinearRegression::lasso_row_major,
+        py::arg("X"), py::arg("y"), py::arg("lambda"), py::arg("do_standardise") = default_do_standardise,
+        R"(Carries out multivariate Lasso regression with intercept.
+
+Given X and y, finds beta' and beta0 minimising || y - \beta'^T X - beta0 ||^2 + lambda * || beta' ||_1.
+
+R2 is always calculated w/r to model returning average y. 
+The matrix `X` is assumed to be standardised unless `do_standardise` is set to `True`.
+Does not calculate the covariance matrix for estimated coefficients.
+
+Args:
+    X: X matrix (shape N x D, with D <= N), with data points in rows.
+    y: Y vector with length N.
+    do_standardise: Whether to automatically subtract the mean from each row in `X` and divide it by its standard deviation (defaults to False).
+
+Returns:
+    Instance of `LassoRegressionResult`. If `do_standardise` was `True`, the `beta` vector will be rescaled and shifted
+    to original `X` units and origins.
 )");
 
     m_lin_reg.def("press", &ml::LinearRegression::press_cppyml,

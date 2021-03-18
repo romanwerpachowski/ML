@@ -8,7 +8,7 @@ import warnings
 import numpy as np
 import pandas as pd
 from scipy import stats
-from sklearn.linear_model import LinearRegression, Ridge
+from sklearn.linear_model import Lasso, LinearRegression, Ridge
 
 from cppyml import linear_regression
 
@@ -110,6 +110,26 @@ Times different versions of linear regression against standard Python libraries 
     t1 = time.perf_counter()
     print("sklearn.linear_model.Ridge time: %g" % (t1 - t0))
     print("sklearn.linear_model.Ridge result: coef=%s, intercept=%g, r2=%g" % (ridge.coef_, ridge.intercept_, ridge.score(X, y)))
+
+    print("\n*** Multivariate w/ Lasso regression - already standardised ***")
+    
+    lam = 0.01
+    lasso = Lasso(alpha=lam, fit_intercept=True, normalize=False)
+
+    t0 = time.perf_counter()
+    for _ in range(n_timing_iters):
+        result = linear_regression.lasso(X, y, lam * 2 * n, do_standardise=False)
+    t1 = time.perf_counter()
+    print("cppyml time: %g" % (t1 - t0))
+    print("cppyml result: %s" % result)
+
+    t0 = time.perf_counter()    
+    for _ in range(n_timing_iters):
+        lasso.fit(X, y)
+    t1 = time.perf_counter()
+    print("sklearn.linear_model.Lasso time: %g" % (t1 - t0))
+    print("sklearn.linear_model.Lasso result: coef=%s, intercept=%g, r2=%g" % (lasso.coef_, lasso.intercept_, lasso.score(X, y)))
+
 
 if __name__ == "__main__":
     main()

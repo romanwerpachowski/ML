@@ -10,6 +10,7 @@ from scipy import stats
 from sklearn import linear_model
 
 from cppyml import linear_regression
+from cppyml import utils
 
 
 class LinearRegressionTest(unittest.TestCase):
@@ -288,6 +289,24 @@ class LinearRegressionTest(unittest.TestCase):
         self.assertAlmostEqual(adjusted_r2, result2.adjusted_r2, delta=1e-14)
         self.assertAlmostEqual(adjusted_r2, result3.adjusted_r2, delta=1e-14)
 
+    def test_lasso_without_standardisation_polynomial(self):
+        n = 101
+        d = 3
+        X = np.empty((n, d), dtype=float)
+        x = np.linspace(-1, 1, n)
+        for i in range(d):
+            X[:, i] = x ** (i + 1)
+        y = np.abs(x) + 1 + 0.2 * np.sin(x)
+        X = utils.standardise_features(X)
+        lam = 0.1
+        result = linear_regression.lasso(X, y, lam * 2 * n, do_standardise=False)
+        lasso = linear_model.Lasso(alpha=lam, fit_intercept=True, normalize=False)
+        lasso.fit(X, y)
+        np.testing.assert_almost_equal(result.beta[:d], lasso.coef_, decimal=13)
+        self.assertAlmostEqual(lasso.intercept_, result.beta[d], delta=1e-13)
+        r2 = lasso.score(X, y)
+        self.assertAlmostEqual(r2, result.r2, delta=1e-13)
+
     def test_press_univariate_with_intercept(self):
         x = np.array([-1, 0, 1])
         y = np.array([1, 0, 1])
@@ -326,4 +345,4 @@ class LinearRegressionTest(unittest.TestCase):
 
 
 if __name__ == "__main__": 
-    unittest.main()    
+    unittest.main()

@@ -22,6 +22,9 @@
     <Filter Include="Python\tests">
       <UniqueIdentifier>{e13969ba-b991-45fa-afd2-c86ee2e048d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Python\cppyml">
+      <UniqueIdentifier>{a9c0808f-13cc-4ccf-b5af-fa960df5ddd4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="decision_trees.cpp">
@@ -51,11 +54,17 @@
     <None Include="tests\test_clustering.py">
       <Filter>Python\tests</Filter>
     </None>
-    <None Include="cppyml\__init__.py">
-      <Filter>Python</Filter>
-    </None>
     <None Include="README.md">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="cppyml\__init__.py">
+      <Filter>Python\cppyml</Filter>
+    </None>
+    <None Include="cppyml\utils.py">
+      <Filter>Python\cppyml</Filter>
+    </None>
+    <None Include="tests\test_utils.py">
+      <Filter>Python\tests</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

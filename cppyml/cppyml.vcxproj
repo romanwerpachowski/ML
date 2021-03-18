@@ -198,6 +198,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="cppyml\utils.py" />
     <None Include="cppyml\__init__.py" />
     <None Include="README.md" />
     <None Include="SConscript" />
@@ -205,6 +206,7 @@
     <None Include="tests\test_decision_trees.py" />
     <None Include="tests\test_clustering.py" />
     <None Include="tests\test_linear_regression.py" />
+    <None Include="tests\test_utils.py" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="types.hpp" />
