@@ -12,10 +12,15 @@
 namespace ml
 {
 	namespace LinearRegression
-	{	
+	{
 		static void members_to_string(const Result& result, std::stringstream& s)
 		{
 			s << "n=" << result.n << ", dof=" << result.dof << ", rss=" << result.rss << ", tss=" << result.tss;
+		}
+
+		static void metrics_to_string(const Result& result, std::stringstream& s)
+		{
+			s << ", var_y=" << result.var_y() << ", r2=" << result.r2() << ", adjusted_r2=" << result.adjusted_r2();
 		}
 
 		std::string UnivariateOLSResult::to_string() const
@@ -23,6 +28,7 @@ namespace ml
 			std::stringstream s;
 			s << "UnivariateOLSResult(";
 			members_to_string(static_cast<const Result&>(*this), s);
+			metrics_to_string(static_cast<const Result&>(*this), s);
 			s << ", slope=" << slope << ", intercept=" << intercept;
 			s << ", var_slope=" << var_slope << ", var_intercept=" << var_intercept << ", cov_slope_intercept=" << cov_slope_intercept;
 			s << ")";
@@ -38,7 +44,8 @@ namespace ml
 		{
 			std::stringstream s;
 			s << "MultivariateOLSResult(";
-			s << "n=" << n << ", dof=" << dof << ", r2=" << r2() << ", var_y=" << var_y();
+			members_to_string(static_cast<const Result&>(*this), s);
+			metrics_to_string(static_cast<const Result&>(*this), s);
 			s << ", beta=[" << beta.transpose() << "]";
 			s << ", cov=[" << cov << "]";
 			s << ")";
@@ -66,6 +73,7 @@ namespace ml
 			std::stringstream s;
 			s << "RidgeRegressionResult(";
 			members_to_string(static_cast<const Result&>(*this), s);
+			metrics_to_string(static_cast<const Result&>(*this), s);
 			s << ", beta=[" << beta.transpose() << "]";
 			s << ", effective_dof=" << effective_dof;
 			s << ", cov=[" << cov << "]";
@@ -78,6 +86,7 @@ namespace ml
 			std::stringstream s;
 			s << "LassoRegressionResult(";
 			members_to_string(static_cast<const Result&>(*this), s);
+			metrics_to_string(static_cast<const Result&>(*this), s);
 			s << ", beta=[" << beta.transpose() << "]";
 			s << ", effective_dof=" << effective_dof;
 			s << ")";
@@ -365,6 +374,9 @@ namespace ml
 				for (Eigen::Index i = 0; i < q; ++i) {
 					if (std::abs(result.beta[i]) > abs_tol) {
 						++num_nonzero_slopes;
+					} else {
+						// Squash it.
+						result.beta[i] = 0;
 					}
 				}
 				result.effective_dof = static_cast<double>(n - 1 - num_nonzero_slopes);

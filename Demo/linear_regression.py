@@ -113,7 +113,7 @@ Times different versions of linear regression against standard Python libraries 
 
     print("\n*** Multivariate w/ Lasso regression - already standardised ***")
     
-    lam = 0.01
+    lam = 0.5
     lasso = Lasso(alpha=lam, fit_intercept=True, normalize=False)
 
     t0 = time.perf_counter()

@@ -1246,7 +1246,7 @@ TEST_F(LinearRegressionTest, lasso_nonzero_lambda)
 {
 	constexpr unsigned int n = 10;
 	constexpr unsigned int d = 3;
-	constexpr double tol = 1e-16;
+	constexpr double tol = 5e-16;
 	Eigen::MatrixXd X0(Eigen::MatrixXd::Random(d, n));
 	standardise(X0);
 	const Eigen::MatrixXd X(add_ones(X0));
@@ -1390,7 +1390,7 @@ TEST_F(LinearRegressionTest, lasso_without_standardisation_polynomial)
 	standardise(X);
 	const auto result = lasso<false>(X, y, 0.1 * static_cast<double>(n));
 	// Test against: sklearn.linear_model.Lasso
-	ASSERT_NEAR(0.892348728286198, result.r2(), 1e-15);
+	ASSERT_NEAR(0.892348728286198, result.r2(), 5e-16);
 	Eigen::VectorXd expected_beta(4);
 	expected_beta << 0.0551505195043211, 0.232317428372784, 0, 1.5049504950495;
 	ASSERT_NEAR(0, (result.beta - expected_beta).norm(), 2e-14) << result.beta;
