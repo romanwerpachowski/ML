@@ -10,6 +10,7 @@ To build a distributable version, run "python setup.py sdist bdist_wheel".
 from setuptools.dist import Distribution
 from setuptools import setup, find_packages
 import argparse
+import json
 import glob
 import os
 import sys
@@ -29,6 +30,9 @@ DEBUG_BINARIES = args.debug
 
 # Name of the C++ build mode.
 CPP_BUILD_MODE = "Debug" if DEBUG_BINARIES else "Release"
+
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "version.json")) as f:
+    VERSION = json.load(f)
 
 # Package name.
 NAME = "cppyml"

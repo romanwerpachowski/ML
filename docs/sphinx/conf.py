@@ -12,10 +12,15 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import json
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../cppyml'))
 
+CPPYML_PATH = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../cppyml'))
+sys.path.insert(0, CPPYML_PATH)
+
+with open(os.path.join(CPPYML_PATH, "version.json")) as f:
+    VERSION = json.load(f)
 
 # -- Project information -----------------------------------------------------
 
@@ -26,7 +31,7 @@ author = 'Roman Werpachowski'
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '0.4.0'
+release = VERSION
 
 
 # -- General configuration ---------------------------------------------------
