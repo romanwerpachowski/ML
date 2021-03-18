@@ -4,7 +4,9 @@ set -ev
 CWD=$(pwd)
 
 #*** Generate documentation for the C++ code using Doxygen. ***
+rm -rf docs/html
 doxygen Doxyfile
+git add docs/html
 
 #*** Generate documentation for Python extension using Sphinx. ***
 cd "${CWD}"

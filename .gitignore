@@ -356,8 +356,6 @@ healthchecksdb
 /googletest/build/cmake_install.cmake
 /googletest/build/CMakeCache.txt
 /ML/docs/html
-/docs/html/search
-/docs/html
 /docs/sphinx/_build
 /mousie.pdf
 .vscode
