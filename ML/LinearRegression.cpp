@@ -330,7 +330,7 @@ namespace ml
 			}
 			constexpr double rel_tol = 1e-15;
 			constexpr double abs_tol = 1e-15;
-			constexpr unsigned int max_iter = 1000;
+			constexpr unsigned int max_iter = 10000;
 			if (lambda > 0) {
 				Eigen::VectorXd ridge_lambda(q);
 				Eigen::MatrixXd XXt(q, q);
@@ -352,9 +352,6 @@ namespace ml
 					result.beta.head(q) = next_beta;
 					//std::cout << next_beta.transpose() << "\n";
 					++num_iters;
-				}	
-				if (!converged) {
-					std::cout << "lasso warning: not converged" << std::endl;
 				}
 			}
 			// Use the fact that intercept == mean(y).
