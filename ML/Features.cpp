@@ -1,6 +1,7 @@
 /* (C) 2021 Roman Werpachowski. */
-#include "Features.hpp"
+#include <algorithm>
 #include <ostream>
+#include "Features.hpp"
 
 
 namespace ml
@@ -24,7 +25,53 @@ namespace ml
             }
             assert(features_it == features.second);
         }
-    }
+
+        void swap_columns(Eigen::Ref<Eigen::MatrixXd> X, const Eigen::Index i1, const Eigen::Index i2)
+        {
+            if (i1 >= X.cols()) {
+                throw std::out_of_range("Features: index of the 1st swapped column out of range");
+            }
+            if (i2 >= X.cols()) {
+                throw std::out_of_range("Features: index of the 2nd swapped column out of range");
+            }
+            auto col1 = X.col(i1);
+            auto col2 = X.col(i2);
+            for (Eigen::Index r = 0; r < X.rows(); ++r) {
+                std::swap(col1[r], col2[r]);
+            }
+        }
+
+        Eigen::Index partition(Eigen::Ref<Eigen::MatrixXd> X, const Eigen::Index pivot_idx, const Eigen::Index k)
+        {
+            if (pivot_idx >= X.cols()) {
+                throw std::out_of_range("Features: pivot column index out of range");
+            }
+            if (k >= X.rows()) {
+                throw std::out_of_range("Features: pivoting dimension index out of range");
+            }            
+            // Use https://en.wikipedia.org/wiki/Quicksort#Hoare_partition_scheme
+            const auto middle_idx = (X.cols() - 1) / 2; // Should round down automatically.
+            const auto A = X.row(k);
+            const double pivot = A[pivot_idx];
+            if (middle_idx != pivot_idx) {
+                swap_columns(X, middle_idx, pivot_idx);
+            }
+            Eigen::Index i = -1;
+            Eigen::Index j = X.cols();
+            while (true) {
+                do {
+                    ++i;
+                } while (A[i] < pivot);
+                do {
+                    --j;
+                } while (A[j] > pivot);
+                if (i >= j) {
+                    return j;
+                }
+                swap_columns(X, i, j);
+            }
+        }
+    }    
 }
 
 namespace std

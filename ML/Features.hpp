@@ -43,7 +43,30 @@ namespace ml
         */
         DLL_DECLSPEC void set_to_nth(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Index n, VectorRange<IndexedFeatureValue> features);
 
-        
+        /**
+         * @brief Swaps two columns in feature matrix.
+         * 
+         * @param X Feature matrix.
+         * @param i1 Index of the 1st column.
+         * @param i2 Index of the 2nd column.
+         * @throw std::out_of_range If `i1 >= X.cols()` or `i2 >= X.cols()`.
+        */
+        DLL_DECLSPEC void swap_columns(Eigen::Ref<Eigen::MatrixXd> X, Eigen::Index i1, Eigen::Index i2);
+
+        /**
+         * @brief Partitions features (in columns) so that those with x[k] < pivot[k] are before the pivot, and those with x[k] > pivot[k] are after it.
+         * 
+         * pivot = X.col(pivot_idx).
+         * 
+         * @param X Features with data points in columns.
+         * @param pivot_idx Pivot index.
+         * @param k Dimension used for comparison.
+         * 
+         * @return Position of the pivot feature after partitioning.
+         * 
+         * @throw std::out_of_range If `pivot_idx >= X.cols()` or `k >= X.rows()`.
+        */
+        DLL_DECLSPEC Eigen::Index partition(Eigen::Ref<Eigen::MatrixXd> X, Eigen::Index pivot_idx, Eigen::Index k);
     }
 }
 

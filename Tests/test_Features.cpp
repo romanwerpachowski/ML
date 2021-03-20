@@ -23,3 +23,43 @@ TEST(FeaturesTest, set_to_nth)
 		ASSERT_EQ(X(1, i), features[i].second) << features[i];
 	}
 }
+
+TEST(FeaturesTest, swap_columns)
+{
+	Eigen::MatrixXd X(2, 4);
+	X << -0.1, 0.2, 0.2, 0.3,
+		1, 2, 2, -1;
+	ml::Features::swap_columns(X, 0, 1);
+	Eigen::MatrixXd expected(2, 4);
+	expected << 0.2, -0.1, 0.2, 0.3,
+		2, 1, 2, -1;
+	ASSERT_NEAR(0, (expected - X).norm(), 1e-15) << X;
+	ml::Features::swap_columns(X.block(0, 2, 2, 2), 0, 1);
+	expected << 0.2, -0.1, 0.3, 0.2,
+		2, 1, -1, 2;
+	ASSERT_NEAR(0, (expected - X).norm(), 1e-15) << X;
+}
+
+TEST(FeaturesTest, partition)
+{
+	Eigen::MatrixXd X(2, 4);
+	X << 0.3, 0.21, -0.3, 0.2,
+		1, 2, -1, 3;
+	auto pivot_idx = ml::Features::partition(X, 1, 0);
+	Eigen::MatrixXd expected(2, 4);
+	expected << 0.2, -0.3, 0.21, 0.3,
+		3, -1, 2, 1;
+	ASSERT_NEAR(0, (expected - X).norm(), 1e-15) << X;
+	EXPECT_EQ(2, pivot_idx);
+	pivot_idx = ml::Features::partition(X.block(0, 0, 2, 1), 0, 1);
+	ASSERT_NEAR(0, (expected - X).norm(), 1e-15) << X;
+	EXPECT_EQ(0, pivot_idx);
+	pivot_idx = ml::Features::partition(X.block(0, 1, 2, 3), 1, 0);	
+	ASSERT_NEAR(0, (expected - X).norm(), 1e-15) << X;
+	EXPECT_EQ(1, pivot_idx);
+	pivot_idx = ml::Features::partition(X.block(0, 1, 2, 3), 1, 1);
+	expected << 0.2, -0.3, 0.3, 0.21,
+		3, -1, 1, 2;
+	ASSERT_NEAR(0, (expected - X).norm(), 1e-15) << X;
+	EXPECT_EQ(1, pivot_idx);
+}

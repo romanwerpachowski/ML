@@ -36,7 +36,9 @@ namespace ml
             const auto pivot_iter = features.first + sorted_pivot_idx;
             const Eigen::Index pivot_feature_idx = pivot_iter->first;
             tree.col(i) = work.col(pivot_feature_idx);
-            // TODO: finish.
+            // Partition work space into Left and Right child features.
+            Features::partition(work, pivot_feature_idx, r);
+
         }
     }
 }
