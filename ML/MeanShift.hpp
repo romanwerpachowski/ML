@@ -8,7 +8,7 @@ namespace ml
 {
     namespace Kernels
     {
-        class DoubleDifferentiableRadialBasisFunction;
+        class DifferentiableRadialBasisFunction;
     }
 
     namespace Clustering
@@ -30,7 +30,7 @@ namespace ml
              * @throw std::invalid_argument If `rbf` is null.
              * @throw std::domain_error If `h <= 0`.
             */
-            MeanShift(std::shared_ptr<Kernels::DoubleDifferentiableRadialBasisFunction> rbf, double h);
+            MeanShift(std::shared_ptr<Kernels::DifferentiableRadialBasisFunction> rbf, double h);
 
             /** @brief Sets absolute tolerance for convergence test.
             @param[in] absolute_tolerance Absolute tolerance.
@@ -57,11 +57,19 @@ namespace ml
             }
         private:
             std::vector<unsigned int> labels_;
-            std::shared_ptr<Kernels::DoubleDifferentiableRadialBasisFunction> rbf_;
-            double h2_; /**< Window radius. */            
+            std::shared_ptr<Kernels::DifferentiableRadialBasisFunction> rbf_;
+            double h_; /**< Window radius. */
+            double h2_; /**< Window radius (squared). */
             double absolute_tolerance_;
             double relative_tolerance_;
+            double perturbation_strength_;
             unsigned int number_clusters_;
+
+            bool close_within_tolerance(Eigen::Ref<const Eigen::VectorXd> x1, Eigen::Ref<const Eigen::VectorXd> x2) const;
+
+            void calc_new_position(Eigen::Ref<const Eigen::MatrixXd> data, Eigen::Ref<const Eigen::VectorXd> old_pos, Eigen::Ref<Eigen::VectorXd> new_pos) const;
+
+            void shift_until_stationary(Eigen::Ref<const Eigen::MatrixXd> data, Eigen::Ref<Eigen::VectorXd> pos, Eigen::Ref<Eigen::VectorXd> work) const;
         };
     }
 }
