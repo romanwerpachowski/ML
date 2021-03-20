@@ -207,6 +207,7 @@
     <None Include="tests\test_clustering.py" />
     <None Include="tests\test_linear_regression.py" />
     <None Include="tests\test_utils.py" />
+    <None Include="version.json" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="types.hpp" />

@@ -54,6 +54,12 @@
     <ClInclude Include="LinearAlgebra.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Kernels.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MeanShift.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EM.cpp">
@@ -78,6 +84,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LinearAlgebra.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Kernels.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MeanShift.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

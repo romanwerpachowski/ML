@@ -1,5 +1,5 @@
-/* (C) 2020 Roman Werpachowski. */
 #pragma once
+/* (C) 2020 Roman Werpachowski. */
 
 /** @file dll.hpp
 Preprocessor declarations used to export functions and classes in the shared library.

@@ -7,6 +7,9 @@ namespace ml
 {
 	namespace Clustering
 	{
+		Model::~Model()
+		{}
+
 		CentroidsInitialiser::~CentroidsInitialiser()
 		{}
 

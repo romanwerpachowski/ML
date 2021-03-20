@@ -1,5 +1,5 @@
-/* (C) 2020 Roman Werpachowski. */
 #pragma once
+/* (C) 2020 Roman Werpachowski. */
 #include <cassert>
 #include <iostream>
 #include <memory>

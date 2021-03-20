@@ -1,5 +1,5 @@
-/* (C) 2020 Roman Werpachowski. */
 #pragma once
+/* (C) 2020 Roman Werpachowski. */
 #include <memory>
 #include <random>
 #include <vector>
@@ -20,7 +20,8 @@ namespace ml
 
 	Iterates until log-likelihood converges.
 	*/
-	class EM {
+	class EM 
+	{
 	public:		
 		/** @brief Constructs an EM ready to fit.
 		@param[in] number_components Number of Gaussian components.

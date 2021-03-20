@@ -66,6 +66,9 @@
     <None Include="tests\test_utils.py">
       <Filter>Python\tests</Filter>
     </None>
+    <None Include="version.json">
+      <Filter>Python</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="types.hpp">

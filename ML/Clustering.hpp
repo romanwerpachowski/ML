@@ -1,7 +1,8 @@
-/* (C) 2020 Roman Werpachowski. */
 #pragma once
+/* (C) 2020 Roman Werpachowski. */
 #include <memory>
 #include <random>
+#include <vector>
 #include <Eigen/Core>
 #include "dll.hpp"
 
@@ -10,6 +11,33 @@ namespace ml
 	/** @brief Methods and classes for clustering algorithms. */
 	namespace Clustering
 	{
+		/**
+		 * @brief Abstract clustering model.
+		*/
+		class Model
+		{
+		public:
+			/**
+			 * @brief Virtual destructor.
+			*/
+			virtual ~Model();
+
+			/** @brief Fits the model.
+			@param[in] data Matrix (column-major order) with a data point in every column.
+			@return `true` if fitting converged successfully.
+			*/
+			virtual bool fit(Eigen::Ref<const Eigen::MatrixXd> data) = 0;
+
+			/** @brief Returns the number of clusters (after fitting). */
+			virtual unsigned int number_clusters() const = 0;
+
+			/** @brief Returns a const reference to resulting cluster labels.
+			* 
+			@return Const reference vector of cluster labels for each datapoint.
+			*/
+			virtual const std::vector<unsigned int>& labels() const = 0;
+		};
+
 		/** @brief Chooses initial locations of centroids. */
 		class CentroidsInitialiser
 		{
