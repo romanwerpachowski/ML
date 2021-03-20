@@ -50,12 +50,13 @@ namespace ml
                 throw std::out_of_range("Features: pivoting dimension index out of range");
             }            
             // Use https://en.wikipedia.org/wiki/Quicksort#Hoare_partition_scheme
-            const auto middle_idx = (X.cols() - 1) / 2; // Should round down automatically.
+            auto p = (X.cols() - 1) / 2; // Should round down automatically.
             const auto A = X.row(k);
             const double pivot = A[pivot_idx];
-            if (middle_idx != pivot_idx) {
-                swap_columns(X, middle_idx, pivot_idx);
+            if (p != pivot_idx) {
+                swap_columns(X, p, pivot_idx);
             }
+            assert(pivot == A[p]);
             Eigen::Index i = -1;
             Eigen::Index j = X.cols();
             while (true) {
@@ -66,7 +67,13 @@ namespace ml
                     --j;
                 } while (A[j] > pivot);
                 if (i >= j) {
-                    return j;
+                    return p;
+                }
+                // Track pivot location.
+                if (p == i) {
+                    p = j;
+                } else if (p == j) {
+                    p = i;
                 }
                 swap_columns(X, i, j);
             }

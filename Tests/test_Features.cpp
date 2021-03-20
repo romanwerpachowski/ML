@@ -50,16 +50,16 @@ TEST(FeaturesTest, partition)
 	expected << 0.2, -0.3, 0.21, 0.3,
 		3, -1, 2, 1;
 	ASSERT_NEAR(0, (expected - X).norm(), 1e-15) << X;
-	EXPECT_EQ(2, pivot_idx);
+	ASSERT_EQ(2, pivot_idx);
 	pivot_idx = ml::Features::partition(X.block(0, 0, 2, 1), 0, 1);
 	ASSERT_NEAR(0, (expected - X).norm(), 1e-15) << X;
-	EXPECT_EQ(0, pivot_idx);
+	ASSERT_EQ(0, pivot_idx);
 	pivot_idx = ml::Features::partition(X.block(0, 1, 2, 3), 1, 0);	
 	ASSERT_NEAR(0, (expected - X).norm(), 1e-15) << X;
-	EXPECT_EQ(1, pivot_idx);
+	ASSERT_EQ(1, pivot_idx);
 	pivot_idx = ml::Features::partition(X.block(0, 1, 2, 3), 1, 1);
 	expected << 0.2, -0.3, 0.3, 0.21,
 		3, -1, 1, 2;
 	ASSERT_NEAR(0, (expected - X).norm(), 1e-15) << X;
-	EXPECT_EQ(1, pivot_idx);
+	ASSERT_EQ(2, pivot_idx);
 }
