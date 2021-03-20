@@ -20,7 +20,7 @@ namespace ml
 			/**
 			 * @brief Virtual destructor.
 			*/
-			virtual ~Model();
+			DLL_DECLSPEC virtual ~Model();
 
 			/** @brief Fits the model.
 			@param[in] data Matrix (column-major order) with a data point in every column.

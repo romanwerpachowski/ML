@@ -121,6 +121,19 @@ namespace ml
         };
 
         /**
+         * @brief Gaussian radial basis function.
+         * 
+         * Given by the formula f(r2) = exp(-r2), where r2 is the SQUARE of the norm.
+        */
+        class GaussianRBF: public DoubleDifferentiableRadialBasisFunction
+        {
+        public:
+            DLL_DECLSPEC double value(double r2) const override;
+            DLL_DECLSPEC double gradient(double r2) const override;
+            DLL_DECLSPEC double second_derivative(double r2) const override;
+        };
+
+        /**
          * @brief Radial basis function kernel.
          *
          * Kernel function of the form K(x1, x2) = s(||x1 - x2||^2).

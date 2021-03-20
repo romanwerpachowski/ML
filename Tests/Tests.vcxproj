@@ -57,6 +57,7 @@
     <ClCompile Include="test_Kernels.cpp" />
     <ClCompile Include="test_LinearAlgebra.cpp" />
     <ClCompile Include="test_LinearRegression.cpp" />
+    <ClCompile Include="test_MeanShift.cpp" />
     <ClCompile Include="test_Statistics.cpp" />
   </ItemGroup>
   <ItemGroup>

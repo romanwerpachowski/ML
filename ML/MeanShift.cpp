@@ -7,7 +7,7 @@ namespace ml
 {
     namespace Clustering
     {
-        MeanShift::MeanShift(std::shared_ptr<Kernels::DifferentiableRadialBasisFunction> rbf, double h)
+        MeanShift::MeanShift(std::shared_ptr<const Kernels::DifferentiableRadialBasisFunction> rbf, double h)
             : rbf_(rbf), h_(h), h2_(h* h)
         {
             if (rbf == nullptr) {
@@ -18,7 +18,7 @@ namespace ml
             }
             absolute_tolerance_ = 1e-12;
             relative_tolerance_ = 1e-14;
-            perturbation_strength_ = h / 100.0;
+            perturbation_strength_ = h / 1000.0;
         }
 
         void MeanShift::set_absolute_tolerance(double absolute_tolerance)

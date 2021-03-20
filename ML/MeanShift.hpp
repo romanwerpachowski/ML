@@ -30,7 +30,7 @@ namespace ml
              * @throw std::invalid_argument If `rbf` is null.
              * @throw std::domain_error If `h <= 0`.
             */
-            MeanShift(std::shared_ptr<Kernels::DifferentiableRadialBasisFunction> rbf, double h);
+            DLL_DECLSPEC MeanShift(std::shared_ptr<const Kernels::DifferentiableRadialBasisFunction> rbf, double h);
 
             /** @brief Sets absolute tolerance for convergence test.
             @param[in] absolute_tolerance Absolute tolerance.
@@ -44,7 +44,7 @@ namespace ml
             */
             DLL_DECLSPEC void set_relative_tolerance(double relative_tolerance);
 
-            bool fit(Eigen::Ref<const Eigen::MatrixXd> data) override;
+            DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data) override;
 
             unsigned int number_clusters() const override
             {
@@ -57,7 +57,7 @@ namespace ml
             }
         private:
             std::vector<unsigned int> labels_;
-            std::shared_ptr<Kernels::DifferentiableRadialBasisFunction> rbf_;
+            std::shared_ptr<const Kernels::DifferentiableRadialBasisFunction> rbf_;
             double h_; /**< Window radius. */
             double h2_; /**< Window radius (squared). */
             double absolute_tolerance_;
