@@ -1,24 +1,65 @@
 /** (C) 2021 Roman Werpachowski */
 #include <cassert>
+#include <limits>
 #include "BallTree.hpp"
-#include "Features.hpp"
 
 namespace ml
 {
-    static void construct(Eigen::Ref<Eigen::MatrixXd> work, unsigned int i, Eigen::Ref<Eigen::MatrixXd> tree, Features::VectorRange<Features::IndexedFeatureValue> features);
-
     BallTree::BallTree(Eigen::Ref<const Eigen::MatrixXd> X)
-        : tree_(X.rows(), X.cols())
+        : tree_(X.rows(), X.cols()), radii_(X.cols()), num_left_children_(X.cols()), num_right_children_(X.cols())
     {
         Eigen::MatrixXd work(X);
         std::vector<Features::IndexedFeatureValue> features(X.cols());
-        construct(work, 0, tree_, Features::from_vector(features));
+        if (X.cols()) {
+            construct(work, 0, Features::from_vector(features));
+        }
     }    
 
-    void construct(Eigen::Ref<Eigen::MatrixXd> work, const unsigned int i, Eigen::Ref<Eigen::MatrixXd> tree, Features::VectorRange<Features::IndexedFeatureValue> features)
+    void BallTree::find_k_nearest_neighbours(Eigen::Ref<const Eigen::VectorXd> x, const unsigned int k, std::vector<unsigned int>& nn) const
     {
-        if (work.cols() == 1) {
-            tree.col(i) = work.col(0);
+        if (x.size() != tree_.rows()) {
+            throw std::invalid_argument("BallTree: wrong feature vector size");
+        }
+        std::queue<unsigned int> q;
+        knn_search(x, k, 0, q);
+        nn.reserve(q.size());
+        nn.clear();
+        while (!q.empty()) {
+            nn.push_back(q.front());
+            q.pop();
+        }
+    }
+
+    unsigned int BallTree::find_k_nearest_neighbours(Eigen::Ref<const Eigen::VectorXd> x, const unsigned int k, Eigen::Ref<Eigen::MatrixXd> nn) const
+    {
+        if (x.size() != tree_.rows()) {
+            throw std::invalid_argument("BallTree: wrong feature vector size");
+        }
+        const auto num_neighbours = std::min(k, static_cast<unsigned int>(tree_.cols()));
+        if (static_cast<unsigned int>(nn.cols()) < num_neighbours) {
+            throw std::invalid_argument("BallTree: not enough room for all neighbours");
+        }
+        std::queue<unsigned int> q;
+        knn_search(x, k, 0, q);
+        assert(q.size() == static_cast<size_t>(num_neighbours));
+        Eigen::Index i = 0;
+        while (!q.empty()) {
+            nn.col(i) = tree_.col(q.front());
+            q.pop();
+            ++i;
+        }
+        return num_neighbours;
+    }
+
+    void BallTree::construct(Eigen::Ref<Eigen::MatrixXd> work, const Eigen::Index i, Features::VectorRange<Features::IndexedFeatureValue> features)
+    {
+        assert(i < tree_.cols());
+        if (work.cols() == 0) {
+            return;
+        } else if (work.cols() == 1) {            
+            tree_.col(i) = work.col(0);
+            num_left_children_[i] = 0;
+            num_right_children_[i] = 0;
         } else {
             // Find the dimension of largest spread.
             const auto spreads = work.rowwise().maxCoeff() - work.rowwise().minCoeff();
@@ -32,13 +73,78 @@ namespace ml
             }
             Features::set_to_nth(work, r, features);
             std::sort(features.first, features.second, Features::INDEXED_FEATURE_COMPARATOR_ASCENDING);
-            const Eigen::Index sorted_pivot_idx = work.cols() / 2;
-            const auto pivot_iter = features.first + sorted_pivot_idx;
-            const Eigen::Index pivot_feature_idx = pivot_iter->first;
-            tree.col(i) = work.col(pivot_feature_idx);
+            const auto pivot_iter = features.first + (work.cols() / 2);
+            Eigen::Index pivot_idx = pivot_iter->first;
+            const auto root = work.col(pivot_idx);
+            tree_.col(i) = root;
+            double max_dist = 0;
+            for (Eigen::Index j = 0; j < work.cols(); ++j) {
+                const double dist = (root - work.col(j)).norm();
+                if (dist > max_dist) {
+                    max_dist = dist;
+                }
+            }
+            radii_[i] = max_dist;
             // Partition work space into Left and Right child features.
-            Features::partition(work, pivot_feature_idx, r);
+            pivot_idx = Features::partition(work, pivot_idx, r);
+            assert(pivot_idx < work.cols());
+            assert((tree_.col(i) - work.col(pivot_idx)).norm() == 0);
+            const auto num_left = static_cast<unsigned int>(pivot_idx);
+            const auto num_right = static_cast<unsigned int>(work.cols() - (pivot_idx + 1));
+            num_left_children_[i] = num_left;
+            num_right_children_[i] = num_right;
+            if (num_left) {
+                construct(work.block(0, 0, work.rows(), pivot_idx), i + 1, Features::VectorRange<Features::IndexedFeatureValue>(features.first, features.first + pivot_idx));
+            }
+            if (num_right) {
+                construct(work.block(0, pivot_idx + 1, work.rows(), num_right), i + 1 + num_left, Features::VectorRange<Features::IndexedFeatureValue>(features.first + pivot_idx + 1, features.second));
+            }
+        }
+    }
 
+    void BallTree::knn_search(Eigen::Ref<const Eigen::VectorXd> x, const unsigned int k, const Eigen::Index i, std::queue<unsigned int>& q) const
+    {
+        assert(i < tree_.cols());
+        const double dist_from_i = (x - tree_.col(i)).norm();
+        const double dist_from_q = distance_from_queue(x, q);
+        if (dist_from_i - radii_[i] >= dist_from_q) {
+            return;
+        }
+        if (dist_from_i < dist_from_q) {
+            q.push(static_cast<unsigned int>(i));
+            if (q.size() > k) {
+                q.pop();
+            }
+        }
+        Eigen::Index i1 = -1;
+        Eigen::Index i2 = -1;
+        double d1 = std::numeric_limits<double>::infinity();
+        double d2 = std::numeric_limits<double>::infinity();
+        if (num_left_children_[i]) {
+            i1 = i + 1;
+            d1 = (x - tree_.col(i1)).norm();
+        }
+        if (num_right_children_[i]) {
+            i2 = i + 1 + num_left_children_[i];
+            d2 = (x - tree_.col(i2)).norm();
+        }
+        if (d2 < d1) {
+            std::swap(i1, i2);
+        }
+        if (i1 >= 0) {
+            knn_search(x, k, i1, q);
+        }
+        if (i2 >= 0) {
+            knn_search(x, k, i2, q);
+        }
+    }
+
+    double BallTree::distance_from_queue(Eigen::Ref<const Eigen::VectorXd> x, const std::queue<unsigned int>& q) const
+    {
+        if (!q.empty()) {
+            return (x - tree_.col(q.front())).norm();
+        } else {
+            return std::numeric_limits<double>::infinity();
         }
     }
 }
