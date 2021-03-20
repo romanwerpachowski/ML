@@ -54,6 +54,7 @@
     <ClCompile Include="test_DecisionTreeNodes.cpp" />
     <ClCompile Include="test_Eigen.cpp" />
     <ClCompile Include="test_EM.cpp" />
+    <ClCompile Include="test_Features.cpp" />
     <ClCompile Include="test_Kernels.cpp" />
     <ClCompile Include="test_LinearAlgebra.cpp" />
     <ClCompile Include="test_LinearRegression.cpp" />

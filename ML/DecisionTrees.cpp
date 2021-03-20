@@ -3,27 +3,18 @@
 #include <future>
 #include <iostream>
 #include <limits>
-#include <utility>
 #include "Crossvalidation.hpp"
 #include "DecisionTrees.hpp"
+#include "Features.hpp"
 #include "Statistics.hpp"
 
 namespace ml
 {	
 	namespace DecisionTrees
-	{
-		typedef std::pair<Eigen::Index, double> IndexedFeatureValue; /**< @brief Used to sort feature vectors. */
-
-		static const auto SORTED_FEATURE_COMPARATOR = [](const IndexedFeatureValue& a, const IndexedFeatureValue& b) { return a.second < b.second; };
+	{		
 		constexpr bool USE_THREADS = false; /**< @brief Whether to use threads when fitting a tree .*/
 		constexpr Eigen::Index MIN_SAMPLE_SIZE_FOR_NEW_THREADS = 256; /**< @brief Minimum sample size for which it's worth launching a new thread.*/
 		constexpr unsigned int DEFAULT_MAX_NUM_THREADS = 2; /**< @brief Default maximum number of threads.*/
-
-		/** Creates an iterator pair containing begin() and end(). */
-		template <typename T> VectorRange<T> from_vector(std::vector<T>& v)
-		{
-			return std::make_pair(v.begin(), v.end());
-		}
 
 		template <typename Metrics> static std::pair<unsigned int, double> find_best_split_1d(
 			const Metrics metrics,
@@ -31,7 +22,7 @@ namespace ml
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
 			const double error_whole_sample,
-			const VectorRange<IndexedFeatureValue> features)
+			const Features::VectorRange<Features::IndexedFeatureValue> features)
 		{
 			const auto number_dimensions = X.rows();
 			const auto sample_size = y.size();
@@ -45,17 +36,12 @@ namespace ml
 
 			// Find best threshold for each feature.
 			for (Eigen::Index feature_index = 0; feature_index < number_dimensions; ++feature_index) {
-				const auto X_f = X.row(feature_index);
-				if (X_f.minCoeff() != X_f.maxCoeff()) {
-					auto features_it = features.first;
-					for (Eigen::Index i = 0; i < sample_size; ++i, ++features_it) {
-						*features_it = std::make_pair(i, X_f[i]);
-					}
-					assert(features_it == features.second);
+				if (X.row(feature_index).minCoeff() != X.row(feature_index).maxCoeff()) {
+					Features::set_to_nth(X, feature_index, features);
 
-					std::sort(features.first, features.second, SORTED_FEATURE_COMPARATOR);
+					std::sort(features.first, features.second, Features::INDEXED_FEATURE_COMPARATOR_ASCENDING);
 					auto sorted_y_it = sorted_y.data();
-					features_it = features.first;
+					auto features_it = features.first;
 					for (Eigen::Index i = 0; i < sample_size; ++i, ++sorted_y_it, ++features_it) {
 						*sorted_y_it = y(features_it->first);
 					}
@@ -71,7 +57,7 @@ namespace ml
 					for (Eigen::Index num_samples_below_threshold = 1; num_samples_below_threshold < sample_size; ++num_samples_below_threshold, ++sorted_y_it) {
 						++features_it;
 						const auto next_feature = *features_it;
-						// Only consider splits between different values of X_f.						
+						// Only consider splits between different values of features.						
 						if (prev_feature.second < next_feature.second) {
 							const double sum_errors = metrics.error_for_splitting(sorted_y.data(), sorted_y_it) + metrics.error_for_splitting(sorted_y_it, sorted_y_end);
 							if (sum_errors < lowest_sum_errors_for_feature) {
@@ -109,7 +95,7 @@ namespace ml
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
 			const unsigned int allowed_split_levels,
 			const unsigned int min_sample_size,
-			const VectorRange<IndexedFeatureValue> features,
+			const Features::VectorRange<Features::IndexedFeatureValue> features,
 			const unsigned int max_num_threads)
 		{
 			const auto sample_size = static_cast<unsigned int>(unsorted_y.size());
@@ -130,16 +116,10 @@ namespace ml
 					return std::make_unique<typename DecisionTree<Y>::LeafNode>(error, value, parent);
 				} else {
 					std::unique_ptr<typename DecisionTree<Y>::SplitNode> split_node(new typename DecisionTree<Y>::SplitNode(error, value, parent, split.second, split.first));
-					const auto X_f = unsorted_X.row(split.first);
+					Features::set_to_nth(unsorted_X, split.first, features);
+					std::sort(features.first, features.second, Features::INDEXED_FEATURE_COMPARATOR_ASCENDING);
 
 					auto features_it = features.first;
-					for (unsigned int i = 0; i < sample_size; ++i, ++features_it) {
-						*features_it = std::make_pair(i, X_f[i]);
-					}
-					assert(features_it == features.second);
-					std::sort(features.first, features.second, SORTED_FEATURE_COMPARATOR);
-
-					features_it = features.first;
 					for (unsigned int i = 0; i < sample_size; ++i, ++features_it) {
 						const auto src_idx = features_it->first;
 						sorted_y[i] = unsorted_y[src_idx];
@@ -228,10 +208,10 @@ namespace ml
 			Eigen::VectorXd unsorted_y(y);
 			Eigen::MatrixXd sorted_X(number_dimensions, sample_size);
 			Eigen::VectorXd sorted_y(sample_size);
-			std::vector<IndexedFeatureValue> features(sample_size);			
+			std::vector<Features::IndexedFeatureValue> features(sample_size);
 			const auto max_num_threads = std::min(std::thread::hardware_concurrency(), DEFAULT_MAX_NUM_THREADS);
 			return DecisionTree<Y>(tree_1d_without_pruning<Y>(
-				metrics, nullptr, unsorted_X, sorted_X, unsorted_y, sorted_y, max_split_levels, min_sample_size, from_vector(features), max_num_threads ? max_num_threads : DEFAULT_MAX_NUM_THREADS));
+				metrics, nullptr, unsorted_X, sorted_X, unsorted_y, sorted_y, max_split_levels, min_sample_size, Features::from_vector(features), max_num_threads ? max_num_threads : DEFAULT_MAX_NUM_THREADS));
 		}
 
 		/** @brief Metrics for classification trees. */
@@ -289,7 +269,7 @@ namespace ml
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
-			const VectorRange<IndexedFeatureValue> features)
+			const Features::VectorRange<Features::IndexedFeatureValue> features)
 		{
 			const RegressionMetrics metrics;
 			const double error_whole_sample = metrics.error_for_splitting(y.data(), y.data() + y.size());

@@ -8,10 +8,10 @@ using namespace ml::Clustering;
 using namespace ml::Kernels;
 
 
-TEST(MeanShift, single_cluster)
+TEST(MeanShiftTest, single_cluster)
 {
     const Eigen::Index n = 1000;
-    const Eigen::Index d = 5;
+    const Eigen::Index d = 2;
     const Eigen::MatrixXd data(Eigen::MatrixXd::Random(d, n));
     MeanShift ms(std::shared_ptr<const DifferentiableRadialBasisFunction>(new GaussianRBF), 0.1);
     ms.fit(data);

@@ -180,6 +180,7 @@
     <Lib />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BallTree.hpp" />
     <ClInclude Include="Clustering.hpp" />
     <ClInclude Include="Crossvalidation.hpp" />
     <ClInclude Include="DecisionTree.hpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="dll.hpp" />
     <ClInclude Include="doc.hpp" />
     <ClInclude Include="EM.hpp" />
+    <ClInclude Include="Features.hpp" />
     <ClInclude Include="Kernels.hpp" />
     <ClInclude Include="LinearAlgebra.hpp" />
     <ClInclude Include="LinearRegression.hpp" />
@@ -197,10 +199,12 @@
     <ClInclude Include="Version.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BallTree.cpp" />
     <ClCompile Include="Clustering.cpp" />
     <ClCompile Include="Crossvalidation.cpp" />
     <ClCompile Include="DecisionTrees.cpp" />
     <ClCompile Include="EM.cpp" />
+    <ClCompile Include="Features.cpp" />
     <ClCompile Include="Kernels.cpp" />
     <ClCompile Include="LinearAlgebra.cpp" />
     <ClCompile Include="LinearRegression.cpp" />

@@ -1,5 +1,6 @@
 /* (C) 2021 Roman Werpachowski. */
 #include <cassert>
+#include <iostream>
 #include "Kernels.hpp"
 #include "MeanShift.hpp"
 
@@ -17,7 +18,7 @@ namespace ml
                 throw std::domain_error("MeanShift: Window radius must be positive");
             }
             absolute_tolerance_ = 1e-12;
-            relative_tolerance_ = 1e-14;
+            relative_tolerance_ = 1e-12;
             perturbation_strength_ = h / 1000.0;
         }
 
@@ -48,11 +49,13 @@ namespace ml
             Eigen::VectorXd tentative_mode(d);
             for (Eigen::Index i = 0; i < n; ++i) {                
                 shift_until_stationary(data, work.col(i), work_v);
+                std::cout << i << ": " << work.col(i) << "\n";
                 tentative_mode = work.col(i);
                 bool found_mode_maximum = false;
                 while (!found_mode_maximum) {
                     work.col(i) += Eigen::VectorXd::Random(d) * perturbation_strength_;
                     shift_until_stationary(data, work.col(i), work_v);
+                    std::cout << i << ": " << work.col(i) << "\n";
                     found_mode_maximum = close_within_tolerance(tentative_mode, work.col(i));
                     tentative_mode = work.col(i);
                 }

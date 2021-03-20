@@ -25,7 +25,7 @@ public:
 };
 
 
-TEST(Kernels, rbf_value)
+TEST(KernelsTest, rbf_value)
 {
     const RBFKernel<> K(std::make_unique<ParabolicRBF>(), 2);
     const Eigen::Vector2d x1(-1, 1);
@@ -33,7 +33,7 @@ TEST(Kernels, rbf_value)
     ASSERT_NEAR(16, K.value(x1, x2), 1e-15);
 }
 
-TEST(Kernels, rbf_gradient)
+TEST(KernelsTest, rbf_gradient)
 {
     const DifferentiableRBFKernel<> K(std::make_unique<ParabolicRBF>(), 2);
     const Eigen::Vector2d x1(-1, 1);

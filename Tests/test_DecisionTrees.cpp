@@ -3,16 +3,9 @@
 #include <random>
 #include <gtest/gtest.h>
 #include "ML/DecisionTrees.hpp"
+#include "ML/Features.hpp"
 
 typedef ml::RegressionTree RegTree;
-
-typedef std::pair<Eigen::Index, double> IndexedFeatureValue;
-
-/** Creates an iterator pair containing begin() and end(). */
-template <class T> static ml::DecisionTrees::VectorRange<T> from_vector(std::vector<T>& v)
-{
-	return std::make_pair(v.begin(), v.end());
-}
 
 TEST(DecisionTreeTest, tree)
 {
@@ -95,9 +88,9 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_constant_y)
 			y[k] = 0;
 		}
 	}
-	std::vector<IndexedFeatureValue> features(sample_size);
+	std::vector<ml::Features::IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
-	const auto split = ml::DecisionTrees::find_best_split_regression(X, y, sorted_y, from_vector(features));
+	const auto split = ml::DecisionTrees::find_best_split_regression(X, y, sorted_y, ml::Features::from_vector(features));
 	ASSERT_EQ(-std::numeric_limits<double>::infinity(), split.second);	
 }
 
@@ -114,9 +107,9 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_linear_in_x0)
 			y[k] = 0.2 * X(0, k) + 1.5;
 		}
 	}
-	std::vector<IndexedFeatureValue> features(sample_size);
+	std::vector<ml::Features::IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
-	const auto split = ml::DecisionTrees::find_best_split_regression(X, y, sorted_y, from_vector(features));
+	const auto split = ml::DecisionTrees::find_best_split_regression(X, y, sorted_y, ml::Features::from_vector(features));
 	ASSERT_EQ(0u, split.first);
 	ASSERT_NEAR(4.5, split.second, 1e-15);
 }
@@ -134,9 +127,9 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_linear)
 			y[k] = 0.2 * X(0, k) + 0.01 * X(1, k) + 1.5;
 		}
 	}
-	std::vector<IndexedFeatureValue> features(sample_size);
+	std::vector<ml::Features::IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
-	const auto split = ml::DecisionTrees::find_best_split_regression(X, y, sorted_y, from_vector(features));
+	const auto split = ml::DecisionTrees::find_best_split_regression(X, y, sorted_y, ml::Features::from_vector(features));
 	ASSERT_EQ(0u, split.first);
 	ASSERT_NEAR(4.5, split.second, 1e-15);	
 }
@@ -154,9 +147,9 @@ TEST(DecisionTreeTest, find_best_split_univariate_regression_const)
 			y[k] = 0;
 		}
 	}
-	std::vector<IndexedFeatureValue> features(sample_size);
+	std::vector<ml::Features::IndexedFeatureValue> features(sample_size);
 	Eigen::VectorXd sorted_y(sample_size);
-	const auto split = ml::DecisionTrees::find_best_split_regression(X, y, sorted_y, from_vector(features));
+	const auto split = ml::DecisionTrees::find_best_split_regression(X, y, sorted_y, ml::Features::from_vector(features));
 	ASSERT_EQ(0u, split.first);
 	ASSERT_EQ(-std::numeric_limits<double>::infinity(), split.second);
 }
@@ -352,14 +345,6 @@ TEST(DecisionTreeTest, pruning)
 		pruned_sse += std::pow(y[i] - y_hat, 2);
 	}
 	ASSERT_NEAR(pruned_sse, tle_sse, 1e-15);
-}
-
-TEST(DecisionTreeTest, from_vector)
-{
-	std::vector<double> v(4);
-	const auto iter_range = from_vector(v);
-	ASSERT_EQ(v.begin(), iter_range.first);
-	ASSERT_EQ(v.end(), iter_range.second);
 }
 
 TEST(DecisionTreeTest, classification_with_pruning)

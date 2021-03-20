@@ -3,6 +3,7 @@
 #include <utility>
 #include <Eigen/Core>
 #include "DecisionTree.hpp"
+#include "Features.hpp"
 #include "dll.hpp"
 
 namespace ml
@@ -16,9 +17,6 @@ namespace ml
 	/** @brief Functions for manipulating decision trees. */
 	namespace DecisionTrees
 	{
-		/** @brief Pair of vector iterators. */
-		template <typename T> using VectorRange = std::pair<typename std::vector<T>::iterator, typename std::vector<T>::iterator>;
-
 		/** @brief Grows a regression tree with pruning.
 		@param[in] X Independent variables (column-wise).
 		@param[in] y Dependent variable.
@@ -130,6 +128,6 @@ namespace ml
 			const Eigen::Ref<const Eigen::MatrixXd> X,
 			const Eigen::Ref<const Eigen::VectorXd> y,
 			Eigen::Ref<Eigen::VectorXd> sorted_y,
-			VectorRange<std::pair<Eigen::Index, double>> features);		
+			Features::VectorRange<Features::IndexedFeatureValue> features);
 	}
 }

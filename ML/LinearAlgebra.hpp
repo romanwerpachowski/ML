@@ -28,6 +28,6 @@ namespace ml
 		@param[out] A Existing N x N matrix.
 		@throw std::invalid_argument If `A` is not square or `x.size() != A.rows()`.
 		*/
-		DLL_DECLSPEC void add_a_xxT(const Eigen::VectorXd& x, Eigen::MatrixXd& dest, double a);
+		DLL_DECLSPEC void add_a_xxT(const Eigen::VectorXd& x, Eigen::MatrixXd& dest, double a);		
 	}
 }
