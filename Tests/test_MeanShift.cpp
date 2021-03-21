@@ -10,7 +10,7 @@ using namespace ml::Kernels;
 
 TEST(MeanShiftTest, single_cluster)
 {
-    const Eigen::Index n = 1000;
+    const Eigen::Index n = 100;
     const Eigen::Index d = 2;
     const Eigen::MatrixXd data(Eigen::MatrixXd::Random(d, n));
     MeanShift ms(std::shared_ptr<const DifferentiableRadialBasisFunction>(new GaussianRBF), 0.1);
