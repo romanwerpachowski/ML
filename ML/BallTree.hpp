@@ -47,6 +47,7 @@ namespace ml
 
         /**
          * @brief Finds up to k nearest neighbours for given target vector.
+         * Uses the KNS1 algorithm from http://people.ee.duke.edu/~lcarin/liu06a.pdf
          * @param[in] x Target vector.
          * @param[in] k Number of nearest neighbours.
          * @param[out] nn Upon return, has size `min(k, size())` and contains the indices of up to `k` nearest neighbours of `x`.
@@ -56,6 +57,7 @@ namespace ml
 
         /**
          * @brief Finds up to k nearest neighbours for given target vector.
+         * Uses the KNS1 algorithm from http://people.ee.duke.edu/~lcarin/liu06a.pdf
          * @param[in] x Target vector.
          * @param[in] k Number of nearest neighbours.
          * @param[out] nn Upon return, contains up to k nearest neighbours of `x`.
