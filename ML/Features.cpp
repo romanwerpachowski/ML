@@ -41,14 +41,14 @@ namespace ml
             }
         }
 
-        Eigen::Index partition(Eigen::Ref<Eigen::MatrixXd> X, const Eigen::Index pivot_idx, const Eigen::Index k)
+        template <class Swapper> static Eigen::Index partition_impl(Eigen::Ref<Eigen::MatrixXd> X, const Eigen::Index pivot_idx, const Eigen::Index k, Swapper swapper)
         {
             if (pivot_idx >= X.cols()) {
                 throw std::out_of_range("Features: pivot column index out of range");
             }
             if (k >= X.rows()) {
                 throw std::out_of_range("Features: pivoting dimension index out of range");
-            }            
+            }
             // Use https://en.wikipedia.org/wiki/Quicksort#Hoare_partition_scheme
             auto p = (X.cols() - 1) / 2; // Should round down automatically.
             const auto A = X.row(k);
@@ -75,8 +75,28 @@ namespace ml
                 } else if (p == j) {
                     p = i;
                 }
-                swap_columns(X, i, j);
+                swapper(i, j);
             }
+        }
+
+        Eigen::Index partition(Eigen::Ref<Eigen::MatrixXd> X, const Eigen::Index pivot_idx, const Eigen::Index k)
+        {
+            const auto swapper = [&X](Eigen::Index i, Eigen::Index j) {
+                swap_columns(X, i, j);
+            };
+            return partition_impl(X, pivot_idx, k, swapper);
+        }
+
+        Eigen::Index partition(Eigen::Ref<Eigen::MatrixXd> X, Eigen::Ref<Eigen::VectorXd> y, const Eigen::Index pivot_idx, const Eigen::Index k)
+        {
+            if (X.cols() != y.size()) {
+                throw std::invalid_argument("Features: wrong number of labels");
+            }
+            const auto swapper = [&X, &y](Eigen::Index i, Eigen::Index j) {
+                swap_columns(X, i, j);
+                std::swap(y[i], y[j]);
+            };            
+            return partition_impl(X, pivot_idx, k, swapper);
         }
     }    
 }

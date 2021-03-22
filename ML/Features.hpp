@@ -67,6 +67,23 @@ namespace ml
          * @throw std::out_of_range If `pivot_idx >= X.cols()` or `k >= X.rows()`.
         */
         DLL_DECLSPEC Eigen::Index partition(Eigen::Ref<Eigen::MatrixXd> X, Eigen::Index pivot_idx, Eigen::Index k);
+
+        /**
+         * @brief Partitions features (in columns) and labels so that those with x[k] < pivot[k] are before the pivot, and those with x[k] > pivot[k] are after it.
+         *
+         * pivot = X.col(pivot_idx).
+         *
+         * @param X Features with data points in columns.
+         * @param y Vector of labels.
+         * @param pivot_idx Pivot index.
+         * @param k Dimension used for comparison.
+         *
+         * @return Position of the pivot feature after partitioning.
+         *
+         * @throw std::out_of_range If `pivot_idx >= X.cols()` or `k >= X.rows()`.
+         * @throw std::invalid_argument If `X.cols() != y.size()`.
+        */
+        DLL_DECLSPEC Eigen::Index partition(Eigen::Ref<Eigen::MatrixXd> X, Eigen::Ref<Eigen::VectorXd> y, Eigen::Index pivot_idx, Eigen::Index k);
     }
 }
 

@@ -63,3 +63,36 @@ TEST(FeaturesTest, partition)
 	ASSERT_NEAR(0, (expected - X).norm(), 1e-15) << X;
 	ASSERT_EQ(2, pivot_idx);
 }
+
+TEST(FeaturesTest, partition_with_labels)
+{
+	Eigen::MatrixXd X(2, 4);
+	X << 0.3, 0.21, -0.3, 0.2,
+		1, 2, -1, 3;
+	Eigen::VectorXd y(4);
+	y << 10, 20, 30, 40;
+	auto pivot_idx = ml::Features::partition(X, y, 1, 0);
+	Eigen::MatrixXd expected_X(2, 4);
+	expected_X << 0.2, -0.3, 0.21, 0.3,
+		3, -1, 2, 1;
+	Eigen::VectorXd expected_y(4);
+	expected_y << 40, 30, 20, 10;
+	ASSERT_NEAR(0, (expected_X - X).norm(), 1e-15) << X;
+	ASSERT_NEAR(0, (expected_y - y).norm(), 1e-15) << y;
+	ASSERT_EQ(2, pivot_idx);
+	pivot_idx = ml::Features::partition(X.block(0, 0, 2, 1), y.segment(0, 1), 0, 1);
+	ASSERT_NEAR(0, (expected_X - X).norm(), 1e-15) << X;
+	ASSERT_NEAR(0, (expected_y - y).norm(), 1e-15) << y;
+	ASSERT_EQ(0, pivot_idx);
+	pivot_idx = ml::Features::partition(X.block(0, 1, 2, 3), y.segment(1, 3), 1, 0);
+	ASSERT_NEAR(0, (expected_X - X).norm(), 1e-15) << X;
+	ASSERT_NEAR(0, (expected_y - y).norm(), 1e-15) << y;
+	ASSERT_EQ(1, pivot_idx);
+	pivot_idx = ml::Features::partition(X.block(0, 1, 2, 3), y.segment(1, 3), 1, 1);
+	expected_X << 0.2, -0.3, 0.3, 0.21,
+		3, -1, 1, 2;
+	expected_y << 40, 30, 10, 20;
+	ASSERT_NEAR(0, (expected_X - X).norm(), 1e-15) << X;
+	ASSERT_NEAR(0, (expected_y - y).norm(), 1e-15) << y;
+	ASSERT_EQ(2, pivot_idx);
+}
