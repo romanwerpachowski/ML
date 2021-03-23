@@ -54,7 +54,7 @@ namespace ml
             const auto A = X.row(k);
             const double pivot = A[pivot_idx];
             if (p != pivot_idx) {
-                swap_columns(X, p, pivot_idx);
+                swapper(p, pivot_idx);
             }
             assert(pivot == A[p]);
             Eigen::Index i = -1;
@@ -81,7 +81,7 @@ namespace ml
 
         Eigen::Index partition(Eigen::Ref<Eigen::MatrixXd> X, const Eigen::Index pivot_idx, const Eigen::Index k)
         {
-            const auto swapper = [&X](Eigen::Index i, Eigen::Index j) {
+            const auto swapper = [&X](const Eigen::Index i, const Eigen::Index j) {
                 swap_columns(X, i, j);
             };
             return partition_impl(X, pivot_idx, k, swapper);
@@ -92,7 +92,7 @@ namespace ml
             if (X.cols() != y.size()) {
                 throw std::invalid_argument("Features: wrong number of labels");
             }
-            const auto swapper = [&X, &y](Eigen::Index i, Eigen::Index j) {
+            const auto swapper = [&X, &y](const Eigen::Index i, const Eigen::Index j) {
                 swap_columns(X, i, j);
                 std::swap(y[i], y[j]);
             };            

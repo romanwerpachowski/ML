@@ -96,3 +96,17 @@ TEST(FeaturesTest, partition_with_labels)
 	ASSERT_NEAR(0, (expected_y - y).norm(), 1e-15) << y;
 	ASSERT_EQ(2, pivot_idx);
 }
+
+TEST(FeaturesTest, partition_with_labels_move_pivot)
+{
+	Eigen::MatrixXd X(2, 2);
+	X << -1.5, 0,
+		0.01, 0.01;
+	Eigen::VectorXd y(2);
+	y << 10, 30;
+	const Eigen::MatrixXd orig_X(X);
+	const Eigen::VectorXd orig_y(y);
+	ml::Features::partition(X, y, 1, 0);
+	ASSERT_EQ(0, (orig_X - X).norm());
+	ASSERT_EQ(0, (orig_y - y).norm());
+}
