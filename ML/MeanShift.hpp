@@ -24,7 +24,7 @@ namespace ml
             /**
              * @brief Constructor.
              * 
-             * @param rbf Radial basis function defining the kernel.
+             * @param rbf Radial basis function defining the kernel. Assumed to be monotonically decreasing with distance.
              * @param h Window radius.
              * 
              * @throw std::invalid_argument If `rbf` is null.
@@ -44,26 +44,40 @@ namespace ml
             */
             DLL_DECLSPEC void set_relative_tolerance(double relative_tolerance);
 
+            /**
+             * @brief Fits the model to data.
+             * @param data Matrix of feature vectors, with data points in columns.
+             * @return True if the fit converged.
+            */
             DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data) override;
 
+            /**
+             * @brief Number of clusters found.
+            */
             unsigned int number_clusters() const override
             {
                 return number_clusters_;
             }
 
+            /**
+             * @brief Const reference to cluster labels assigned to data points.
+            */
             const std::vector<unsigned int>& labels() const override
             {
                 return labels_;
             }
         private:
-            std::vector<unsigned int> labels_;
+            std::vector<unsigned int> labels_;            
             std::shared_ptr<const Kernels::DifferentiableRadialBasisFunction> rbf_;
             double h_; /**< Window radius. */
             double h2_; /**< Window radius (squared). */
             double absolute_tolerance_;
             double relative_tolerance_;
-            double perturbation_strength_;
+            double perturbation_strength_;            
+            double mode_identification_absolute_tolerance_;
             unsigned int number_clusters_;
+
+            static bool close_within_tolerance(Eigen::Ref<const Eigen::VectorXd> x1, Eigen::Ref<const Eigen::VectorXd> x2, double absolute_tolerance, double relative_tolerance);
 
             bool close_within_tolerance(Eigen::Ref<const Eigen::VectorXd> x1, Eigen::Ref<const Eigen::VectorXd> x2) const;
 

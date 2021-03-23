@@ -17,9 +17,10 @@ namespace ml
             if (h <= 0) {
                 throw std::domain_error("MeanShift: Window radius must be positive");
             }
-            absolute_tolerance_ = 1e-12;
-            relative_tolerance_ = 1e-12;
-            perturbation_strength_ = h / 1000.0;
+            absolute_tolerance_ = 1e-6;
+            relative_tolerance_ = 1e-6;
+            perturbation_strength_ = h / 100.0;
+            mode_identification_absolute_tolerance_ = perturbation_strength_ / 10;
         }
 
         void MeanShift::set_absolute_tolerance(double absolute_tolerance)
@@ -49,20 +50,19 @@ namespace ml
             Eigen::VectorXd tentative_mode(d);
             for (Eigen::Index i = 0; i < n; ++i) {                
                 shift_until_stationary(data, work.col(i), work_v);
-                std::cout << i << ": " << work.col(i) << "\n";
                 tentative_mode = work.col(i);
                 bool found_mode_maximum = false;
                 while (!found_mode_maximum) {
                     work.col(i) += Eigen::VectorXd::Random(d) * perturbation_strength_;
                     shift_until_stationary(data, work.col(i), work_v);
-                    std::cout << i << ": " << work.col(i) << "\n";
-                    found_mode_maximum = close_within_tolerance(tentative_mode, work.col(i));
+                    found_mode_maximum = close_within_tolerance(tentative_mode, work.col(i), mode_identification_absolute_tolerance_, 0);
                     tentative_mode = work.col(i);
                 }
+                std::cout << i << " -> " << work.col(i).transpose() << std::endl;
                 // Find the cluster to which this point belongs, or create a new one.
                 unsigned int cluster_label = number_clusters_;
                 for (Eigen::Index j = 0; j < i; ++j) {
-                    if (close_within_tolerance(work.col(j), work.col(i))) {
+                    if (close_within_tolerance(work.col(j), work.col(i), mode_identification_absolute_tolerance_, 0)) {
                         cluster_label = labels_[j];
                         break;
                     }
@@ -70,30 +70,34 @@ namespace ml
                 labels_[i] = cluster_label;
                 if (cluster_label == number_clusters_) {
                     ++number_clusters_;
+                    std::cout << "New cluster!\n";
                 }
             }     
             return true;
         }
 
-        bool MeanShift::close_within_tolerance(const Eigen::Ref<const Eigen::VectorXd> x1, const Eigen::Ref<const Eigen::VectorXd> x2) const
+        bool MeanShift::close_within_tolerance(const Eigen::Ref<const Eigen::VectorXd> x1, const Eigen::Ref<const Eigen::VectorXd> x2, const double absolute_tolerance, const double relative_tolerance)
         {
             assert(x1.size() == x2.size());
-            /*for (Eigen::Index k = 0; k < x1.size(); ++k) {
+            for (Eigen::Index k = 0; k < x1.size(); ++k) {
                 const double dx = std::abs(x1[k] - x2[k]);
-                if (dx <= absolute_tolerance_) {
+                if (dx <= absolute_tolerance) {
                     continue;
                 }
-                if (dx <= relative_tolerance_ * std::max(std::abs(x1[k]), std::abs(x2[k]))) {
+                if (dx <= relative_tolerance * std::max(std::abs(x1[k]), std::abs(x2[k]))) {
                     continue;
                 }
                 return false;
             }
-            return true;*/
-            const double dr = (x1 - x2).norm();
-            return (dr <= absolute_tolerance_) || (dr <= relative_tolerance_ * std::max(x1.norm(), x2.norm()));
+            return true;
         }
 
-        void MeanShift::calc_new_position(const Eigen::Ref<const Eigen::MatrixXd> data, const Eigen::Ref<const Eigen::VectorXd> old_pos, Eigen::Ref<Eigen::VectorXd> new_pos) const
+        bool MeanShift::close_within_tolerance(const Eigen::Ref<const Eigen::VectorXd> x1, const Eigen::Ref<const Eigen::VectorXd> x2) const
+        {
+            return close_within_tolerance(x1, x2, absolute_tolerance_, relative_tolerance_);
+        }
+
+        void MeanShift::calc_new_position(Eigen::Ref<const Eigen::MatrixXd> data, const Eigen::Ref<const Eigen::VectorXd> old_pos, Eigen::Ref<Eigen::VectorXd> new_pos) const
         {
             assert(old_pos.size() == new_pos.size());
             new_pos.setZero();
@@ -109,7 +113,7 @@ namespace ml
             }
         }
 
-        void MeanShift::shift_until_stationary(const Eigen::Ref<const Eigen::MatrixXd> data, Eigen::Ref<Eigen::VectorXd> pos, Eigen::Ref<Eigen::VectorXd> work) const
+        void MeanShift::shift_until_stationary(Eigen::Ref<const Eigen::MatrixXd> data, Eigen::Ref<Eigen::VectorXd> pos, Eigen::Ref<Eigen::VectorXd> work) const
         {
             bool converged = false;
             while (!converged) {
