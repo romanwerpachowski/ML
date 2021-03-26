@@ -6,6 +6,8 @@
 
 namespace ml
 {
+    class BallTree;
+
     namespace Kernels
     {
         class DifferentiableRadialBasisFunction;
@@ -16,7 +18,7 @@ namespace ml
         /**
          * @brief Mean shift clustering model.
          * 
-         * Based on https://homepages.inf.ed.ac.uk/rbf/CVonline/LOCAL_COPIES/TUZEL1/MeanShift.pdf and D. Comaniciu and P. Meer. Mean shift: A robust approach toward feature space analysis. IEEE Trans. Pattern Anal. Machine Intell., 24:603–619, 2002.
+         * Based on Algorithm 3 in "Modified Subspace Constrained Mean Shift Algorithm", Ghassabeh, Y. A. and Rudzicz, F., Journal of Classification (2020), https://www.cs.toronto.edu/~frank/Download/GhassabehRudzicz-2020-ModifiedSubspaceConstrainedMeanShiftAlgorithm.pdf
         */
         class MeanShift : public Model
         {
@@ -32,24 +34,18 @@ namespace ml
             */
             DLL_DECLSPEC MeanShift(std::shared_ptr<const Kernels::DifferentiableRadialBasisFunction> rbf, double h);
 
-            /** @brief Sets absolute tolerance for convergence test.
-            @param[in] absolute_tolerance Absolute tolerance.
-            @throw std::domain_error If `absolute_tolerance < 0`.
-            */
-            DLL_DECLSPEC void set_absolute_tolerance(double absolute_tolerance);
-
-            /** @brief Sets relative tolerance for convergence test.
-            @param[in] relative_tolerance Relative tolerance.
-            @throw std::domain_error If `relative_tolerance < 0`.
-            */
-            DLL_DECLSPEC void set_relative_tolerance(double relative_tolerance);
-
             /**
              * @brief Fits the model to data.
              * @param data Matrix of feature vectors, with data points in columns.
-             * @return True if the fit converged.
+             * @return True if the fit converged (it always does).
             */
             DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data) override;
+
+            /**
+             * @brief Fits the model to data.
+             * @param[in,out] data_tree Ball tree of feature vectors (for faster nearest neighbour search). At exit, #labels() and #data_tree.labels() will have equal contents.
+            */
+            DLL_DECLSPEC void fit(BallTree& data_tree);
 
             /**
              * @brief Number of clusters found.
@@ -71,19 +67,11 @@ namespace ml
             std::shared_ptr<const Kernels::DifferentiableRadialBasisFunction> rbf_;
             double h_; /**< Window radius. */
             double h2_; /**< Window radius (squared). */
-            double absolute_tolerance_;
-            double relative_tolerance_;
-            double perturbation_strength_;            
-            double mode_identification_absolute_tolerance_;
             unsigned int number_clusters_;
 
-            static bool close_within_tolerance(Eigen::Ref<const Eigen::VectorXd> x1, Eigen::Ref<const Eigen::VectorXd> x2, double absolute_tolerance, double relative_tolerance);
+            void calc_new_position(const BallTree& data_tree, Eigen::Ref<const Eigen::VectorXd> old_pos, Eigen::Ref<Eigen::VectorXd> new_pos) const;
 
-            bool close_within_tolerance(Eigen::Ref<const Eigen::VectorXd> x1, Eigen::Ref<const Eigen::VectorXd> x2) const;
-
-            void calc_new_position(Eigen::Ref<const Eigen::MatrixXd> data, Eigen::Ref<const Eigen::VectorXd> old_pos, Eigen::Ref<Eigen::VectorXd> new_pos) const;
-
-            void shift_until_stationary(Eigen::Ref<const Eigen::MatrixXd> data, Eigen::Ref<Eigen::VectorXd> pos, Eigen::Ref<Eigen::VectorXd> work) const;
+            void shift_until_stationary(const BallTree& data_tree, Eigen::Ref<Eigen::VectorXd> pos, Eigen::Ref<Eigen::VectorXd> work) const;
         };
     }
 }

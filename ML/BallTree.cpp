@@ -11,7 +11,15 @@ namespace ml
     {}
 
     BallTree::BallTree(Eigen::Ref<const Eigen::MatrixXd> X, const Eigen::Ref<const Eigen::VectorXd> y, const unsigned int min_split_size)
-        : data_(X), labels_(y), min_split_size_(min_split_size)
+        : BallTree(Eigen::MatrixXd(X), Eigen::VectorXd(y), min_split_size)
+    {}
+
+    BallTree::BallTree(Eigen::MatrixXd&& X, const unsigned int min_split_size)
+        : BallTree(std::move(X), Eigen::VectorXd::Zero(X.cols()), min_split_size)
+    {}
+
+    BallTree::BallTree(Eigen::MatrixXd&& X, Eigen::VectorXd&& y, const unsigned int min_split_size)
+        : min_split_size_(min_split_size)        
     {
         if (min_split_size < 3) {
             throw std::invalid_argument("BallTree: min_split_size must be at least 3");
@@ -19,6 +27,8 @@ namespace ml
         if (y.size() && y.size() != X.cols()) {
             throw std::invalid_argument("BallTree: wrong size of label vector");
         }
+        data_ = std::move(X);
+        labels_ = std::move(y);
         std::vector<Features::IndexedFeatureValue> features(size());
         construct(data_, labels_, 0, root_, Features::from_vector(features));
     }
@@ -36,7 +46,21 @@ namespace ml
             nn.push_back(q.top().first);
             q.pop();
         }
-    }    
+    }  
+
+    unsigned int BallTree::find_nearest_neighbour(Eigen::Ref<const Eigen::VectorXd> x) const
+    {
+        if (!size()) {
+            throw std::logic_error("BallTree: is empty");
+        }
+        if (x.size() != dim()) {
+            throw std::invalid_argument("BallTree: wrong feature vector size");
+        }
+        MaxDistancePriorityQueue q;
+        knn_search(x, 1, root_.get(), q);
+        assert(!q.empty());
+        return q.top().first;
+    }
 
     static double calc_radius(Eigen::Ref<Eigen::MatrixXd> work, Eigen::Index pivot_idx)
     {

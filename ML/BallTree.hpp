@@ -35,6 +35,23 @@ namespace ml
         DLL_DECLSPEC BallTree(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, unsigned int min_split_size);
 
         /**
+         * @brief Constructor taking only features.
+         * @param X Feature matrix, with data points in columns. Moved.
+         * @param min_split_size Minimum number of points in the ball to consider splitting it into child balls.
+         * @throw std::invalid_argument If `min_split_size < 3`.
+        */
+        DLL_DECLSPEC BallTree(Eigen::MatrixXd&& X, unsigned int min_split_size);
+
+        /**
+         * @brief Constructor taking features and labels.
+         * @param X Feature matrix, with data points in columns. Moved.
+         * @param y Label vectors, with size equal to number of data points or empty. Moved.
+         * @param min_split_size Minimum number of points in the ball to consider splitting it into child balls.
+         * @throw std::invalid_argument If `min_split_size < 3` or `y.size() != X.cols()`.
+        */
+        DLL_DECLSPEC BallTree(Eigen::MatrixXd&& X, Eigen::VectorXd&& y, unsigned int min_split_size);
+
+        /**
          * @brief Returns const reference to feature vectors (reordered).
         */
         const Eigen::MatrixXd& data() const
@@ -51,6 +68,14 @@ namespace ml
         }
 
         /**
+         * @brief Returns mutable reference to labels (reordered). Resizing not possible.
+        */
+        Eigen::Ref<Eigen::VectorXd> labels()
+        {
+            return labels_;
+        }
+
+        /**
          * @brief Finds up to k nearest neighbours for given target vector.
          * Uses the KNS1 algorithm from http://people.ee.duke.edu/~lcarin/liu06a.pdf
          * @param[in] x Target vector.
@@ -61,15 +86,14 @@ namespace ml
         DLL_DECLSPEC void find_k_nearest_neighbours(Eigen::Ref<const Eigen::VectorXd> x, unsigned int k, std::vector<unsigned int>& nn) const;        
 
         /**
-         * @brief Finds up to k nearest neighbours for given target vector.
+         * @brief Finds nearest neighbour for given target vector.
          * Uses the KNS1 algorithm from http://people.ee.duke.edu/~lcarin/liu06a.pdf
          * @param[in] x Target vector.
-         * @param[in] k Number of nearest neighbours.
-         * @param[out] nn Upon return, contains up to k nearest neighbours of `x`.
-         * @return Number of nearest neighbours found.
-         * @throw std::invalid_argument If `x.size() != #dim()`, `nn.rows() != #dim()` or `nn.cols()` is lower than the number of nearest neighbours found.
+         * @return Index in #data() of the nearest neighbour of `x`.
+         * @throw std::invalid_argument If `x.size() != #dim()`.
+         * @throw std::logic_error If tree is empty.
         */
-        DLL_DECLSPEC unsigned int find_k_nearest_neighbours(Eigen::Ref<const Eigen::VectorXd> x, unsigned int k, Eigen::Ref<Eigen::MatrixXd> nnX, Eigen::Ref<Eigen::VectorXd> nny) const;
+        DLL_DECLSPEC unsigned int find_nearest_neighbour(Eigen::Ref<const Eigen::VectorXd> x) const;
 
         /**
          * @brief Size of the tree (number of vectors).

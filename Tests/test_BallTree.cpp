@@ -99,6 +99,20 @@ TEST(BallTreeTest, find_one_nearest_neighbour)
     ASSERT_EQ(1u, nn.size());
     const auto nn0 = bt.data().col(nn[0]);
     ASSERT_EQ(0, (X.col(0) - nn0).norm()) << nn0;
+    ASSERT_EQ(nn[0], bt.find_nearest_neighbour(x));   
+}
+
+
+TEST(BallTreeTest, find_nearest_neighbour)
+{
+    Eigen::MatrixXd X(2, 4);
+    X << 0.5, 0.6, 0.4, 2,
+        -1.5, 1.5, 0, 4;
+    std::vector<unsigned int> nn;
+    ml::BallTree bt(X, 3);
+    for (unsigned int i = 0; i < bt.size(); ++i) {
+        ASSERT_EQ(i, bt.find_nearest_neighbour(bt.data().col(i))) << i;
+    }
 }
 
 

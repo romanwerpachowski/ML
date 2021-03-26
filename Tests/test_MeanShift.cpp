@@ -11,7 +11,7 @@ using namespace ml::Kernels;
 
 TEST(MeanShiftTest, single_cluster)
 {
-    const Eigen::Index n = 1000;
+    const Eigen::Index n = 100;
     const Eigen::Index d = 2;
     Eigen::MatrixXd data(d, n);
     std::default_random_engine rng(342394823);
@@ -21,7 +21,7 @@ TEST(MeanShiftTest, single_cluster)
             data(r, c) = n01(rng);
         }
     }
-    MeanShift ms(std::shared_ptr<const DifferentiableRadialBasisFunction>(new GaussianRBF), 1);
+    MeanShift ms(std::shared_ptr<const DifferentiableRadialBasisFunction>(new GaussianRBF), 0.5);
     ms.fit(data);
     ASSERT_EQ(1u, ms.number_clusters());
     ASSERT_EQ(static_cast<size_t>(n), ms.labels().size());
