@@ -1,6 +1,7 @@
 /* (C) 2021 Roman Werpachowski. */
 #include <cassert>
 #include <iostream>
+#include <map>
 #include "BallTree.hpp"
 #include "Kernels.hpp"
 #include "MeanShift.hpp"
@@ -20,43 +21,51 @@ namespace ml
             }            
         }
 
+        struct CentroidInfo
+        {
+            unsigned int cluster_label;
+            unsigned int number_points;
+        };
+
         bool MeanShift::fit(Eigen::Ref<const Eigen::MatrixXd> data)
         {
-            BallTree data_tree(data, 20);
-            fit(data_tree);
-            return true;
-        }
-
-        void MeanShift::fit(BallTree& data_tree)
-        {
-            const auto& data = data_tree.data();
+            BallTree tree(data, 20);
             Eigen::MatrixXd work(data);
             const auto n = data.cols();
             const auto d = data.rows();
             Eigen::VectorXd work_v(d);
-            for (Eigen::Index i = 0; i < n; ++i) {                
-                shift_until_stationary(data_tree, work.col(i), work_v);
-            }            
+            for (Eigen::Index data_idx = 0; data_idx < n; ++data_idx) {
+                shift_until_stationary(tree, work.col(data_idx), work_v);
+            }
             labels_.resize(n);
             number_clusters_ = 0;
-            data_tree.labels().setConstant(-1);
-            for (Eigen::Index i = 0; i < n; ++i) {
+            std::map<unsigned int, CentroidInfo> centroids; // Maps tree indices of centroids to info about them.
+            for (Eigen::Index data_idx = 0; data_idx < n; ++data_idx) {
                 // Find the cluster to which this point belongs, or create a new one.
-                const auto j = data_tree.find_nearest_neighbour(work.col(i));
-                if (data_tree.labels()[j] == -1) {
-                    data_tree.labels()[j] = static_cast<double>(number_clusters_);                    
+                const auto tree_idx = tree.find_nearest_neighbour(work.col(data_idx));
+                auto centroids_iter = centroids.find(tree_idx);
+                if (centroids_iter == centroids.end()) {
+                    centroids[tree_idx] = { number_clusters_, 1 };
                     ++number_clusters_;
+                } else {
+                    ++centroids_iter->second.number_points;
                 }
-                labels_[i] = static_cast<unsigned int>(data_tree.labels()[j]);
+                labels_[data_idx] = static_cast<unsigned int>(tree.labels()[tree_idx]);
             }
+            centroids_.resize(data.rows(), centroids.size());
+            for (const auto& key_value : centroids) {
+                const auto& ci = key_value.second;
+                centroids_.col(ci.cluster_label) = tree.data().col(key_value.first);
+            }
+            return true;
         }
 
-        void MeanShift::calc_new_position(const BallTree& data_tree, const Eigen::Ref<const Eigen::VectorXd> old_pos, Eigen::Ref<Eigen::VectorXd> new_pos) const
+        void MeanShift::calc_new_position(const BallTree& tree, const Eigen::Ref<const Eigen::VectorXd> old_pos, Eigen::Ref<Eigen::VectorXd> new_pos) const
         {
             assert(old_pos.size() == new_pos.size());
             new_pos.setZero();
             double sum_g = 0;
-            const auto& data = data_tree.data();
+            const auto& data = tree.data();
             for (Eigen::Index j = 0; j < data.cols(); ++j) {
                 const double r2 = (old_pos - data.col(j)).squaredNorm();
                 const double g = -rbf_->gradient(r2 / h2_);
@@ -67,15 +76,15 @@ namespace ml
                 new_pos /= sum_g;
             }
             // Find closest data point.
-            new_pos = data.col(data_tree.find_nearest_neighbour(new_pos));
+            new_pos = data.col(tree.find_nearest_neighbour(new_pos));
         }
 
-        void MeanShift::shift_until_stationary(const BallTree& data_tree, Eigen::Ref<Eigen::VectorXd> pos, Eigen::Ref<Eigen::VectorXd> work) const
+        void MeanShift::shift_until_stationary(const BallTree& tree, Eigen::Ref<Eigen::VectorXd> pos, Eigen::Ref<Eigen::VectorXd> work) const
         {
             bool converged = false;
             unsigned int iter = 0;
             while (!converged) {
-                calc_new_position(data_tree, pos, work);
+                calc_new_position(tree, pos, work);
                 converged = (pos - work).norm() == 0;
                 pos = work;
                 ++iter;

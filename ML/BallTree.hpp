@@ -68,14 +68,6 @@ namespace ml
         }
 
         /**
-         * @brief Returns mutable reference to labels (reordered). Resizing not possible.
-        */
-        Eigen::Ref<Eigen::VectorXd> labels()
-        {
-            return labels_;
-        }
-
-        /**
          * @brief Finds up to k nearest neighbours for given target vector.
          * Uses the KNS1 algorithm from http://people.ee.duke.edu/~lcarin/liu06a.pdf
          * @param[in] x Target vector.

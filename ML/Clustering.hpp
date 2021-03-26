@@ -31,11 +31,13 @@ namespace ml
 			/** @brief Returns the number of clusters (after fitting). */
 			virtual unsigned int number_clusters() const = 0;
 
-			/** @brief Returns a const reference to resulting cluster labels.
-			* 
-			@return Const reference vector of cluster labels for each datapoint.
-			*/
+			/** @brief Returns a const reference to resulting cluster labels for each datapoint. */
 			virtual const std::vector<unsigned int>& labels() const = 0;
+
+			/**
+			 * @brief Returns a const reference to the matrix of cluster centroids (in columns). 
+			*/
+			virtual const Eigen::MatrixXd& centroids() const = 0;
 		};
 
 		/** @brief Chooses initial locations of centroids. */

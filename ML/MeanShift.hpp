@@ -41,29 +41,23 @@ namespace ml
             */
             DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data) override;
 
-            /**
-             * @brief Fits the model to data.
-             * @param[in,out] data_tree Ball tree of feature vectors (for faster nearest neighbour search). At exit, #labels() and #data_tree.labels() will have equal contents.
-            */
-            DLL_DECLSPEC void fit(BallTree& data_tree);
-
-            /**
-             * @brief Number of clusters found.
-            */
             unsigned int number_clusters() const override
             {
                 return number_clusters_;
             }
 
-            /**
-             * @brief Const reference to cluster labels assigned to data points.
-            */
             const std::vector<unsigned int>& labels() const override
             {
                 return labels_;
             }
+
+            const Eigen::MatrixXd& centroids() const override
+            {
+                return centroids_;
+            }
         private:
-            std::vector<unsigned int> labels_;            
+            Eigen::MatrixXd centroids_;
+            std::vector<unsigned int> labels_;
             std::shared_ptr<const Kernels::DifferentiableRadialBasisFunction> rbf_;
             double h_; /**< Window radius. */
             double h2_; /**< Window radius (squared). */

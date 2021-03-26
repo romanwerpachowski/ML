@@ -21,8 +21,9 @@ TEST(MeanShiftTest, single_cluster)
             data(r, c) = n01(rng);
         }
     }
-    MeanShift ms(std::shared_ptr<const DifferentiableRadialBasisFunction>(new GaussianRBF), 0.5);
+    MeanShift ms(std::shared_ptr<const DifferentiableRadialBasisFunction>(new GaussianRBF), 1);
     ms.fit(data);
+    std::cout << ms.centroids().transpose();
     ASSERT_EQ(1u, ms.number_clusters());
     ASSERT_EQ(static_cast<size_t>(n), ms.labels().size());
     for (const auto label : ms.labels()) {
