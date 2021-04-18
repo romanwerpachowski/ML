@@ -66,6 +66,8 @@ namespace ml
             void calc_new_position(const BallTree& data_tree, Eigen::Ref<const Eigen::VectorXd> old_pos, Eigen::Ref<Eigen::VectorXd> new_pos) const;
 
             void shift_until_stationary(const BallTree& data_tree, Eigen::Ref<Eigen::VectorXd> pos, Eigen::Ref<Eigen::VectorXd> work) const;
+
+            void generate_clusters(Eigen::Ref<const Eigen::MatrixXd> data, const BallTree& tree, const Eigen::MatrixXd& work);
         };
     }
 }
