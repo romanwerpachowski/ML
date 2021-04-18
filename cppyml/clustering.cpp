@@ -15,6 +15,10 @@ namespace ml
     class EMPy : public EM
     {
     public:
+        EMPy(unsigned int number_components)
+            : EM(number_components)
+        {}
+
         /** Fits the model to data in row-major order.
         @param data Matrix (row-major order) with a data point in every row.
         */

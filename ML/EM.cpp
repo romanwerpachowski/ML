@@ -101,6 +101,7 @@ namespace ml
 		means_.resize(number_dimensions, number_components_);
 		responsibilities_.resize(sample_size, number_components_);
 		mixing_probabilities_.fill(1. / static_cast<double>(number_components_));
+		labels_.resize(sample_size);
 		
 		if (sample_size == number_components_) {
 			// An exact deterministic fit is possible.
@@ -158,6 +159,7 @@ namespace ml
 			if (step > 0) {
 				const double ll_change = std::abs(log_likelihood_ - old_log_likelihood);
 				if (ll_change < absolute_tolerance_ + relative_tolerance_ * std::max(std::abs(old_log_likelihood), std::abs(log_likelihood_))) {
+					calculate_labels();
 					return true;
 				}
 			}
@@ -277,6 +279,23 @@ namespace ml
 				sqrt_covariance_determinant *= llt.matrixL()(i, i);
 			}
 			sqrt_covariance_determinants_[k] = sqrt_covariance_determinant;
+		}
+	}
+
+	void EM::calculate_labels()
+	{
+		assert(labels_.size() == static_cast<size_t>(responsibilities_.rows()));
+		for (Eigen::Index i = 0; i < responsibilities_.rows(); ++i) {
+			double max_responsibility = -1;
+			Eigen::Index label = -1;
+			const auto row = responsibilities_.row(i);
+			for (Eigen::Index k = 0; k < responsibilities_.cols(); ++k) {
+				if (responsibilities_(i, k) > max_responsibility) {
+					max_responsibility = responsibilities_(i, k);
+					label = k;
+				}
+			}
+			labels_[i] = static_cast<unsigned int>(label);
 		}
 	}
 }

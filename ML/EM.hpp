@@ -5,22 +5,17 @@
 #include <vector>
 #include <Eigen/Cholesky>
 #include <Eigen/Core>
+#include "Clustering.hpp"
 #include "dll.hpp"
 
 
 namespace ml 
 {	
-	namespace Clustering
-	{
-		class CentroidsInitialiser;
-		class ResponsibilitiesInitialiser;
-	}
-
 	/** @brief Gaussian Expectation-Maximisation algorithm.
 
 	Iterates until log-likelihood converges.
 	*/
-	class EM 
+	class EM: public Clustering::Model
 	{
 	public:		
 		/** @brief Constructs an EM ready to fit.
@@ -92,12 +87,22 @@ namespace ml
 			return number_components_;
 		}
 
+		unsigned int number_clusters() const override
+		{
+			return number_components();
+		}
+
 		/** @brief Returns a const reference to matrix containing fitted component means. 
 		@return Const reference to `number_dimensions` x #number_components() matrix.
 		*/
 		const auto& means() const 
 		{
 			return means_;
+		}
+
+		const Eigen::MatrixXd& centroids() const override
+		{
+			return means();
 		}
 
 		/** @brief Returns a const reference to fitted component covariance matrices. 
@@ -148,6 +153,11 @@ namespace ml
 		@throw std::invalid_argument If `x.size() != means().rows()` or `u.size() != number_components()`.
 		*/
 		DLL_DECLSPEC void assign_responsibilities(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<Eigen::VectorXd> u) const;		
+
+		const std::vector<unsigned int>& labels() const override
+		{
+			return labels_;
+		}
 	private:
 		std::default_random_engine prng_;
 		std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser_;
@@ -160,6 +170,7 @@ namespace ml
 		std::vector<Eigen::MatrixXd> inverse_covariances_; /**< Inverses of `covariance_` matrices. */
 		std::vector<Eigen::LLT<Eigen::MatrixXd>> covariance_decompositions_; /**< Cholesky decompositions of `covariance_` matrices. */		
 		Eigen::VectorXd sqrt_covariance_determinants_; /**< Square roots of determinants of `covariance_` matrices. */
+		std::vector<unsigned int> labels_; /**< Labels assigned to feature vectors by choosing the component with maximum responsibility. */
 		double absolute_tolerance_;
 		double relative_tolerance_;
 		double log_likelihood_;
@@ -175,5 +186,7 @@ namespace ml
 		void expectation_stage(Eigen::Ref<const Eigen::MatrixXd> data);
 
 		void maximisation_stage(Eigen::Ref<const Eigen::MatrixXd> data);
+
+		void calculate_labels();
 	};
 }

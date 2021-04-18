@@ -28,14 +28,22 @@ namespace ml
 			*/
 			virtual bool fit(Eigen::Ref<const Eigen::MatrixXd> data) = 0;
 
-			/** @brief Returns the number of clusters (after fitting). */
+			/** @brief Returns the number of clusters. 
+			* 
+			* Value make sense only if fitting converged successfully.
+			*/
 			virtual unsigned int number_clusters() const = 0;
 
-			/** @brief Returns a const reference to resulting cluster labels for each datapoint. */
+			/** @brief Returns a const reference to resulting cluster labels for each datapoint.
+			
+			Values make sense only if fitting converged successfully.
+			*/
 			virtual const std::vector<unsigned int>& labels() const = 0;
 
 			/**
 			 * @brief Returns a const reference to the matrix of cluster centroids (in columns). 
+			 * 
+			 * Values make sense only if fitting converged successfully.
 			*/
 			virtual const Eigen::MatrixXd& centroids() const = 0;
 		};
