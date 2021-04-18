@@ -13,7 +13,7 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsIn
 	const unsigned int num_components = 2;
 	const unsigned int num_dimensions = 3;
 	const unsigned int sample_size = 400;
-	const double p0 = 0.25;
+	constexpr double p0 = 0.25;
 	Eigen::MatrixXd means(num_dimensions, num_components);
 	means << 0.4, -1.2,
 		0.11, 2.2,
@@ -71,7 +71,7 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsIn
 	mixing_probabilities << p0, 1 - p0;
 
 	// EM could have discovered the clusters in either order.
-	const bool first_p_lower = p0 < 1 - p0;
+	constexpr bool first_p_lower = p0 < 1 - p0;
 	if ((em.mixing_probabilities()[0] < em.mixing_probabilities()[1]) != first_p_lower) {
 		std::swap(mixing_probabilities[0], mixing_probabilities[1]);
 		means.col(0).swap(means.col(1));
