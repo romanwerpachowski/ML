@@ -57,9 +57,6 @@
     <ClInclude Include="Kernels.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MeanShift.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BallTree.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -93,9 +90,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Kernels.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MeanShift.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BallTree.cpp">

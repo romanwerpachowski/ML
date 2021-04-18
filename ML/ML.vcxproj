@@ -193,7 +193,6 @@
     <ClInclude Include="Kernels.hpp" />
     <ClInclude Include="LinearAlgebra.hpp" />
     <ClInclude Include="LinearRegression.hpp" />
-    <ClInclude Include="MeanShift.hpp" />
     <ClInclude Include="RecursiveMultivariateOLS.hpp" />
     <ClInclude Include="Statistics.hpp" />
     <ClInclude Include="Version.hpp" />
@@ -208,7 +207,6 @@
     <ClCompile Include="Kernels.cpp" />
     <ClCompile Include="LinearAlgebra.cpp" />
     <ClCompile Include="LinearRegression.cpp" />
-    <ClCompile Include="MeanShift.cpp" />
     <ClCompile Include="RecursiveMultivariateOLS.cpp" />
     <ClCompile Include="Statistics.cpp" />
   </ItemGroup>
