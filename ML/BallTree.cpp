@@ -148,7 +148,7 @@ namespace ml
         }
     }
 
-    double BallTree::distance_from_queue(Eigen::Ref<const Eigen::VectorXd> x, const unsigned int k, const MaxDistancePriorityQueue& q) const
+    double BallTree::distance_from_queue(Eigen::Ref<const Eigen::VectorXd> /*x*/, const unsigned int k, const MaxDistancePriorityQueue& q) const
     {
         assert(q.size() <= k);
         if (k && q.size() == k) {

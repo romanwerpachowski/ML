@@ -1,6 +1,7 @@
 #pragma once
 /** (C) 2021 Roman Werpachowski */
 #include <queue>
+#include <memory>
 #include <utility>
 #include <Eigen/Core>
 #include "Features.hpp"
