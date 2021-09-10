@@ -4,7 +4,7 @@ ML++ is a set of efficient C++ implementations of some ML algorithms.
 
 cppyml is a Python extension module built on top of M++. Precompiled cppyml binaries for Windows are available on [PyPi](https://pypi.org/project/cppyml/).
 
-© 2020 Roman Werpachowski.
+© 2020-21 Roman Werpachowski.
 
 ## Contents
 
