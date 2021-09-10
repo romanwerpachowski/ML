@@ -2,6 +2,7 @@
 set -ev
 
 #*** Release build ***
+export TERM="xterm"
 scons mode=release -j 2
 
 #*** C++ demos ***
