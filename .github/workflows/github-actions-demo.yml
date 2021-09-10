@@ -1,7 +1,7 @@
 name: ML++
 on: [push]
 jobs:
-  Continuous Integration:
+  Continuous-Integration:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
