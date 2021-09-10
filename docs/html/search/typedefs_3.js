@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['splitnode_268',['SplitNode',['../classml_1_1DecisionTree.html#acc98ec49fbefaf01d043213777d01057',1,'ml::DecisionTree']]]
+  ['leafnode_338',['LeafNode',['../classml_1_1DecisionTree.html#a88b8396085012cb1d3dba4979399a244',1,'ml::DecisionTree']]]
 ];

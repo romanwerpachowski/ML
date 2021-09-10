@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classml_1_1DecisionTree.html" title="Decision tree." alt="" coords="5,5,173,32"/>
+<area shape="rect" id="node1" href="$classml_1_1Clustering_1_1Model.html" title="Abstract clustering model." alt="" coords="5,5,167,32"/>
+<area shape="rect" id="node2" href="$classml_1_1EM.html" title="Gaussian Expectation&#45;Maximisation algorithm." alt="" coords="215,5,281,32"/>
 </map>

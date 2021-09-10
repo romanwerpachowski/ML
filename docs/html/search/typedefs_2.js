@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['node_267',['Node',['../classml_1_1DecisionTree.html#a8c3c0e87b7413202e778a3852b04899f',1,'ml::DecisionTree']]]
+  ['indexedfeaturevalue_337',['IndexedFeatureValue',['../namespaceml_1_1Features.html#abea37811485549a161aa4d57c303b983',1,'ml::Features']]]
 ];

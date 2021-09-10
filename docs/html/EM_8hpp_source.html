@@ -102,142 +102,161 @@ $(document).ready(function(){initNavTree('EM_8hpp_source.html',''); initResizabl
 <div class="title">EM.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* (C) 2020 Roman Werpachowski. */</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">/* (C) 2020 Roman Werpachowski. */</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;random&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;Eigen/Cholesky&gt;</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;Eigen/Core&gt;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="dll_8hpp.html">dll.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;Clustering.hpp&quot;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="dll_8hpp.html">dll.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span>ml </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;{   </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">namespace </span>Clustering</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">class </span>CentroidsInitialiser;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">class </span>ResponsibilitiesInitialiser;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    }</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classml_1_1EM.html">   23</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classml_1_1EM.html">EM</a> {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">public</span>:     </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        DLL_DECLSPEC <a class="code" href="classml_1_1EM.html#acd328379af5ecfb72600a035fef5e1db">EM</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130">number_components</a>);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a9d15f4af05825d1a5f15de8c06058dea">set_seed</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> seed);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#aa96ca693fe035199c1a96b294f55d41b">set_absolute_tolerance</a>(<span class="keywordtype">double</span> absolute_tolerance);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a0e486bd2ab7e9355dd3bbf5eca2faa9a">set_relative_tolerance</a>(<span class="keywordtype">double</span> relative_tolerance);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a1d1d0bb18430813dc7fb623438b422cd">set_maximum_steps</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> maximum_steps);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a713d5f664a384c91e6f4e8d16e8d8c26">set_means_initialiser</a>(std::shared_ptr&lt;const Clustering::CentroidsInitialiser&gt; <a class="code" href="classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e">means_initialiser</a>);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#ae8601fa4215df8e4fd3bc0f4bc294bc5">set_responsibilities_initialiser</a>(std::shared_ptr&lt;const Clustering::ResponsibilitiesInitialiser&gt; responsibilities_initialiser);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89">   69</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89">set_verbose</a>(<span class="keywordtype">bool</span> verbose)</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        {</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            verbose_ = verbose;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        }</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#a7c72f938c3a98046c4f6a8b39cfc9610">   77</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a7c72f938c3a98046c4f6a8b39cfc9610">set_maximise_first</a>(<span class="keywordtype">bool</span> maximise_first)</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        {</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            maximise_first_ = maximise_first;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        }</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        DLL_DECLSPEC <span class="keywordtype">bool</span> <a class="code" href="classml_1_1EM.html#a1b656a9edae6f7e5a140b37a3742aaf1">fit</a>(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);      </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130">   89</a></span>&#160;        <span class="keyword">auto</span> <a class="code" href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130">number_components</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="keywordflow">return</span> number_components_;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#a7ab4b5d790cd3a37b12703c010d2056b">   97</a></span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="classml_1_1EM.html#a7ab4b5d790cd3a37b12703c010d2056b">means</a>()<span class="keyword"> const </span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            <span class="keywordflow">return</span> means_;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        }</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#a1ccbd858960d5cb454ac393c1ab8d461">  105</a></span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="classml_1_1EM.html#a1ccbd858960d5cb454ac393c1ab8d461">covariances</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <span class="keywordflow">return</span> covariances_;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        }</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        DLL_DECLSPEC <span class="keyword">const</span> Eigen::MatrixXd&amp; <a class="code" href="classml_1_1EM.html#a9a22ba5b84733905e7b8102391cc115f">covariance</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> k) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#ae42efce9e1af38322d157804c4a12cfc">  118</a></span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="classml_1_1EM.html#ae42efce9e1af38322d157804c4a12cfc">mixing_probabilities</a>()<span class="keyword"> const </span></div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;            <span class="keywordflow">return</span> mixing_probabilities_;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        }</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00126"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#ad00fd3573c2078707aeaacebb1a40f14">  126</a></span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="classml_1_1EM.html#ad00fd3573c2078707aeaacebb1a40f14">responsibilities</a>()<span class="keyword"> const </span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;            <span class="keywordflow">return</span> responsibilities_;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        }</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#aedac3544c55121d270e6d3bdca67b6a5">  132</a></span>&#160;        <span class="keywordtype">double</span> <a class="code" href="classml_1_1EM.html#aedac3544c55121d270e6d3bdca67b6a5">log_likelihood</a>()<span class="keyword"> const </span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceml.html">ml</a> </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{   </div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classml_1_1EM.html">   18</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classml_1_1EM.html">EM</a>: <span class="keyword">public</span> <a class="code" href="classml_1_1Clustering_1_1Model.html">Clustering::Model</a></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    {</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">public</span>:     </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        DLL_DECLSPEC <a class="code" href="classml_1_1EM.html#acd328379af5ecfb72600a035fef5e1db">EM</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130">number_components</a>);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a9d15f4af05825d1a5f15de8c06058dea">set_seed</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> seed);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#aa96ca693fe035199c1a96b294f55d41b">set_absolute_tolerance</a>(<span class="keywordtype">double</span> absolute_tolerance);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a0e486bd2ab7e9355dd3bbf5eca2faa9a">set_relative_tolerance</a>(<span class="keywordtype">double</span> relative_tolerance);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a1d1d0bb18430813dc7fb623438b422cd">set_maximum_steps</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> maximum_steps);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a713d5f664a384c91e6f4e8d16e8d8c26">set_means_initialiser</a>(std::shared_ptr&lt;const Clustering::CentroidsInitialiser&gt; <a class="code" href="classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e">means_initialiser</a>);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#ae8601fa4215df8e4fd3bc0f4bc294bc5">set_responsibilities_initialiser</a>(std::shared_ptr&lt;const Clustering::ResponsibilitiesInitialiser&gt; responsibilities_initialiser);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89">   65</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89">set_verbose</a>(<span class="keywordtype">bool</span> verbose)</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            verbose_ = verbose;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#a7c72f938c3a98046c4f6a8b39cfc9610">   73</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a7c72f938c3a98046c4f6a8b39cfc9610">set_maximise_first</a>(<span class="keywordtype">bool</span> maximise_first)</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            maximise_first_ = maximise_first;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        DLL_DECLSPEC <span class="keywordtype">bool</span> <a class="code" href="classml_1_1EM.html#a1b656a9edae6f7e5a140b37a3742aaf1">fit</a>(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);      </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130">   85</a></span>&#160;        <span class="keyword">auto</span> <a class="code" href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130">number_components</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            <span class="keywordflow">return</span> number_components_;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        }</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#a3c7830bad6d500589d66e52c31facc30">   90</a></span>&#160;        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classml_1_1EM.html#a3c7830bad6d500589d66e52c31facc30">number_clusters</a>()<span class="keyword"> const override</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130">number_components</a>();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#a7ab4b5d790cd3a37b12703c010d2056b">   98</a></span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="classml_1_1EM.html#a7ab4b5d790cd3a37b12703c010d2056b">means</a>()<span class="keyword"> const </span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="keywordflow">return</span> means_;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        }</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#aecd3d79c8aa9a09e546a80d4fdb8d352">  103</a></span>&#160;        <span class="keyword">const</span> Eigen::MatrixXd&amp; <a class="code" href="classml_1_1EM.html#aecd3d79c8aa9a09e546a80d4fdb8d352">centroids</a>()<span class="keyword"> const override</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classml_1_1EM.html#a7ab4b5d790cd3a37b12703c010d2056b">means</a>();</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        }</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#a1ccbd858960d5cb454ac393c1ab8d461">  111</a></span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="classml_1_1EM.html#a1ccbd858960d5cb454ac393c1ab8d461">covariances</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            <span class="keywordflow">return</span> covariances_;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        DLL_DECLSPEC <span class="keyword">const</span> Eigen::MatrixXd&amp; <a class="code" href="classml_1_1EM.html#a9a22ba5b84733905e7b8102391cc115f">covariance</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> k) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#ae42efce9e1af38322d157804c4a12cfc">  124</a></span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="classml_1_1EM.html#ae42efce9e1af38322d157804c4a12cfc">mixing_probabilities</a>()<span class="keyword"> const </span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            <span class="keywordflow">return</span> mixing_probabilities_;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        }</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#ad00fd3573c2078707aeaacebb1a40f14">  132</a></span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="classml_1_1EM.html#ad00fd3573c2078707aeaacebb1a40f14">responsibilities</a>()<span class="keyword"> const </span></div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <span class="keywordflow">return</span> log_likelihood_;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        }       </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <span class="keywordflow">return</span> responsibilities_;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        }</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
-<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e">  138</a></span>&#160;        std::shared_ptr&lt;const Clustering::CentroidsInitialiser&gt; <a class="code" href="classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e">means_initialiser</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#aedac3544c55121d270e6d3bdca67b6a5">  138</a></span>&#160;        <span class="keywordtype">double</span> <a class="code" href="classml_1_1EM.html#aedac3544c55121d270e6d3bdca67b6a5">log_likelihood</a>()<span class="keyword"> const </span></div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;            <span class="keywordflow">return</span> means_initialiser_;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        }</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;            <span class="keywordflow">return</span> log_likelihood_;</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        }       </div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a18e66d65c816c2ff41aaadb670864ac9">assign_responsibilities</a>(Eigen::Ref&lt;const Eigen::VectorXd&gt; x, Eigen::Ref&lt;Eigen::VectorXd&gt; u) <span class="keyword">const</span>;        </div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        std::default_random_engine prng_;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        std::shared_ptr&lt;const Clustering::CentroidsInitialiser&gt; means_initialiser_;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        std::shared_ptr&lt;const Clustering::ResponsibilitiesInitialiser&gt; responsibilities_initialiser_;</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        Eigen::VectorXd mixing_probabilities_;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        Eigen::MatrixXd means_; </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        Eigen::MatrixXd responsibilities_; </div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        Eigen::VectorXd work_vector_;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        std::vector&lt;Eigen::MatrixXd&gt; covariances_; </div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        std::vector&lt;Eigen::MatrixXd&gt; inverse_covariances_; </div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        std::vector&lt;Eigen::LLT&lt;Eigen::MatrixXd&gt;&gt; covariance_decompositions_; </div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        Eigen::VectorXd sqrt_covariance_determinants_; </div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <span class="keywordtype">double</span> absolute_tolerance_;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        <span class="keywordtype">double</span> relative_tolerance_;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <span class="keywordtype">double</span> log_likelihood_;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> number_components_;</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> maximum_steps_;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <span class="keywordtype">bool</span> verbose_;</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <span class="keywordtype">bool</span> maximise_first_;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keyword">static</span> Eigen::MatrixXd calculate_sample_covariance(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="keywordtype">void</span> process_covariances(Eigen::Index number_dimensions);</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <span class="keywordtype">void</span> expectation_stage(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="keywordtype">void</span> maximisation_stage(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    };</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;}</div>
+<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e">  144</a></span>&#160;        std::shared_ptr&lt;const Clustering::CentroidsInitialiser&gt; <a class="code" href="classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e">means_initialiser</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            <span class="keywordflow">return</span> means_initialiser_;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        }</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        DLL_DECLSPEC <span class="keywordtype">void</span> <a class="code" href="classml_1_1EM.html#a18e66d65c816c2ff41aaadb670864ac9">assign_responsibilities</a>(Eigen::Ref&lt;const Eigen::VectorXd&gt; x, Eigen::Ref&lt;Eigen::VectorXd&gt; u) <span class="keyword">const</span>;        </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#aba8eb164484a8253e15beb04fae5aee0">  157</a></span>&#160;        <span class="keyword">const</span> std::vector&lt;unsigned int&gt;&amp; <a class="code" href="classml_1_1EM.html#aba8eb164484a8253e15beb04fae5aee0">labels</a>()<span class="keyword"> const override</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            <span class="keywordflow">return</span> labels_;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        }</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        std::default_random_engine prng_;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        std::shared_ptr&lt;const Clustering::CentroidsInitialiser&gt; means_initialiser_;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        std::shared_ptr&lt;const Clustering::ResponsibilitiesInitialiser&gt; responsibilities_initialiser_;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        Eigen::VectorXd mixing_probabilities_;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        Eigen::MatrixXd means_; </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        Eigen::MatrixXd responsibilities_; </div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        Eigen::VectorXd work_vector_;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        std::vector&lt;Eigen::MatrixXd&gt; covariances_; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        std::vector&lt;Eigen::MatrixXd&gt; inverse_covariances_; </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        std::vector&lt;Eigen::LLT&lt;Eigen::MatrixXd&gt;&gt; covariance_decompositions_; </div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        Eigen::VectorXd sqrt_covariance_determinants_; </div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        std::vector&lt;unsigned int&gt; labels_; </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <span class="keywordtype">double</span> absolute_tolerance_;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="keywordtype">double</span> relative_tolerance_;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="keywordtype">double</span> log_likelihood_;</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> number_components_;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> maximum_steps_;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="keywordtype">bool</span> verbose_;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordtype">bool</span> maximise_first_;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keyword">static</span> Eigen::MatrixXd calculate_sample_covariance(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keywordtype">void</span> process_covariances(Eigen::Index number_dimensions);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="keywordtype">void</span> expectation_stage(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keywordtype">void</span> maximisation_stage(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="keywordtype">void</span> calculate_labels();</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    };</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassml_1_1EM_html_a18e66d65c816c2ff41aaadb670864ac9"><div class="ttname"><a href="classml_1_1EM.html#a18e66d65c816c2ff41aaadb670864ac9">ml::EM::assign_responsibilities</a></div><div class="ttdeci">void assign_responsibilities(Eigen::Ref&lt; const Eigen::VectorXd &gt; x, Eigen::Ref&lt; Eigen::VectorXd &gt; u) const</div><div class="ttdoc">Given a data point x, calculate each component's responsibilities for x and save them in u.</div></div>
-<div class="ttc" id="aclassml_1_1EM_html_a6a7245e3d8c316af1846892ec35bbc89"><div class="ttname"><a href="classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89">ml::EM::set_verbose</a></div><div class="ttdeci">void set_verbose(bool verbose)</div><div class="ttdoc">Switches between verbose and quiet mode.</div><div class="ttdef"><b>Definition:</b> EM.hpp:69</div></div>
+<div class="ttc" id="aclassml_1_1EM_html_a6a7245e3d8c316af1846892ec35bbc89"><div class="ttname"><a href="classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89">ml::EM::set_verbose</a></div><div class="ttdeci">void set_verbose(bool verbose)</div><div class="ttdoc">Switches between verbose and quiet mode.</div><div class="ttdef"><b>Definition:</b> EM.hpp:65</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_a0e486bd2ab7e9355dd3bbf5eca2faa9a"><div class="ttname"><a href="classml_1_1EM.html#a0e486bd2ab7e9355dd3bbf5eca2faa9a">ml::EM::set_relative_tolerance</a></div><div class="ttdeci">void set_relative_tolerance(double relative_tolerance)</div><div class="ttdoc">Sets relative tolerance for convergence test.</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_a9d15f4af05825d1a5f15de8c06058dea"><div class="ttname"><a href="classml_1_1EM.html#a9d15f4af05825d1a5f15de8c06058dea">ml::EM::set_seed</a></div><div class="ttdeci">void set_seed(unsigned int seed)</div><div class="ttdoc">Sets PRNG seed.</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_a1b656a9edae6f7e5a140b37a3742aaf1"><div class="ttname"><a href="classml_1_1EM.html#a1b656a9edae6f7e5a140b37a3742aaf1">ml::EM::fit</a></div><div class="ttdeci">bool fit(Eigen::Ref&lt; const Eigen::MatrixXd &gt; data)</div><div class="ttdoc">Fits the model.</div></div>
-<div class="ttc" id="aclassml_1_1EM_html_a1ccbd858960d5cb454ac393c1ab8d461"><div class="ttname"><a href="classml_1_1EM.html#a1ccbd858960d5cb454ac393c1ab8d461">ml::EM::covariances</a></div><div class="ttdeci">const auto &amp; covariances() const</div><div class="ttdoc">Returns a const reference to fitted component covariance matrices.</div><div class="ttdef"><b>Definition:</b> EM.hpp:105</div></div>
+<div class="ttc" id="aclassml_1_1EM_html_a1ccbd858960d5cb454ac393c1ab8d461"><div class="ttname"><a href="classml_1_1EM.html#a1ccbd858960d5cb454ac393c1ab8d461">ml::EM::covariances</a></div><div class="ttdeci">const auto &amp; covariances() const</div><div class="ttdoc">Returns a const reference to fitted component covariance matrices.</div><div class="ttdef"><b>Definition:</b> EM.hpp:111</div></div>
+<div class="ttc" id="anamespaceml_html"><div class="ttname"><a href="namespaceml.html">ml</a></div><div class="ttdef"><b>Definition:</b> BallTree.hpp:9</div></div>
 <div class="ttc" id="adll_8hpp_html"><div class="ttname"><a href="dll_8hpp.html">dll.hpp</a></div></div>
-<div class="ttc" id="aclassml_1_1EM_html_a7c72f938c3a98046c4f6a8b39cfc9610"><div class="ttname"><a href="classml_1_1EM.html#a7c72f938c3a98046c4f6a8b39cfc9610">ml::EM::set_maximise_first</a></div><div class="ttdeci">void set_maximise_first(bool maximise_first)</div><div class="ttdoc">Switches between starting with E or M step first.</div><div class="ttdef"><b>Definition:</b> EM.hpp:77</div></div>
+<div class="ttc" id="aclassml_1_1EM_html_a7c72f938c3a98046c4f6a8b39cfc9610"><div class="ttname"><a href="classml_1_1EM.html#a7c72f938c3a98046c4f6a8b39cfc9610">ml::EM::set_maximise_first</a></div><div class="ttdeci">void set_maximise_first(bool maximise_first)</div><div class="ttdoc">Switches between starting with E or M step first.</div><div class="ttdef"><b>Definition:</b> EM.hpp:73</div></div>
+<div class="ttc" id="aclassml_1_1EM_html_aba8eb164484a8253e15beb04fae5aee0"><div class="ttname"><a href="classml_1_1EM.html#aba8eb164484a8253e15beb04fae5aee0">ml::EM::labels</a></div><div class="ttdeci">const std::vector&lt; unsigned int &gt; &amp; labels() const override</div><div class="ttdoc">Returns a const reference to resulting cluster labels for each datapoint.</div><div class="ttdef"><b>Definition:</b> EM.hpp:157</div></div>
+<div class="ttc" id="aclassml_1_1EM_html_aecd3d79c8aa9a09e546a80d4fdb8d352"><div class="ttname"><a href="classml_1_1EM.html#aecd3d79c8aa9a09e546a80d4fdb8d352">ml::EM::centroids</a></div><div class="ttdeci">const Eigen::MatrixXd &amp; centroids() const override</div><div class="ttdoc">Returns a const reference to the matrix of cluster centroids (in columns).</div><div class="ttdef"><b>Definition:</b> EM.hpp:103</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_acd328379af5ecfb72600a035fef5e1db"><div class="ttname"><a href="classml_1_1EM.html#acd328379af5ecfb72600a035fef5e1db">ml::EM::EM</a></div><div class="ttdeci">EM(unsigned int number_components)</div><div class="ttdoc">Constructs an EM ready to fit.</div></div>
+<div class="ttc" id="aclassml_1_1Clustering_1_1Model_html"><div class="ttname"><a href="classml_1_1Clustering_1_1Model.html">ml::Clustering::Model</a></div><div class="ttdoc">Abstract clustering model.</div><div class="ttdef"><b>Definition:</b> Clustering.hpp:17</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_a1d1d0bb18430813dc7fb623438b422cd"><div class="ttname"><a href="classml_1_1EM.html#a1d1d0bb18430813dc7fb623438b422cd">ml::EM::set_maximum_steps</a></div><div class="ttdeci">void set_maximum_steps(unsigned int maximum_steps)</div><div class="ttdoc">Sets maximum number of E-M steps.</div></div>
-<div class="ttc" id="aclassml_1_1EM_html_a7ab4b5d790cd3a37b12703c010d2056b"><div class="ttname"><a href="classml_1_1EM.html#a7ab4b5d790cd3a37b12703c010d2056b">ml::EM::means</a></div><div class="ttdeci">const auto &amp; means() const</div><div class="ttdoc">Returns a const reference to matrix containing fitted component means.</div><div class="ttdef"><b>Definition:</b> EM.hpp:97</div></div>
-<div class="ttc" id="aclassml_1_1EM_html_aedac3544c55121d270e6d3bdca67b6a5"><div class="ttname"><a href="classml_1_1EM.html#aedac3544c55121d270e6d3bdca67b6a5">ml::EM::log_likelihood</a></div><div class="ttdeci">double log_likelihood() const</div><div class="ttdoc">Returns a const reference to maximised log-likelihood of training data.</div><div class="ttdef"><b>Definition:</b> EM.hpp:132</div></div>
-<div class="ttc" id="aclassml_1_1EM_html_ae42efce9e1af38322d157804c4a12cfc"><div class="ttname"><a href="classml_1_1EM.html#ae42efce9e1af38322d157804c4a12cfc">ml::EM::mixing_probabilities</a></div><div class="ttdeci">const auto &amp; mixing_probabilities() const</div><div class="ttdoc">Returns a const reference to fitted component mixing probabilities.</div><div class="ttdef"><b>Definition:</b> EM.hpp:118</div></div>
+<div class="ttc" id="aclassml_1_1EM_html_a7ab4b5d790cd3a37b12703c010d2056b"><div class="ttname"><a href="classml_1_1EM.html#a7ab4b5d790cd3a37b12703c010d2056b">ml::EM::means</a></div><div class="ttdeci">const auto &amp; means() const</div><div class="ttdoc">Returns a const reference to matrix containing fitted component means.</div><div class="ttdef"><b>Definition:</b> EM.hpp:98</div></div>
+<div class="ttc" id="aclassml_1_1EM_html_aedac3544c55121d270e6d3bdca67b6a5"><div class="ttname"><a href="classml_1_1EM.html#aedac3544c55121d270e6d3bdca67b6a5">ml::EM::log_likelihood</a></div><div class="ttdeci">double log_likelihood() const</div><div class="ttdoc">Returns a const reference to maximised log-likelihood of training data.</div><div class="ttdef"><b>Definition:</b> EM.hpp:138</div></div>
+<div class="ttc" id="aclassml_1_1EM_html_ae42efce9e1af38322d157804c4a12cfc"><div class="ttname"><a href="classml_1_1EM.html#ae42efce9e1af38322d157804c4a12cfc">ml::EM::mixing_probabilities</a></div><div class="ttdeci">const auto &amp; mixing_probabilities() const</div><div class="ttdoc">Returns a const reference to fitted component mixing probabilities.</div><div class="ttdef"><b>Definition:</b> EM.hpp:124</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_a9a22ba5b84733905e7b8102391cc115f"><div class="ttname"><a href="classml_1_1EM.html#a9a22ba5b84733905e7b8102391cc115f">ml::EM::covariance</a></div><div class="ttdeci">const Eigen::MatrixXd &amp; covariance(unsigned int k) const</div><div class="ttdoc">Returns a const reference to fitted k-th component's covariance matrix.</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_ae8601fa4215df8e4fd3bc0f4bc294bc5"><div class="ttname"><a href="classml_1_1EM.html#ae8601fa4215df8e4fd3bc0f4bc294bc5">ml::EM::set_responsibilities_initialiser</a></div><div class="ttdeci">void set_responsibilities_initialiser(std::shared_ptr&lt; const Clustering::ResponsibilitiesInitialiser &gt; responsibilities_initialiser)</div><div class="ttdoc">Sets responsibilities initialiser.</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_aa96ca693fe035199c1a96b294f55d41b"><div class="ttname"><a href="classml_1_1EM.html#aa96ca693fe035199c1a96b294f55d41b">ml::EM::set_absolute_tolerance</a></div><div class="ttdeci">void set_absolute_tolerance(double absolute_tolerance)</div><div class="ttdoc">Sets absolute tolerance for convergence test.</div></div>
-<div class="ttc" id="aclassml_1_1EM_html"><div class="ttname"><a href="classml_1_1EM.html">ml::EM</a></div><div class="ttdoc">Gaussian Expectation-Maximisation algorithm.</div><div class="ttdef"><b>Definition:</b> EM.hpp:23</div></div>
-<div class="ttc" id="aclassml_1_1EM_html_ad00fd3573c2078707aeaacebb1a40f14"><div class="ttname"><a href="classml_1_1EM.html#ad00fd3573c2078707aeaacebb1a40f14">ml::EM::responsibilities</a></div><div class="ttdeci">const auto &amp; responsibilities() const</div><div class="ttdoc">Returns a const reference to resulting component responsibilities.</div><div class="ttdef"><b>Definition:</b> EM.hpp:126</div></div>
+<div class="ttc" id="aclassml_1_1EM_html"><div class="ttname"><a href="classml_1_1EM.html">ml::EM</a></div><div class="ttdoc">Gaussian Expectation-Maximisation algorithm.</div><div class="ttdef"><b>Definition:</b> EM.hpp:18</div></div>
+<div class="ttc" id="aclassml_1_1EM_html_a3c7830bad6d500589d66e52c31facc30"><div class="ttname"><a href="classml_1_1EM.html#a3c7830bad6d500589d66e52c31facc30">ml::EM::number_clusters</a></div><div class="ttdeci">unsigned int number_clusters() const override</div><div class="ttdoc">Returns the number of clusters.</div><div class="ttdef"><b>Definition:</b> EM.hpp:90</div></div>
+<div class="ttc" id="aclassml_1_1EM_html_ad00fd3573c2078707aeaacebb1a40f14"><div class="ttname"><a href="classml_1_1EM.html#ad00fd3573c2078707aeaacebb1a40f14">ml::EM::responsibilities</a></div><div class="ttdeci">const auto &amp; responsibilities() const</div><div class="ttdoc">Returns a const reference to resulting component responsibilities.</div><div class="ttdef"><b>Definition:</b> EM.hpp:132</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_a713d5f664a384c91e6f4e8d16e8d8c26"><div class="ttname"><a href="classml_1_1EM.html#a713d5f664a384c91e6f4e8d16e8d8c26">ml::EM::set_means_initialiser</a></div><div class="ttdeci">void set_means_initialiser(std::shared_ptr&lt; const Clustering::CentroidsInitialiser &gt; means_initialiser)</div><div class="ttdoc">Sets means initialiser.</div></div>
-<div class="ttc" id="aclassml_1_1EM_html_a5df516d211f0230d006fb4146aa7773e"><div class="ttname"><a href="classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e">ml::EM::means_initialiser</a></div><div class="ttdeci">std::shared_ptr&lt; const Clustering::CentroidsInitialiser &gt; means_initialiser() const</div><div class="ttdoc">Returns a shared pointer to means initialiser implementation.</div><div class="ttdef"><b>Definition:</b> EM.hpp:138</div></div>
-<div class="ttc" id="aclassml_1_1EM_html_ac2e2a5ea28be43d31a3f2bcd7299d130"><div class="ttname"><a href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130">ml::EM::number_components</a></div><div class="ttdeci">auto number_components() const</div><div class="ttdoc">Returns the number of components.</div><div class="ttdef"><b>Definition:</b> EM.hpp:89</div></div>
+<div class="ttc" id="aclassml_1_1EM_html_a5df516d211f0230d006fb4146aa7773e"><div class="ttname"><a href="classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e">ml::EM::means_initialiser</a></div><div class="ttdeci">std::shared_ptr&lt; const Clustering::CentroidsInitialiser &gt; means_initialiser() const</div><div class="ttdoc">Returns a shared pointer to means initialiser implementation.</div><div class="ttdef"><b>Definition:</b> EM.hpp:144</div></div>
+<div class="ttc" id="aclassml_1_1EM_html_ac2e2a5ea28be43d31a3f2bcd7299d130"><div class="ttname"><a href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130">ml::EM::number_components</a></div><div class="ttdeci">auto number_components() const</div><div class="ttdoc">Returns the number of components.</div><div class="ttdef"><b>Definition:</b> EM.hpp:85</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

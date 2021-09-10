@@ -1,0 +1,6 @@
+<map id="ml::Kernels::DifferentiableRadialBasisFunction" name="ml::Kernels::DifferentiableRadialBasisFunction">
+<area shape="rect" id="node1" title="Differentiable radial basis function kernel." alt="" coords="28,95,221,136"/>
+<area shape="rect" id="node3" href="$classml_1_1Kernels_1_1DoubleDifferentiableRadialBasisFunction.html" title="Double differentiable radial basis function kernel." alt="" coords="5,184,244,225"/>
+<area shape="rect" id="node2" href="$classml_1_1Kernels_1_1RadialBasisFunction.html" title="Radial basis function." alt="" coords="35,5,214,47"/>
+<area shape="rect" id="node4" href="$classml_1_1Kernels_1_1GaussianRBF.html" title="Gaussian radial basis function." alt="" coords="30,273,219,300"/>
+</map>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['splitnode_146',['SplitNode',['../structml_1_1DecisionTrees_1_1SplitNode.html',1,'ml::DecisionTrees']]]
+  ['node_183',['Node',['../structml_1_1DecisionTrees_1_1Node.html',1,'ml::DecisionTrees']]]
 ];

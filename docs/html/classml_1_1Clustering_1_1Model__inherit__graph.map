@@ -1,0 +1,4 @@
+<map id="ml::Clustering::Model" name="ml::Clustering::Model">
+<area shape="rect" id="node1" title="Abstract clustering model." alt="" coords="5,5,167,32"/>
+<area shape="rect" id="node2" href="$classml_1_1EM.html" title="Gaussian Expectation&#45;Maximisation algorithm." alt="" coords="53,80,119,107"/>
+</map>
