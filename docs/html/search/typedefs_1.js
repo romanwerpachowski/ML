@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['leafnode_266',['LeafNode',['../classml_1_1DecisionTree.html#a88b8396085012cb1d3dba4979399a244',1,'ml::DecisionTree']]]
+  ['classificationtree_336',['ClassificationTree',['../namespaceml.html#abdac3465de1b7266e0d6f030dd5c146f',1,'ml']]]
 ];

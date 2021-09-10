@@ -75,22 +75,6 @@ along with this program.  If not, see &lt;<a class="reference external" href="ht
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
 <p>Gaussian Expectation-Maximisation algorithm.</p>
 <dl class="method">
-<dt id="cppyml.cppyml.clustering.EM.assign_responsibilities">
-<code class="descname">assign_responsibilities</code><span class="sig-paren">(</span><em>self: cppyml.cppyml.clustering.EM, x: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray[float64[m, 1]]<a class="headerlink" href="#cppyml.cppyml.clustering.EM.assign_responsibilities" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given a data point x, calculate each component’s responsibilities for x and return them.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – Data point with correct dimension.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Array of components’ responsibilities.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="cppyml.cppyml.clustering.EM.covariance">
 <code class="descname">covariance</code><span class="sig-paren">(</span><em>self: cppyml.cppyml.clustering.EM</em>, <em>k: int</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray[float64[m, n]]<a class="headerlink" href="#cppyml.cppyml.clustering.EM.covariance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns k-th covariance matrix.</p>
@@ -425,38 +409,9 @@ along with this program.  If not, see &lt;<a class="reference external" href="ht
 <span id="linear-regression"></span><h2>Linear regression<a class="headerlink" href="#module-cppyml.cppyml.linear_regression" title="Permalink to this headline">¶</a></h2>
 <p>Linear regression algorithms.</p>
 <dl class="class">
-<dt id="cppyml.cppyml.linear_regression.LassoRegressionResult">
-<em class="property">class </em><code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">LassoRegressionResult</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.LassoRegressionResult" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cppyml.cppyml.linear_regression.Result" title="cppyml.cppyml.linear_regression.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.cppyml.linear_regression.Result</span></code></a></p>
-<p>Result of a (multivariate) Lasso regression with intercept.</p>
-<p>Intercept is the last coefficient in <cite>beta</cite>.</p>
-<p><cite>var_y</cite> is calculated using <cite>dof</cite> as the denominator.</p>
-<dl class="attribute">
-<dt id="cppyml.cppyml.linear_regression.LassoRegressionResult.beta">
-<code class="descname">beta</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.LassoRegressionResult.beta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fitted coefficients of the model y_i = beta’^T X_i, followed by beta0.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cppyml.cppyml.linear_regression.LassoRegressionResult.effective_dof">
-<code class="descname">effective_dof</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.LassoRegressionResult.effective_dof" title="Permalink to this definition">¶</a></dt>
-<dd><p>N - tr [ X^T (X * X^T + lambda * I)^{-1} X ] - 1.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Effective number of residual degrees of freedom</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="cppyml.cppyml.linear_regression.MultivariateOLSResult">
 <em class="property">class </em><code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">MultivariateOLSResult</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.MultivariateOLSResult" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cppyml.cppyml.linear_regression.Result" title="cppyml.cppyml.linear_regression.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.cppyml.linear_regression.Result</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
 <p>Result of multivariate Ordinary Least Squares regression.</p>
 <p>The <cite>cov</cite> property assumes independent Gaussian error terms.</p>
 <dl class="attribute">
@@ -469,6 +424,30 @@ along with this program.  If not, see &lt;<a class="reference external" href="ht
 <dt id="cppyml.cppyml.linear_regression.MultivariateOLSResult.cov">
 <code class="descname">cov</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.MultivariateOLSResult.cov" title="Permalink to this definition">¶</a></dt>
 <dd><p>Covariance matrix of beta coefficients.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.cppyml.linear_regression.MultivariateOLSResult.dof">
+<code class="descname">dof</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.MultivariateOLSResult.dof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of residual degrees of freedom.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.cppyml.linear_regression.MultivariateOLSResult.n">
+<code class="descname">n</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.MultivariateOLSResult.n" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of data points.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.cppyml.linear_regression.MultivariateOLSResult.r2">
+<code class="descname">r2</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.MultivariateOLSResult.r2" title="Permalink to this definition">¶</a></dt>
+<dd><p>R2 = 1 - fraction of variance unexplained relative to a “base model”.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.cppyml.linear_regression.MultivariateOLSResult.var_y">
+<code class="descname">var_y</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.MultivariateOLSResult.var_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimated variance of observations Y.</p>
 </dd></dl>
 
 </dd></dl>
@@ -525,86 +504,29 @@ y_1 = X_1^T * beta + e_1
 </dd></dl>
 
 <dl class="class">
-<dt id="cppyml.cppyml.linear_regression.Result">
-<em class="property">class </em><code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">Result</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.Result" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
-<dl class="attribute">
-<dt id="cppyml.cppyml.linear_regression.Result.adjusted_r2">
-<code class="descname">adjusted_r2</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.Result.adjusted_r2" title="Permalink to this definition">¶</a></dt>
-<dd><p>1 - fraction of variance unexplained relative to the base model. Uses sample variances. Equal to <cite>1 - rss * (n - 1) / tss / dof</cite>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cppyml.cppyml.linear_regression.Result.dof">
-<code class="descname">dof</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.Result.dof" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of residual degrees of freedom (e.g. <cite>n - 2</cite> or <cite>n - 1</cite> for univariate regression with or without intercept).</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cppyml.cppyml.linear_regression.Result.n">
-<code class="descname">n</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.Result.n" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of data points.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cppyml.cppyml.linear_regression.Result.r2">
-<code class="descname">r2</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.Result.r2" title="Permalink to this definition">¶</a></dt>
-<dd><p>1 - fraction of variance unexplained relative to the base model. Equal to <cite>1 - rss / tss</cite>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cppyml.cppyml.linear_regression.Result.rss">
-<code class="descname">rss</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.Result.rss" title="Permalink to this definition">¶</a></dt>
-<dd><p>sum_{i=1}^N (hat{y}_i - y_i)^2.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Residual sum of squares</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cppyml.cppyml.linear_regression.Result.tss">
-<code class="descname">tss</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.Result.tss" title="Permalink to this definition">¶</a></dt>
-<dd><p>sum_{i=1}^N (y_i - N^{-1} sum_{j=1}^N y_j)^2.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Total sum of squares</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cppyml.cppyml.linear_regression.Result.var_y">
-<code class="descname">var_y</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.Result.var_y" title="Permalink to this definition">¶</a></dt>
-<dd><p>Estimated variance of observations Y, equal to <cite>rss / dof</cite>.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="cppyml.cppyml.linear_regression.RidgeRegressionResult">
 <em class="property">class </em><code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">RidgeRegressionResult</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.RidgeRegressionResult" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cppyml.cppyml.linear_regression.Result" title="cppyml.cppyml.linear_regression.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.cppyml.linear_regression.Result</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
 <p>Result of a (multivariate) ridge regression with intercept.</p>
-<p>Intercept is the last coefficient in <cite>beta</cite>.</p>
+<p>Does not contain error estimates because they are not easy to estimate reliably for regularised regression.</p>
+<p>Intercept is reported separately because it has a special status: it’s not regularised.</p>
 <p><cite>var_y</cite> is calculated using <cite>dof</cite> as the denominator.</p>
 <dl class="attribute">
 <dt id="cppyml.cppyml.linear_regression.RidgeRegressionResult.beta">
 <code class="descname">beta</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.RidgeRegressionResult.beta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fitted coefficients of the model y_i = beta’^T X_i, followed by beta0.</p>
+<dd><p>Fitted coefficients of the model y_i = beta^T X_i.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="cppyml.cppyml.linear_regression.RidgeRegressionResult.cov">
 <code class="descname">cov</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.RidgeRegressionResult.cov" title="Permalink to this definition">¶</a></dt>
-<dd><p>Covariance matrix of (beta’, beta0) coefficients.</p>
+<dd><p>Covariance matrix of beta coefficients.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.cppyml.linear_regression.RidgeRegressionResult.dof">
+<code class="descname">dof</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.RidgeRegressionResult.dof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of residual degrees of freedom.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -621,12 +543,30 @@ y_1 = X_1^T * beta + e_1
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="cppyml.cppyml.linear_regression.RidgeRegressionResult.n">
+<code class="descname">n</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.RidgeRegressionResult.n" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of data points.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.cppyml.linear_regression.RidgeRegressionResult.r2">
+<code class="descname">r2</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.RidgeRegressionResult.r2" title="Permalink to this definition">¶</a></dt>
+<dd><p>R2 = 1 - fraction of variance unexplained relative to a “base model”.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.cppyml.linear_regression.RidgeRegressionResult.var_y">
+<code class="descname">var_y</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.RidgeRegressionResult.var_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimated variance of observations Y.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="cppyml.cppyml.linear_regression.UnivariateOLSResult">
 <em class="property">class </em><code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">UnivariateOLSResult</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.UnivariateOLSResult" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cppyml.cppyml.linear_regression.Result" title="cppyml.cppyml.linear_regression.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.cppyml.linear_regression.Result</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
 <p>Result of univariate Ordinary Least Squares regression (with or without intercept).</p>
 <p>The following properties assume independent Gaussian error terms: <cite>var_slope</cite>, <cite>var_intercept</cite> and <cite>cov_slope_intercept</cite>.</p>
 <dl class="attribute">
@@ -636,9 +576,27 @@ y_1 = X_1^T * beta + e_1
 </dd></dl>
 
 <dl class="attribute">
+<dt id="cppyml.cppyml.linear_regression.UnivariateOLSResult.dof">
+<code class="descname">dof</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.UnivariateOLSResult.dof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of residual degrees of freedom.</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="cppyml.cppyml.linear_regression.UnivariateOLSResult.intercept">
 <code class="descname">intercept</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.UnivariateOLSResult.intercept" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constant added to slope * X when predicting Y.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.cppyml.linear_regression.UnivariateOLSResult.n">
+<code class="descname">n</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.UnivariateOLSResult.n" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of data points.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.cppyml.linear_regression.UnivariateOLSResult.r2">
+<code class="descname">r2</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.UnivariateOLSResult.r2" title="Permalink to this definition">¶</a></dt>
+<dd><p>R2 = 1 - fraction of variance unexplained relative to a “base model”.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -659,33 +617,12 @@ y_1 = X_1^T * beta + e_1
 <dd><p>Estimated variance of the slope.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="cppyml.cppyml.linear_regression.UnivariateOLSResult.var_y">
+<code class="descname">var_y</code><a class="headerlink" href="#cppyml.cppyml.linear_regression.UnivariateOLSResult.var_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimated variance of observations Y.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="cppyml.cppyml.linear_regression.lasso">
-<code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">lasso</code><span class="sig-paren">(</span><em>X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]], lambda: float, do_standardise: bool = False</em><span class="sig-paren">)</span> &#x2192; cppyml.cppyml.linear_regression.LassoRegressionResult<a class="headerlink" href="#cppyml.cppyml.linear_regression.lasso" title="Permalink to this definition">¶</a></dt>
-<dd><p>Carries out multivariate Lasso regression with intercept.</p>
-<p>Given X and y, finds beta’ and beta0 minimising || y - beta’^T X - beta0 ||^2 + lambda * || beta’ ||_1.</p>
-<p>R2 is always calculated w/r to model returning average y.
-The matrix <cite>X</cite> is assumed to be standardised unless <cite>do_standardise</cite> is set to <cite>True</cite>.
-Does not calculate the covariance matrix for estimated coefficients.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>X</strong> – X matrix (shape N x D, with D &lt;= N), with data points in rows.</li>
-<li><strong>y</strong> – Y vector with length N.</li>
-<li><strong>do_standardise</strong> – Whether to automatically subtract the mean from each row in <cite>X</cite> and divide it by its standard deviation (defaults to False).</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Instance of <cite>LassoRegressionResult</cite>. If <cite>do_standardise</cite> was <cite>True</cite>, the <cite>beta</cite> vector will be rescaled and shifted
-to original <cite>X</cite> units and origins.</p>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="function">
@@ -714,85 +651,10 @@ or set the parameter <cite>add_ones</cite> to <cite>True</cite>.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="cppyml.cppyml.linear_regression.press">
-<code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">press</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#cppyml.cppyml.linear_regression.press" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overloaded function.</p>
-<ol class="arabic simple">
-<li>press(X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]], regularisation: str = ‘none’, reg_lambda: float = 0.0) -&gt; float</li>
-</ol>
-<p>Calculates the PRESS statistic (Predicted Residual Error Sum of Squares).</p>
-<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/PRESS_statistic">https://en.wikipedia.org/wiki/PRESS_statistic</a> for details.</p>
-<p>NOTE: Training data will be standardised internally if using regularisation.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>X</strong> – X matrix (shape N x D, with D &lt;= N), with data points in rows. Unstandardised.</li>
-<li><strong>y</strong> – Y vector with length N.</li>
-<li><strong>regularisation</strong> – Type of regularisation: “none” or “ridge”. Defaults to “none”.</li>
-<li><strong>reg_lambda</strong> – Non-negative regularisation strength. Defaults to 0. Ignored if <cite>regularisation == “none”</cite>.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Value of the PRESS statistic.</p>
-</td>
-</tr>
-</tbody>
-</table>
-<ol class="arabic simple" start="2">
-<li>press(X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]], regularisation: str = ‘none’, reg_lambda: float = 0.0) -&gt; float</li>
-</ol>
-<p>Calculates the PRESS statistic (Predicted Residual Error Sum of Squares).</p>
-<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/PRESS_statistic">https://en.wikipedia.org/wiki/PRESS_statistic</a> for details.</p>
-<p>NOTE: Training data will be standardised internally if using regularisation.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>X</strong> – X matrix (shape N x D, with D &lt;= N), with data points in rows. Unstandardised.</li>
-<li><strong>y</strong> – Y vector with length N.</li>
-<li><strong>regularisation</strong> – Type of regularisation: “none” or “ridge”. Defaults to “none”.</li>
-<li><strong>reg_lambda</strong> – Non-negative regularisation strength. Defaults to 0. Ignored if <cite>regularisation == “none”</cite>.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Value of the PRESS statistic.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="cppyml.cppyml.linear_regression.press_univariate">
-<code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">press_univariate</code><span class="sig-paren">(</span><em>x: numpy.ndarray[float64[m, 1]], y: numpy.ndarray[float64[m, 1]], with_intercept: bool = True</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#cppyml.cppyml.linear_regression.press_univariate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the PRESS statistic (Predicted Residual Error Sum of Squares) for univariate regression.</p>
-<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/PRESS_statistic">https://en.wikipedia.org/wiki/PRESS_statistic</a> for details.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> – X vector with length N.</li>
-<li><strong>y</strong> – Y vector with same length as <cite>x</cite>.</li>
-<li><strong>with_intercept</strong> – Whether the regression is with intercept or not (defaults to True).</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Value of the PRESS statistic.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="cppyml.cppyml.linear_regression.ridge">
 <code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">ridge</code><span class="sig-paren">(</span><em>X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]], lambda: float, do_standardise: bool = False</em><span class="sig-paren">)</span> &#x2192; cppyml.cppyml.linear_regression.RidgeRegressionResult<a class="headerlink" href="#cppyml.cppyml.linear_regression.ridge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Carries out multivariate ridge regression with intercept.</p>
-<p>Given X and y, finds beta’ and beta0 minimising || y - beta’^T X - beta0 ||^2 + lambda * || beta’ ||^2.</p>
+<p>Given X and y, finds beta and beta0 minimising f$ lVert vec{y} - X^T vec{beta} rVert^2 + lambda lVert vec{beta} rVert^2 f$.</p>
 <p>R2 is always calculated w/r to model returning average y.
 The matrix <cite>X</cite> is assumed to be standardised unless <cite>do_standardise</cite> is set to <cite>True</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -802,12 +664,12 @@ The matrix <cite>X</cite> is assumed to be standardised unless <cite>do_standard
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>X</strong> – X matrix (shape N x D, with D &lt;= N), with data points in rows.</li>
 <li><strong>y</strong> – Y vector with length N.</li>
-<li><strong>do_standardise</strong> – Whether to automatically subtract the mean from each row in <cite>X</cite> and divide it by its standard deviation (defaults to False).</li>
+<li><strong>do_standardise</strong> – Whether to automatically subtract the mean from each row in <cite>X</cite> and divide it by its standard deviation.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Instance of <cite>RidgeRegressionResult</cite>. If <cite>do_standardise</cite> was <cite>True</cite>, the <cite>beta</cite> vector will be rescaled and shifted
-to original <cite>X</cite> units and origins, and the <cite>cov</cite> matrix will be transformed accordingly.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Instance of <cite>RidgeRegressionResult</cite>. If <cite>do_standardise</cite> was <cite>True</cite>, the <cite>slopes</cite> and <cite>intercept</cite> fields will be rescaled and shifted
+to original <cite>X</cite> units and origins.</p>
 </td>
 </tr>
 </tbody>
@@ -870,8 +732,8 @@ to original <cite>X</cite> units and origins, and the <cite>cov</cite> matrix wi
 <code class="descclassname">cppyml.cppyml.linear_regression.</code><code class="descname">univariate_without_intercept</code><span class="sig-paren">(</span><em>x: numpy.ndarray[float64[m, 1]], y: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; cppyml.cppyml.linear_regression.UnivariateOLSResult<a class="headerlink" href="#cppyml.cppyml.linear_regression.univariate_without_intercept" title="Permalink to this definition">¶</a></dt>
 <dd><p>Carries out univariate (aka simple) linear regression without intercept.</p>
 <dl class="docutils">
-<dt>The R2 coefficient is calculated w/r to a model returning average Y:</dt>
-<dd>R2 = 1 - sum_{i=1}^n (y_i - hat{y}_i)^2 / sum_{i=1}^n (y_i - avg(Y))^2.</dd>
+<dt>R2 coefficient is calculated w/r to a model returning 0 and is therefore not equal to Corr(X, Y)^2:</dt>
+<dd>R2 = 1 - sum_{i=1}^n (y_i - hat{y}_i)^2 / sum_{i=1}^n (y_i)^2.</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

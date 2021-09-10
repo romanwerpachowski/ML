@@ -1,8 +1,8 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression." alt="" coords="5,71,164,112"/>
-<area shape="rect" id="node2" href="$structml_1_1LinearRegression_1_1MultivariateOLSResult.html" title="Result of multivariate Ordinary Least Squares regression." alt="" coords="235,5,409,47"/>
-<area shape="rect" id="node3" href="$structml_1_1LinearRegression_1_1RegularisedRegressionResult.html" title="Result of a regularised regression with intercept." alt="" coords="212,71,432,112"/>
-<area shape="rect" id="node6" href="$structml_1_1LinearRegression_1_1UnivariateOLSResult.html" title="Result of 1D Ordinary Least Squares regression (with or without intercept)." alt="" coords="240,136,404,177"/>
-<area shape="rect" id="node4" href="$structml_1_1LinearRegression_1_1LassoRegressionResult.html" title="Result of a (multivariate) Lasso regression with intercept." alt="" coords="480,39,660,80"/>
-<area shape="rect" id="node5" href="$structml_1_1LinearRegression_1_1RidgeRegressionResult.html" title="Result of a (multivariate) ridge regression with intercept." alt="" coords="480,104,660,145"/>
+<area shape="rect" id="node1" href="$classml_1_1Kernels_1_1Kernel.html" title="Abstract R^D kernel interface." alt="" coords="5,78,149,105"/>
+<area shape="rect" id="node2" href="$classml_1_1Kernels_1_1DifferentiableKernel.html" title="Abstract differentiable R^D kernel interface." alt="" coords="237,5,431,47"/>
+<area shape="rect" id="node5" href="$classml_1_1Kernels_1_1RBFKernel.html" title="Radial basis function kernel." alt="" coords="249,71,419,112"/>
+<area shape="rect" id="node6" href="$classml_1_1Kernels_1_1RBFKernel.html" title=" " alt="" coords="197,136,471,177"/>
+<area shape="rect" id="node3" href="$classml_1_1Kernels_1_1DifferentiableRBFKernel.html" title="Differentiable radial basis function kernel." alt="" coords="541,103,735,144"/>
+<area shape="rect" id="node4" href="$classml_1_1Kernels_1_1DoubleDifferentiableKernel.html" title="Abstract double differentiable R^D kernel interface." alt="" coords="519,5,757,47"/>
 </map>

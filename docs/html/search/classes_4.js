@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kpp_135',['KPP',['../classml_1_1Clustering_1_1KPP.html',1,'ml::Clustering']]]
+  ['forgy_175',['Forgy',['../classml_1_1Clustering_1_1Forgy.html',1,'ml::Clustering']]]
 ];

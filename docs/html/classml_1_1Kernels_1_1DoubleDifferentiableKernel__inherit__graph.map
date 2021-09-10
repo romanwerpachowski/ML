@@ -1,0 +1,5 @@
+<map id="ml::Kernels::DoubleDifferentiableKernel" name="ml::Kernels::DoubleDifferentiableKernel">
+<area shape="rect" id="node1" title="Abstract double differentiable R^D kernel interface." alt="" coords="5,169,244,211"/>
+<area shape="rect" id="node2" href="$classml_1_1Kernels_1_1DifferentiableKernel.html" title="Abstract differentiable R^D kernel interface." alt="" coords="28,80,221,121"/>
+<area shape="rect" id="node3" href="$classml_1_1Kernels_1_1Kernel.html" title="Abstract R^D kernel interface." alt="" coords="53,5,197,32"/>
+</map>
