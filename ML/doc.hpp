@@ -4,7 +4,7 @@
 
 C++ library with efficient implementations of selected machine learning algorithms.
 
-(C) 2020 <a href="mailto:roman.werpachowski@gmail.com">Roman Werpachowski</a>.
+(C) 2020-21 <a href="mailto:roman.werpachowski@gmail.com">Roman Werpachowski</a>.
 
 Project webpage: https://romanwerpachowski.github.io/ML/
 
