@@ -9,7 +9,7 @@ var classml_1_1EM =
     [ "set_responsibilities_initialiser", "classml_1_1EM.html#ae8601fa4215df8e4fd3bc0f4bc294bc5", null ],
     [ "set_verbose", "classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89", null ],
     [ "set_maximise_first", "classml_1_1EM.html#a7c72f938c3a98046c4f6a8b39cfc9610", null ],
-    [ "fit", "classml_1_1EM.html#a1b656a9edae6f7e5a140b37a3742aaf1", null ],
+    [ "fit", "classml_1_1EM.html#a8061b0d675ded50b22ceaa2f2c3f96fa", null ],
     [ "number_components", "classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130", null ],
     [ "number_clusters", "classml_1_1EM.html#a3c7830bad6d500589d66e52c31facc30", null ],
     [ "means", "classml_1_1EM.html#a7ab4b5d790cd3a37b12703c010d2056b", null ],

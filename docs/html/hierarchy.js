@@ -18,6 +18,7 @@ var hierarchy =
       ] ]
     ] ],
     [ "ml::Clustering::Model", "classml_1_1Clustering_1_1Model.html", [
+      [ "ml::Clustering::KMeans", "classml_1_1Clustering_1_1KMeans.html", null ],
       [ "ml::EM", "classml_1_1EM.html", null ]
     ] ],
     [ "ml::DecisionTrees::Node< Y >", "structml_1_1DecisionTrees_1_1Node.html", [

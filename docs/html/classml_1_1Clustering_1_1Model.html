@@ -115,8 +115,9 @@ Inheritance diagram for ml::Clustering::Model:</div>
 <div class="dyncontent">
 <div class="center"><img src="classml_1_1Clustering_1_1Model__inherit__graph.png" border="0" usemap="#ml_1_1Clustering_1_1Model_inherit__map" alt="Inheritance graph"/></div>
 <map name="ml_1_1Clustering_1_1Model_inherit__map" id="ml_1_1Clustering_1_1Model_inherit__map">
-<area shape="rect" title="Abstract clustering model." alt="" coords="5,5,167,32"/>
-<area shape="rect" href="classml_1_1EM.html" title="Gaussian Expectation&#45;Maximisation algorithm." alt="" coords="53,80,119,107"/>
+<area shape="rect" title="Abstract clustering model." alt="" coords="83,5,245,32"/>
+<area shape="rect" href="classml_1_1Clustering_1_1KMeans.html" title="K&#45;means clustering method." alt="" coords="5,80,179,107"/>
+<area shape="rect" href="classml_1_1EM.html" title="Gaussian Expectation&#45;Maximisation algorithm." alt="" coords="203,80,269,107"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -174,8 +175,14 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if fitting converged successfully. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If <code>data</code> has no rows, or if the sample size (number of columns in <code>data</code>) is too low. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implemented in <a class="el" href="classml_1_1EM.html#a1b656a9edae6f7e5a140b37a3742aaf1">ml::EM</a>.</p>
+<p>Implemented in <a class="el" href="classml_1_1EM.html#a8061b0d675ded50b22ceaa2f2c3f96fa">ml::EM</a>, and <a class="el" href="classml_1_1Clustering_1_1KMeans.html#ae264776a0baf426a6ba38836bf1a2279">ml::Clustering::KMeans</a>.</p>
 
 </div>
 </div>
@@ -205,7 +212,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <p>Returns the number of clusters. </p>
 <p>Value make sense only if fitting converged successfully. </p>
 
-<p>Implemented in <a class="el" href="classml_1_1EM.html#a3c7830bad6d500589d66e52c31facc30">ml::EM</a>.</p>
+<p>Implemented in <a class="el" href="classml_1_1EM.html#a3c7830bad6d500589d66e52c31facc30">ml::EM</a>, and <a class="el" href="classml_1_1Clustering_1_1KMeans.html#ad49f5e4542fd7a7ac031e3a08f236d82">ml::Clustering::KMeans</a>.</p>
 
 </div>
 </div>
@@ -235,7 +242,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <p>Returns a const reference to resulting cluster labels for each datapoint. </p>
 <p>Values make sense only if fitting converged successfully. </p>
 
-<p>Implemented in <a class="el" href="classml_1_1EM.html#aba8eb164484a8253e15beb04fae5aee0">ml::EM</a>.</p>
+<p>Implemented in <a class="el" href="classml_1_1EM.html#aba8eb164484a8253e15beb04fae5aee0">ml::EM</a>, and <a class="el" href="classml_1_1Clustering_1_1KMeans.html#ae33a8f30f5846de7ddddd75fbed2edcf">ml::Clustering::KMeans</a>.</p>
 
 </div>
 </div>
@@ -265,7 +272,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <p>Returns a const reference to the matrix of cluster centroids (in columns). </p>
 <p>Values make sense only if fitting converged successfully. </p>
 
-<p>Implemented in <a class="el" href="classml_1_1EM.html#aecd3d79c8aa9a09e546a80d4fdb8d352">ml::EM</a>.</p>
+<p>Implemented in <a class="el" href="classml_1_1EM.html#aecd3d79c8aa9a09e546a80d4fdb8d352">ml::EM</a>, and <a class="el" href="classml_1_1Clustering_1_1KMeans.html#a4461fec5deaeb83b9b8f53146098e3c2">ml::Clustering::KMeans</a>.</p>
 
 </div>
 </div>

@@ -110,6 +110,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 , <a class="el" href="structml_1_1DecisionTrees_1_1Node.html#a0194df585aada7276e94ac0a366a02b9">ml::DecisionTrees::Node&lt; Y &gt;</a>
 , <a class="el" href="structml_1_1DecisionTrees_1_1SplitNode.html#a13286b5d9fd49ad64f44352ae0dea7d4">ml::DecisionTrees::SplitNode&lt; Y &gt;</a>
 </li>
+<li>assign_label()
+: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#a08166e8db38f7e1fa889c20d3ce74b19">ml::Clustering::KMeans</a>
+</li>
 <li>assign_responsibilities()
 : <a class="el" href="classml_1_1EM.html#a18e66d65c816c2ff41aaadb670864ac9">ml::EM</a>
 </li>
@@ -130,7 +133,8 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 
 <h3><a id="index_c"></a>- c -</h3><ul>
 <li>centroids()
-: <a class="el" href="classml_1_1Clustering_1_1Model.html#ac1e8c87185a73e37ddcebdd9fbdab31b">ml::Clustering::Model</a>
+: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#a4461fec5deaeb83b9b8f53146098e3c2">ml::Clustering::KMeans</a>
+, <a class="el" href="classml_1_1Clustering_1_1Model.html#ac1e8c87185a73e37ddcebdd9fbdab31b">ml::Clustering::Model</a>
 , <a class="el" href="classml_1_1EM.html#aecd3d79c8aa9a09e546a80d4fdb8d352">ml::EM</a>
 </li>
 <li>clone()
@@ -187,7 +191,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="classml_1_1BallTree.html#a37cbeebfaae968ba114de062ce40e5b2">ml::BallTree</a>
 </li>
 <li>DecisionTree()
-: <a class="el" href="classml_1_1DecisionTree.html#a615bf3917a495b49e4759e89c6e3d8ec">ml::DecisionTree&lt; Y &gt;</a>
+: <a class="el" href="classml_1_1DecisionTree.html#a2610206ee4567b270a29cd475fcdb06a">ml::DecisionTree&lt; Y &gt;</a>
 </li>
 <li>dim()
 : <a class="el" href="classml_1_1BallTree.html#a46a7f4ad2efafa88cc04475c12986990">ml::BallTree</a>
@@ -224,8 +228,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="classml_1_1BallTree.html#a2788035a8629391c7d4c3248c01c9b06">ml::BallTree</a>
 </li>
 <li>fit()
-: <a class="el" href="classml_1_1Clustering_1_1Model.html#ab8e8b9b25ec2ed472d1fe538f7e744b6">ml::Clustering::Model</a>
-, <a class="el" href="classml_1_1EM.html#a1b656a9edae6f7e5a140b37a3742aaf1">ml::EM</a>
+: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#ae264776a0baf426a6ba38836bf1a2279">ml::Clustering::KMeans</a>
+, <a class="el" href="classml_1_1Clustering_1_1Model.html#ab8e8b9b25ec2ed472d1fe538f7e744b6">ml::Clustering::Model</a>
+, <a class="el" href="classml_1_1EM.html#a8061b0d675ded50b22ceaa2f2c3f96fa">ml::EM</a>
 </li>
 </ul>
 
@@ -247,6 +252,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 
 
 <h3><a id="index_i"></a>- i -</h3><ul>
+<li>inertia()
+: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#ad34b2ddda82bb753f57c89cc5bb45962">ml::Clustering::KMeans</a>
+</li>
 <li>init()
 : <a class="el" href="classml_1_1Clustering_1_1CentroidsInitialiser.html#a0c54f98f7c8875648704a54a1b8fb4e1">ml::Clustering::CentroidsInitialiser</a>
 , <a class="el" href="classml_1_1Clustering_1_1ClosestCentroid.html#ab7874c1e73b323d07cc6b391f354cc19">ml::Clustering::ClosestCentroid</a>
@@ -266,9 +274,17 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 </ul>
 
 
+<h3><a id="index_k"></a>- k -</h3><ul>
+<li>KMeans()
+: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#afc96a5f6b066d781a78d9886f71e5c8d">ml::Clustering::KMeans</a>
+</li>
+</ul>
+
+
 <h3><a id="index_l"></a>- l -</h3><ul>
 <li>labels()
 : <a class="el" href="classml_1_1BallTree.html#a1c716a0ad29719d5bf2f87b3cdf2d722">ml::BallTree</a>
+, <a class="el" href="classml_1_1Clustering_1_1KMeans.html#ae33a8f30f5846de7ddddd75fbed2edcf">ml::Clustering::KMeans</a>
 , <a class="el" href="classml_1_1Clustering_1_1Model.html#ac530cb6d52c5816a0863718a10a1db9a">ml::Clustering::Model</a>
 , <a class="el" href="classml_1_1EM.html#aba8eb164484a8253e15beb04fae5aee0">ml::EM</a>
 </li>
@@ -308,7 +324,8 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 , <a class="el" href="structml_1_1DecisionTrees_1_1Node.html#a3ab7a8cb5e03d13f536e38df30f59302">ml::DecisionTrees::Node&lt; Y &gt;</a>
 </li>
 <li>number_clusters()
-: <a class="el" href="classml_1_1Clustering_1_1Model.html#a5d8308c4ef808c2714dde56401f96cf8">ml::Clustering::Model</a>
+: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#ad49f5e4542fd7a7ac031e3a08f236d82">ml::Clustering::KMeans</a>
+, <a class="el" href="classml_1_1Clustering_1_1Model.html#a5d8308c4ef808c2714dde56401f96cf8">ml::Clustering::Model</a>
 , <a class="el" href="classml_1_1EM.html#a3c7830bad6d500589d66e52c31facc30">ml::EM</a>
 </li>
 <li>number_components()
@@ -358,7 +375,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="classml_1_1Kernels_1_1RBFKernel.html#a134c5f31ea2111ceaa587f4bfc08310a">ml::Kernels::RBFKernel&lt; RBF &gt;</a>
 </li>
 <li>RecursiveMultivariateOLS()
-: <a class="el" href="classml_1_1LinearRegression_1_1RecursiveMultivariateOLS.html#abeef4f383bd42d1c42aa455512f3c471">ml::LinearRegression::RecursiveMultivariateOLS</a>
+: <a class="el" href="classml_1_1LinearRegression_1_1RecursiveMultivariateOLS.html#a2b79607d0a04d046382f41b55e174708">ml::LinearRegression::RecursiveMultivariateOLS</a>
 </li>
 <li>remove_weakest_link()
 : <a class="el" href="classml_1_1DecisionTree.html#a978b18656760bc602a601e00fc78bf2f">ml::DecisionTree&lt; Y &gt;</a>
@@ -378,16 +395,24 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 , <a class="el" href="classml_1_1Kernels_1_1GaussianRBF.html#a3e28b1d3fb2a90bec29b29ea50398477">ml::Kernels::GaussianRBF</a>
 </li>
 <li>set_absolute_tolerance()
-: <a class="el" href="classml_1_1EM.html#aa96ca693fe035199c1a96b294f55d41b">ml::EM</a>
+: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#a18160e61b93c0d36b46418fcc2cd6128">ml::Clustering::KMeans</a>
+, <a class="el" href="classml_1_1EM.html#aa96ca693fe035199c1a96b294f55d41b">ml::EM</a>
+</li>
+<li>set_centroids_initialiser()
+: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#ad1433f70bb158d9aa8dd07289486aa62">ml::Clustering::KMeans</a>
 </li>
 <li>set_maximise_first()
 : <a class="el" href="classml_1_1EM.html#a7c72f938c3a98046c4f6a8b39cfc9610">ml::EM</a>
 </li>
 <li>set_maximum_steps()
-: <a class="el" href="classml_1_1EM.html#a1d1d0bb18430813dc7fb623438b422cd">ml::EM</a>
+: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#abc1ed0e7500277f55ba163c48bd1623a">ml::Clustering::KMeans</a>
+, <a class="el" href="classml_1_1EM.html#a1d1d0bb18430813dc7fb623438b422cd">ml::EM</a>
 </li>
 <li>set_means_initialiser()
 : <a class="el" href="classml_1_1EM.html#a713d5f664a384c91e6f4e8d16e8d8c26">ml::EM</a>
+</li>
+<li>set_number_initialisations()
+: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#ae88d0a2d817f991348b110dd01e1673b">ml::Clustering::KMeans</a>
 </li>
 <li>set_relative_tolerance()
 : <a class="el" href="classml_1_1EM.html#a0e486bd2ab7e9355dd3bbf5eca2faa9a">ml::EM</a>
@@ -396,10 +421,12 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="classml_1_1EM.html#ae8601fa4215df8e4fd3bc0f4bc294bc5">ml::EM</a>
 </li>
 <li>set_seed()
-: <a class="el" href="classml_1_1EM.html#a9d15f4af05825d1a5f15de8c06058dea">ml::EM</a>
+: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#a48842b3da5ace45bc0070cd58446dea8">ml::Clustering::KMeans</a>
+, <a class="el" href="classml_1_1EM.html#a9d15f4af05825d1a5f15de8c06058dea">ml::EM</a>
 </li>
 <li>set_verbose()
-: <a class="el" href="classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89">ml::EM</a>
+: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#aa48c985005b00f75573b957367175ff6">ml::Clustering::KMeans</a>
+, <a class="el" href="classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89">ml::EM</a>
 </li>
 <li>size()
 : <a class="el" href="classml_1_1BallTree.html#af0ac94d365074e5ac01ebc53265967a9">ml::BallTree</a>

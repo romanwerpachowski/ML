@@ -158,9 +158,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7c72f938c3a98046c4f6a8b39cfc9610"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1EM.html#a7c72f938c3a98046c4f6a8b39cfc9610">set_maximise_first</a> (bool maximise_first)</td></tr>
 <tr class="memdesc:a7c72f938c3a98046c4f6a8b39cfc9610"><td class="mdescLeft">&#160;</td><td class="mdescRight">Switches between starting with E or M step first.  <a href="classml_1_1EM.html#a7c72f938c3a98046c4f6a8b39cfc9610">More...</a><br /></td></tr>
 <tr class="separator:a7c72f938c3a98046c4f6a8b39cfc9610"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b656a9edae6f7e5a140b37a3742aaf1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1EM.html#a1b656a9edae6f7e5a140b37a3742aaf1">fit</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; data)</td></tr>
-<tr class="memdesc:a1b656a9edae6f7e5a140b37a3742aaf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fits the model.  <a href="classml_1_1EM.html#a1b656a9edae6f7e5a140b37a3742aaf1">More...</a><br /></td></tr>
-<tr class="separator:a1b656a9edae6f7e5a140b37a3742aaf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8061b0d675ded50b22ceaa2f2c3f96fa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1EM.html#a8061b0d675ded50b22ceaa2f2c3f96fa">fit</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; data) override</td></tr>
+<tr class="memdesc:a8061b0d675ded50b22ceaa2f2c3f96fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fits the model.  <a href="classml_1_1EM.html#a8061b0d675ded50b22ceaa2f2c3f96fa">More...</a><br /></td></tr>
+<tr class="separator:a8061b0d675ded50b22ceaa2f2c3f96fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2e2a5ea28be43d31a3f2bcd7299d130"><td class="memItemLeft" align="right" valign="top"><a id="ac2e2a5ea28be43d31a3f2bcd7299d130"></a>
 auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130">number_components</a> () const</td></tr>
 <tr class="memdesc:ac2e2a5ea28be43d31a3f2bcd7299d130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of components. <br /></td></tr>
@@ -384,7 +384,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <p>Sets means initialiser. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">means_initialiser</td><td>Pointer to MeansInitialiser implementation. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">means_initialiser</td><td>Pointer to <a class="el" href="classml_1_1Clustering_1_1CentroidsInitialiser.html" title="Chooses initial locations of centroids.">Clustering::CentroidsInitialiser</a> implementation. </td></tr>
   </table>
   </dd>
 </dl>
@@ -497,8 +497,8 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 
 </div>
 </div>
-<a id="a1b656a9edae6f7e5a140b37a3742aaf1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b656a9edae6f7e5a140b37a3742aaf1">&#9670;&nbsp;</a></span>fit()</h2>
+<a id="a8061b0d675ded50b22ceaa2f2c3f96fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8061b0d675ded50b22ceaa2f2c3f96fa">&#9670;&nbsp;</a></span>fit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -516,7 +516,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
