@@ -100,7 +100,6 @@ $(document).ready(function(){initNavTree('namespaceml_1_1DecisionTrees.html','')
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">ml::DecisionTrees Namespace Reference</div>  </div>
@@ -122,39 +121,31 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Non-terminal node, which splits data depending on a threshold value of some feature.  <a href="structml_1_1DecisionTrees_1_1SplitNode.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a152de58a801cad591f4dcc096fe9d8c7"><td class="memTemplParams" colspan="2"><a id="a152de58a801cad591f4dcc096fe9d8c7"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a152de58a801cad591f4dcc096fe9d8c7"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#a152de58a801cad591f4dcc096fe9d8c7">VectorRange</a> = std::pair&lt; typename std::vector&lt; T &gt;::iterator, typename std::vector&lt; T &gt;::iterator &gt;</td></tr>
-<tr class="memdesc:a152de58a801cad591f4dcc096fe9d8c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pair of vector iterators. <br /></td></tr>
-<tr class="separator:a152de58a801cad591f4dcc096fe9d8c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a1e01b877cf69e72277d01733af974c25"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="classml_1_1DecisionTree.html">RegressionTree</a>, double, double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#a1e01b877cf69e72277d01733af974c25">regression_tree_auto_prune</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector&lt; double &gt; &amp;alphas, const unsigned int num_folds)</td></tr>
+<tr class="memitem:a1e01b877cf69e72277d01733af974c25"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="namespaceml.html#a7add85fae802c6508a5a5c53144add28">RegressionTree</a>, double, double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#a1e01b877cf69e72277d01733af974c25">regression_tree_auto_prune</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector&lt; double &gt; &amp;alphas, const unsigned int num_folds)</td></tr>
 <tr class="memdesc:a1e01b877cf69e72277d01733af974c25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Grows a regression tree with pruning.  <a href="namespaceml_1_1DecisionTrees.html#a1e01b877cf69e72277d01733af974c25">More...</a><br /></td></tr>
 <tr class="separator:a1e01b877cf69e72277d01733af974c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62e6e08496dbeeea787ff5c147337cf9"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="classml_1_1DecisionTree.html">ClassificationTree</a>, double, double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#a62e6e08496dbeeea787ff5c147337cf9">classification_tree_auto_prune</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector&lt; double &gt; &amp;alphas, const unsigned int num_folds)</td></tr>
+<tr class="memitem:a62e6e08496dbeeea787ff5c147337cf9"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="namespaceml.html#abdac3465de1b7266e0d6f030dd5c146f">ClassificationTree</a>, double, double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#a62e6e08496dbeeea787ff5c147337cf9">classification_tree_auto_prune</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, unsigned int max_split_levels, unsigned int min_sample_size, const std::vector&lt; double &gt; &amp;alphas, const unsigned int num_folds)</td></tr>
 <tr class="memdesc:a62e6e08496dbeeea787ff5c147337cf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Grows a classification tree with pruning.  <a href="namespaceml_1_1DecisionTrees.html#a62e6e08496dbeeea787ff5c147337cf9">More...</a><br /></td></tr>
 <tr class="separator:a62e6e08496dbeeea787ff5c147337cf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ffd5a3fdc83ec6d30c220c4cb6028af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classml_1_1DecisionTree.html">RegressionTree</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#a3ffd5a3fdc83ec6d30c220c4cb6028af">regression_tree</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, unsigned int max_split_levels, unsigned int min_sample_size)</td></tr>
+<tr class="memitem:a3ffd5a3fdc83ec6d30c220c4cb6028af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceml.html#a7add85fae802c6508a5a5c53144add28">RegressionTree</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#a3ffd5a3fdc83ec6d30c220c4cb6028af">regression_tree</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, unsigned int max_split_levels, unsigned int min_sample_size)</td></tr>
 <tr class="memdesc:a3ffd5a3fdc83ec6d30c220c4cb6028af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Grows a regression tree without pruning.  <a href="namespaceml_1_1DecisionTrees.html#a3ffd5a3fdc83ec6d30c220c4cb6028af">More...</a><br /></td></tr>
 <tr class="separator:a3ffd5a3fdc83ec6d30c220c4cb6028af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a601b69b50358eee24266b790f51bff0a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classml_1_1DecisionTree.html">ClassificationTree</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#a601b69b50358eee24266b790f51bff0a">classification_tree</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, unsigned int max_split_levels, unsigned int min_sample_size)</td></tr>
+<tr class="memitem:a601b69b50358eee24266b790f51bff0a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceml.html#abdac3465de1b7266e0d6f030dd5c146f">ClassificationTree</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#a601b69b50358eee24266b790f51bff0a">classification_tree</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, unsigned int max_split_levels, unsigned int min_sample_size)</td></tr>
 <tr class="memdesc:a601b69b50358eee24266b790f51bff0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Grows a classification tree without pruning.  <a href="namespaceml_1_1DecisionTrees.html#a601b69b50358eee24266b790f51bff0a">More...</a><br /></td></tr>
 <tr class="separator:a601b69b50358eee24266b790f51bff0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa37bf7c3a167880e3318296d7a657ed8"><td class="memTemplParams" colspan="2">template&lt;typename Y &gt; </td></tr>
 <tr class="memitem:aa37bf7c3a167880e3318296d7a657ed8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#aa37bf7c3a167880e3318296d7a657ed8">cost_complexity_prune</a> (<a class="el" href="classml_1_1DecisionTree.html">DecisionTree</a>&lt; Y &gt; &amp;tree, const double alpha)</td></tr>
 <tr class="memdesc:aa37bf7c3a167880e3318296d7a657ed8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs cost-complexity pruning in-place.  <a href="namespaceml_1_1DecisionTrees.html#aa37bf7c3a167880e3318296d7a657ed8">More...</a><br /></td></tr>
 <tr class="separator:aa37bf7c3a167880e3318296d7a657ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7ddc796c2839b1817c325829af14ee4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#ac7ddc796c2839b1817c325829af14ee4">regression_tree_mean_squared_error</a> (const <a class="el" href="classml_1_1DecisionTree.html">RegressionTree</a> &amp;tree, Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)</td></tr>
+<tr class="memitem:ac7ddc796c2839b1817c325829af14ee4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#ac7ddc796c2839b1817c325829af14ee4">regression_tree_mean_squared_error</a> (const <a class="el" href="namespaceml.html#a7add85fae802c6508a5a5c53144add28">RegressionTree</a> &amp;tree, Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)</td></tr>
 <tr class="memdesc:ac7ddc796c2839b1817c325829af14ee4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates tree mean squared error (MSE) for a sample.  <a href="namespaceml_1_1DecisionTrees.html#ac7ddc796c2839b1817c325829af14ee4">More...</a><br /></td></tr>
 <tr class="separator:ac7ddc796c2839b1817c325829af14ee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae4aed3d6aa0665b21ee576472ee1be7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#aae4aed3d6aa0665b21ee576472ee1be7">classification_tree_accuracy</a> (const <a class="el" href="classml_1_1DecisionTree.html">ClassificationTree</a> &amp;tree, Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)</td></tr>
+<tr class="memitem:aae4aed3d6aa0665b21ee576472ee1be7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#aae4aed3d6aa0665b21ee576472ee1be7">classification_tree_accuracy</a> (const <a class="el" href="namespaceml.html#abdac3465de1b7266e0d6f030dd5c146f">ClassificationTree</a> &amp;tree, Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)</td></tr>
 <tr class="memdesc:aae4aed3d6aa0665b21ee576472ee1be7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates tree accuracy for a sample.  <a href="namespaceml_1_1DecisionTrees.html#aae4aed3d6aa0665b21ee576472ee1be7">More...</a><br /></td></tr>
 <tr class="separator:aae4aed3d6aa0665b21ee576472ee1be7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2706d40fb97ff31c8f16502a3651a7e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#af2706d40fb97ff31c8f16502a3651a7e">classification_tree_misclassification_rate</a> (const <a class="el" href="classml_1_1DecisionTree.html">ClassificationTree</a> &amp;tree, Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)</td></tr>
+<tr class="memitem:af2706d40fb97ff31c8f16502a3651a7e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceml_1_1DecisionTrees.html#af2706d40fb97ff31c8f16502a3651a7e">classification_tree_misclassification_rate</a> (const <a class="el" href="namespaceml.html#abdac3465de1b7266e0d6f030dd5c146f">ClassificationTree</a> &amp;tree, Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y)</td></tr>
 <tr class="memdesc:af2706d40fb97ff31c8f16502a3651a7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates tree misclassification rate for a sample.  <a href="namespaceml_1_1DecisionTrees.html#af2706d40fb97ff31c8f16502a3651a7e">More...</a><br /></td></tr>
 <tr class="separator:af2706d40fb97ff31c8f16502a3651a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -169,7 +160,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::tuple&lt;<a class="el" href="classml_1_1DecisionTree.html">RegressionTree</a>, double, double&gt; ml::DecisionTrees::regression_tree_auto_prune </td>
+          <td class="memname">std::tuple&lt;<a class="el" href="namespaceml.html#a7add85fae802c6508a5a5c53144add28">RegressionTree</a>, double, double&gt; ml::DecisionTrees::regression_tree_auto_prune </td>
           <td>(</td>
           <td class="paramtype">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td>
           <td class="paramname"><em>X</em>, </td>
@@ -241,7 +232,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::tuple&lt;<a class="el" href="classml_1_1DecisionTree.html">ClassificationTree</a>, double, double&gt; ml::DecisionTrees::classification_tree_auto_prune </td>
+          <td class="memname">std::tuple&lt;<a class="el" href="namespaceml.html#abdac3465de1b7266e0d6f030dd5c146f">ClassificationTree</a>, double, double&gt; ml::DecisionTrees::classification_tree_auto_prune </td>
           <td>(</td>
           <td class="paramtype">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td>
           <td class="paramname"><em>X</em>, </td>
@@ -287,7 +278,7 @@ Functions</h2></td></tr>
 <p>Grows a classification tree with pruning. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>Features (column-wise). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td><a class="el" href="namespaceml_1_1Features.html" title="Utilities and types for working with features.">Features</a> (column-wise). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Class indices. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">max_split_levels</td><td>Maximum number of split nodes on the way to any leaf node. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">min_sample_size</td><td>Minimum sample size which can be split (at least 2). </td></tr>
@@ -313,7 +304,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classml_1_1DecisionTree.html">RegressionTree</a> ml::DecisionTrees::regression_tree </td>
+          <td class="memname"><a class="el" href="namespaceml.html#a7add85fae802c6508a5a5c53144add28">RegressionTree</a> ml::DecisionTrees::regression_tree </td>
           <td>(</td>
           <td class="paramtype">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td>
           <td class="paramname"><em>X</em>, </td>
@@ -371,7 +362,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classml_1_1DecisionTree.html">ClassificationTree</a> ml::DecisionTrees::classification_tree </td>
+          <td class="memname"><a class="el" href="namespaceml.html#abdac3465de1b7266e0d6f030dd5c146f">ClassificationTree</a> ml::DecisionTrees::classification_tree </td>
           <td>(</td>
           <td class="paramtype">Eigen::Ref&lt; const Eigen::MatrixXd &gt;&#160;</td>
           <td class="paramname"><em>X</em>, </td>
@@ -482,7 +473,7 @@ template&lt;typename Y &gt; </div>
         <tr>
           <td class="memname">double ml::DecisionTrees::regression_tree_mean_squared_error </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classml_1_1DecisionTree.html">RegressionTree</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceml.html#a7add85fae802c6508a5a5c53144add28">RegressionTree</a> &amp;&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
         </tr>
         <tr>
@@ -534,7 +525,7 @@ template&lt;typename Y &gt; </div>
         <tr>
           <td class="memname">double ml::DecisionTrees::classification_tree_accuracy </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classml_1_1DecisionTree.html">ClassificationTree</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceml.html#abdac3465de1b7266e0d6f030dd5c146f">ClassificationTree</a> &amp;&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
         </tr>
         <tr>
@@ -588,7 +579,7 @@ template&lt;typename Y &gt; </div>
         <tr>
           <td class="memname">double ml::DecisionTrees::classification_tree_misclassification_rate </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classml_1_1DecisionTree.html">ClassificationTree</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceml.html#abdac3465de1b7266e0d6f030dd5c146f">ClassificationTree</a> &amp;&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
         </tr>
         <tr>
@@ -640,7 +631,7 @@ template&lt;typename Y &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>ml</b></li><li class="navelem"><a class="el" href="namespaceml_1_1DecisionTrees.html">DecisionTrees</a></li>
+    <li class="navelem"><a class="el" href="namespaceml.html">ml</a></li><li class="navelem"><a class="el" href="namespaceml_1_1DecisionTrees.html">DecisionTrees</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>

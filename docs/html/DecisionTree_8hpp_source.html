@@ -102,8 +102,8 @@ $(document).ready(function(){initNavTree('DecisionTree_8hpp_source.html',''); in
 <div class="title">DecisionTree.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* (C) 2020 Roman Werpachowski. */</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">/* (C) 2020 Roman Werpachowski. */</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;cassert&gt;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
@@ -113,7 +113,7 @@ $(document).ready(function(){initNavTree('DecisionTree_8hpp_source.html',''); in
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;Eigen/Core&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;DecisionTreeNodes.hpp&quot;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span>ml</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceml.html">ml</a></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{</div>
 <div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classml_1_1DecisionTree.html">   20</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Y&gt; <span class="keyword">class </span><a class="code" href="classml_1_1DecisionTree.html">DecisionTree</a></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    {</div>
@@ -270,6 +270,7 @@ $(document).ready(function(){initNavTree('DecisionTree_8hpp_source.html',''); in
 <div class="ttc" id="aclassml_1_1DecisionTree_html_a7066a838fadcc6700f7ab2fc3d1023e7"><div class="ttname"><a href="classml_1_1DecisionTree.html#a7066a838fadcc6700f7ab2fc3d1023e7">ml::DecisionTree::DecisionTree</a></div><div class="ttdeci">DecisionTree(DecisionTree&lt; Y &gt; &amp;&amp;other) noexcept</div><div class="ttdoc">Move constructor.</div><div class="ttdef"><b>Definition:</b> DecisionTree.hpp:50</div></div>
 <div class="ttc" id="astructml_1_1DecisionTrees_1_1SplitNode_html"><div class="ttname"><a href="structml_1_1DecisionTrees_1_1SplitNode.html">ml::DecisionTrees::SplitNode</a></div><div class="ttdoc">Non-terminal node, which splits data depending on a threshold value of some feature.</div><div class="ttdef"><b>Definition:</b> DecisionTreeNodes.hpp:13</div></div>
 <div class="ttc" id="aclassml_1_1DecisionTree_html_a382939c2c1df43725cfe67d93f645764"><div class="ttname"><a href="classml_1_1DecisionTree.html#a382939c2c1df43725cfe67d93f645764">ml::DecisionTree::value_type</a></div><div class="ttdeci">Y value_type</div><div class="ttdef"><b>Definition:</b> DecisionTree.hpp:24</div></div>
+<div class="ttc" id="anamespaceml_html"><div class="ttname"><a href="namespaceml.html">ml</a></div><div class="ttdef"><b>Definition:</b> BallTree.hpp:9</div></div>
 <div class="ttc" id="aclassml_1_1DecisionTree_html_a88b8396085012cb1d3dba4979399a244"><div class="ttname"><a href="classml_1_1DecisionTree.html#a88b8396085012cb1d3dba4979399a244">ml::DecisionTree::LeafNode</a></div><div class="ttdeci">DecisionTrees::LeafNode&lt; Y &gt; LeafNode</div><div class="ttdef"><b>Definition:</b> DecisionTree.hpp:27</div></div>
 <div class="ttc" id="aclassml_1_1DecisionTree_html_a2610206ee4567b270a29cd475fcdb06a"><div class="ttname"><a href="classml_1_1DecisionTree.html#a2610206ee4567b270a29cd475fcdb06a">ml::DecisionTree::DecisionTree</a></div><div class="ttdeci">DecisionTree(std::unique_ptr&lt; Node &gt; &amp;&amp;root)</div><div class="ttdoc">Constructs a decision tree by taking ownership of a root node.</div><div class="ttdef"><b>Definition:</b> DecisionTree.hpp:34</div></div>
 <div class="ttc" id="aclassml_1_1DecisionTree_html_a978b18656760bc602a601e00fc78bf2f"><div class="ttname"><a href="classml_1_1DecisionTree.html#a978b18656760bc602a601e00fc78bf2f">ml::DecisionTree::remove_weakest_link</a></div><div class="ttdeci">bool remove_weakest_link(const double max_allowed_error_increase)</div><div class="ttdoc">Finds the weakest link and removes it, if the error does not increase too much.</div><div class="ttdef"><b>Definition:</b> DecisionTree.hpp:146</div></div>

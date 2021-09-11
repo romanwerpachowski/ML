@@ -1,0 +1,6 @@
+<map id="ml::Kernels::DifferentiableRBFKernel&lt; DiffRBF &gt;" name="ml::Kernels::DifferentiableRBFKernel&lt; DiffRBF &gt;">
+<area shape="rect" id="node1" title="Differentiable radial basis function kernel." alt="" coords="519,39,712,80"/>
+<area shape="rect" id="node2" href="$classml_1_1Kernels_1_1DifferentiableKernel.html" title="Abstract differentiable R^D kernel interface." alt="" coords="237,5,431,47"/>
+<area shape="rect" id="node3" href="$classml_1_1Kernels_1_1Kernel.html" title="Abstract R^D kernel interface." alt="" coords="5,46,149,73"/>
+<area shape="rect" id="node4" href="$classml_1_1Kernels_1_1RBFKernel.html" title=" " alt="" coords="197,71,471,112"/>
+</map>

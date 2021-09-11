@@ -2,7 +2,7 @@
 
 Efficient C++ implementations of some ML algorithms with Python bindings.
 
-(C) 2020 Roman Werpachowski.
+(C) 2020-21 Roman Werpachowski.
 
 ## Licence
 

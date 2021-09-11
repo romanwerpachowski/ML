@@ -1,0 +1,14 @@
+name: ML++
+on: [push]
+jobs:
+  Continuous-Integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: ./scripts/ci_dependencies.sh
+      - name: Debug build
+        run: ./scripts/ci_debug_build.sh
+      - name: Release build
+        run: ./scripts/ci_release_build.sh

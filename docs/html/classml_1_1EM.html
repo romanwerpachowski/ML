@@ -110,6 +110,24 @@ $(document).ready(function(){initNavTree('classml_1_1EM.html',''); initResizable
  <a href="classml_1_1EM.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="EM_8hpp_source.html">EM.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for ml::EM:</div>
+<div class="dyncontent">
+<div class="center"><img src="classml_1_1EM__inherit__graph.png" border="0" usemap="#ml_1_1EM_inherit__map" alt="Inheritance graph"/></div>
+<map name="ml_1_1EM_inherit__map" id="ml_1_1EM_inherit__map">
+<area shape="rect" title="Gaussian Expectation&#45;Maximisation algorithm." alt="" coords="53,80,119,107"/>
+<area shape="rect" href="classml_1_1Clustering_1_1Model.html" title="Abstract clustering model." alt="" coords="5,5,167,32"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for ml::EM:</div>
+<div class="dyncontent">
+<div class="center"><img src="classml_1_1EM__coll__graph.png" border="0" usemap="#ml_1_1EM_coll__map" alt="Collaboration graph"/></div>
+<map name="ml_1_1EM_coll__map" id="ml_1_1EM_coll__map">
+<area shape="rect" title="Gaussian Expectation&#45;Maximisation algorithm." alt="" coords="53,80,119,107"/>
+<area shape="rect" href="classml_1_1Clustering_1_1Model.html" title="Abstract clustering model." alt="" coords="5,5,167,32"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -147,9 +165,15 @@ Public Member Functions</h2></td></tr>
 auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130">number_components</a> () const</td></tr>
 <tr class="memdesc:ac2e2a5ea28be43d31a3f2bcd7299d130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of components. <br /></td></tr>
 <tr class="separator:ac2e2a5ea28be43d31a3f2bcd7299d130"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c7830bad6d500589d66e52c31facc30"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1EM.html#a3c7830bad6d500589d66e52c31facc30">number_clusters</a> () const override</td></tr>
+<tr class="memdesc:a3c7830bad6d500589d66e52c31facc30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of clusters.  <a href="classml_1_1EM.html#a3c7830bad6d500589d66e52c31facc30">More...</a><br /></td></tr>
+<tr class="separator:a3c7830bad6d500589d66e52c31facc30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ab4b5d790cd3a37b12703c010d2056b"><td class="memItemLeft" align="right" valign="top">const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1EM.html#a7ab4b5d790cd3a37b12703c010d2056b">means</a> () const</td></tr>
 <tr class="memdesc:a7ab4b5d790cd3a37b12703c010d2056b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a const reference to matrix containing fitted component means.  <a href="classml_1_1EM.html#a7ab4b5d790cd3a37b12703c010d2056b">More...</a><br /></td></tr>
 <tr class="separator:a7ab4b5d790cd3a37b12703c010d2056b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecd3d79c8aa9a09e546a80d4fdb8d352"><td class="memItemLeft" align="right" valign="top">const Eigen::MatrixXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1EM.html#aecd3d79c8aa9a09e546a80d4fdb8d352">centroids</a> () const override</td></tr>
+<tr class="memdesc:aecd3d79c8aa9a09e546a80d4fdb8d352"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a const reference to the matrix of cluster centroids (in columns).  <a href="classml_1_1EM.html#aecd3d79c8aa9a09e546a80d4fdb8d352">More...</a><br /></td></tr>
+<tr class="separator:aecd3d79c8aa9a09e546a80d4fdb8d352"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ccbd858960d5cb454ac393c1ab8d461"><td class="memItemLeft" align="right" valign="top">const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1EM.html#a1ccbd858960d5cb454ac393c1ab8d461">covariances</a> () const</td></tr>
 <tr class="memdesc:a1ccbd858960d5cb454ac393c1ab8d461"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a const reference to fitted component covariance matrices.  <a href="classml_1_1EM.html#a1ccbd858960d5cb454ac393c1ab8d461">More...</a><br /></td></tr>
 <tr class="separator:a1ccbd858960d5cb454ac393c1ab8d461"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -173,6 +197,14 @@ std::shared_ptr&lt; const <a class="el" href="classml_1_1Clustering_1_1Centroids
 <tr class="memitem:a18e66d65c816c2ff41aaadb670864ac9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1EM.html#a18e66d65c816c2ff41aaadb670864ac9">assign_responsibilities</a> (Eigen::Ref&lt; const Eigen::VectorXd &gt; x, Eigen::Ref&lt; Eigen::VectorXd &gt; u) const</td></tr>
 <tr class="memdesc:a18e66d65c816c2ff41aaadb670864ac9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a data point x, calculate each component's responsibilities for x and save them in u.  <a href="classml_1_1EM.html#a18e66d65c816c2ff41aaadb670864ac9">More...</a><br /></td></tr>
 <tr class="separator:a18e66d65c816c2ff41aaadb670864ac9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba8eb164484a8253e15beb04fae5aee0"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; unsigned int &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1EM.html#aba8eb164484a8253e15beb04fae5aee0">labels</a> () const override</td></tr>
+<tr class="memdesc:aba8eb164484a8253e15beb04fae5aee0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a const reference to resulting cluster labels for each datapoint.  <a href="classml_1_1EM.html#aba8eb164484a8253e15beb04fae5aee0">More...</a><br /></td></tr>
+<tr class="separator:aba8eb164484a8253e15beb04fae5aee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classml_1_1Clustering_1_1Model"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classml_1_1Clustering_1_1Model')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classml_1_1Clustering_1_1Model.html">ml::Clustering::Model</a></td></tr>
+<tr class="memitem:a32dcdd805920717c763f8198ec3a5e1b inherit pub_methods_classml_1_1Clustering_1_1Model"><td class="memItemLeft" align="right" valign="top"><a id="a32dcdd805920717c763f8198ec3a5e1b"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1Clustering_1_1Model.html#a32dcdd805920717c763f8198ec3a5e1b">~Model</a> ()</td></tr>
+<tr class="memdesc:a32dcdd805920717c763f8198ec3a5e1b inherit pub_methods_classml_1_1Clustering_1_1Model"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor. <br /></td></tr>
+<tr class="separator:a32dcdd805920717c763f8198ec3a5e1b inherit pub_methods_classml_1_1Clustering_1_1Model"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Gaussian Expectation-Maximisation algorithm. </p>
@@ -470,6 +502,9 @@ std::shared_ptr&lt; const <a class="el" href="classml_1_1Clustering_1_1Centroids
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool ml::EM::fit </td>
@@ -479,6 +514,11 @@ std::shared_ptr&lt; const <a class="el" href="classml_1_1Clustering_1_1Centroids
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Fits the model. </p>
@@ -489,6 +529,38 @@ std::shared_ptr&lt; const <a class="el" href="classml_1_1Clustering_1_1Centroids
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if fitting converged successfully. </dd></dl>
+
+<p>Implements <a class="el" href="classml_1_1Clustering_1_1Model.html#ab8e8b9b25ec2ed472d1fe538f7e744b6">ml::Clustering::Model</a>.</p>
+
+</div>
+</div>
+<a id="a3c7830bad6d500589d66e52c31facc30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c7830bad6d500589d66e52c31facc30">&#9670;&nbsp;</a></span>number_clusters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int ml::EM::number_clusters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of clusters. </p>
+<p>Value make sense only if fitting converged successfully. </p>
+
+<p>Implements <a class="el" href="classml_1_1Clustering_1_1Model.html#a5d8308c4ef808c2714dde56401f96cf8">ml::Clustering::Model</a>.</p>
 
 </div>
 </div>
@@ -517,6 +589,36 @@ std::shared_ptr&lt; const <a class="el" href="classml_1_1Clustering_1_1Centroids
 
 <p>Returns a const reference to matrix containing fitted component means. </p>
 <dl class="section return"><dt>Returns</dt><dd>Const reference to <code>number_dimensions</code> x <a class="el" href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130" title="Returns the number of components.">number_components()</a> matrix. </dd></dl>
+
+</div>
+</div>
+<a id="aecd3d79c8aa9a09e546a80d4fdb8d352"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecd3d79c8aa9a09e546a80d4fdb8d352">&#9670;&nbsp;</a></span>centroids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const Eigen::MatrixXd&amp; ml::EM::centroids </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a const reference to the matrix of cluster centroids (in columns). </p>
+<p>Values make sense only if fitting converged successfully. </p>
+
+<p>Implements <a class="el" href="classml_1_1Clustering_1_1Model.html#ac1e8c87185a73e37ddcebdd9fbdab31b">ml::Clustering::Model</a>.</p>
 
 </div>
 </div>
@@ -668,6 +770,36 @@ std::shared_ptr&lt; const <a class="el" href="classml_1_1Clustering_1_1Centroids
 
 </div>
 </div>
+<a id="aba8eb164484a8253e15beb04fae5aee0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba8eb164484a8253e15beb04fae5aee0">&#9670;&nbsp;</a></span>labels()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt;unsigned int&gt;&amp; ml::EM::labels </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a const reference to resulting cluster labels for each datapoint. </p>
+<p>Values make sense only if fitting converged successfully. </p>
+
+<p>Implements <a class="el" href="classml_1_1Clustering_1_1Model.html#ac530cb6d52c5816a0863718a10a1db9a">ml::Clustering::Model</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>ML/<a class="el" href="EM_8hpp_source.html">EM.hpp</a></li>
 </ul>
@@ -676,7 +808,7 @@ std::shared_ptr&lt; const <a class="el" href="classml_1_1Clustering_1_1Centroids
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>ml</b></li><li class="navelem"><a class="el" href="classml_1_1EM.html">EM</a></li>
+    <li class="navelem"><a class="el" href="namespaceml.html">ml</a></li><li class="navelem"><a class="el" href="classml_1_1EM.html">EM</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>

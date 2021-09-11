@@ -2,6 +2,7 @@
 set -ev
 
 #*** Debug build ***
+export TERM="xterm"
 scons -j 2
 
 #*** C++ unit tests ***

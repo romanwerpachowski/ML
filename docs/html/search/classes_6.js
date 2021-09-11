@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['multivariateolsresult_138',['MultivariateOLSResult',['../structml_1_1LinearRegression_1_1MultivariateOLSResult.html',1,'ml::LinearRegression']]]
+  ['kernel_177',['Kernel',['../classml_1_1Kernels_1_1Kernel.html',1,'ml::Kernels']]],
+  ['kpp_178',['KPP',['../classml_1_1Clustering_1_1KPP.html',1,'ml::Clustering']]]
 ];

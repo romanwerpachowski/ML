@@ -291,7 +291,7 @@ namespace ml
 			const auto row = responsibilities_.row(i);
 			for (Eigen::Index k = 0; k < responsibilities_.cols(); ++k) {
 				if (responsibilities_(i, k) > max_responsibility) {
-					max_responsibility = responsibilities_(i, k);
+					max_responsibility = row[k];
 					label = k;
 				}
 			}
