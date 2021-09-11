@@ -46,6 +46,7 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsIn
 	em.set_seed(seed);
 	ASSERT_TRUE(em.fit(data)) << "EM::fit did not converge";
 	ASSERT_EQ(num_components, static_cast<unsigned int>(em.mixing_probabilities().size()));
+	ASSERT_EQ(sample_size, static_cast<unsigned int>(em.labels().size()));
 	ASSERT_EQ(num_components, static_cast<unsigned int>(em.means().cols()));
 	ASSERT_EQ(num_dimensions, static_cast<unsigned int>(em.means().rows()));
 	ASSERT_EQ(sample_size, static_cast<unsigned int>(em.responsibilities().rows()));
@@ -75,7 +76,7 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsIn
 	if ((em.mixing_probabilities()[0] < em.mixing_probabilities()[1]) != first_p_lower) {
 		std::swap(mixing_probabilities[0], mixing_probabilities[1]);
 		means.col(0).swap(means.col(1));
-		std::swap(covariances[0], covariances[1]);
+		std::swap(covariances[0], covariances[1]);		
 	}
 	ASSERT_NEAR(0., (mixing_probabilities - em.mixing_probabilities()).norm(), 2e-2) << em.mixing_probabilities();
 	ASSERT_NEAR(0., (means - em.means()).norm(), 2e-2) << em.means();
@@ -96,6 +97,7 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsIn
 	for (unsigned int i = 0; i < sample_size; ++i) {
 		em1.assign_responsibilities(data.col(i), u);
 		ASSERT_NEAR(0, (u - em1.responsibilities().row(i).transpose()).norm(), 1e-15) << i;
+		ASSERT_EQ(0u, em1.labels()[i]) << i;
 	}
 }
 

@@ -8,7 +8,12 @@ namespace ml
     namespace Clustering
     {
 		KMeans::KMeans(unsigned int number_clusters)
-			: work_vector_(number_clusters), num_clusters_(number_clusters)
+			: work_vector_(number_clusters)
+			, centroids_initialiser_(std::make_shared<Clustering::Forgy>())
+			, absolute_tolerance_(1e-8)
+			, maximum_steps_(1000)
+			, num_clusters_(number_clusters)
+			, verbose_(false)
 		{
 			if (!number_clusters) {
 				throw std::invalid_argument("KMeans: number of clusters cannot be zero");
@@ -106,23 +111,27 @@ namespace ml
 			centroids_initialiser_ = centroids_initialiser;
 		}
 
+		unsigned int KMeans::assign_label(const Eigen::Ref<const Eigen::VectorXd> x) const
+		{
+			double min_squared_distance = std::numeric_limits<double>::infinity();
+			unsigned int label = 0;
+			for (unsigned int k = 0; k < num_clusters_; ++k) {
+				const auto squared_distance = (x - centroids_.col(k)).squaredNorm();
+				if (squared_distance < min_squared_distance) {
+					min_squared_distance = squared_distance;
+					label = k;
+				}
+			}
+			return label;
+		}
+
 		void KMeans::assignment_step(Eigen::Ref<const Eigen::MatrixXd> data)
 		{
 			const auto sample_size = data.cols();
 			assert(labels_.size() == static_cast<size_t>(sample_size));
 			old_labels_.swap(labels_); // Save previoous labels.
 			for (Eigen::Index i = 0; i < sample_size; ++i) {
-				double min_squared_distance = std::numeric_limits<double>::infinity();
-				unsigned int label = 0;
-				const auto point = data.col(i);
-				for (unsigned int k = 0; k < num_clusters_; ++k) {
-					const auto squared_distance = (point - centroids_.col(k)).squaredNorm();
-					if (squared_distance < min_squared_distance) {
-						min_squared_distance = squared_distance;
-						label = k;
-					}
-				}
-				labels_[i] = label;
+				labels_[i] = assign_label(data.col(i));
 			}
 		}
 
@@ -135,8 +144,8 @@ namespace ml
 			// Update centroids.
 			for (Eigen::Index i = 0; i < sample_size; ++i) {
 				const unsigned int label = labels_[i];
-				work_vector_[i] += 1.;
-				centroids_.col(label) += (data.col(i) - centroids_.col(label)) / work_vector_[i];
+				const double num = (++work_vector_[label]);
+				centroids_.col(label) += (data.col(i) - centroids_.col(label)) / num;
 			}
 		}
     }

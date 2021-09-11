@@ -70,6 +70,13 @@ namespace ml
             {
                 verbose_ = verbose;
             }
+
+            /** @brief Given a data point x, assign it to its cluster and return the correct label.
+
+            @param[in] x Data point with correct dimension.
+            @throw std::invalid_argument If `x.size() != means().rows()`.
+            */
+            DLL_DECLSPEC unsigned int assign_label(Eigen::Ref<const Eigen::VectorXd> x) const;
         private:
             std::vector<unsigned int> labels_;
             std::vector<unsigned int> old_labels_;
