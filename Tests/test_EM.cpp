@@ -118,3 +118,23 @@ TEST(EMTest, two_gaussians_closest_mean)
 {
 	test_two_gaussians(nullptr, true);
 }
+
+TEST(EMTest, deterministic)
+{
+	const unsigned int num_components = 2;
+	const unsigned int num_dimensions = 3;
+
+	Eigen::MatrixXd data(num_dimensions, num_components);
+	data << -1, 0,
+		1, 0.5,
+		0.5, 0.5;
+
+	ml::EM em(num_components);
+
+	ASSERT_TRUE(em.fit(data));
+
+	for (unsigned int i = 0; i < num_components; ++i) {
+		ASSERT_EQ(i, em.labels()[i]) << i;
+		ASSERT_EQ(0, (em.means().col(i) - data.col(i)).norm()) << i;
+	}
+}

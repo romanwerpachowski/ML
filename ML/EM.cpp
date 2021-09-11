@@ -111,6 +111,7 @@ namespace ml
 				means_.col(i) = data.col(i);
 				covariances_[i].setZero(number_dimensions, number_dimensions);
 				log_likelihood_ = std::numeric_limits<double>::infinity();
+				labels_[i] = i;
 			}
 			return true;
 		}

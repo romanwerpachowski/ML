@@ -17,9 +17,11 @@ namespace ml
         public:
             /** @brief Constructs a K-means model ready to fit.
             @param[in] number_clusters Number of clusters.
-            @throw If `number_clusters == 0`.
+            @throw std::invalid_argument If `number_clusters == 0`.
             */
             DLL_DECLSPEC KMeans(unsigned int number_clusters);
+
+            DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data) override;
 
             unsigned int number_clusters() const override
             {

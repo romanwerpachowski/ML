@@ -6,6 +6,41 @@ namespace ml
 {
     namespace Clustering
     {
+		KMeans::KMeans(unsigned int number_clusters)
+			: num_clusters_(number_clusters)
+		{
+			if (!number_clusters) {
+				throw std::invalid_argument("KMeans: number of clusters cannot be zero");
+			}
+		}
+
+		bool KMeans::fit(Eigen::Ref<const Eigen::MatrixXd> data)
+		{
+			const auto number_dimensions = static_cast<unsigned int>(data.rows());
+			const auto sample_size = static_cast<unsigned int>(data.cols());
+			if (!number_dimensions) {
+				throw std::invalid_argument("KMeans: At least one dimension required");
+			}
+			if (sample_size < num_clusters_) {
+				throw std::invalid_argument("KMeans: Not enough data ");
+			}
+
+			centroids_.resize(number_dimensions, num_clusters_);
+			labels_.resize(sample_size);
+
+			if (sample_size == num_clusters_) {
+				// An exact deterministic fit is possible.
+				// Center each cluster on a different sample point.
+				for (unsigned int i = 0; i < sample_size; ++i) {
+					centroids_.col(i) = data.col(i);
+					labels_[i] = i;
+				}
+				return true;
+			}
+
+			return false;
+		}
+
         void KMeans::set_seed(unsigned int seed)
         {
             prng_.seed(seed);
