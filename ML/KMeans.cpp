@@ -12,6 +12,7 @@ namespace ml
 			, centroids_initialiser_(std::make_shared<Clustering::Forgy>())
 			, absolute_tolerance_(1e-8)
 			, maximum_steps_(1000)
+			, num_inits_(1)
 			, num_clusters_(number_clusters)
 			, verbose_(false)
 		{
@@ -21,6 +22,31 @@ namespace ml
 		}
 
 		bool KMeans::fit(Eigen::Ref<const Eigen::MatrixXd> data)
+		{
+			if (num_inits_ == 1) {
+				return fit_once(data);
+			} else {
+				double min_inertia = std::numeric_limits<double>::infinity();
+				Eigen::MatrixXd best_centroids;
+				bool converged = false;
+				for (unsigned int i = 0; i < num_inits_; ++i) {
+					if (fit_once(data)) {
+						if (inertia_ < min_inertia) {
+							min_inertia = inertia_;
+							best_centroids = centroids_;
+						}
+						converged = true;
+					}
+				}
+				if (converged) {
+					centroids_ = best_centroids;
+					assignment_step(data);
+				}
+				return converged;
+			}
+		}
+
+		bool KMeans::fit_once(Eigen::Ref<const Eigen::MatrixXd> data)
 		{
 			const auto number_dimensions = static_cast<unsigned int>(data.rows());
 			const auto sample_size = static_cast<unsigned int>(data.cols());
@@ -102,6 +128,14 @@ namespace ml
 				throw std::invalid_argument("KMeans: At least two steps required for convergence test");
 			}
 			maximum_steps_ = maximum_steps;
+		}
+
+		void KMeans::set_number_initialisations(unsigned int number_initialisations)
+		{
+			if (number_initialisations < 1) {
+				throw std::invalid_argument("KMeans: At least 1 initialisation required");
+			}
+			num_inits_ = number_initialisations;
 		}
 
 		void KMeans::set_centroids_initialiser(std::shared_ptr<const Clustering::CentroidsInitialiser> centroids_initialiser)

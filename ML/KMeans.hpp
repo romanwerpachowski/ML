@@ -54,9 +54,16 @@ namespace ml
 
             /** @brief Sets maximum number of K-means steps.
             @param[in] maximum_steps Maximum number of steps.
-            @throw std::invalid_argument If `maximum_steps < 1`.
+            @throw std::invalid_argument If `maximum_steps < 2`.
             */
             DLL_DECLSPEC void set_maximum_steps(unsigned int maximum_steps);
+
+            /**
+             * @brief Sets number of initialisations to try, to find the clusters with lowest inertia.
+             * @param number_initialisations Number of initialisations.
+             * @throw std::invalid_argument If `number_initialisations < 1`.
+            */
+            DLL_DECLSPEC void set_number_initialisations(unsigned int number_initialisations);
 
             /** @brief Sets centroids initialiser.
             @param[in] centroids_initialiser Pointer to CentroidsInitialiser implementation.
@@ -101,6 +108,8 @@ namespace ml
             unsigned int num_inits_;
             unsigned int num_clusters_;
             bool verbose_;
+
+            bool fit_once(Eigen::Ref<const Eigen::MatrixXd> data);
 
             /// Assigns points to centroids and updates inertia.
             void assignment_step(Eigen::Ref<const Eigen::MatrixXd> data);
