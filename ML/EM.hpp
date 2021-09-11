@@ -183,9 +183,9 @@ namespace ml
 
 		void process_covariances(Eigen::Index number_dimensions);
 
-		void expectation_stage(Eigen::Ref<const Eigen::MatrixXd> data);
+		void expectation_step(Eigen::Ref<const Eigen::MatrixXd> data);
 
-		void maximisation_stage(Eigen::Ref<const Eigen::MatrixXd> data);
+		void maximisation_step(Eigen::Ref<const Eigen::MatrixXd> data);
 
 		void calculate_labels();
 	};

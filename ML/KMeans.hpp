@@ -11,6 +11,8 @@ namespace ml
     {
         /**
          * @brief K-means clustering method.
+         * 
+         * Converges if exactly the same cluster assignments are chosen twice, or if sum of squared differences between new and old centroids is lower than tolerance.
         */
         class KMeans : public Model
         {
@@ -43,17 +45,11 @@ namespace ml
             */
             DLL_DECLSPEC void set_seed(unsigned int seed);
 
-            /** @brief Sets absolute tolerance for convergence test.
+            /** @brief Sets absolute tolerance for convergence test: || old centroids - new centroids ||^2 < absolute tolerance.
             @param[in] absolute_tolerance Absolute tolerance.
             @throw std::domain_error If `absolute_tolerance < 0`.
             */
             DLL_DECLSPEC void set_absolute_tolerance(double absolute_tolerance);
-
-            /** @brief Sets relative tolerance for convergence test.
-            @param[in] relative_tolerance Relative tolerance.
-            @throw std::domain_error If `relative_tolerance < 0`.
-            */
-            DLL_DECLSPEC void set_relative_tolerance(double relative_tolerance);
 
             /** @brief Sets maximum number of K-means steps.
             @param[in] maximum_steps Maximum number of steps.
@@ -76,15 +72,23 @@ namespace ml
             }
         private:
             std::vector<unsigned int> labels_;
+            std::vector<unsigned int> old_labels_;
             Eigen::MatrixXd centroids_;
+            Eigen::MatrixXd old_centroids_;
+            Eigen::VectorXd work_vector_;
             std::default_random_engine prng_;
             std::shared_ptr<const CentroidsInitialiser> centroids_initialiser_;
             double absolute_tolerance_;
-            double relative_tolerance_;
             unsigned int maximum_steps_;
             unsigned int num_inits_;
             unsigned int num_clusters_;
             bool verbose_;
+
+            /// Assigns points to centroids.
+            void assignment_step(Eigen::Ref<const Eigen::MatrixXd> data);
+
+            /// Updates positions of centroids.
+            void update_step(Eigen::Ref<const Eigen::MatrixXd> data);
         };
     }
 }

@@ -121,7 +121,7 @@ namespace ml
 			for (unsigned int k = 0; k < number_components_; ++k) {
 				covariances_[k].resize(number_dimensions, number_dimensions);
 			}
-			maximisation_stage(data);			
+			maximisation_step(data);			
 		} else {
 			// Initialise means and covariances to sensible guesses.
 			means_initialiser_->init(data, prng_, number_components_, means_);
@@ -141,9 +141,9 @@ namespace ml
 		// Main iteration loop.
 		for (unsigned int step = 0; step < maximum_steps_; ++step) {			
 
-			expectation_stage(data);			
+			expectation_step(data);			
 
-			maximisation_stage(data);
+			maximisation_step(data);
 
 			if (verbose_) {
 				std::cout << "Step " << step << "\n";
@@ -184,7 +184,7 @@ namespace ml
 		u /= u.sum();
 	}
 
-	void EM::expectation_stage(Eigen::Ref<const Eigen::MatrixXd> data)
+	void EM::expectation_step(Eigen::Ref<const Eigen::MatrixXd> data)
 	{
 		const auto number_dimensions = data.rows();
 		assert(number_dimensions);
@@ -215,7 +215,7 @@ namespace ml
 		}
 	}
 
-	void EM::maximisation_stage(Eigen::Ref<const Eigen::MatrixXd> data)
+	void EM::maximisation_step(Eigen::Ref<const Eigen::MatrixXd> data)
 	{
 		const auto number_dimensions = data.rows();
 		assert(number_dimensions);
