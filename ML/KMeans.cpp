@@ -8,7 +8,7 @@ namespace ml
     namespace Clustering
     {
 		KMeans::KMeans(unsigned int number_clusters)
-			: num_clusters_(number_clusters), work_vector_(number_clusters)
+			: work_vector_(number_clusters), num_clusters_(number_clusters)
 		{
 			if (!number_clusters) {
 				throw std::invalid_argument("KMeans: number of clusters cannot be zero");
