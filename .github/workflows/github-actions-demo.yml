@@ -14,3 +14,5 @@ jobs:
         run: ./scripts/ci_release_build.sh
       - name: Benchmarks
         run: ./Benchmarks/build/Release/Benchmarks
+      - name: Build documentation
+        run: ./scripts/ci_documentation.sh
