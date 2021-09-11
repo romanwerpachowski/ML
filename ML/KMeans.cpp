@@ -43,6 +43,7 @@ namespace ml
 					centroids_.col(i) = data.col(i);
 					labels_[i] = i;
 				}
+				inertia_ = 0;
 				return true;
 			}
 
@@ -71,8 +72,8 @@ namespace ml
 				}
 
 				if (step > 0) {					
-					const double ssq_change = (centroids_ - old_centroids_).squaredNorm();
-					if (ssq_change < absolute_tolerance_) {
+					const double centroid_shift = (centroids_ - old_centroids_).squaredNorm();
+					if (centroid_shift < absolute_tolerance_) {
 						assignment_step(data);
 						return true;
 					}
@@ -111,7 +112,7 @@ namespace ml
 			centroids_initialiser_ = centroids_initialiser;
 		}
 
-		unsigned int KMeans::assign_label(const Eigen::Ref<const Eigen::VectorXd> x) const
+		std::pair<unsigned int, double> KMeans::assign_label(const Eigen::Ref<const Eigen::VectorXd> x) const
 		{
 			double min_squared_distance = std::numeric_limits<double>::infinity();
 			unsigned int label = 0;
@@ -122,7 +123,7 @@ namespace ml
 					label = k;
 				}
 			}
-			return label;
+			return std::make_pair(label, min_squared_distance);
 		}
 
 		void KMeans::assignment_step(Eigen::Ref<const Eigen::MatrixXd> data)
@@ -130,8 +131,11 @@ namespace ml
 			const auto sample_size = data.cols();
 			assert(labels_.size() == static_cast<size_t>(sample_size));
 			old_labels_.swap(labels_); // Save previoous labels.
+			inertia_ = 0;
 			for (Eigen::Index i = 0; i < sample_size; ++i) {
-				labels_[i] = assign_label(data.col(i));
+				const auto label_and_distance = assign_label(data.col(i));
+				labels_[i] = label_and_distance.first;
+				inertia_ += label_and_distance.second;
 			}
 		}
 

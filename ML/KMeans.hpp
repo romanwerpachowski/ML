@@ -2,6 +2,7 @@
 /* (C) 2021 Roman Werpachowski. */
 #include "Clustering.hpp"
 #include <vector>
+#include <utility>
 #include <Eigen/Core>
 #include "dll.hpp"
 
@@ -71,12 +72,21 @@ namespace ml
                 verbose_ = verbose;
             }
 
-            /** @brief Given a data point x, assign it to its cluster and return the correct label.
+            /** @brief Given a data point x, assign it to its cluster and return the correct label and squared Euclidean distance to the assigned centroid.
 
             @param[in] x Data point with correct dimension.
             @throw std::invalid_argument If `x.size() != means().rows()`.
             */
-            DLL_DECLSPEC unsigned int assign_label(Eigen::Ref<const Eigen::VectorXd> x) const;
+            DLL_DECLSPEC std::pair<unsigned int, double> assign_label(Eigen::Ref<const Eigen::VectorXd> x) const;
+
+            /**
+             * @brief  Sum of squared distances to the nearest centroid.
+             * @return Non-negative number;
+            */
+            double inertia() const
+            {
+                return inertia_;
+            }
         private:
             std::vector<unsigned int> labels_;
             std::vector<unsigned int> old_labels_;
@@ -86,12 +96,13 @@ namespace ml
             std::default_random_engine prng_;
             std::shared_ptr<const CentroidsInitialiser> centroids_initialiser_;
             double absolute_tolerance_;
+            double inertia_;
             unsigned int maximum_steps_;
             unsigned int num_inits_;
             unsigned int num_clusters_;
             bool verbose_;
 
-            /// Assigns points to centroids.
+            /// Assigns points to centroids and updates inertia.
             void assignment_step(Eigen::Ref<const Eigen::MatrixXd> data);
 
             /// Updates positions of centroids.
