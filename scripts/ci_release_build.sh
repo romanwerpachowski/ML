@@ -5,9 +5,6 @@ set -ev
 export TERM="xterm"
 scons mode=release -j 2
 
-#*** C++ demos ***
-./Demo/build/Release/Demo
-
 #*** Deploy Python module locally ***
 CWD="${PWD}"
 cd cppyml
