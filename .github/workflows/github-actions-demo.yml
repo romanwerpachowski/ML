@@ -12,7 +12,5 @@ jobs:
         run: ./scripts/ci_debug_build.sh
       - name: Release build
         run: ./scripts/ci_release_build.sh
-      - name: C++ demos
-        run: ./Demo/build/Release/Demo
       - name: Build documentation
         run: ./scripts/ci_documentation.sh
