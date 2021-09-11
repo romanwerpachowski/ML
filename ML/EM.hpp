@@ -48,7 +48,7 @@ namespace ml
 		DLL_DECLSPEC void set_maximum_steps(unsigned int maximum_steps);
 
 		/** @brief Sets means initialiser.
-		@param[in] means_initialiser Pointer to MeansInitialiser implementation.
+		@param[in] means_initialiser Pointer to Clustering::CentroidsInitialiser implementation.
 		@throw std::invalid_argument If `means_initialiser` is null.
 		*/
 		DLL_DECLSPEC void set_means_initialiser(std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser);
@@ -79,7 +79,7 @@ namespace ml
 		@param[in] data Matrix (column-major order) with a data point in every column.
 		@return `true` if fitting converged successfully.
 		*/
-		DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data);		
+		DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data) override;
 
 		/** @brief Returns the number of components. */
 		auto number_components() const
@@ -183,9 +183,9 @@ namespace ml
 
 		void process_covariances(Eigen::Index number_dimensions);
 
-		void expectation_stage(Eigen::Ref<const Eigen::MatrixXd> data);
+		void expectation_step(Eigen::Ref<const Eigen::MatrixXd> data);
 
-		void maximisation_stage(Eigen::Ref<const Eigen::MatrixXd> data);
+		void maximisation_step(Eigen::Ref<const Eigen::MatrixXd> data);
 
 		void calculate_labels();
 	};

@@ -142,7 +142,7 @@ $(document).ready(function(){initNavTree('EM_8hpp_source.html',''); initResizabl
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            maximise_first_ = maximise_first;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        }</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        DLL_DECLSPEC <span class="keywordtype">bool</span> <a class="code" href="classml_1_1EM.html#a1b656a9edae6f7e5a140b37a3742aaf1">fit</a>(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);      </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        DLL_DECLSPEC <span class="keywordtype">bool</span> <a class="code" href="classml_1_1EM.html#a8061b0d675ded50b22ceaa2f2c3f96fa">fit</a>(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
 <div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130">   85</a></span>&#160;        <span class="keyword">auto</span> <a class="code" href="classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130">number_components</a>()<span class="keyword"> const</span></div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">        </span>{</div>
@@ -222,22 +222,22 @@ $(document).ready(function(){initNavTree('EM_8hpp_source.html',''); initResizabl
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keywordtype">void</span> process_covariances(Eigen::Index number_dimensions);</div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="keywordtype">void</span> expectation_stage(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="keywordtype">void</span> expectation_step(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keywordtype">void</span> maximisation_stage(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keywordtype">void</span> maximisation_step(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="keywordtype">void</span> calculate_labels();</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    };</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aclassml_1_1EM_html_a8061b0d675ded50b22ceaa2f2c3f96fa"><div class="ttname"><a href="classml_1_1EM.html#a8061b0d675ded50b22ceaa2f2c3f96fa">ml::EM::fit</a></div><div class="ttdeci">bool fit(Eigen::Ref&lt; const Eigen::MatrixXd &gt; data) override</div><div class="ttdoc">Fits the model.</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_a18e66d65c816c2ff41aaadb670864ac9"><div class="ttname"><a href="classml_1_1EM.html#a18e66d65c816c2ff41aaadb670864ac9">ml::EM::assign_responsibilities</a></div><div class="ttdeci">void assign_responsibilities(Eigen::Ref&lt; const Eigen::VectorXd &gt; x, Eigen::Ref&lt; Eigen::VectorXd &gt; u) const</div><div class="ttdoc">Given a data point x, calculate each component's responsibilities for x and save them in u.</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_a6a7245e3d8c316af1846892ec35bbc89"><div class="ttname"><a href="classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89">ml::EM::set_verbose</a></div><div class="ttdeci">void set_verbose(bool verbose)</div><div class="ttdoc">Switches between verbose and quiet mode.</div><div class="ttdef"><b>Definition:</b> EM.hpp:65</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_a0e486bd2ab7e9355dd3bbf5eca2faa9a"><div class="ttname"><a href="classml_1_1EM.html#a0e486bd2ab7e9355dd3bbf5eca2faa9a">ml::EM::set_relative_tolerance</a></div><div class="ttdeci">void set_relative_tolerance(double relative_tolerance)</div><div class="ttdoc">Sets relative tolerance for convergence test.</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_a9d15f4af05825d1a5f15de8c06058dea"><div class="ttname"><a href="classml_1_1EM.html#a9d15f4af05825d1a5f15de8c06058dea">ml::EM::set_seed</a></div><div class="ttdeci">void set_seed(unsigned int seed)</div><div class="ttdoc">Sets PRNG seed.</div></div>
-<div class="ttc" id="aclassml_1_1EM_html_a1b656a9edae6f7e5a140b37a3742aaf1"><div class="ttname"><a href="classml_1_1EM.html#a1b656a9edae6f7e5a140b37a3742aaf1">ml::EM::fit</a></div><div class="ttdeci">bool fit(Eigen::Ref&lt; const Eigen::MatrixXd &gt; data)</div><div class="ttdoc">Fits the model.</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_a1ccbd858960d5cb454ac393c1ab8d461"><div class="ttname"><a href="classml_1_1EM.html#a1ccbd858960d5cb454ac393c1ab8d461">ml::EM::covariances</a></div><div class="ttdeci">const auto &amp; covariances() const</div><div class="ttdoc">Returns a const reference to fitted component covariance matrices.</div><div class="ttdef"><b>Definition:</b> EM.hpp:111</div></div>
-<div class="ttc" id="anamespaceml_html"><div class="ttname"><a href="namespaceml.html">ml</a></div><div class="ttdef"><b>Definition:</b> BallTree.hpp:9</div></div>
+<div class="ttc" id="anamespaceml_html"><div class="ttname"><a href="namespaceml.html">ml</a></div><div class="ttdef"><b>Definition:</b> BallTree.hpp:10</div></div>
 <div class="ttc" id="adll_8hpp_html"><div class="ttname"><a href="dll_8hpp.html">dll.hpp</a></div></div>
 <div class="ttc" id="aclassml_1_1EM_html_a7c72f938c3a98046c4f6a8b39cfc9610"><div class="ttname"><a href="classml_1_1EM.html#a7c72f938c3a98046c4f6a8b39cfc9610">ml::EM::set_maximise_first</a></div><div class="ttdeci">void set_maximise_first(bool maximise_first)</div><div class="ttdoc">Switches between starting with E or M step first.</div><div class="ttdef"><b>Definition:</b> EM.hpp:73</div></div>
 <div class="ttc" id="aclassml_1_1EM_html_aba8eb164484a8253e15beb04fae5aee0"><div class="ttname"><a href="classml_1_1EM.html#aba8eb164484a8253e15beb04fae5aee0">ml::EM::labels</a></div><div class="ttdeci">const std::vector&lt; unsigned int &gt; &amp; labels() const override</div><div class="ttdoc">Returns a const reference to resulting cluster labels for each datapoint.</div><div class="ttdef"><b>Definition:</b> EM.hpp:157</div></div>
