@@ -8,7 +8,7 @@ cppyml is a Python extension module built on top of M++. Precompiled cppyml bina
 
 ## Contents
 
-- clustering (EM algorithm)
+- clustering (E-M algorithm, K-means)
 - decision trees for classification and regression
 - linear regression (incl. recursive and ridge)
 
