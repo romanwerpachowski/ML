@@ -76,7 +76,7 @@ namespace ml
             std::vector<unsigned int> labels_;
             Eigen::MatrixXd centroids_;
             std::default_random_engine prng_;
-            std::shared_ptr<CentroidsInitialiser> centroids_initialiser_;
+            std::shared_ptr<const CentroidsInitialiser> centroids_initialiser_;
             double absolute_tolerance_;
             double relative_tolerance_;
             unsigned int maximum_steps_;

@@ -206,6 +206,7 @@
     <ClCompile Include="EM.cpp" />
     <ClCompile Include="Features.cpp" />
     <ClCompile Include="Kernels.cpp" />
+    <ClCompile Include="KMeans.cpp" />
     <ClCompile Include="LinearAlgebra.cpp" />
     <ClCompile Include="LinearRegression.cpp" />
     <ClCompile Include="RecursiveMultivariateOLS.cpp" />
