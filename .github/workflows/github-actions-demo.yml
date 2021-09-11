@@ -12,5 +12,10 @@ jobs:
         run: ./scripts/ci_debug_build.sh
       - name: Release build
         run: ./scripts/ci_release_build.sh
-      - name: Build documentation
-        run: ./scripts/ci_documentation.sh
+      - name: Update documentation
+        run: |
+            ./scripts/ci_documentation.sh
+            git config --global user.name 'Roman Werpachowski'
+            git config --global user.email 'romanwerpachowski@users.noreply.github.com'
+            git commit -am "Auto-update documentation"
+            git push
