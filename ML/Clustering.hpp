@@ -25,6 +25,7 @@ namespace ml
 			/** @brief Fits the model.
 			@param[in] data Matrix (column-major order) with a data point in every column.
 			@return `true` if fitting converged successfully.
+			@throw std::invalid_argument If `data` has no rows, or if the sample size (number of columns in `data`) is too low.
 			*/
 			virtual bool fit(Eigen::Ref<const Eigen::MatrixXd> data) = 0;
 

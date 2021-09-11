@@ -12,3 +12,5 @@ jobs:
         run: ./scripts/ci_debug_build.sh
       - name: Release build
         run: ./scripts/ci_release_build.sh
+      - name: Benchmarks
+        run: ./Benchmarks/build/Release/Benchmarks
