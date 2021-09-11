@@ -12,7 +12,7 @@ Project webpage: https://romanwerpachowski.github.io/ML/
 
 @subsection Clustering
 
-We provide the Gaussian E-M algorithm. Initial means can be initialised in three different ways:
+We provide the Gaussian E-M and K-means algorithms. Initial means can be initialised in three different ways:
 - <a href="https://en.wikipedia.org/wiki/K-means_clustering#Initialization_methods">Forgy and Random partition</a>
 - <a href="https://en.wikipedia.org/wiki/K-means%2B%2B">K++</a>
 
