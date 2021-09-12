@@ -17,6 +17,6 @@ jobs:
             ./scripts/ci_documentation.sh
             git config --global user.name 'Roman Werpachowski'
             git config --global user.email 'romanwerpachowski@users.noreply.github.com'
-            git commit -am "Auto-update documentation"
+            git commit -am "Auto-update documentation" || echo "No changes to commit"
             git pull
             git push
