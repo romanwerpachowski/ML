@@ -210,6 +210,105 @@ along with this program.  If not, see &lt;<a class="reference external" href="ht
 </dd></dl>
 
 <dl class="class">
+<dt id="cppyml.cppyml.clustering.KMeans">
+<em class="property">class </em><code class="descclassname">cppyml.cppyml.clustering.</code><code class="descname">KMeans</code><a class="headerlink" href="#cppyml.cppyml.clustering.KMeans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
+<p>Naive K-Means algorithm.</p>
+<dl class="method">
+<dt id="cppyml.cppyml.clustering.KMeans.assign_label">
+<code class="descname">assign_label</code><span class="sig-paren">(</span><em>self: cppyml.cppyml.clustering.KMeans, x: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; Tuple[int, float]<a class="headerlink" href="#cppyml.cppyml.clustering.KMeans.assign_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a data point x, assigns it to the closest cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – Data point with correct dimension.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Cluster label for point x.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.cppyml.clustering.KMeans.centroids">
+<code class="descname">centroids</code><a class="headerlink" href="#cppyml.cppyml.clustering.KMeans.centroids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitted centroids.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.cppyml.clustering.KMeans.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>self: cppyml.cppyml.clustering.KMeans, data: numpy.ndarray[float64[m, n], flags.c_contiguous]</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#cppyml.cppyml.clustering.KMeans.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits the components to the data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – A 2D array with data points in rows.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if EM algorithm converged.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.cppyml.clustering.KMeans.inertia">
+<code class="descname">inertia</code><a class="headerlink" href="#cppyml.cppyml.clustering.KMeans.inertia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimised inertia.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.cppyml.clustering.KMeans.labels">
+<code class="descname">labels</code><a class="headerlink" href="#cppyml.cppyml.clustering.KMeans.labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitted labels.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.cppyml.clustering.KMeans.number_clusters">
+<code class="descname">number_clusters</code><a class="headerlink" href="#cppyml.cppyml.clustering.KMeans.number_clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of clusters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.cppyml.clustering.KMeans.set_absolute_tolerance">
+<code class="descname">set_absolute_tolerance</code><span class="sig-paren">(</span><em>self: cppyml.cppyml.clustering.KMeans</em>, <em>absolute_tolerance: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.cppyml.clustering.KMeans.set_absolute_tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets absolute tolerance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.cppyml.clustering.KMeans.set_centroids_initialiser">
+<code class="descname">set_centroids_initialiser</code><span class="sig-paren">(</span><em>self: cppyml.cppyml.clustering.KMeans</em>, <em>centroids_initialiser: cppyml.cppyml.clustering.CentroidsInitialiser</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.cppyml.clustering.KMeans.set_centroids_initialiser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the algorithm to initialise cluster centroids.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.cppyml.clustering.KMeans.set_maximum_steps">
+<code class="descname">set_maximum_steps</code><span class="sig-paren">(</span><em>self: cppyml.cppyml.clustering.KMeans</em>, <em>maximum_steps: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.cppyml.clustering.KMeans.set_maximum_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets maximum number of iterations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.cppyml.clustering.KMeans.set_number_initialisations">
+<code class="descname">set_number_initialisations</code><span class="sig-paren">(</span><em>self: cppyml.cppyml.clustering.KMeans</em>, <em>centroids_initialiser: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.cppyml.clustering.KMeans.set_number_initialisations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets number of initialisations to try, to find the clusters with lowest inertia.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.cppyml.clustering.KMeans.set_seed">
+<code class="descname">set_seed</code><span class="sig-paren">(</span><em>self: cppyml.cppyml.clustering.KMeans</em>, <em>seed: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.cppyml.clustering.KMeans.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the PRNG seed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.cppyml.clustering.KMeans.set_verbose">
+<code class="descname">set_verbose</code><span class="sig-paren">(</span><em>self: cppyml.cppyml.clustering.KMeans</em>, <em>verbose: bool</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.cppyml.clustering.KMeans.set_verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns on/off the verbose mode.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="cppyml.cppyml.clustering.KPP">
 <em class="property">class </em><code class="descclassname">cppyml.cppyml.clustering.</code><code class="descname">KPP</code><a class="headerlink" href="#cppyml.cppyml.clustering.KPP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#cppyml.cppyml.clustering.CentroidsInitialiser" title="cppyml.cppyml.clustering.CentroidsInitialiser"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.cppyml.clustering.CentroidsInitialiser</span></code></a></p>
