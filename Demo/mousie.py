@@ -19,7 +19,7 @@ import seaborn as sns
 def main():
     print("""
 
-*** E-M CLUSTERING DEMO ***
+*** E-M & K-means CLUSTERING DEMO ***
 
 Uses the classic "mouse" test set. The algorithm should correctly split the face and ears into three separate clusters.
 k-means clustering fails on this set.
@@ -59,7 +59,7 @@ Compares cppyml with sklearn.
     
     n_timing_iters = 100
     
-    pyml_report = pd.Series(index=["converged", "time", "log-likelihood"], dtype=float)
+    cppyml_report = pd.Series(index=["converged", "time", "log-likelihood"], dtype=float)
     em = clustering.EM(num_components)
     em.set_seed(42)
     em.set_absolute_tolerance(abs_tol)
@@ -69,12 +69,12 @@ Compares cppyml with sklearn.
     t0 = time.perf_counter()
     for _ in range(n_timing_iters):        
         converged = int(em.fit(data))
-    pyml_report["converged"] = float(converged)
+    cppyml_report["converged"] = float(converged)
     t1 = time.perf_counter()
-    pyml_report["time"] = (t1 - t0) / n_timing_iters
-    pyml_report["log-likelihood"] = em.log_likelihood
+    cppyml_report["time"] = (t1 - t0) / n_timing_iters
+    cppyml_report["log-likelihood"] = em.log_likelihood
 
-    sklearn_report = pd.Series(index=pyml_report.index, dtype=pyml_report.dtype)    
+    sklearn_report = pd.Series(index=cppyml_report.index, dtype=cppyml_report.dtype)    
     gmm = sklearn.mixture.GaussianMixture(num_components, tol=abs_tol, max_iter=max_iter, random_state=999, n_init=1, reg_covar=1e-15)
     t0 = time.perf_counter()
     for _ in range(n_timing_iters):        
@@ -83,18 +83,42 @@ Compares cppyml with sklearn.
     sklearn_report["converged"] = 1  # gmm raises a warning if not converged.
     sklearn_report["time"] = (t1 - t0) / n_timing_iters
     sklearn_report["log-likelihood"] = gmm.score(data)
+       
+    em_report = pd.DataFrame()
+    em_report["cppyml"] = cppyml_report
+    em_report["sklearn"] = sklearn_report
+
+    print("E-M algorithms")
+    print(em_report)
 
     km = sklearn.cluster.KMeans(num_components, max_iter=max_iter, tol=abs_tol, random_state=1984)
-    km.fit(data)
+    t0 = time.perf_counter()
+    for _ in range(n_timing_iters):
+        km.fit(data)
+    t1 = time.perf_counter()
     km_class = km.labels_
+    km_sklearn_report = pd.Series({"converged": 1, "inertia": km.inertia_, "time": (t1 - t0) / n_timing_iters})
 
-    report = pd.DataFrame()
-    report["cppyml"] = pyml_report
-    report["sklearn"] = sklearn_report
+    km_cppyml = clustering.KMeans(num_components)
+    km_cppyml.set_maximum_steps(max_iter)
+    km_cppyml.set_absolute_tolerance(abs_tol)
+    km_cppyml.set_seed(42)
+    km_cppyml.set_centroids_initialiser(clustering.KPP())
 
-    print(report)
+    t0 = time.perf_counter()
+    for _ in range(n_timing_iters):
+        converged = km_cppyml.fit(data)
+    t1 = time.perf_counter()
+    km_cppyml_report = pd.Series({"converged": float(converged), "inertia": km_cppyml.inertia, "time": (t1 - t0) / n_timing_iters})
+
+    km_report = pd.DataFrame()
+    km_report["cppyml"] = km_cppyml_report
+    km_report["sklearn"] = km_sklearn_report
+
+    print("K-means algorithms")
+    print(km_report)
     
-    pyml_class = np.argmax(em.responsibilities, axis=1)
+    cppyml_class = np.argmax(em.responsibilities, axis=1)
     sklearn_class = gmm.predict(data)
 
     palette = {
@@ -104,7 +128,7 @@ Compares cppyml with sklearn.
     }
 
     fig, ax = plt.subplots(1, 3, figsize=(12, 4))
-    sns.scatterplot(x=data[:, 0], y=data[:, 1], hue=pyml_class, ax=ax[0], palette=palette)
+    sns.scatterplot(x=data[:, 0], y=data[:, 1], hue=cppyml_class, ax=ax[0], palette=palette)
     ax[0].set_title("cppyml")
     sns.scatterplot(x=data[:, 0], y=data[:, 1], hue=sklearn_class, ax=ax[1], palette=palette)
     ax[1].set_title("sklearn")
