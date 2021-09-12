@@ -156,6 +156,7 @@
     <ClCompile Include="bm_Crossvalidation.cpp" />
     <ClCompile Include="bm_DecisionTrees.cpp" />
     <ClCompile Include="bm_EM.cpp" />
+    <ClCompile Include="bm_KMeans.cpp" />
     <ClCompile Include="bm_LinearAlgebra.cpp" />
     <ClCompile Include="bm_LinearRegression.cpp" />
     <ClCompile Include="bm_Statistics.cpp" />
