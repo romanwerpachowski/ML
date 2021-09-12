@@ -11,7 +11,7 @@ namespace ml
     namespace Clustering
     {
         /**
-         * @brief K-means clustering method.
+         * @brief Naive K-means clustering method.
          * 
          * Converges if exactly the same cluster assignments are chosen twice, or if sum of squared differences between new and old centroids is lower than tolerance.
         */
