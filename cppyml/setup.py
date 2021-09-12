@@ -22,15 +22,13 @@ argparser.add_argument("--debug", dest="debug", default=False, action="store_tru
 args, unknown = argparser.parse_known_args()
 sys.argv = [sys.argv[0]] + unknown
 
-# Package version.
-VERSION = "0.5.0"
-
 # Whether to install a Debug version of the binary files.
 DEBUG_BINARIES = args.debug
 
 # Name of the C++ build mode.
 CPP_BUILD_MODE = "Debug" if DEBUG_BINARIES else "Release"
 
+# Package version.
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "version.json")) as f:
     VERSION = json.load(f)
 
