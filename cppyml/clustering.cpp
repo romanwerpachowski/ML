@@ -165,7 +165,7 @@ Args:
     data: A 2D array with data points in rows.
 
 Returns:
-    True if EM algorithm converged.
+    True if the algorithm converged.
 )"
 )
     .def_property_readonly("number_clusters", &ml::Clustering::KMeansPy::number_clusters, "Number of clusters.")
