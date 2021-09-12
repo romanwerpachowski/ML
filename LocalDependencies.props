@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\Roman\source\repos\benchmark\out\build\x64-Release\src;C:\Users\Roman\Anaconda3\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Roman\source\repos\benchmark\out\build\x64-Release\src;C:\Users\Roman\anaconda3\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>

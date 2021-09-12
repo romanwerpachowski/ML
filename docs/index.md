@@ -19,7 +19,7 @@ and [Sphinx documentation](cppyml/html/index.html) for the Python extensions.
 
 ### Windows
 
-Tested with Visual Studio C++ 2019 and Python 3.7.7.
+Tested with Visual Studio C++ 2019 and Python 3.8.x.
 
 ### Linux
 

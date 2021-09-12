@@ -1,8 +1,10 @@
 /* (C) 2020 Roman Werpachowski. */
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
+#include <pybind11/stl.h>
 #include "ML/Clustering.hpp"
 #include "ML/EM.hpp"
+#include "ML/KMeans.hpp"
 #include "types.hpp"
 
 
@@ -35,8 +37,38 @@ namespace ml
             Eigen::VectorXd u(number_components());
             EM::assign_responsibilities(x, u);
             return u;
-        }
+        }        
     };
+
+    namespace Clustering
+    {
+        /**
+         * @brief Version of ml::Clustering::KMeans adapted for Python bindings.
+        */
+        class KMeansPy : public KMeans
+        {
+        public:
+            KMeansPy(unsigned int number_clusters)
+                : KMeans(number_clusters)
+            {}
+
+            /** Fits the model to data in row-major order.
+            @param data Matrix (row-major order) with a data point in every row.
+            */
+            bool fit_row_major(Eigen::Ref<const MatrixXdR> data)
+            {
+                return fit(data.transpose());
+            }
+
+            /**
+             * @brief Returns centroids in row-major order.
+            */
+            Eigen::Ref<const MatrixXdR> centroids_row_major() const
+            {
+                return this->centroids().transpose();
+            }
+        };
+    }
 }
 
 
@@ -113,4 +145,41 @@ Returns:
     Array of components' responsibilities.
 )")
         .doc() = "Gaussian Expectation-Maximisation algorithm.";
+
+    py::class_<ml::Clustering::KMeansPy, std::shared_ptr<ml::Clustering::KMeansPy>>(m_clustering, "KMeans")
+        .def(py::init<unsigned int>(), py::arg("number_clusters"), R"(Constructor.
+
+Args:
+    number_clusters: Number of clusters to fit.
+)")
+    .def("set_seed", &ml::Clustering::KMeansPy::set_seed, py::arg("seed"), "Sets the PRNG seed.")
+    .def("set_absolute_tolerance", &ml::Clustering::KMeansPy::set_absolute_tolerance, py::arg("absolute_tolerance"), "Sets absolute tolerance.")
+    .def("set_maximum_steps", &ml::Clustering::KMeansPy::set_maximum_steps, py::arg("maximum_steps"), "Sets maximum number of iterations.")
+    .def("set_centroids_initialiser", &ml::Clustering::KMeansPy::set_centroids_initialiser, py::arg("centroids_initialiser"), "Sets the algorithm to initialise cluster centroids.")
+    .def("set_number_initialisations", &ml::Clustering::KMeansPy::set_number_initialisations, py::arg("centroids_initialiser"), "Sets number of initialisations to try, to find the clusters with lowest inertia.")
+    .def("set_verbose", &ml::Clustering::KMeansPy::set_verbose, py::arg("verbose"), "Turns on/off the verbose mode.")
+    .def("fit", &ml::Clustering::KMeansPy::fit_row_major, py::arg("data").noconvert(),
+    R"(Fits the components to the data.
+
+Args:
+    data: A 2D array with data points in rows.
+
+Returns:
+    True if EM algorithm converged.
+)"
+)
+    .def_property_readonly("number_clusters", &ml::Clustering::KMeansPy::number_clusters, "Number of clusters.")
+    .def_property_readonly("centroids", &ml::Clustering::KMeansPy::centroids_row_major, "Fitted centroids.")
+    .def_property_readonly("labels", &ml::Clustering::KMeansPy::labels, "Fitted labels.")
+    .def_property_readonly("inertia", &ml::Clustering::KMeansPy::inertia, "Minimised inertia.")    
+    .def("assign_label", &ml::Clustering::KMeansPy::assign_label, py::arg("x"),
+    R"(Given a data point x, assigns it to the closest cluster.
+
+Args:
+    x: Data point with correct dimension.
+
+Returns:
+    Cluster label for point x.
+)")
+    .doc() = "Naive K-Means algorithm.";
 }
