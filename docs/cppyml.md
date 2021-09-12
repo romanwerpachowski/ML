@@ -19,7 +19,7 @@ Automatically generated documentation is [here](cppyml/html/index.html)
 
 ### Linux
 
-Build from source using `SCons` and install using `python setup.py install`:
+Build from source using `SCons` and install using `sudo python setup.py install`:
 
 ```bash
 scons mode=release
@@ -29,14 +29,15 @@ sudo python setup.py install
 
 ### Windows
 
-Precompiled binaries are available on [PyPi](https://pypi.org/project/cppyml/).
-Install them using `pip install cppyml`.
 
-To build from source under Windows, build the solution in Release mode and then do:
-```bash
-cd cppyml
-python setup.py install
-```
+1. Add a path to the `libs` directory of a Python distribution to the Visual Studio properties file `LocalDependencies.props` in the "Linker -> General -> Additional Library Directories" section.
+   For example, I use `C:\Users\Roman\anaconda3\libs`.
+
+2. Build the solution in ReleaseStatic mode.
+
+3. From the `cppyml` directory, run `python setup.py install` to install the Python module linked to ReleaseStatic build of the ML++ library.
+   Remember to install the `cppyml` package in a Python environment with the same Python version as the one used to build it!
+
 
 ## Example
 
