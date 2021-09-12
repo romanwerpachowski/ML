@@ -1,7 +1,7 @@
-/* (C) 2020 Roman Werpachowski. */
-#include "em_demo.hpp"
+/* (C) 2020-21 Roman Werpachowski. */
+#include "clustering_demo.hpp"
 
 int main(void)
 {
-	em_demo();
+	clustering_demo();
 }

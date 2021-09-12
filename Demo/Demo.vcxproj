@@ -137,7 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="em_demo.cpp" />
+    <ClCompile Include="clustering_demo.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -146,7 +146,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="em_demo.hpp" />
+    <ClInclude Include="clustering_demo.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="classification_tree.py" />

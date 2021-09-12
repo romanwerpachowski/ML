@@ -1,14 +1,15 @@
-/* (C) 2020 Roman Werpachowski. */
+/* (C) 2020-21 Roman Werpachowski. */
 #include <cmath>
 #include <fstream>
 #include <iostream>
 #include <random>
 #include "ML/Clustering.hpp"
 #include "ML/EM.hpp"
+#include "ML/KMeans.hpp"
 
 static constexpr double PI = 3.14159265358979323846;
 
-void em_demo(void)
+void clustering_demo(void)
 {
 	std::default_random_engine rng;
 	std::uniform_real_distribution<double> u01(0, 1);
@@ -38,23 +39,29 @@ void em_demo(void)
 	ml::EM em(num_components);
 	em.set_absolute_tolerance(1e-14);
 	em.set_relative_tolerance(1e-14);
-	em.set_means_initialiser(std::make_shared<ml::Clustering::KPP>());
+	const auto initialiser = std::make_shared<ml::Clustering::KPP>();
+	em.set_means_initialiser(initialiser);
 	em.set_maximise_first(false);
-	bool converged;
-	for (int i = 0; i < 100; ++i) {
-		converged = em.fit(data);
-	}	
+	const bool em_converged = em.fit(data);
 
-	std::cout << "Converged: " << converged << "\n";
-	std::cout << "Log-likelihood: " << em.log_likelihood() << "\n";
-	std::cout << "Means:\n" << em.means() << "\n";
+	ml::Clustering::KMeans km(num_components);
+	km.set_absolute_tolerance(0); // Iterate until cluster assignments are stable.
+	km.set_centroids_initialiser(initialiser);
+	const bool km_converged = km.fit(data);
+
+	std::cout << "E-M converged: " << em_converged << "\n";
+	std::cout << "E-M log-likelihood: " << em.log_likelihood() << "\n";
+	std::cout << "E-M means:\n" << em.means() << "\n";
 	for (unsigned int k = 0; k < num_components; ++k) {
-		std::cout << "Covariance[" << k << "]:\n" << em.covariance(k) << "\n";
+		std::cout << "E-M covariance[" << k << "]:\n" << em.covariance(k) << "\n";
 	}
+	std::cout << "K-means converged: " << km_converged << "\n";
+	std::cout << "K-means inertia: " << km.inertia() << "\n";
+	std::cout << "K-means centroids:\n" << km.centroids() << "\n";	
 
 	std::ofstream file("mousie.csv");
-	file << "X,Y,Class,P_face,P_left_ear,P_right_ear\n";
+	file << "X,Y,EM_Class,P_face,P_left_ear,P_right_ear,KM_Class\n";
 	for (unsigned int i = 0; i < sample_size; ++i) {
-		file << data(0, i) << "," << data(1, i) << "," << classes[i] << "," << em.responsibilities()(i, 0) << "," << em.responsibilities()(i, 1) << "," << em.responsibilities()(i, 2) << "\n";
+		file << data(0, i) << "," << data(1, i) << "," << classes[i] << "," << em.responsibilities()(i, 0) << "," << em.responsibilities()(i, 1) << "," << em.responsibilities()(i, 2) << "," << km.labels()[i] << "\n";
 	}
 }
