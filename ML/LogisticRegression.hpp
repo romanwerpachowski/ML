@@ -1,6 +1,7 @@
 #pragma once
 /* (C) 2021 Roman Werpachowski */
 #include <Eigen/Core>
+#include "dll.hpp"
 
 namespace ml
 {
@@ -46,7 +47,6 @@ namespace ml
         */
         virtual Result fit(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y) = 0;
 
-    protected:
         /**
          * @brief Calculates the probability of label given model weights and feature vector.
          * @param x Feature vector.
@@ -54,7 +54,7 @@ namespace ml
          * @param w Model weight vector, equal length to `x`.
          * @return P(y|x,w).
         */
-        static double probability(Eigen::Ref<const Eigen::VectorXd> x, double y, Eigen::Ref<const Eigen::VectorXd> w);
+        DLL_DECLSPEC static double probability(Eigen::Ref<const Eigen::VectorXd> x, double y, Eigen::Ref<const Eigen::VectorXd> w);
 
         /**
          * @brief Calculates the posterior log-likelihood of data given model weights.
