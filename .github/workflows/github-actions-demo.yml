@@ -18,10 +18,10 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
       - name: Update documentation
-          run: |
-              ./scripts/ci_documentation.sh
-              git config --global user.name 'Roman Werpachowski'
-              git config --global user.email 'romanwerpachowski@users.noreply.github.com'
-              git commit -am "Auto-update documentation" || echo "No changes to commit"
-              git pull --ff-only
-              git push
+        run: |
+            ./scripts/ci_documentation.sh
+            git config --global user.name 'Roman Werpachowski'
+            git config --global user.email 'romanwerpachowski@users.noreply.github.com'
+            git commit -am "Auto-update documentation" || echo "No changes to commit"
+            git pull --ff-only
+            git push
