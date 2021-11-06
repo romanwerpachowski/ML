@@ -66,7 +66,7 @@ namespace ml
          * @throw std::domain_error If `lam` is negative.
          * @throw std::invalid_argument If matrix or vector dimensions do not match.
         */
-        static double log_likelihood(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<const Eigen::VectorXd> w, double lam);
+        DLL_DECLSPEC static double log_likelihood(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<const Eigen::VectorXd> w, double lam);
 
         /**
          * @brief Calculates the gradient posterior log-likelihood of data given model weights, over those weights.
