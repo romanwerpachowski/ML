@@ -73,3 +73,34 @@ TEST(LogisticRegression, grad_log_likelihood)
         ASSERT_NEAR(expected_grad, actual_grad[i], 1E-7) << i;
     }
 }
+
+TEST(LogisticRegression, hessian_log_likelihood)
+{
+    Eigen::VectorXd w(2);
+    w << 1, 1;
+    Eigen::VectorXd y(5);
+    y << -1, -1, -1, 1, 1;
+    Eigen::MatrixXd X(w.size(), y.size());
+    X << 0.5, -0.2, 0.3, 0.3, 0.9,
+        -0.5, 0.7, -0.9, 0.9, 0.3;
+    const double lam = 0.01;
+
+    Eigen::VectorXd actual_H(w.size(), w.size());
+    LogisticRegression::hessian_log_likelihood(X, y, w, lam, actual_H);
+    Eigen::VectorXd grad_up(w.size());
+    Eigen::VectorXd grad_down(w.size());
+    Eigen::VectorXd expected_H_i(w.size());
+    const double eps = 1e-8;
+    for (Eigen::Index i = 0; i < w.size(); ++i) {
+        const double w_i_orig = w[i];
+        w[i] = w_i_orig + eps;
+        LogisticRegression::grad_log_likelihood(X, y, w, lam, grad_up);
+        w[i] = w_i_orig - eps;
+        LogisticRegression::grad_log_likelihood(X, y, w, lam, grad_down);
+        w[i] = w_i_orig;
+        expected_H_i = (grad_up - grad_down) / (2 * eps);
+        for (Eigen::Index j = 0; j < w.size(); ++j) {
+            ASSERT_NEAR(expected_H_i[j], actual_H(i, j), 1E-7) << i << " " << j;
+        }        
+    }
+}

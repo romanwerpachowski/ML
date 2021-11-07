@@ -69,7 +69,7 @@ namespace ml
         DLL_DECLSPEC static double log_likelihood(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<const Eigen::VectorXd> w, double lam);
 
         /**
-         * @brief Calculates the gradient posterior log-likelihood of data given model weights, over those weights.
+         * @brief Calculates the gradient of the posterior log-likelihood of data given model weights, over those weights.
          * @param X D x N matrix of X values, with data points in columns.
          * @param y Y vector with length N. Values should be -1 or 1.
          * @param w Model weight vector with length D.
@@ -79,5 +79,67 @@ namespace ml
          * @throw std::invalid_argument If matrix or vector dimensions do not match.
         */
         DLL_DECLSPEC static void grad_log_likelihood(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<const Eigen::VectorXd> w, double lam, Eigen::Ref<Eigen::VectorXd> g);
+
+        /**
+         * @brief Calculates the Hessian of the posterior log-likelihood of data given model weights, over those weights.
+         * @param X D x N matrix of X values, with data points in columns.
+         * @param y Y vector with length N. Values should be -1 or 1.
+         * @param w Model weight vector with length D.
+         * @param lam Inverse variance of the Gaussian prior for `w`. Cannot be negative. Set it to 0 if you want to perform maximum likelihood estimation of `w`.
+         * @param[out] H D x D matrix for the computed Hessian of log-likelihood over weights `w`.
+         * @throw std::domain_error If `lam` is negative.
+         * @throw std::invalid_argument If matrix or vector dimensions do not match.
+        */
+        DLL_DECLSPEC static void hessian_log_likelihood(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<const Eigen::VectorXd> w, double lam, Eigen::Ref<Eigen::MatrixXd> H);
+    };
+
+    /**
+     * @brief Abstract implementation, sharing the common parameters and stopping criterion.
+     * 
+     * The stopping criterion is ||old_weights - new_weights||_2 <= absolute_tolerance + relative_tolerance * max(||old_weights||_2, ||new_weights||_2).
+    */
+    class AbstractLogisticRegression : public LogisticRegression
+    {
+    public:
+        /**
+         * @brief Constructor.
+         * @param lam Inverse variance of the Gaussian prior for `w`. Cannot be negative. Set it to 0 if you want to perform maximum likelihood estimation of `w`.
+         * @param weight_relative_tolerance Weight relative tolerance. Cannot be negative.
+         * @throw std::domain_error If any of `lam`, `weight_relative_tolerance` or `weight_absolute_tolerance` is negative.
+        */
+        DLL_DECLSPEC AbstractLogisticRegression(double lam, double weight_relative_tolerance, double weight_absolute_tolerance);
+
+        double lam() const
+        {
+            return lam_;
+        }
+
+        /**
+         * @brief Returns absolute tolerance for fitted weights.
+        */
+        double weight_absolute_tolerance() const
+        {
+            return weight_absolute_tolerance_;
+        }
+
+        /**
+         * @brief Returns relative tolerance for fitted weights.
+        */
+        double weight_relative_tolerance() const
+        {
+            return weight_relative_tolerance_;
+        }
+    protected:
+        /**
+         * @brief Check if fitting converged.
+         * @param old_weights Previous weight vector.
+         * @param new_weights New weight vector.
+         * @return True if converged, false otherwise.
+        */
+        bool converged(Eigen::Ref<const Eigen::VectorXd> old_weights, Eigen::Ref<const Eigen::VectorXd> new_weights);
+    private:
+        double lam_;
+        double weight_relative_tolerance_;
+        double weight_absolute_tolerance_;
     };
 }
