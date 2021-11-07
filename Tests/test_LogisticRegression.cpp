@@ -33,24 +33,31 @@ TEST(LogisticRegression, log_likelihood)
 {
     Eigen::VectorXd w(2);
     w << 1, 1;
-
     Eigen::VectorXd y(5);
     y << -1, -1, -1, 1, 1;
-
     Eigen::MatrixXd X(w.size(), y.size());
     X << 0.5, -0.2, 0.3, 0.3, 0.9,
         -0.5, 0.7, -0.9, 0.9, 0.3;
-    
-
     const double lam = 0.01;
 
     const auto actual = LogisticRegression::log_likelihood(X, y, w, lam);
-
     double expected = -lam * w.squaredNorm() / 2;
     for (Eigen::Index i = 0; i < X.cols(); ++i) {
         expected += log(LogisticRegression::probability(X.col(i), y[i], w));
     }
     ASSERT_NEAR(expected, actual, 1e-15);
+}
+
+TEST(LogisticRegression, grad_log_likelihood)
+{
+    Eigen::VectorXd w(2);
+    w << 1, 1;
+    Eigen::VectorXd y(5);
+    y << -1, -1, -1, 1, 1;
+    Eigen::MatrixXd X(w.size(), y.size());
+    X << 0.5, -0.2, 0.3, 0.3, 0.9,
+        -0.5, 0.7, -0.9, 0.9, 0.3;
+    const double lam = 0.01;
 
     Eigen::VectorXd actual_grad(w.size());
     LogisticRegression::grad_log_likelihood(X, y, w, lam, actual_grad);
