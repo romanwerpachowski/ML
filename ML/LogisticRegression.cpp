@@ -6,6 +6,9 @@
 
 namespace ml
 {
+    LogisticRegression::~LogisticRegression()
+    {}
+
     double LogisticRegression::probability(Eigen::Ref<const Eigen::VectorXd> x, double y, Eigen::Ref<const Eigen::VectorXd> w)
     {
         assert(y == -1 || y == 1);

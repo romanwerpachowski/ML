@@ -34,7 +34,7 @@ namespace ml
         /**
          * @brief Virtual destructor.
         */
-        virtual ~LogisticRegression();
+        DLL_DECLSPEC virtual ~LogisticRegression();
 
         /**
          * @brief Fit the model and return the result.
@@ -45,7 +45,7 @@ namespace ml
          * @param y Y vector with length N. Values should be -1 or 1.
          * @return Result object.
         */
-        virtual Result fit(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y) = 0;
+        DLL_DECLSPEC virtual Result fit(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y) = 0;
 
         /**
          * @brief Calculates the probability of label given model weights and feature vector.
@@ -78,6 +78,6 @@ namespace ml
          * @throw std::domain_error If `lam` is negative.
          * @throw std::invalid_argument If matrix or vector dimensions do not match.
         */
-        static void grad_log_likelihood(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<const Eigen::VectorXd> w, double lam, Eigen::Ref<Eigen::VectorXd> g);
+        DLL_DECLSPEC static void grad_log_likelihood(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<const Eigen::VectorXd> w, double lam, Eigen::Ref<Eigen::VectorXd> g);
     };
 }
