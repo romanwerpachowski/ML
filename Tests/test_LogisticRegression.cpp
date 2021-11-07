@@ -85,7 +85,7 @@ TEST(LogisticRegression, hessian_log_likelihood)
         -0.5, 0.7, -0.9, 0.9, 0.3;
     const double lam = 0.01;
 
-    Eigen::VectorXd actual_H(w.size(), w.size());
+    Eigen::MatrixXd actual_H(w.size(), w.size());
     LogisticRegression::hessian_log_likelihood(X, y, w, lam, actual_H);
     Eigen::VectorXd grad_up(w.size());
     Eigen::VectorXd grad_down(w.size());
