@@ -21,14 +21,15 @@ namespace ml
     */
     class LogisticRegression
     {
-    public:
+    public:        
         /**
          * @brief Result of binomial logistic regression.
         */
         struct Result
-        {
-            unsigned int n; /**< Number of data points. */
+        {            
             Eigen::VectorXd w; /**< Fitted coefficients of the LR model. */
+            unsigned int steps_taken; /**< Number of steps taken to converge. */
+            bool converged; /**< Did it converge? */
         };
 
         /**
@@ -43,9 +44,10 @@ namespace ml
          * 
          * @param X D x N matrix of X values, with data points in columns.
          * @param y Y vector with length N. Values should be -1 or 1.
+         * @throw std::invalid_argument if N or D are zero, or if dimensions of `X` and `y` do not match.
          * @return Result object.
         */
-        DLL_DECLSPEC virtual Result fit(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y) = 0;
+        DLL_DECLSPEC virtual Result fit(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y) const = 0;
 
         /**
          * @brief Calculates the probability of label given model weights and feature vector.
@@ -91,6 +93,16 @@ namespace ml
          * @throw std::invalid_argument If matrix or vector dimensions do not match.
         */
         DLL_DECLSPEC static void hessian_log_likelihood(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<const Eigen::VectorXd> w, double lam, Eigen::Ref<Eigen::MatrixXd> H);
+
+        /**
+         * @brief Predicts labels for features X given w.
+         * @param X D x N matrix of X values, with data points in columns.
+         * @param w Model weight vector with length D.
+         * @param[out] y Y vector with length N.
+         * @return Fills `y` with -1 or 1 values.
+         * @throw std::invalid_argument If matrix or vector dimensions do not match.
+        */
+        DLL_DECLSPEC static void predict(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> w, Eigen::Ref<Eigen::VectorXd> y);
     };
 
     /**
@@ -102,13 +114,14 @@ namespace ml
     {
     public:
         /**
-         * @brief Constructor.
-         * @param lam Inverse variance of the Gaussian prior for `w`. Cannot be negative. Set it to 0 if you want to perform maximum likelihood estimation of `w`.
-         * @param weight_relative_tolerance Weight relative tolerance. Cannot be negative.
-         * @throw std::domain_error If any of `lam`, `weight_relative_tolerance` or `weight_absolute_tolerance` is negative.
+         * @brief Constructor setting default parameter values.
         */
-        DLL_DECLSPEC AbstractLogisticRegression(double lam, double weight_relative_tolerance, double weight_absolute_tolerance);
+        DLL_DECLSPEC AbstractLogisticRegression();
 
+        /**
+         * @brief Returns the regularisation parameter.
+         * @return Inverse variance of the Gaussian prior for `w`. Cannot be negative. Set it to 0 if you want to perform maximum likelihood estimation of `w`. 
+        */
         double lam() const
         {
             return lam_;
@@ -129,17 +142,61 @@ namespace ml
         {
             return weight_relative_tolerance_;
         }
+
+        /**
+         * @brief Returns maximum number of steps allowed.
+        */
+        unsigned int maximum_steps() const
+        {
+            return maximum_steps_;
+        }
+
+        /**
+         * @brief Sets the regularisation parameter.
+         * @param lam Inverse variance of the Gaussian prior for `w`. Cannot be negative. Set it to 0 if you want to perform maximum likelihood estimation of `w`.
+         * @throw std::domain_error If `lam` is negative.
+        */
+        DLL_DECLSPEC void set_lam(double lam);
+
+        /**
+         * @brief Sets absolute tolerance for weight convergence.
+         * @param weight_absolute_tolerance Weight absolute tolerance. Cannot be negative.
+         * @throw std::domain_error If negative.
+        */
+        DLL_DECLSPEC void set_weight_absolute_tolerance(double weight_absolute_tolerance);
+
+        /**
+         * @brief Sets relative tolerance for weight convergence.
+         * @param weight_relative_tolerance Weight relative tolerance. Cannot be negative.
+         * @throw std::domain_error If negative.
+        */
+        DLL_DECLSPEC void set_weight_relative_tolerance(double weight_relative_tolerance);
+
+        /**
+         * @brief Sets maximum number of steps.
+        */
+        DLL_DECLSPEC void set_maximum_steps(unsigned int maximum_steps);
     protected:
         /**
-         * @brief Check if fitting converged.
+         * @brief Check if weight fitting converged.
          * @param old_weights Previous weight vector.
          * @param new_weights New weight vector.
          * @return True if converged, false otherwise.
         */
-        bool converged(Eigen::Ref<const Eigen::VectorXd> old_weights, Eigen::Ref<const Eigen::VectorXd> new_weights);
+        bool weights_converged(Eigen::Ref<const Eigen::VectorXd> old_weights, Eigen::Ref<const Eigen::VectorXd> new_weights) const;
     private:
         double lam_;
         double weight_relative_tolerance_;
         double weight_absolute_tolerance_;
+        unsigned int maximum_steps_;
+    };
+
+    /**
+     * @brief Conjugate gradient logistic regression, as described in Sec. 4 of Thomas P. Minka, "A comparison of numerical optimizers for logistic regression".
+    */
+    class ConjugateGradientLogisticRegression : public AbstractLogisticRegression
+    {
+    public:        
+        DLL_DECLSPEC Result fit(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y) const override;
     };
 }

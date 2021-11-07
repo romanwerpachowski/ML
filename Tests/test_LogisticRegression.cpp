@@ -1,5 +1,6 @@
 /* (C) 2021 Roman Werpachowski. */
 #include <cmath>
+#include <random>
 #include <gtest/gtest.h>
 #include "ML/LogisticRegression.hpp"
 
@@ -103,4 +104,50 @@ TEST(LogisticRegression, hessian_log_likelihood)
             ASSERT_NEAR(expected_H_i[j], actual_H(i, j), 1E-7) << i << " " << j;
         }        
     }
+}
+
+TEST(LogisticRegression, predict)
+{
+    Eigen::VectorXd w(2);
+    w << 1, 1;
+    Eigen::VectorXd y(5);
+    Eigen::MatrixXd X(w.size(), y.size());
+    X << 0.5, -0.2, 0.3, 0.3, 0.9,
+        -0.5, 0.7, -0.9, 0.9, 0.3;    
+    LogisticRegression::predict(X, w, y);
+    for (Eigen::Index i = 0; i < X.cols(); ++i) {
+        const double p1 = LogisticRegression::probability(X.col(i), 1, w);
+        const double expected = p1 > 0.5 ? 1 : -1;
+        ASSERT_EQ(expected, y[i]) << i;
+    }
+}
+
+TEST(ConjugateGradientLogisticRegression, separable)
+{
+    std::default_random_engine rng(784957984);
+    std::normal_distribution n01;
+    const unsigned int n = 100;
+    const unsigned int d = 10;
+    Eigen::VectorXd w(d);
+    Eigen::MatrixXd X(d, n);
+    for (unsigned int k = 0; k < d; ++k) {
+        w[k] = n01(rng);
+        for (unsigned int i = 0; i < n; ++i) {
+            X(k, i) = n01(rng);
+        }
+    }
+    Eigen::VectorXd y(n);
+    for (unsigned int i = 0; i < n; ++i) {
+        const double score = X.col(i).dot(w);
+        y[i] = score >= 0 ? 1 : -1;
+    }
+    ConjugateGradientLogisticRegression cglr;
+    cglr.set_weight_relative_tolerance(1e-6);
+    cglr.set_maximum_steps(100);
+    const auto result = cglr.fit(X, y);
+    ASSERT_TRUE(result.converged);
+    Eigen::VectorXd pred_y(n);
+    LogisticRegression::predict(X, result.w, pred_y);
+    ASSERT_EQ(0, (y - pred_y).norm());
+    ASSERT_LT(result.steps_taken, 100u);
 }

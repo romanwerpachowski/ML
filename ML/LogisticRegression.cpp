@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cmath>
 #include <stdexcept>
+#include "LinearAlgebra.hpp"
 #include "LogisticRegression.hpp"
 
 namespace ml
@@ -81,25 +82,118 @@ namespace ml
         }
     }
 
-    AbstractLogisticRegression::AbstractLogisticRegression(double lam, double weight_relative_tolerance, double weight_absolute_tolerance)
-        : lam_(lam), weight_relative_tolerance_(weight_relative_tolerance), weight_absolute_tolerance_(weight_absolute_tolerance)
+    void LogisticRegression::predict(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> w, Eigen::Ref<Eigen::VectorXd> y)
+    {
+        const auto dim = w.size();
+        if (dim != X.rows()) {
+            throw std::invalid_argument("Size mismatch: w.size() != X.rows()");
+        }
+        const auto n = X.cols();
+        if (n != y.size()) {
+            throw std::invalid_argument("Size mismatch: X.cols() != y.size()");
+        }
+        for (Eigen::Index i = 0; i < n; ++i) {
+            if (w.dot(X.col(i)) > 0) {
+                y[i] = 1;
+            } else {
+                y[i] = -1;
+            }
+        }
+    }
+
+    AbstractLogisticRegression::AbstractLogisticRegression()
+    {
+        lam_ = 1e-3;
+        weight_absolute_tolerance_ = 0;
+        weight_relative_tolerance_ = 1e-8;
+        maximum_steps_ = 100;
+    }
+
+    void AbstractLogisticRegression::set_lam(double lam)
     {
         if (!(lam >= 0)) {
             throw std::domain_error("Lambda must be non-negative");
         }
-        if (!(weight_relative_tolerance >= 0)) {
-            throw std::domain_error("Relative weight tolerance must be non-negative");
-        }
+        lam_ = lam;
+    }
+
+    void AbstractLogisticRegression::set_weight_absolute_tolerance(double weight_absolute_tolerance)
+    {
         if (!(weight_absolute_tolerance >= 0)) {
             throw std::domain_error("Absolute weight tolerance must be non-negative");
         }
+        weight_absolute_tolerance_ = weight_absolute_tolerance;
     }
 
-    bool AbstractLogisticRegression::converged(Eigen::Ref<const Eigen::VectorXd> old_weights, Eigen::Ref<const Eigen::VectorXd> new_weights)
+    void AbstractLogisticRegression::set_weight_relative_tolerance(double weight_relative_tolerance)
+    {
+        if (!(weight_relative_tolerance >= 0)) {
+            throw std::domain_error("Relative weight tolerance must be non-negative");
+        }
+        weight_relative_tolerance_ = weight_relative_tolerance;
+    }
+
+    void AbstractLogisticRegression::set_maximum_steps(unsigned int maximum_steps)
+    {
+        maximum_steps_ = maximum_steps;
+    }
+
+    bool AbstractLogisticRegression::weights_converged(Eigen::Ref<const Eigen::VectorXd> old_weights, Eigen::Ref<const Eigen::VectorXd> new_weights) const
     {
         const double old_weights_norm = old_weights.norm();
         const double new_weights_norm = new_weights.norm();
         const double weights_diff_norm = (old_weights - new_weights).norm();
         return weights_diff_norm <= weight_absolute_tolerance_ + std::max(old_weights_norm, new_weights_norm) * weight_relative_tolerance_;
+    }
+
+    LogisticRegression::Result ConjugateGradientLogisticRegression::fit(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y) const
+    {
+        const auto n = y.size();
+        const auto d = X.rows();
+        if (!n) {
+            throw std::invalid_argument("Need at least 1 example");
+        }
+        if (!d) {
+            throw std::invalid_argument("Need at least 1 feature");
+        }
+        if (X.cols() != n) {
+            throw std::invalid_argument("Dimension mismatch");
+        }
+
+        Eigen::VectorXd prev_w;
+        Result result;
+        result.converged = false;
+        result.w = Eigen::VectorXd::Zero(d);
+        Eigen::VectorXd g(d);
+        Eigen::VectorXd prev_g;
+        Eigen::MatrixXd H(d, d);
+        Eigen::VectorXd update_direction(d);
+        Eigen::VectorXd prev_update_direction;
+        unsigned int iter = 0;
+        while (iter < maximum_steps() && !result.converged) {
+            prev_w = result.w;
+            prev_g = g;
+            prev_update_direction = update_direction;
+            grad_log_likelihood(X, y, prev_w, lam(), g);
+            hessian_log_likelihood(X, y, prev_w, lam(), H);
+            update_direction = g;
+            if (iter) {
+                assert(prev_g.size() == d);
+                assert(prev_update_direction.size() == d);
+                assert(prev_w.size() == d);
+                const auto diff_g = g - prev_g;
+                update_direction = g;
+                const double denom = prev_update_direction.dot(diff_g);
+                if (denom != 0) {
+                    const double beta = g.dot(diff_g) / denom;
+                    update_direction -= beta * prev_update_direction;
+                }                                
+            }
+            result.w -= update_direction * g.dot(update_direction) / LinearAlgebra::xAx_symmetric(H, update_direction);
+            result.converged = weights_converged(prev_w, result.w);
+            ++iter;
+        }
+        result.steps_taken = iter;
+        return result;
     }
 }
