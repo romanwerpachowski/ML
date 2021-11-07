@@ -108,18 +108,21 @@ TEST(LogisticRegression, hessian_log_likelihood)
 
 TEST(LogisticRegression, predict)
 {
-    Eigen::VectorXd w(2);
-    w << 1, 1;
+    LogisticRegression::Result result;
+    result.w.resize(2);    
+    result.w << 1, 1;
     Eigen::VectorXd y(5);
-    Eigen::MatrixXd X(w.size(), y.size());
+    Eigen::MatrixXd X(result.w.size(), y.size());
     X << 0.5, -0.2, 0.3, 0.3, 0.9,
-        -0.5, 0.7, -0.9, 0.9, 0.3;    
-    LogisticRegression::predict(X, w, y);
+        -0.5, 0.7, -0.9, 0.9, 0.3;        
+    result.predict(X, y);
     for (Eigen::Index i = 0; i < X.cols(); ++i) {
-        const double p1 = LogisticRegression::probability(X.col(i), 1, w);
+        const double p1 = LogisticRegression::probability(X.col(i), 1, result.w);
         const double expected = p1 > 0.5 ? 1 : -1;
         ASSERT_EQ(expected, y[i]) << i;
     }
+    const Eigen::VectorXd y2 = result.predict(X);
+    ASSERT_EQ(0, (y - y2).norm());
 }
 
 TEST(ConjugateGradientLogisticRegression, separable)
@@ -146,8 +149,7 @@ TEST(ConjugateGradientLogisticRegression, separable)
     cglr.set_maximum_steps(100);
     const auto result = cglr.fit(X, y);
     ASSERT_TRUE(result.converged);
-    Eigen::VectorXd pred_y(n);
-    LogisticRegression::predict(X, result.w, pred_y);
+    Eigen::VectorXd pred_y = result.predict(X);
     ASSERT_EQ(0, (y - pred_y).norm());
     ASSERT_LT(result.steps_taken, 100u);
 }

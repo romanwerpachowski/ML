@@ -30,6 +30,28 @@ namespace ml
             Eigen::VectorXd w; /**< Fitted coefficients of the LR model. */
             unsigned int steps_taken; /**< Number of steps taken to converge. */
             bool converged; /**< Did it converge? */
+
+            /**
+             * @brief Predicts labels for features X given w.
+             * @param X D x N matrix of X values, with data points in columns.
+             * @param[out] y Y vector with length N.
+             * @return Fills `y` with -1 or 1 values.
+             * @throw std::invalid_argument If matrix or vector dimensions do not match.
+            */
+            DLL_DECLSPEC void predict(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<Eigen::VectorXd> y) const;
+
+            /**
+             * @brief Predicts labels for features X given w. Version which returns a new vector.
+             * @param X D x N matrix of X values, with data points in columns.
+             * @return Fills `y` with -1 or 1 values.
+             * @throw std::invalid_argument If matrix or vector dimensions do not match.
+            */
+            Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const
+            {
+                Eigen::VectorXd y(X.cols());
+                predict(X, y);
+                return y;
+            }
         };
 
         /**
@@ -92,17 +114,7 @@ namespace ml
          * @throw std::domain_error If `lam` is negative.
          * @throw std::invalid_argument If matrix or vector dimensions do not match.
         */
-        DLL_DECLSPEC static void hessian_log_likelihood(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<const Eigen::VectorXd> w, double lam, Eigen::Ref<Eigen::MatrixXd> H);
-
-        /**
-         * @brief Predicts labels for features X given w.
-         * @param X D x N matrix of X values, with data points in columns.
-         * @param w Model weight vector with length D.
-         * @param[out] y Y vector with length N.
-         * @return Fills `y` with -1 or 1 values.
-         * @throw std::invalid_argument If matrix or vector dimensions do not match.
-        */
-        DLL_DECLSPEC static void predict(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> w, Eigen::Ref<Eigen::VectorXd> y);
+        DLL_DECLSPEC static void hessian_log_likelihood(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y, Eigen::Ref<const Eigen::VectorXd> w, double lam, Eigen::Ref<Eigen::MatrixXd> H);        
     };
 
     /**
@@ -184,7 +196,7 @@ namespace ml
          * @return True if converged, false otherwise.
         */
         bool weights_converged(Eigen::Ref<const Eigen::VectorXd> old_weights, Eigen::Ref<const Eigen::VectorXd> new_weights) const;
-    private:
+    private:        
         double lam_;
         double weight_relative_tolerance_;
         double weight_absolute_tolerance_;

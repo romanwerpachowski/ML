@@ -6,7 +6,7 @@
 #include "LogisticRegression.hpp"
 
 namespace ml
-{
+{    
     LogisticRegression::~LogisticRegression()
     {}
 
@@ -80,9 +80,9 @@ namespace ml
             const double p = probability(x_i, 1, w);
             H -= p * (1 - p) * x_i * x_i.transpose();
         }
-    }
-
-    void LogisticRegression::predict(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> w, Eigen::Ref<Eigen::VectorXd> y)
+    }    
+    
+    void LogisticRegression::Result::predict(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<Eigen::VectorXd> y) const
     {
         const auto dim = w.size();
         if (dim != X.rows()) {
