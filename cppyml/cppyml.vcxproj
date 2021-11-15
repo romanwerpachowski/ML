@@ -191,6 +191,7 @@
     <ClCompile Include="decision_trees.cpp" />
     <ClCompile Include="linear_regression.cpp" />
     <ClCompile Include="cppyml.cpp" />
+    <ClCompile Include="logistic_regression.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ML\ML.vcxproj">

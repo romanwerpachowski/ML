@@ -43,7 +43,7 @@ namespace ml
             /**
              * @brief Predicts labels for features X given w. Version which returns a new vector.
              * @param X D x N matrix of X values, with data points in columns.
-             * @return Fills `y` with -1 or 1 values.
+             * @return Vector with -1 or 1 values.
              * @throw std::invalid_argument If matrix or vector dimensions do not match.
             */
             Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const
