@@ -13,7 +13,7 @@ namespace ml
     namespace LogisticRegressionPython
     {
         /**
-         * @brief Wraps Logistic Regression result to accept Python data structures.
+         * @brief Wraps Logistic Regression result to accept the feature matrix in row-major order.
          * @tparam R Wrapped result class.
         */
         template <class R> struct Result: public R
@@ -44,6 +44,44 @@ namespace ml
                 return this->predict(X.transpose());
             }
         };
+
+        /**
+         * @brief Wraps a Logistic Regression model to accept the feature matrix in row-major order.
+         * @tparam M Wrapped model class.
+         * @tparam R Wrapped result class.
+        */
+        template <class M, class R> class Model : public M
+        {
+            /** Construct the result from user data. */
+            template <class ... Types> Model(Types ... args)
+                : R{ args... }
+            {}
+
+            /** Wrap C++ result. */
+            Model(M&& wrapped)
+                : M(std::move(wrapped))
+            {}
+
+            /** Wrap const C++ result. */
+            Model(const M& wrapped)
+                : M(wrapped)
+            {}
+
+            /**
+             * @brief Fit the model and return the result.
+             *
+             * If fitting with intercept is desired, include a column of 1's in the X values.
+             *
+             * @param X N x D matrix of X values, with data points in rows.
+             * @param y Y vector with length N. Values should be -1 or 1.
+             * @throw std::invalid_argument if N or D are zero, or if dimensions of `X` and `y` do not match.
+             * @return Result object.
+            */
+            Result<R> fit_row_major(Eigen::Ref<const MatrixXdR> X, Eigen::Ref<const Eigen::VectorXd> y) const
+            {
+                return Result<R>(this->fit(X.transpose(), y));
+            }
+        };
     }
 }
 
@@ -56,4 +94,6 @@ void init_logistic_regression(py::module& m)
         .def_readonly("steps_taken", &ml::LogisticRegressionPython::Result<ml::LogisticRegression::Result>::steps_taken, "Number of steps taken to converge.")
         .def_readonly("converged", &ml::LogisticRegressionPython::Result<ml::LogisticRegression::Result>::converged, "Did it converge?")
         .def("predict", &ml::LogisticRegressionPython::Result<ml::LogisticRegression::Result>::predict_row_major, py::arg("X"), "Predicts labels for features X given w. Returns the predicted label vector.");
+
+    py::class_<ml::LogisticRegressionPython::Model<ml::LogisticRegression, ml::LogisticRegression::Result>> logistic_regression(m_log_reg, "LogisticRegression");
 }
