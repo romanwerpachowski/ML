@@ -153,3 +153,38 @@ TEST(ConjugateGradientLogisticRegression, separable)
     ASSERT_EQ(0, (y - pred_y).norm());
     ASSERT_LT(result.steps_taken, 100u);
 }
+
+TEST(ConjugateGradientLogisticRegression, non_separable)
+{
+    std::default_random_engine rng(784957984);
+    std::normal_distribution n01;
+    const unsigned int n = 100;
+    const unsigned int d = 10;
+    Eigen::VectorXd w(d);
+    Eigen::MatrixXd X(d, n);
+    for (unsigned int k = 0; k < d; ++k) {
+        w[k] = n01(rng);
+        for (unsigned int i = 0; i < n; ++i) {
+            X(k, i) = n01(rng);
+        }
+    }
+    Eigen::VectorXd y(n);
+    for (unsigned int i = 0; i < n; ++i) {
+        const double score = X.col(i).dot(w);
+        y[i] = score >= 0 ? 1 : -1;
+    }
+    // Flip 10% of labels.
+    for (unsigned int i = 0; i < n / 10; ++i) {
+        y[i] *= -1;
+    }
+    ConjugateGradientLogisticRegression cglr;
+    cglr.set_lam(0);
+    cglr.set_weight_relative_tolerance(1e-6);
+    cglr.set_maximum_steps(100);
+    const auto result = cglr.fit(X, y);
+    ASSERT_TRUE(result.converged);
+    Eigen::VectorXd pred_y = result.predict(X);
+    const double expected_mse = sqrt(4 * n / 10);
+    ASSERT_NEAR(expected_mse, (y - pred_y).norm(), expected_mse * 0.05);
+    ASSERT_LT(result.steps_taken, 100u);
+}
