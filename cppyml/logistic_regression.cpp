@@ -52,6 +52,7 @@ namespace ml
         */
         template <class M, class R> class Model : public M
         {
+        public:
             /** Construct the result from user data. */
             template <class ... Types> Model(Types ... args)
                 : R{ args... }
@@ -68,7 +69,7 @@ namespace ml
             {}
 
             /**
-             * @brief Fit the model and return the result.
+             * @brief Fits the model and returns the result.
              *
              * If fitting with intercept is desired, include a column of 1's in the X values.
              *
@@ -81,6 +82,12 @@ namespace ml
             {
                 return Result<R>(this->fit(X.transpose(), y));
             }
+        };
+
+        class WrappedAbstractLogisticRegression : public Model<AbstractLogisticRegression, LogisticRegression::Result>
+        {
+        public:
+            using AbstractLogisticRegression::lam;
         };
     }
 }
@@ -95,5 +102,22 @@ void init_logistic_regression(py::module& m)
         .def_readonly("converged", &ml::LogisticRegressionPython::Result<ml::LogisticRegression::Result>::converged, "Did it converge?")
         .def("predict", &ml::LogisticRegressionPython::Result<ml::LogisticRegression::Result>::predict_row_major, py::arg("X"), "Predicts labels for features X given w. Returns the predicted label vector.");
 
-    py::class_<ml::LogisticRegressionPython::Model<ml::LogisticRegression, ml::LogisticRegression::Result>> logistic_regression(m_log_reg, "LogisticRegression");
+    typedef ml::LogisticRegressionPython::Model<ml::AbstractLogisticRegression, ml::LogisticRegression::Result> WrappedAbstractLogisticRegression;
+
+    py::class_<WrappedAbstractLogisticRegression> logistic_regression(m_log_reg, "LogisticRegression");
+    logistic_regression.def("fit", &WrappedAbstractLogisticRegression::fit_row_major, py::arg("X"), py::arg("y"), R"(Fits the model and returns the result.
+
+If fitting with intercept is desired, include a column of 1's in the X values.
+
+Args:
+    X: N x D matrix of X values, with data points in rows.
+    y: Y vector with length N. Values should be -1 or 1.
+
+Returns:
+    Instance of `Result`.
+)")
+    .def_property_readonly("lam", &WrappedAbstractLogisticRegression::lam, "Regularisation parameter: inverse variance of the Gaussian prior for `w`")
+    .def_property_readonly("weight_absolute_tolerance", &WrappedAbstractLogisticRegression::weight_absolute_tolerance, "Absolute tolerance for fitted weights")
+    .def_property_readonly("weight_relative_tolerance", &WrappedAbstractLogisticRegression::weight_relative_tolerance, "Relative tolerance for fitted weights")
+    .def_property_readonly("maximum_steps", &WrappedAbstractLogisticRegression::maximum_steps, "Maximum number of steps allowed");
 }

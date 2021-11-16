@@ -60,7 +60,7 @@ namespace ml
         DLL_DECLSPEC virtual ~LogisticRegression();
 
         /**
-         * @brief Fit the model and return the result.
+         * @brief Fits the model and returns the result.
          * 
          * If fitting with intercept is desired, include a row of 1's in the X values.
          * 
