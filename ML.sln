@@ -19,7 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		README.md = README.md
 		SConstruct = SConstruct
-		ubuntu_required_packages.txt = ubuntu_required_packages.txt
+		ubuntu_required_packages_build.txt = ubuntu_required_packages_build.txt
+		ubuntu_required_packages_documentation.txt = ubuntu_required_packages_documentation.txt
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cppyml", "cppyml\cppyml.vcxproj", "{54C9836C-51BD-4E2A-B4C1-0F4C8A76CA64}"

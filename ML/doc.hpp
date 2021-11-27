@@ -39,6 +39,10 @@ Only Ordinary Least Squares for now:
 
 Implemented in ml::LinearRegression namespace.
 
+@subsection Logistic regression
+
+Conjugate gradient logistic regression algorithm. See class ml::ConjugateGradientLogisticRegression.
+
 @subsection Cross-validation
 
 Methods:
