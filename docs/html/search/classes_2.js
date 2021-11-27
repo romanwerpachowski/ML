@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['decisiontree_173',['DecisionTree',['../classml_1_1DecisionTree.html',1,'ml']]],
-  ['differentiablekernel_174',['DifferentiableKernel',['../classml_1_1Kernels_1_1DifferentiableKernel.html',1,'ml::Kernels']]],
-  ['differentiableradialbasisfunction_175',['DifferentiableRadialBasisFunction',['../classml_1_1Kernels_1_1DifferentiableRadialBasisFunction.html',1,'ml::Kernels']]],
-  ['differentiablerbfkernel_176',['DifferentiableRBFKernel',['../classml_1_1Kernels_1_1DifferentiableRBFKernel.html',1,'ml::Kernels']]],
-  ['doubledifferentiablekernel_177',['DoubleDifferentiableKernel',['../classml_1_1Kernels_1_1DoubleDifferentiableKernel.html',1,'ml::Kernels']]],
-  ['doubledifferentiableradialbasisfunction_178',['DoubleDifferentiableRadialBasisFunction',['../classml_1_1Kernels_1_1DoubleDifferentiableRadialBasisFunction.html',1,'ml::Kernels']]]
+  ['centroidsinitialiser_190',['CentroidsInitialiser',['../classml_1_1Clustering_1_1CentroidsInitialiser.html',1,'ml::Clustering']]],
+  ['closestcentroid_191',['ClosestCentroid',['../classml_1_1Clustering_1_1ClosestCentroid.html',1,'ml::Clustering']]],
+  ['conjugategradientlogisticregression_192',['ConjugateGradientLogisticRegression',['../classml_1_1ConjugateGradientLogisticRegression.html',1,'ml']]]
 ];

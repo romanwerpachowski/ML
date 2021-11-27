@@ -1,8 +1,12 @@
 var searchData=
 [
-  ['means_261',['means',['../classml_1_1EM.html#a7ab4b5d790cd3a37b12703c010d2056b',1,'ml::EM']]],
-  ['means_5finitialiser_262',['means_initialiser',['../classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e',1,'ml::EM']]],
-  ['mixing_5fprobabilities_263',['mixing_probabilities',['../classml_1_1EM.html#ae42efce9e1af38322d157804c4a12cfc',1,'ml::EM']]],
-  ['mode_264',['mode',['../namespaceml_1_1Statistics.html#ac1f94188b70909819b1429f166c46e4f',1,'ml::Statistics']]],
-  ['multivariate_265',['multivariate',['../namespaceml_1_1LinearRegression.html#ad36b2e75f9b2ba79ce0cdd7b49ed2f33',1,'ml::LinearRegression']]]
+  ['labels_277',['labels',['../classml_1_1BallTree.html#a1c716a0ad29719d5bf2f87b3cdf2d722',1,'ml::BallTree::labels()'],['../classml_1_1Clustering_1_1Model.html#ac530cb6d52c5816a0863718a10a1db9a',1,'ml::Clustering::Model::labels()'],['../classml_1_1EM.html#aba8eb164484a8253e15beb04fae5aee0',1,'ml::EM::labels()'],['../classml_1_1Clustering_1_1KMeans.html#ae33a8f30f5846de7ddddd75fbed2edcf',1,'ml::Clustering::KMeans::labels()']]],
+  ['lam_278',['lam',['../classml_1_1AbstractLogisticRegression.html#a215f4c858991ca567e41037249fe783b',1,'ml::AbstractLogisticRegression']]],
+  ['lasso_279',['lasso',['../namespaceml_1_1LinearRegression.html#ac10e71b6231916b0a5da0bc5884d0ac5',1,'ml::LinearRegression::lasso(Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, double lambda)'],['../namespaceml_1_1LinearRegression.html#ac006c0b3be542f240b432001f28f2fc4',1,'ml::LinearRegression::lasso(Eigen::Ref&lt; const Eigen::MatrixXd &gt; X, Eigen::Ref&lt; const Eigen::VectorXd &gt; y, double lambda, bool do_standardise)']]],
+  ['lasso_3c_20false_20_3e_280',['lasso&lt; false &gt;',['../namespaceml_1_1LinearRegression.html#abaf46d0aa34a4867026be2a867e7e7ab',1,'ml::LinearRegression']]],
+  ['lasso_3c_20true_20_3e_281',['lasso&lt; true &gt;',['../namespaceml_1_1LinearRegression.html#abb48c34d2d4c0e1390b99da7534de834',1,'ml::LinearRegression']]],
+  ['leafnode_282',['LeafNode',['../structml_1_1DecisionTrees_1_1LeafNode.html#a107859f6c0a2a5d7da0c207c9b842dce',1,'ml::DecisionTrees::LeafNode']]],
+  ['leave_5fone_5fout_283',['leave_one_out',['../namespaceml_1_1Crossvalidation.html#a52be767b7ee570fb2795860484527132',1,'ml::Crossvalidation']]],
+  ['leave_5fone_5fout_5fscalar_284',['leave_one_out_scalar',['../namespaceml_1_1Crossvalidation.html#a45ebc8c35196b24488e2bff8ab34d54b',1,'ml::Crossvalidation']]],
+  ['log_5flikelihood_285',['log_likelihood',['../classml_1_1EM.html#aedac3544c55121d270e6d3bdca67b6a5',1,'ml::EM::log_likelihood()'],['../classml_1_1LogisticRegression.html#aed7a085072352db52e728305de697328',1,'ml::LogisticRegression::log_likelihood()']]]
 ];

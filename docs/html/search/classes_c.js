@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['univariateolsresult_200',['UnivariateOLSResult',['../structml_1_1LinearRegression_1_1UnivariateOLSResult.html',1,'ml::LinearRegression']]]
+  ['splitnode_220',['SplitNode',['../structml_1_1DecisionTrees_1_1SplitNode.html',1,'ml::DecisionTrees']]]
 ];

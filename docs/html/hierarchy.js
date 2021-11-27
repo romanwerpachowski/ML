@@ -17,6 +17,11 @@ var hierarchy =
         [ "ml::Kernels::DifferentiableRBFKernel< DiffRBF >", "classml_1_1Kernels_1_1DifferentiableRBFKernel.html", null ]
       ] ]
     ] ],
+    [ "ml::LogisticRegression", "classml_1_1LogisticRegression.html", [
+      [ "ml::AbstractLogisticRegression", "classml_1_1AbstractLogisticRegression.html", [
+        [ "ml::ConjugateGradientLogisticRegression", "classml_1_1ConjugateGradientLogisticRegression.html", null ]
+      ] ]
+    ] ],
     [ "ml::Clustering::Model", "classml_1_1Clustering_1_1Model.html", [
       [ "ml::Clustering::KMeans", "classml_1_1Clustering_1_1KMeans.html", null ],
       [ "ml::EM", "classml_1_1EM.html", null ]
@@ -35,6 +40,7 @@ var hierarchy =
     [ "ml::Clustering::ResponsibilitiesInitialiser", "classml_1_1Clustering_1_1ResponsibilitiesInitialiser.html", [
       [ "ml::Clustering::ClosestCentroid", "classml_1_1Clustering_1_1ClosestCentroid.html", null ]
     ] ],
+    [ "ml::LogisticRegression::Result", "structml_1_1LogisticRegression_1_1Result.html", null ],
     [ "ml::LinearRegression::Result", "structml_1_1LinearRegression_1_1Result.html", [
       [ "ml::LinearRegression::MultivariateOLSResult", "structml_1_1LinearRegression_1_1MultivariateOLSResult.html", null ],
       [ "ml::LinearRegression::RegularisedRegressionResult", "structml_1_1LinearRegression_1_1RegularisedRegressionResult.html", [

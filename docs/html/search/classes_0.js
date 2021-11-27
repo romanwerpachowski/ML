@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['balltree_170',['BallTree',['../classml_1_1BallTree.html',1,'ml']]]
+  ['abstractlogisticregression_188',['AbstractLogisticRegression',['../classml_1_1AbstractLogisticRegression.html',1,'ml']]]
 ];

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['without_5fkth_5ffold_5f1d_317',['without_kth_fold_1d',['../namespaceml_1_1Crossvalidation.html#ac52d219aa17c664c8e3a05bd94a9641f',1,'ml::Crossvalidation::without_kth_fold_1d(Eigen::Ref&lt; const Eigen::VectorXd &gt; data, unsigned int k, unsigned int num_folds)'],['../namespaceml_1_1Crossvalidation.html#a639a94a413997207b149403aa1564d4c',1,'ml::Crossvalidation::without_kth_fold_1d(const std::vector&lt; T &gt; &amp;data, unsigned int k, unsigned int num_folds)']]],
-  ['without_5fkth_5ffold_5f2d_318',['without_kth_fold_2d',['../namespaceml_1_1Crossvalidation.html#adcd6520a92d38d68f2e7c504c99b640a',1,'ml::Crossvalidation']]]
+  ['value_345',['value',['../classml_1_1Kernels_1_1Kernel.html#a4131ba7fc936f68c05f010ab038f650e',1,'ml::Kernels::Kernel::value()'],['../classml_1_1Kernels_1_1RadialBasisFunction.html#a5689bfd9c4c3b42e91a2ad85c348421b',1,'ml::Kernels::RadialBasisFunction::value()'],['../classml_1_1Kernels_1_1GaussianRBF.html#a5bc866a09d4bc6745f0f9278b3e668be',1,'ml::Kernels::GaussianRBF::value()'],['../classml_1_1Kernels_1_1RBFKernel.html#a6858b225bbe7b1072305339a5be1ef75',1,'ml::Kernels::RBFKernel::value()']]],
+  ['var_5fy_346',['var_y',['../structml_1_1LinearRegression_1_1Result.html#a30e75a614b52889f7bb0963ef2b7c8a7',1,'ml::LinearRegression::Result']]]
 ];

@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['_7ecentroidsinitialiser_321',['~CentroidsInitialiser',['../classml_1_1Clustering_1_1CentroidsInitialiser.html#a2dedeb38aa34283f684a29edbd9168f8',1,'ml::Clustering::CentroidsInitialiser']]],
-  ['_7ekernel_322',['~Kernel',['../classml_1_1Kernels_1_1Kernel.html#a006f650268f881d78acbf893875a157d',1,'ml::Kernels::Kernel']]],
-  ['_7emodel_323',['~Model',['../classml_1_1Clustering_1_1Model.html#a32dcdd805920717c763f8198ec3a5e1b',1,'ml::Clustering::Model']]],
-  ['_7enode_324',['~Node',['../structml_1_1DecisionTrees_1_1Node.html#a74ab9952ad2e4f30323776d252af4bf3',1,'ml::DecisionTrees::Node']]],
-  ['_7eradialbasisfunction_325',['~RadialBasisFunction',['../classml_1_1Kernels_1_1RadialBasisFunction.html#ac07d4067709e9f8c76c1ae783cdb2105',1,'ml::Kernels::RadialBasisFunction']]],
-  ['_7eresponsibilitiesinitialiser_326',['~ResponsibilitiesInitialiser',['../classml_1_1Clustering_1_1ResponsibilitiesInitialiser.html#a57cb966681d117805cb2c064e9571cea',1,'ml::Clustering::ResponsibilitiesInitialiser']]]
+  ['xax_5fsymmetric_352',['xAx_symmetric',['../namespaceml_1_1LinearAlgebra.html#a974bc64c706388c0b8221c18c2190035',1,'ml::LinearAlgebra']]],
+  ['xxt_353',['xxT',['../namespaceml_1_1LinearAlgebra.html#a5c9e448884c3bad1a72b137beb081cad',1,'ml::LinearAlgebra']]]
 ];
