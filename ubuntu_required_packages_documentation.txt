@@ -1,0 +1,4 @@
+doxygen
+graphviz
+python3-setuptools
+python3-sphinx

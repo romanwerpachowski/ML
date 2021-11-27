@@ -7,7 +7,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Install dependencies
-        run: ./scripts/ci_dependencies.sh
+        run: ./scripts/ci_dependencies.sh ubuntu_required_packages_build.txt
       - name: Debug build
         run: ./scripts/ci_debug_build.sh
       - name: Release build
@@ -17,6 +17,10 @@ jobs:
     needs: Continuous-Integration
     if: github.ref == 'refs/heads/master'
     steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: ./scripts/ci_dependencies.sh ubuntu_required_packages_documentation.txt
       - name: Update documentation
         run: |
             ./scripts/ci_documentation.sh

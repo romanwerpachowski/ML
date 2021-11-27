@@ -1,5 +1,3 @@
-doxygen
-graphviz
 libeigen3-dev
 libbenchmark-dev
 pybind11-dev
@@ -12,5 +10,4 @@ python3-scipy
 python3-seaborn
 python3-setuptools
 python3-sklearn
-python3-sphinx
 scons
