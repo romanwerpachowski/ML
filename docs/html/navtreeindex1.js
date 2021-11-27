@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"structml_1_1LinearRegression_1_1Result.html#a30e75a614b52889f7bb0963ef2b7c8a7":[2,0,0,3,4,0],
 "structml_1_1LinearRegression_1_1Result.html#a3e0bff5cb2d11ab07031323000229f44":[2,0,0,3,4,5],
 "structml_1_1LinearRegression_1_1Result.html#a64108333e3904568ce45aaea074878a7":[2,0,0,3,4,2],
 "structml_1_1LinearRegression_1_1Result.html#a82133f978eef41c38438131c678ff6ae":[2,0,0,3,4,6],
