@@ -52,6 +52,9 @@ namespace ml
                 predict(X, y);
                 return y;
             }
+
+            /** @brief Formats the result as string. */
+            DLL_DECLSPEC std::string to_string() const;
         };
 
         /**

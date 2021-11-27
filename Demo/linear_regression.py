@@ -17,7 +17,7 @@ def main():
 
 *** LINEAR REGRESSION DEMO ***
 
-Times different versions of linear regression against standard Python libraries (scipy and sklearn).
+Benchmarks different versions of linear regression against standard Python libraries (scipy and sklearn).
 
 """)
     np.random.seed(1066)

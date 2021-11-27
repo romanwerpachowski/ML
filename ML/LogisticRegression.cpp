@@ -101,6 +101,13 @@ namespace ml
         }
     }
 
+    std::string LogisticRegression::Result::to_string() const
+    {
+        std::stringstream s;
+        s << "LogisticRegressionResult(w=[" << w.transpose() << "], steps_taken=" << steps_taken << ", converged=" << converged << ")";
+        return s.str();
+    }
+
     AbstractLogisticRegression::AbstractLogisticRegression()
     {
         lam_ = 1e-3;
