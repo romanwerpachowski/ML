@@ -11,6 +11,7 @@ cppyml is a Python extension module built on top of M++. Precompiled cppyml bina
 - clustering (E-M algorithm, K-means)
 - decision trees for classification and regression
 - linear regression (incl. recursive and ridge)
+- logistic regression
 
 More is coming! See [Doxygen documentation](html/index.html) for the C++ library documentation
 and [Sphinx documentation](cppyml/html/index.html) for the Python extensions.

@@ -8,8 +8,9 @@ Optimised Python extension for machine learning based on the [ML++](https://gith
 
 - ordinary least squares (OLS) regression
 - recursive OLS regression
+- logistic regression
 - classification and regression decision trees with pruning
-- Gaussian E-M clustering
+- Gaussian E-M clustering and K-means
 
 ## Documentation
 
