@@ -14,6 +14,7 @@ var dir_6efd14ba659829a180da85912847468f =
     [ "KMeans.hpp", "KMeans_8hpp_source.html", null ],
     [ "LinearAlgebra.hpp", "LinearAlgebra_8hpp_source.html", null ],
     [ "LinearRegression.hpp", "LinearRegression_8hpp_source.html", null ],
+    [ "LogisticRegression.hpp", "LogisticRegression_8hpp_source.html", null ],
     [ "RecursiveMultivariateOLS.hpp", "RecursiveMultivariateOLS_8hpp_source.html", null ],
     [ "Statistics.hpp", "Statistics_8hpp_source.html", null ],
     [ "Version.hpp", "Version_8hpp.html", null ]

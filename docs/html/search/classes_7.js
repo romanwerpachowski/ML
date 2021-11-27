@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['lassoregressionresult_185',['LassoRegressionResult',['../structml_1_1LinearRegression_1_1LassoRegressionResult.html',1,'ml::LinearRegression']]],
-  ['leafnode_186',['LeafNode',['../structml_1_1DecisionTrees_1_1LeafNode.html',1,'ml::DecisionTrees']]]
+  ['kernel_202',['Kernel',['../classml_1_1Kernels_1_1Kernel.html',1,'ml::Kernels']]],
+  ['kmeans_203',['KMeans',['../classml_1_1Clustering_1_1KMeans.html',1,'ml::Clustering']]],
+  ['kpp_204',['KPP',['../classml_1_1Clustering_1_1KPP.html',1,'ml::Clustering']]]
 ];

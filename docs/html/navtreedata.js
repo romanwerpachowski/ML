@@ -57,7 +57,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"BallTree_8hpp_source.html"
+"BallTree_8hpp_source.html",
+"structml_1_1LinearRegression_1_1Result.html#a3e0bff5cb2d11ab07031323000229f44"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

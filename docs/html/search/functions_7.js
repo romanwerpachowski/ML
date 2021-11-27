@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['inertia_247',['inertia',['../classml_1_1Clustering_1_1KMeans.html#ad34b2ddda82bb753f57c89cc5bb45962',1,'ml::Clustering::KMeans']]],
-  ['init_248',['init',['../classml_1_1Clustering_1_1CentroidsInitialiser.html#a0c54f98f7c8875648704a54a1b8fb4e1',1,'ml::Clustering::CentroidsInitialiser::init()'],['../classml_1_1Clustering_1_1ResponsibilitiesInitialiser.html#abd2ab7c676c1eed0037089ae57fa604d',1,'ml::Clustering::ResponsibilitiesInitialiser::init()'],['../classml_1_1Clustering_1_1Forgy.html#a3878a9ce986285dd31771acc6992858d',1,'ml::Clustering::Forgy::init()'],['../classml_1_1Clustering_1_1RandomPartition.html#ab819f206123f442846257a9dddc3d9e1',1,'ml::Clustering::RandomPartition::init()'],['../classml_1_1Clustering_1_1KPP.html#ab4b388a8095aa988bab5002033934c6a',1,'ml::Clustering::KPP::init()'],['../classml_1_1Clustering_1_1ClosestCentroid.html#ab7874c1e73b323d07cc6b391f354cc19',1,'ml::Clustering::ClosestCentroid::init()']]],
-  ['is_5fleaf_249',['is_leaf',['../structml_1_1DecisionTrees_1_1Node.html#a46fa5d10356f1730a1b74876dcffef47',1,'ml::DecisionTrees::Node::is_leaf()'],['../structml_1_1DecisionTrees_1_1SplitNode.html#a0b552217d59ef9d6c6a2763ecfd5d6ee',1,'ml::DecisionTrees::SplitNode::is_leaf()'],['../structml_1_1DecisionTrees_1_1LeafNode.html#a57c32eb8e6ff5b998df46ebbecb99b3f',1,'ml::DecisionTrees::LeafNode::is_leaf()']]]
+  ['hessian_5flog_5flikelihood_270',['hessian_log_likelihood',['../classml_1_1LogisticRegression.html#a3d75b69143845caa5e95afe9c51bc9f0',1,'ml::LogisticRegression']]]
 ];

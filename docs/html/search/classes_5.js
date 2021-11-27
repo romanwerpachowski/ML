@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gaussianrbf_181',['GaussianRBF',['../classml_1_1Kernels_1_1GaussianRBF.html',1,'ml::Kernels']]]
+  ['forgy_200',['Forgy',['../classml_1_1Clustering_1_1Forgy.html',1,'ml::Clustering']]]
 ];

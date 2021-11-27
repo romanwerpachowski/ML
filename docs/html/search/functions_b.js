@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['n_266',['n',['../classml_1_1LinearRegression_1_1RecursiveMultivariateOLS.html#a29fea80582f61a1235ed0efedb0a72f4',1,'ml::LinearRegression::RecursiveMultivariateOLS']]],
-  ['node_267',['Node',['../structml_1_1DecisionTrees_1_1Node.html#a3ab7a8cb5e03d13f536e38df30f59302',1,'ml::DecisionTrees::Node']]],
-  ['number_5fclusters_268',['number_clusters',['../classml_1_1Clustering_1_1Model.html#a5d8308c4ef808c2714dde56401f96cf8',1,'ml::Clustering::Model::number_clusters()'],['../classml_1_1EM.html#a3c7830bad6d500589d66e52c31facc30',1,'ml::EM::number_clusters()'],['../classml_1_1Clustering_1_1KMeans.html#ad49f5e4542fd7a7ac031e3a08f236d82',1,'ml::Clustering::KMeans::number_clusters()']]],
-  ['number_5fcomponents_269',['number_components',['../classml_1_1EM.html#ac2e2a5ea28be43d31a3f2bcd7299d130',1,'ml::EM']]],
-  ['number_5flowest_5fsplit_5fnodes_270',['number_lowest_split_nodes',['../classml_1_1DecisionTree.html#a351e707ef1aeaabf649afcafb4c115c7',1,'ml::DecisionTree']]]
+  ['maximum_5fsteps_286',['maximum_steps',['../classml_1_1AbstractLogisticRegression.html#aa229950d3920c3c5d9faa38549fdc648',1,'ml::AbstractLogisticRegression']]],
+  ['means_287',['means',['../classml_1_1EM.html#a7ab4b5d790cd3a37b12703c010d2056b',1,'ml::EM']]],
+  ['means_5finitialiser_288',['means_initialiser',['../classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e',1,'ml::EM']]],
+  ['mixing_5fprobabilities_289',['mixing_probabilities',['../classml_1_1EM.html#ae42efce9e1af38322d157804c4a12cfc',1,'ml::EM']]],
+  ['mode_290',['mode',['../namespaceml_1_1Statistics.html#ac1f94188b70909819b1429f166c46e4f',1,'ml::Statistics']]],
+  ['multivariate_291',['multivariate',['../namespaceml_1_1LinearRegression.html#ad36b2e75f9b2ba79ce0cdd7b49ed2f33',1,'ml::LinearRegression']]]
 ];
