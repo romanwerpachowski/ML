@@ -18,3 +18,4 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from .cppyml import clustering
 from .cppyml import decision_trees
 from .cppyml import linear_regression
+from .cppyml import logistic_regression

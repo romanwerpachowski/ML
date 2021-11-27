@@ -12,6 +12,7 @@ namespace py = pybind11;
 void init_clustering(py::module &m);
 void init_decision_trees(py::module &m);
 void init_linear_regression(py::module &m);
+void init_logistic_regression(py::module& m);
 
 PYBIND11_MODULE(cppyml, m)
 {
@@ -25,4 +26,5 @@ The goal is to provide well-tested, highly optimised implementations.
     init_clustering(m);
     init_decision_trees(m);
     init_linear_regression(m);
+    init_logistic_regression(m);
 }

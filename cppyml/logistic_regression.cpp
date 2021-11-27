@@ -55,7 +55,7 @@ namespace ml
         public:
             /** Construct the result from user data. */
             template <class ... Types> Model(Types ... args)
-                : R{ args... }
+                : M{ args... }
             {}
 
             /** Wrap C++ result. */
@@ -103,9 +103,8 @@ void init_logistic_regression(py::module& m)
         .def("predict", &ml::LogisticRegressionPython::Result<ml::LogisticRegression::Result>::predict_row_major, py::arg("X"), "Predicts labels for features X given w. Returns the predicted label vector.");
 
     typedef ml::LogisticRegressionPython::Model<ml::AbstractLogisticRegression, ml::LogisticRegression::Result> WrappedAbstractLogisticRegression;
-
-    py::class_<WrappedAbstractLogisticRegression> logistic_regression(m_log_reg, "LogisticRegression");
-    logistic_regression.def("fit", &WrappedAbstractLogisticRegression::fit_row_major, py::arg("X"), py::arg("y"), R"(Fits the model and returns the result.
+    py::class_<WrappedAbstractLogisticRegression> abstract_logistic_regression(m_log_reg, "LogisticRegression");
+    abstract_logistic_regression.def("fit", &WrappedAbstractLogisticRegression::fit_row_major, py::arg("X"), py::arg("y"), R"(Fits the model and returns the result.
 
 If fitting with intercept is desired, include a column of 1's in the X values.
 
@@ -116,8 +115,19 @@ Args:
 Returns:
     Instance of `Result`.
 )")
-    .def_property_readonly("lam", &WrappedAbstractLogisticRegression::lam, "Regularisation parameter: inverse variance of the Gaussian prior for `w`")
-    .def_property_readonly("weight_absolute_tolerance", &WrappedAbstractLogisticRegression::weight_absolute_tolerance, "Absolute tolerance for fitted weights")
-    .def_property_readonly("weight_relative_tolerance", &WrappedAbstractLogisticRegression::weight_relative_tolerance, "Relative tolerance for fitted weights")
-    .def_property_readonly("maximum_steps", &WrappedAbstractLogisticRegression::maximum_steps, "Maximum number of steps allowed");
+        .def_property_readonly("lam", &WrappedAbstractLogisticRegression::lam, "Regularisation parameter: inverse variance of the Gaussian prior for `w`")
+        .def_property_readonly("weight_absolute_tolerance", &WrappedAbstractLogisticRegression::weight_absolute_tolerance, "Absolute tolerance for fitted weights")
+        .def_property_readonly("weight_relative_tolerance", &WrappedAbstractLogisticRegression::weight_relative_tolerance, "Relative tolerance for fitted weights")
+        .def_property_readonly("maximum_steps", &WrappedAbstractLogisticRegression::maximum_steps, "Maximum number of steps allowed")
+        .def("set_lam", &WrappedAbstractLogisticRegression::set_lam, py::arg("lam"), "Sets the regularisation parameter.")
+        .def("set_weight_absolute_tolerance", &WrappedAbstractLogisticRegression::set_weight_absolute_tolerance, py::arg("weight_absolute_tolerance"), "Sets absolute tolerance for weight convergence.")
+        .def("set_weight_relative_tolerance", &WrappedAbstractLogisticRegression::set_weight_relative_tolerance, py::arg("weight_relative_tolerance"), "Sets relative tolerance for weight convergence.")
+        .def("set_maximum_steps", &WrappedAbstractLogisticRegression::set_maximum_steps, py::arg("maximum_steps"), "Sets maximum number of steps.");
+
+    typedef ml::LogisticRegressionPython::Model<ml::ConjugateGradientLogisticRegression, ml::LogisticRegression::Result> WrappedConjugateGradientLogisticRegression;
+    py::class_<WrappedConjugateGradientLogisticRegression> conjugate_gradient_logistic_regression(m_log_reg, "ConjugateGradientLogisticRegression", abstract_logistic_regression);
+    conjugate_gradient_logistic_regression.def(py::init()).doc() = R"(Binomial logistic regression algorithm.
+
+Implemented the conjugate gradient algorithm described in Thomas P. Minka, "A comparison of numerical optimizers for logistic regression".
+)";
 }

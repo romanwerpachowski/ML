@@ -72,6 +72,9 @@
     <None Include="version.json">
       <Filter>Python</Filter>
     </None>
+    <None Include="tests\test_logistic_regression.py">
+      <Filter>Python\tests</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="types.hpp">

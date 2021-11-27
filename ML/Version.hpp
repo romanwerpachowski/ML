@@ -1,8 +1,8 @@
 #pragma once
-/* (C) 2020 Roman Werpachowski. */
+/* (C) 2020-21 Roman Werpachowski. */
 
 /** @file Version.hpp
 Defines the current version of the library.
 */
 
-#define MLPP_VERSION "0.5.0" /**< Version string. */
+#define MLPP_VERSION "0.7.0" /**< Version string. */
