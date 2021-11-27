@@ -191,6 +191,7 @@
     <ClCompile Include="decision_trees.cpp" />
     <ClCompile Include="linear_regression.cpp" />
     <ClCompile Include="cppyml.cpp" />
+    <ClCompile Include="logistic_regression.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ML\ML.vcxproj">
@@ -206,6 +207,7 @@
     <None Include="tests\test_decision_trees.py" />
     <None Include="tests\test_clustering.py" />
     <None Include="tests\test_linear_regression.py" />
+    <None Include="tests\test_logistic_regression.py" />
     <None Include="tests\test_utils.py" />
     <None Include="version.json" />
   </ItemGroup>

@@ -41,5 +41,8 @@
     <None Include="mousie.py">
       <Filter>Python</Filter>
     </None>
+    <None Include="logistic_regression.py">
+      <Filter>Python</Filter>
+    </None>
   </ItemGroup>
 </Project>

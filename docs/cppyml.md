@@ -31,7 +31,7 @@ sudo python setup.py install
 
 
 1. Add a path to the `libs` directory of a Python distribution to the Visual Studio properties file `LocalDependencies.props` in the "Linker -> General -> Additional Library Directories" section.
-   For example, I use `C:\Users\Roman\anaconda3\libs`.
+   For example, I use `C:\Users\Roman\anaconda3\libs`. These paths determine the Python version required by the built module.
 
 2. Build the solution in ReleaseStatic mode.
 

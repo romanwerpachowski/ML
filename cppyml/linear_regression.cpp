@@ -1,4 +1,4 @@
-/* (C)2020 Roman Werpachowski. */
+/* (C) 2020 Roman Werpachowski. */
 #include <iostream>
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
