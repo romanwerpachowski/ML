@@ -19,6 +19,11 @@ Linear regression
 .. automodule:: cppyml.cppyml.linear_regression
 
 
+Logistic regression
+-----------------
+.. automodule:: cppyml.cppyml.logistic_regression
+
+
 Indices and tables
 ==================
 
