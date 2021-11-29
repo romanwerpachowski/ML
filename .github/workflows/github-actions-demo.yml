@@ -34,7 +34,7 @@ jobs:
       - name: Install cppyml
         run: |
             pwd
-            ls
+            ls -l
             pip install cppyml.whl
       - name: Update documentation
         run: |
