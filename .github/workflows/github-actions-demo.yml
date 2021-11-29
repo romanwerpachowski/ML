@@ -33,6 +33,7 @@ jobs:
           path: cppyml/cppyml/cppyml.so
       - name: Update documentation
         run: |
+            find .
             ./scripts/ci_documentation.sh
             git config --global user.name 'Roman Werpachowski'
             git config --global user.email 'romanwerpachowski@users.noreply.github.com'
