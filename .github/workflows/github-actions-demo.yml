@@ -15,8 +15,8 @@ jobs:
       - name: Upload binary Python package
         uses: actions/upload-artifact@v2
         with:
-          name: cppyml-binary-wheel
-          path: cppyml.whl
+          name: cppyml-artifacts
+          path: cppyml/dist/
   Documentation:
     runs-on: ubuntu-latest
     needs: Continuous-Integration
@@ -29,13 +29,11 @@ jobs:
       - name: Download binary Python package
         uses: actions/download-artifact@v2
         with:
-          name: cppyml-binary-wheel
-          path: cppyml.whl
+          name: cppyml-artifacts
+          path: cppyml/dist/
       - name: Install cppyml
         run: |
-            pwd
-            ls -l
-            pip install cppyml.whl
+            pip install cppyml/dist/*.whl
       - name: Update documentation
         run: |
             ./scripts/ci_documentation.sh
