@@ -7,21 +7,21 @@ All modules listed below should be imported as `cppyml.<module name>`, e.g. `cpp
 
 Clustering
 ----------
-.. automodule:: cppyml.clustering
+.. automodule:: cppyml.cppyml.clustering
 
 Decision trees
 --------------
-.. automodule:: cppyml.decision_trees
+.. automodule:: cppyml.cppyml.decision_trees
 
 
 Linear regression
 -----------------
-.. automodule:: cppyml.linear_regression
+.. automodule:: cppyml.cppyml.linear_regression
 
 
 Logistic regression
 -------------------
-.. automodule:: cppyml.logistic_regression
+.. automodule:: cppyml.cppyml.logistic_regression
 
 
 Indices and tables
