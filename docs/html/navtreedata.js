@@ -27,6 +27,7 @@ var NAVTREE =
       [ "Clustering", "index.html#Clustering", null ],
       [ "Decision trees", "index.html#decision_trees", null ],
       [ "Linear regression", "index.html#linreg", null ],
+      [ "regression", "index.html#Logistic", null ],
       [ "Cross-validation", "index.html#Cross-validation", null ],
       [ "Statistics", "index.html#Statistics", null ]
     ] ],
@@ -58,7 +59,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "BallTree_8hpp_source.html",
-"structml_1_1LinearRegression_1_1Result.html#a3e0bff5cb2d11ab07031323000229f44"
+"structml_1_1LinearRegression_1_1Result.html#a30e75a614b52889f7bb0963ef2b7c8a7"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

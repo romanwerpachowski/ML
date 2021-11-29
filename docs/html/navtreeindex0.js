@@ -172,8 +172,9 @@ var NAVTREEINDEX0 =
 "hierarchy.html":[2,2],
 "index.html":[],
 "index.html#Clustering":[0,0],
-"index.html#Cross-validation":[0,3],
-"index.html#Statistics":[0,4],
+"index.html#Cross-validation":[0,4],
+"index.html#Logistic":[0,3],
+"index.html#Statistics":[0,5],
 "index.html#decision_trees":[0,1],
 "index.html#linreg":[0,2],
 "index.html#provalg":[0],
@@ -185,11 +186,11 @@ var NAVTREEINDEX0 =
 "namespaceml_1_1Clustering.html":[1,0,0,0],
 "namespaceml_1_1Clustering.html":[2,0,0,0],
 "namespaceml_1_1Crossvalidation.html":[1,0,0,1],
-"namespaceml_1_1DecisionTrees.html":[2,0,0,1],
 "namespaceml_1_1DecisionTrees.html":[1,0,0,2],
+"namespaceml_1_1DecisionTrees.html":[2,0,0,1],
 "namespaceml_1_1Features.html":[1,0,0,3],
-"namespaceml_1_1Kernels.html":[2,0,0,2],
 "namespaceml_1_1Kernels.html":[1,0,0,4],
+"namespaceml_1_1Kernels.html":[2,0,0,2],
 "namespaceml_1_1LinearAlgebra.html":[1,0,0,5],
 "namespaceml_1_1LinearRegression.html":[1,0,0,6],
 "namespaceml_1_1LinearRegression.html":[2,0,0,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "structml_1_1LinearRegression_1_1RegularisedRegressionResult.html#ac5bf5d19b1fda2dbfa4a4a562e6adcc0":[2,0,0,3,3,2],
 "structml_1_1LinearRegression_1_1Result.html":[2,0,0,3,4],
 "structml_1_1LinearRegression_1_1Result.html#a1818badf519d8ef7c3da43d7884afb38":[2,0,0,3,4,4],
-"structml_1_1LinearRegression_1_1Result.html#a2aa2d9b23a663d1f915fa0ce24006777":[2,0,0,3,4,3],
-"structml_1_1LinearRegression_1_1Result.html#a30e75a614b52889f7bb0963ef2b7c8a7":[2,0,0,3,4,0]
+"structml_1_1LinearRegression_1_1Result.html#a2aa2d9b23a663d1f915fa0ce24006777":[2,0,0,3,4,3]
 };
