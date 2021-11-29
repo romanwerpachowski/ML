@@ -20,7 +20,7 @@ Linear regression
 
 
 Logistic regression
------------------
+-------------------
 .. automodule:: cppyml.cppyml.logistic_regression
 
 
