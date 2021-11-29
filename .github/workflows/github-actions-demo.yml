@@ -33,6 +33,8 @@ jobs:
           path: cppyml.whl
       - name: Install cppyml
         run: |
+            pwd
+            ls
             pip install cppyml.whl
       - name: Update documentation
         run: |
