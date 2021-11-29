@@ -16,8 +16,8 @@ import json
 import os
 import sys
 
-CPPYML_PATH = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../cppyml'))
-sys.path.insert(0, CPPYML_PATH)
+CPPYML_PATH = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../cppyml/'))
+sys.path.insert(0, os.path.join(CPPYML_PATH, "cppyml"))
 
 with open(os.path.join(CPPYML_PATH, "version.json")) as f:
     VERSION = json.load(f)
