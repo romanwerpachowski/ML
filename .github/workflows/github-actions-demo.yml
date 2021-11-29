@@ -32,7 +32,7 @@ jobs:
           name: cppyml-binary-wheel
       - name: Install cppyml
         run: |
-            pip install cppyml.whl
+            pip install ML/cppyml.whl
       - name: Update documentation
         run: |
             ./scripts/ci_documentation.sh
