@@ -6,32 +6,18 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Install dependencies
+      - name: Install build dependencies
         run: ./scripts/ci_dependencies.sh ubuntu_required_packages_build.txt
       - name: Debug build
         run: ./scripts/ci_debug_build.sh
       - name: Release build
+        if: github.ref == 'refs/heads/master'
         run: ./scripts/ci_release_build.sh      
-      - name: Upload binary Python module
-        uses: actions/upload-artifact@v2
-        with:
-          name: cppyml.so
-          path: cppyml/cppyml/cppyml.so
-  Documentation:
-    runs-on: ubuntu-latest
-    needs: Continuous-Integration
-    if: github.ref == 'refs/heads/master'
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Install dependencies
+      - name: Install documentation dependencies
+        if: github.ref == 'refs/heads/master'
         run: ./scripts/ci_dependencies.sh ubuntu_required_packages_documentation.txt
-      - name: Download binary Python module
-        uses: actions/download-artifact@v2
-        with:
-          name: cppyml.so
-          path: cppyml/cppyml/cppyml.so
       - name: Update documentation
+        if: github.ref == 'refs/heads/master'
         run: |
             find .
             ./scripts/ci_documentation.sh
