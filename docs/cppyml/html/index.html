@@ -25,6 +25,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">cppyml 0.7.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
@@ -34,20 +37,1076 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-cppyml-s-documentation">
-<h1>Welcome to cppyml’s documentation!<a class="headerlink" href="#welcome-to-cppyml-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-cppyml">
+<span id="welcome-to-cppyml-s-documentation"></span><h1>Welcome to cppyml’s documentation!<a class="headerlink" href="#module-cppyml" title="Permalink to this headline">¶</a></h1>
+<p>cppyml: Python bindings for efficient C++ implementations of selected ML algorithms.</p>
+<p>cppyml provides Python programmers with a curated selection of popular ML algorithms implemented in C++.
+The goal is to provide well-tested, highly optimised implementations.</p>
+<p>© 2020 Roman Werpachowski. Available under GPG v3 license.</p>
 <p>All modules listed below should be imported as <cite>cppyml.&lt;module name&gt;</cite>, e.g. <cite>cppyml.linear_regression</cite>.</p>
-<div class="section" id="clustering">
-<h2>Clustering<a class="headerlink" href="#clustering" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cppyml.clustering">
+<span id="clustering"></span><h2>Clustering<a class="headerlink" href="#module-cppyml.clustering" title="Permalink to this headline">¶</a></h2>
+<p>Clustering algorithms.</p>
+<dl class="class">
+<dt id="cppyml.clustering.CentroidsInitialiser">
+<em class="property">class </em><code class="descclassname">cppyml.clustering.</code><code class="descname">CentroidsInitialiser</code><a class="headerlink" href="#cppyml.clustering.CentroidsInitialiser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
+<p>Abstract centroids initialiser.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.clustering.ClosestCentroid">
+<em class="property">class </em><code class="descclassname">cppyml.clustering.</code><code class="descname">ClosestCentroid</code><a class="headerlink" href="#cppyml.clustering.ClosestCentroid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cppyml.clustering.ResponsibilitiesInitialiser" title="cppyml.clustering.ResponsibilitiesInitialiser"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.clustering.ResponsibilitiesInitialiser</span></code></a></p>
+<p>Assigns points to closest centroid.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.clustering.EM">
+<em class="property">class </em><code class="descclassname">cppyml.clustering.</code><code class="descname">EM</code><a class="headerlink" href="#cppyml.clustering.EM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
+<p>Gaussian Expectation-Maximisation algorithm.</p>
+<dl class="method">
+<dt id="cppyml.clustering.EM.assign_responsibilities">
+<code class="descname">assign_responsibilities</code><span class="sig-paren">(</span><em>self: cppyml.clustering.EM, x: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray[float64[m, 1]]<a class="headerlink" href="#cppyml.clustering.EM.assign_responsibilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a data point x, calculate each component’s responsibilities for x and return them.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – Data point with correct dimension.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Array of components’ responsibilities.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.EM.covariance">
+<code class="descname">covariance</code><span class="sig-paren">(</span><em>self: cppyml.clustering.EM</em>, <em>k: int</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray[float64[m, n]]<a class="headerlink" href="#cppyml.clustering.EM.covariance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns k-th covariance matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>k</strong> – Gaussian component index.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">2D square matrix with covariance coefficients.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.EM.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>self: cppyml.clustering.EM, data: numpy.ndarray[float64[m, n], flags.c_contiguous]</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#cppyml.clustering.EM.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits the components to the data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – A 2D array with data points in rows.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if EM algorithm converged.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.clustering.EM.log_likelihood">
+<code class="descname">log_likelihood</code><a class="headerlink" href="#cppyml.clustering.EM.log_likelihood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximised log-likelihood.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.clustering.EM.means">
+<code class="descname">means</code><a class="headerlink" href="#cppyml.clustering.EM.means" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitted means.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.clustering.EM.mixing_probabilities">
+<code class="descname">mixing_probabilities</code><a class="headerlink" href="#cppyml.clustering.EM.mixing_probabilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mixing probabilities of components.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.clustering.EM.number_components">
+<code class="descname">number_components</code><a class="headerlink" href="#cppyml.clustering.EM.number_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of Gaussian components.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.clustering.EM.responsibilities">
+<code class="descname">responsibilities</code><a class="headerlink" href="#cppyml.clustering.EM.responsibilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitted responsibilities.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.EM.set_absolute_tolerance">
+<code class="descname">set_absolute_tolerance</code><span class="sig-paren">(</span><em>self: cppyml.clustering.EM</em>, <em>absolute_tolerance: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.EM.set_absolute_tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets absolute tolerance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.EM.set_maximise_first">
+<code class="descname">set_maximise_first</code><span class="sig-paren">(</span><em>self: cppyml.clustering.EM</em>, <em>maximise_first: bool</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.EM.set_maximise_first" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns on/off doing an initial maximisation step before the E-M iterations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.EM.set_maximum_steps">
+<code class="descname">set_maximum_steps</code><span class="sig-paren">(</span><em>self: cppyml.clustering.EM</em>, <em>maximum_steps: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.EM.set_maximum_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets maximum number of iterations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.EM.set_means_initialiser">
+<code class="descname">set_means_initialiser</code><span class="sig-paren">(</span><em>self: cppyml.clustering.EM</em>, <em>means_initialiser: cppyml.clustering.CentroidsInitialiser</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.EM.set_means_initialiser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the algorithm to initialise component means.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.EM.set_relative_tolerance">
+<code class="descname">set_relative_tolerance</code><span class="sig-paren">(</span><em>self: cppyml.clustering.EM</em>, <em>relative_tolerance: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.EM.set_relative_tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets relative tolerance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.EM.set_responsibilities_initialiser">
+<code class="descname">set_responsibilities_initialiser</code><span class="sig-paren">(</span><em>self: cppyml.clustering.EM</em>, <em>responsibilities_initialiser: cppyml.clustering.ResponsibilitiesInitialiser</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.EM.set_responsibilities_initialiser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the algorithm to initialise responsibilities for data points.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.EM.set_seed">
+<code class="descname">set_seed</code><span class="sig-paren">(</span><em>self: cppyml.clustering.EM</em>, <em>seed: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.EM.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets PRNG seed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.EM.set_verbose">
+<code class="descname">set_verbose</code><span class="sig-paren">(</span><em>self: cppyml.clustering.EM</em>, <em>verbose: bool</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.EM.set_verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns on/off the verbose mode.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.clustering.Forgy">
+<em class="property">class </em><code class="descclassname">cppyml.clustering.</code><code class="descname">Forgy</code><a class="headerlink" href="#cppyml.clustering.Forgy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cppyml.clustering.CentroidsInitialiser" title="cppyml.clustering.CentroidsInitialiser"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.clustering.CentroidsInitialiser</span></code></a></p>
+<p>Forgy initialisation algorithm.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.clustering.KMeans">
+<em class="property">class </em><code class="descclassname">cppyml.clustering.</code><code class="descname">KMeans</code><a class="headerlink" href="#cppyml.clustering.KMeans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
+<p>Naive K-Means algorithm.</p>
+<dl class="method">
+<dt id="cppyml.clustering.KMeans.assign_label">
+<code class="descname">assign_label</code><span class="sig-paren">(</span><em>self: cppyml.clustering.KMeans, x: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; Tuple[int, float]<a class="headerlink" href="#cppyml.clustering.KMeans.assign_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a data point x, assigns it to the closest cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – Data point with correct dimension.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Cluster label for point x.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.clustering.KMeans.centroids">
+<code class="descname">centroids</code><a class="headerlink" href="#cppyml.clustering.KMeans.centroids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitted centroids.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.KMeans.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>self: cppyml.clustering.KMeans, data: numpy.ndarray[float64[m, n], flags.c_contiguous]</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#cppyml.clustering.KMeans.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits the components to the data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – A 2D array with data points in rows.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the algorithm converged.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.clustering.KMeans.inertia">
+<code class="descname">inertia</code><a class="headerlink" href="#cppyml.clustering.KMeans.inertia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimised inertia.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.clustering.KMeans.labels">
+<code class="descname">labels</code><a class="headerlink" href="#cppyml.clustering.KMeans.labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitted labels.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.clustering.KMeans.number_clusters">
+<code class="descname">number_clusters</code><a class="headerlink" href="#cppyml.clustering.KMeans.number_clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of clusters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.KMeans.set_absolute_tolerance">
+<code class="descname">set_absolute_tolerance</code><span class="sig-paren">(</span><em>self: cppyml.clustering.KMeans</em>, <em>absolute_tolerance: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.KMeans.set_absolute_tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets absolute tolerance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.KMeans.set_centroids_initialiser">
+<code class="descname">set_centroids_initialiser</code><span class="sig-paren">(</span><em>self: cppyml.clustering.KMeans</em>, <em>centroids_initialiser: cppyml.clustering.CentroidsInitialiser</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.KMeans.set_centroids_initialiser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the algorithm to initialise cluster centroids.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.KMeans.set_maximum_steps">
+<code class="descname">set_maximum_steps</code><span class="sig-paren">(</span><em>self: cppyml.clustering.KMeans</em>, <em>maximum_steps: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.KMeans.set_maximum_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets maximum number of iterations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.KMeans.set_number_initialisations">
+<code class="descname">set_number_initialisations</code><span class="sig-paren">(</span><em>self: cppyml.clustering.KMeans</em>, <em>centroids_initialiser: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.KMeans.set_number_initialisations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets number of initialisations to try, to find the clusters with lowest inertia.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.KMeans.set_seed">
+<code class="descname">set_seed</code><span class="sig-paren">(</span><em>self: cppyml.clustering.KMeans</em>, <em>seed: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.KMeans.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the PRNG seed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.clustering.KMeans.set_verbose">
+<code class="descname">set_verbose</code><span class="sig-paren">(</span><em>self: cppyml.clustering.KMeans</em>, <em>verbose: bool</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.clustering.KMeans.set_verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns on/off the verbose mode.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.clustering.KPP">
+<em class="property">class </em><code class="descclassname">cppyml.clustering.</code><code class="descname">KPP</code><a class="headerlink" href="#cppyml.clustering.KPP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cppyml.clustering.CentroidsInitialiser" title="cppyml.clustering.CentroidsInitialiser"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.clustering.CentroidsInitialiser</span></code></a></p>
+<p>KMeans++ initialisation algorithm.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.clustering.RandomPartition">
+<em class="property">class </em><code class="descclassname">cppyml.clustering.</code><code class="descname">RandomPartition</code><a class="headerlink" href="#cppyml.clustering.RandomPartition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cppyml.clustering.CentroidsInitialiser" title="cppyml.clustering.CentroidsInitialiser"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.clustering.CentroidsInitialiser</span></code></a></p>
+<p>Random Partition initialisation algorithm.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.clustering.ResponsibilitiesInitialiser">
+<em class="property">class </em><code class="descclassname">cppyml.clustering.</code><code class="descname">ResponsibilitiesInitialiser</code><a class="headerlink" href="#cppyml.clustering.ResponsibilitiesInitialiser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
+<p>Abstract responsibilities initialiser.</p>
+</dd></dl>
+
 </div>
-<div class="section" id="decision-trees">
-<h2>Decision trees<a class="headerlink" href="#decision-trees" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cppyml.decision_trees">
+<span id="decision-trees"></span><h2>Decision trees<a class="headerlink" href="#module-cppyml.decision_trees" title="Permalink to this headline">¶</a></h2>
+<p>Decision tree algorithms.</p>
+<dl class="class">
+<dt id="cppyml.decision_trees.ClassificationTree">
+<em class="property">class </em><code class="descclassname">cppyml.decision_trees.</code><code class="descname">ClassificationTree</code><a class="headerlink" href="#cppyml.decision_trees.ClassificationTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
+<p>Classification tree</p>
+<dl class="method">
+<dt id="cppyml.decision_trees.ClassificationTree.cost_complexity">
+<code class="descname">cost_complexity</code><span class="sig-paren">(</span><em>self: cppyml.decision_trees.ClassificationTree</em>, <em>alpha: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#cppyml.decision_trees.ClassificationTree.cost_complexity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates cost-complexity for given alpha.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.decision_trees.ClassificationTree.number_leaf_nodes">
+<code class="descname">number_leaf_nodes</code><a class="headerlink" href="#cppyml.decision_trees.ClassificationTree.number_leaf_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of leaf nodes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.decision_trees.ClassificationTree.number_lowest_split_nodes">
+<code class="descname">number_lowest_split_nodes</code><a class="headerlink" href="#cppyml.decision_trees.ClassificationTree.number_lowest_split_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of lowest split nodes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.decision_trees.ClassificationTree.number_nodes">
+<code class="descname">number_nodes</code><a class="headerlink" href="#cppyml.decision_trees.ClassificationTree.number_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of nodes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.decision_trees.ClassificationTree.original_error">
+<code class="descname">original_error</code><a class="headerlink" href="#cppyml.decision_trees.ClassificationTree.original_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Original error.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.decision_trees.ClassificationTree.total_leaf_error">
+<code class="descname">total_leaf_error</code><a class="headerlink" href="#cppyml.decision_trees.ClassificationTree.total_leaf_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total leaf error.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.decision_trees.RegressionTree">
+<em class="property">class </em><code class="descclassname">cppyml.decision_trees.</code><code class="descname">RegressionTree</code><a class="headerlink" href="#cppyml.decision_trees.RegressionTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
+<p>Regression tree</p>
+<dl class="method">
+<dt id="cppyml.decision_trees.RegressionTree.cost_complexity">
+<code class="descname">cost_complexity</code><span class="sig-paren">(</span><em>self: cppyml.decision_trees.RegressionTree</em>, <em>alpha: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#cppyml.decision_trees.RegressionTree.cost_complexity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates cost-complexity for given alpha.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.decision_trees.RegressionTree.number_leaf_nodes">
+<code class="descname">number_leaf_nodes</code><a class="headerlink" href="#cppyml.decision_trees.RegressionTree.number_leaf_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of leaf nodes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.decision_trees.RegressionTree.number_lowest_split_nodes">
+<code class="descname">number_lowest_split_nodes</code><a class="headerlink" href="#cppyml.decision_trees.RegressionTree.number_lowest_split_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of lowest split nodes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.decision_trees.RegressionTree.number_nodes">
+<code class="descname">number_nodes</code><a class="headerlink" href="#cppyml.decision_trees.RegressionTree.number_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of nodes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.decision_trees.RegressionTree.original_error">
+<code class="descname">original_error</code><a class="headerlink" href="#cppyml.decision_trees.RegressionTree.original_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Original error.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.decision_trees.RegressionTree.total_leaf_error">
+<code class="descname">total_leaf_error</code><a class="headerlink" href="#cppyml.decision_trees.RegressionTree.total_leaf_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total leaf error.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cppyml.decision_trees.classification_tree">
+<code class="descclassname">cppyml.decision_trees.</code><code class="descname">classification_tree</code><span class="sig-paren">(</span><em>X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]], max_split_levels: int = 100, min_split_size: int = 10, alphas: List[float] = [1e-06, 1e-05, 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0], num_folds: int = 10</em><span class="sig-paren">)</span> &#x2192; Tuple[cppyml.decision_trees.ClassificationTree, float, float]<a class="headerlink" href="#cppyml.decision_trees.classification_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grows a classification tree with pruning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> – Independent variables (row-wise) with shape N x D.</li>
+<li><strong>y</strong> – Dependent variable (vector) with length N.</li>
+<li><strong>max_split_levels</strong> – Maximum number of split nodes on the way to any leaf node.</li>
+<li><strong>min_split_size</strong> – Minimum sample size which can be split (at least 2).</li>
+<li><strong>alphas</strong> – Candidate alphas (non-negative) for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used. Defaults to [1E-6, 1E-5, …, 10, 100].</li>
+<li><strong>num_folds</strong> – Number of folds for cross-validation. Ignored if cross-validation is not done.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">trained decision tree, chosen alpha (NaN if no pruning was done) and minimum cross-validation test error (NaN if no cross-validation was done).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Tuple of</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cppyml.decision_trees.classification_tree_accuracy">
+<code class="descclassname">cppyml.decision_trees.</code><code class="descname">classification_tree_accuracy</code><span class="sig-paren">(</span><em>tree: cppyml.decision_trees.ClassificationTree, X: numpy.ndarray[float64[m, n], flags.f_contiguous], y: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#cppyml.decision_trees.classification_tree_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates classification tree accuracy on (X, y) data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tree</strong> – Classification tree instance.</li>
+<li><strong>X</strong> – Independent variables (row-wise) with shape N x D.</li>
+<li><strong>y</strong> – Dependent variable (vector) with length N.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Classification accuracy.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cppyml.decision_trees.regression_tree">
+<code class="descclassname">cppyml.decision_trees.</code><code class="descname">regression_tree</code><span class="sig-paren">(</span><em>X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]], max_split_levels: int = 100, min_split_size: int = 10, alphas: List[float] = [1e-06, 1e-05, 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0], num_folds: int = 10</em><span class="sig-paren">)</span> &#x2192; Tuple[cppyml.decision_trees.RegressionTree, float, float]<a class="headerlink" href="#cppyml.decision_trees.regression_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grows a regression tree with pruning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> – Independent variables (row-wise) with shape N x D.</li>
+<li><strong>y</strong> – Dependent variable (vector) with length N.</li>
+<li><strong>max_split_levels</strong> – Maximum number of split nodes on the way to any leaf node.</li>
+<li><strong>min_split_size</strong> – Minimum sample size which can be split (at least 2).</li>
+<li><strong>alphas</strong> – Candidate alphas (non-negative) for pruning to be selected by cross-validation. If this vector is empty, no pruning is done. If it has just one element, this value is used for pruning. If it has more than one, the one with smallest k-fold cross-validation test error is used. Defaults to [1E-6, 1E-5, …, 10, 100].</li>
+<li><strong>num_folds</strong> – Number of folds for cross-validation. Ignored if cross-validation is not done.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">trained decision tree, chosen alpha (NaN if no pruning was done) and minimum cross-validation test error (NaN if no cross-validation was done).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Tuple of</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cppyml.decision_trees.regression_tree_mean_squared_error">
+<code class="descclassname">cppyml.decision_trees.</code><code class="descname">regression_tree_mean_squared_error</code><span class="sig-paren">(</span><em>tree: cppyml.decision_trees.RegressionTree, X: numpy.ndarray[float64[m, n], flags.f_contiguous], y: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#cppyml.decision_trees.regression_tree_mean_squared_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates regression tree mean squared error on (X, y) data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tree</strong> – Regression tree instance.</li>
+<li><strong>X</strong> – Independent variables (row-wise) with shape N x D.</li>
+<li><strong>y</strong> – Dependent variable (vector) with length N.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Mean squared error.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
-<div class="section" id="linear-regression">
-<h2>Linear regression<a class="headerlink" href="#linear-regression" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cppyml.linear_regression">
+<span id="linear-regression"></span><h2>Linear regression<a class="headerlink" href="#module-cppyml.linear_regression" title="Permalink to this headline">¶</a></h2>
+<p>Linear regression algorithms.</p>
+<dl class="class">
+<dt id="cppyml.linear_regression.LassoRegressionResult">
+<em class="property">class </em><code class="descclassname">cppyml.linear_regression.</code><code class="descname">LassoRegressionResult</code><a class="headerlink" href="#cppyml.linear_regression.LassoRegressionResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cppyml.linear_regression.Result" title="cppyml.linear_regression.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.linear_regression.Result</span></code></a></p>
+<p>Result of a (multivariate) Lasso regression with intercept.</p>
+<p>Intercept is the last coefficient in <cite>beta</cite>.</p>
+<p><cite>var_y</cite> is calculated using <cite>dof</cite> as the denominator.</p>
+<dl class="attribute">
+<dt id="cppyml.linear_regression.LassoRegressionResult.beta">
+<code class="descname">beta</code><a class="headerlink" href="#cppyml.linear_regression.LassoRegressionResult.beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitted coefficients of the model y_i = beta’^T X_i, followed by beta0.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.LassoRegressionResult.effective_dof">
+<code class="descname">effective_dof</code><a class="headerlink" href="#cppyml.linear_regression.LassoRegressionResult.effective_dof" title="Permalink to this definition">¶</a></dt>
+<dd><p>N - tr [ X^T (X * X^T + lambda * I)^{-1} X ] - 1.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Effective number of residual degrees of freedom</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.linear_regression.MultivariateOLSResult">
+<em class="property">class </em><code class="descclassname">cppyml.linear_regression.</code><code class="descname">MultivariateOLSResult</code><a class="headerlink" href="#cppyml.linear_regression.MultivariateOLSResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cppyml.linear_regression.Result" title="cppyml.linear_regression.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.linear_regression.Result</span></code></a></p>
+<p>Result of multivariate Ordinary Least Squares regression.</p>
+<p>The <cite>cov</cite> property assumes independent Gaussian error terms.</p>
+<dl class="attribute">
+<dt id="cppyml.linear_regression.MultivariateOLSResult.beta">
+<code class="descname">beta</code><a class="headerlink" href="#cppyml.linear_regression.MultivariateOLSResult.beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitted coefficients of the model y_i = beta^T X_i.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.MultivariateOLSResult.cov">
+<code class="descname">cov</code><a class="headerlink" href="#cppyml.linear_regression.MultivariateOLSResult.cov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Covariance matrix of beta coefficients.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.linear_regression.RecursiveMultivariateOLS">
+<em class="property">class </em><code class="descclassname">cppyml.linear_regression.</code><code class="descname">RecursiveMultivariateOLS</code><a class="headerlink" href="#cppyml.linear_regression.RecursiveMultivariateOLS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
+<p>Given a stream of pairs (X_i, y_i), updates the least-squares estimate for beta solving the equations</p>
+<p>y_0 = X_0^T * beta + e_0
+y_1 = X_1^T * beta + e_1
+…</p>
+<p>Based on <a class="reference external" href="https://cpb-us-w2.wpmucdn.com/sites.gatech.edu/dist/2/436/files/2017/07/22-notes-6250-f16.pdf">https://cpb-us-w2.wpmucdn.com/sites.gatech.edu/dist/2/436/files/2017/07/22-notes-6250-f16.pdf</a></p>
+<dl class="attribute">
+<dt id="cppyml.linear_regression.RecursiveMultivariateOLS.beta">
+<code class="descname">beta</code><a class="headerlink" href="#cppyml.linear_regression.RecursiveMultivariateOLS.beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current beta estimate. If n == 0, returns an empty array.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.RecursiveMultivariateOLS.d">
+<code class="descname">d</code><a class="headerlink" href="#cppyml.linear_regression.RecursiveMultivariateOLS.d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dimension of data points. If n == 0, returs 0.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.RecursiveMultivariateOLS.n">
+<code class="descname">n</code><a class="headerlink" href="#cppyml.linear_regression.RecursiveMultivariateOLS.n" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of data points seen so far.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.linear_regression.RecursiveMultivariateOLS.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>self: cppyml.linear_regression.RecursiveMultivariateOLS, X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.linear_regression.RecursiveMultivariateOLS.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the beta estimate with a new sample.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>X</strong> – N x D matrix of X values, with data points in rows.</li>
+<li><strong>y</strong> – Y vector with length N.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Throws:</dt>
+<dd>ValueError: If n == 0 (i.e., (X, y) is the first sample) and N &lt; D.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.linear_regression.Result">
+<em class="property">class </em><code class="descclassname">cppyml.linear_regression.</code><code class="descname">Result</code><a class="headerlink" href="#cppyml.linear_regression.Result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
+<dl class="attribute">
+<dt id="cppyml.linear_regression.Result.adjusted_r2">
+<code class="descname">adjusted_r2</code><a class="headerlink" href="#cppyml.linear_regression.Result.adjusted_r2" title="Permalink to this definition">¶</a></dt>
+<dd><p>1 - fraction of variance unexplained relative to the base model. Uses sample variances. Equal to <cite>1 - rss * (n - 1) / tss / dof</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.Result.dof">
+<code class="descname">dof</code><a class="headerlink" href="#cppyml.linear_regression.Result.dof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of residual degrees of freedom (e.g. <cite>n - 2</cite> or <cite>n - 1</cite> for univariate regression with or without intercept).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.Result.n">
+<code class="descname">n</code><a class="headerlink" href="#cppyml.linear_regression.Result.n" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of data points.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.Result.r2">
+<code class="descname">r2</code><a class="headerlink" href="#cppyml.linear_regression.Result.r2" title="Permalink to this definition">¶</a></dt>
+<dd><p>1 - fraction of variance unexplained relative to the base model. Equal to <cite>1 - rss / tss</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.Result.rss">
+<code class="descname">rss</code><a class="headerlink" href="#cppyml.linear_regression.Result.rss" title="Permalink to this definition">¶</a></dt>
+<dd><p>sum_{i=1}^N (hat{y}_i - y_i)^2.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Residual sum of squares</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.Result.tss">
+<code class="descname">tss</code><a class="headerlink" href="#cppyml.linear_regression.Result.tss" title="Permalink to this definition">¶</a></dt>
+<dd><p>sum_{i=1}^N (y_i - N^{-1} sum_{j=1}^N y_j)^2.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Total sum of squares</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.Result.var_y">
+<code class="descname">var_y</code><a class="headerlink" href="#cppyml.linear_regression.Result.var_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimated variance of observations Y, equal to <cite>rss / dof</cite>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.linear_regression.RidgeRegressionResult">
+<em class="property">class </em><code class="descclassname">cppyml.linear_regression.</code><code class="descname">RidgeRegressionResult</code><a class="headerlink" href="#cppyml.linear_regression.RidgeRegressionResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cppyml.linear_regression.Result" title="cppyml.linear_regression.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.linear_regression.Result</span></code></a></p>
+<p>Result of a (multivariate) ridge regression with intercept.</p>
+<p>Intercept is the last coefficient in <cite>beta</cite>.</p>
+<p><cite>var_y</cite> is calculated using <cite>dof</cite> as the denominator.</p>
+<dl class="attribute">
+<dt id="cppyml.linear_regression.RidgeRegressionResult.beta">
+<code class="descname">beta</code><a class="headerlink" href="#cppyml.linear_regression.RidgeRegressionResult.beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitted coefficients of the model y_i = beta’^T X_i, followed by beta0.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.RidgeRegressionResult.cov">
+<code class="descname">cov</code><a class="headerlink" href="#cppyml.linear_regression.RidgeRegressionResult.cov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Covariance matrix of (beta’, beta0) coefficients.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.RidgeRegressionResult.effective_dof">
+<code class="descname">effective_dof</code><a class="headerlink" href="#cppyml.linear_regression.RidgeRegressionResult.effective_dof" title="Permalink to this definition">¶</a></dt>
+<dd><p>N - tr [ X^T (X * X^T + lambda * I)^{-1} X ] - 1.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Effective number of residual degrees of freedom</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.linear_regression.UnivariateOLSResult">
+<em class="property">class </em><code class="descclassname">cppyml.linear_regression.</code><code class="descname">UnivariateOLSResult</code><a class="headerlink" href="#cppyml.linear_regression.UnivariateOLSResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cppyml.linear_regression.Result" title="cppyml.linear_regression.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.linear_regression.Result</span></code></a></p>
+<p>Result of univariate Ordinary Least Squares regression (with or without intercept).</p>
+<p>The following properties assume independent Gaussian error terms: <cite>var_slope</cite>, <cite>var_intercept</cite> and <cite>cov_slope_intercept</cite>.</p>
+<dl class="attribute">
+<dt id="cppyml.linear_regression.UnivariateOLSResult.cov_slope_intercept">
+<code class="descname">cov_slope_intercept</code><a class="headerlink" href="#cppyml.linear_regression.UnivariateOLSResult.cov_slope_intercept" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimated covariance of the slope and the intercept.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.UnivariateOLSResult.intercept">
+<code class="descname">intercept</code><a class="headerlink" href="#cppyml.linear_regression.UnivariateOLSResult.intercept" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant added to slope * X when predicting Y.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.UnivariateOLSResult.slope">
+<code class="descname">slope</code><a class="headerlink" href="#cppyml.linear_regression.UnivariateOLSResult.slope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coefficient multiplying X values when predicting Y.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.UnivariateOLSResult.var_intercept">
+<code class="descname">var_intercept</code><a class="headerlink" href="#cppyml.linear_regression.UnivariateOLSResult.var_intercept" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimated variance of the intercept.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.linear_regression.UnivariateOLSResult.var_slope">
+<code class="descname">var_slope</code><a class="headerlink" href="#cppyml.linear_regression.UnivariateOLSResult.var_slope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimated variance of the slope.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cppyml.linear_regression.lasso">
+<code class="descclassname">cppyml.linear_regression.</code><code class="descname">lasso</code><span class="sig-paren">(</span><em>X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]], lambda: float, do_standardise: bool = False</em><span class="sig-paren">)</span> &#x2192; cppyml.linear_regression.LassoRegressionResult<a class="headerlink" href="#cppyml.linear_regression.lasso" title="Permalink to this definition">¶</a></dt>
+<dd><p>Carries out multivariate Lasso regression with intercept.</p>
+<p>Given X and y, finds beta’ and beta0 minimising || y - beta’^T X - beta0 ||^2 + lambda * || beta’ ||_1.</p>
+<p>R2 is always calculated w/r to model returning average y.
+The matrix <cite>X</cite> is assumed to be standardised unless <cite>do_standardise</cite> is set to <cite>True</cite>.
+Does not calculate the covariance matrix for estimated coefficients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> – X matrix (shape N x D, with D &lt;= N), with data points in rows.</li>
+<li><strong>y</strong> – Y vector with length N.</li>
+<li><strong>do_standardise</strong> – Whether to automatically subtract the mean from each row in <cite>X</cite> and divide it by its standard deviation (defaults to False).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Instance of <cite>LassoRegressionResult</cite>. If <cite>do_standardise</cite> was <cite>True</cite>, the <cite>beta</cite> vector will be rescaled and shifted
+to original <cite>X</cite> units and origins.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cppyml.linear_regression.multivariate">
+<code class="descclassname">cppyml.linear_regression.</code><code class="descname">multivariate</code><span class="sig-paren">(</span><em>X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]], add_ones: bool = False</em><span class="sig-paren">)</span> &#x2192; cppyml.linear_regression.MultivariateOLSResult<a class="headerlink" href="#cppyml.linear_regression.multivariate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Carries out multivariate linear regression.</p>
+<p>R2 is always calculated w/r to model returning average Y.
+If fitting with intercept is desired, include a row of 1’s in the X values
+or set the parameter <cite>add_ones</cite> to <cite>True</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> – X matrix (shape N x D, with D &lt;= N), with data points in rows.</li>
+<li><strong>y</strong> – Y vector with length N.</li>
+<li><strong>add_ones</strong> – Whether to automatically add a column of 1’s at the end of <cite>X</cite> (optional, defaults to <cite>False</cite>).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Instance of <cite>MultivariateOLSResult</cite>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cppyml.linear_regression.press">
+<code class="descclassname">cppyml.linear_regression.</code><code class="descname">press</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#cppyml.linear_regression.press" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li>press(X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]], regularisation: str = ‘none’, reg_lambda: float = 0.0) -&gt; float</li>
+</ol>
+<p>Calculates the PRESS statistic (Predicted Residual Error Sum of Squares).</p>
+<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/PRESS_statistic">https://en.wikipedia.org/wiki/PRESS_statistic</a> for details.</p>
+<p>NOTE: Training data will be standardised internally if using regularisation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> – X matrix (shape N x D, with D &lt;= N), with data points in rows. Unstandardised.</li>
+<li><strong>y</strong> – Y vector with length N.</li>
+<li><strong>regularisation</strong> – Type of regularisation: “none” or “ridge”. Defaults to “none”.</li>
+<li><strong>reg_lambda</strong> – Non-negative regularisation strength. Defaults to 0. Ignored if <cite>regularisation == “none”</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Value of the PRESS statistic.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<ol class="arabic simple" start="2">
+<li>press(X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]], regularisation: str = ‘none’, reg_lambda: float = 0.0) -&gt; float</li>
+</ol>
+<p>Calculates the PRESS statistic (Predicted Residual Error Sum of Squares).</p>
+<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/PRESS_statistic">https://en.wikipedia.org/wiki/PRESS_statistic</a> for details.</p>
+<p>NOTE: Training data will be standardised internally if using regularisation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> – X matrix (shape N x D, with D &lt;= N), with data points in rows. Unstandardised.</li>
+<li><strong>y</strong> – Y vector with length N.</li>
+<li><strong>regularisation</strong> – Type of regularisation: “none” or “ridge”. Defaults to “none”.</li>
+<li><strong>reg_lambda</strong> – Non-negative regularisation strength. Defaults to 0. Ignored if <cite>regularisation == “none”</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Value of the PRESS statistic.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cppyml.linear_regression.press_univariate">
+<code class="descclassname">cppyml.linear_regression.</code><code class="descname">press_univariate</code><span class="sig-paren">(</span><em>x: numpy.ndarray[float64[m, 1]], y: numpy.ndarray[float64[m, 1]], with_intercept: bool = True</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#cppyml.linear_regression.press_univariate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the PRESS statistic (Predicted Residual Error Sum of Squares) for univariate regression.</p>
+<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/PRESS_statistic">https://en.wikipedia.org/wiki/PRESS_statistic</a> for details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – X vector with length N.</li>
+<li><strong>y</strong> – Y vector with same length as <cite>x</cite>.</li>
+<li><strong>with_intercept</strong> – Whether the regression is with intercept or not (defaults to True).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Value of the PRESS statistic.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cppyml.linear_regression.ridge">
+<code class="descclassname">cppyml.linear_regression.</code><code class="descname">ridge</code><span class="sig-paren">(</span><em>X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]], lambda: float, do_standardise: bool = False</em><span class="sig-paren">)</span> &#x2192; cppyml.linear_regression.RidgeRegressionResult<a class="headerlink" href="#cppyml.linear_regression.ridge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Carries out multivariate ridge regression with intercept.</p>
+<p>Given X and y, finds beta’ and beta0 minimising || y - beta’^T X - beta0 ||^2 + lambda * || beta’ ||^2.</p>
+<p>R2 is always calculated w/r to model returning average y.
+The matrix <cite>X</cite> is assumed to be standardised unless <cite>do_standardise</cite> is set to <cite>True</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> – X matrix (shape N x D, with D &lt;= N), with data points in rows.</li>
+<li><strong>y</strong> – Y vector with length N.</li>
+<li><strong>do_standardise</strong> – Whether to automatically subtract the mean from each row in <cite>X</cite> and divide it by its standard deviation (defaults to False).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Instance of <cite>RidgeRegressionResult</cite>. If <cite>do_standardise</cite> was <cite>True</cite>, the <cite>beta</cite> vector will be rescaled and shifted
+to original <cite>X</cite> units and origins, and the <cite>cov</cite> matrix will be transformed accordingly.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cppyml.linear_regression.univariate">
+<code class="descclassname">cppyml.linear_regression.</code><code class="descname">univariate</code><span class="sig-paren">(</span><em>x: numpy.ndarray[float64[m, 1]], y: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; cppyml.linear_regression.UnivariateOLSResult<a class="headerlink" href="#cppyml.linear_regression.univariate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Carries out univariate (aka simple) linear regression with intercept.</p>
+<dl class="docutils">
+<dt>R2 coefficient is calculated w/r to a model returning average Y, and is equal to Corr(X, Y)^2:</dt>
+<dd>R2 = 1 - sum_{i=1}^n (y_i - hat{y}_i)^2 / sum_{i=1}^n (y_i - avg(Y))^2.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – X vector.</li>
+<li><strong>y</strong> – Y vector. <cite>x</cite> and <cite>y</cite> must have same length not less than 2.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Instance of <cite>UnivariateOLSResult</cite>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cppyml.linear_regression.univariate_regular">
+<code class="descclassname">cppyml.linear_regression.</code><code class="descname">univariate_regular</code><span class="sig-paren">(</span><em>x0: float, dx: float, y: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; cppyml.linear_regression.UnivariateOLSResult<a class="headerlink" href="#cppyml.linear_regression.univariate_regular" title="Permalink to this definition">¶</a></dt>
+<dd><p>Carries out univariate (aka simple) linear regression with intercept on regularly spaced points.</p>
+<dl class="docutils">
+<dt>R2 coefficient is calculated w/r to a model returning average Y, and is equal to Corr(X, Y)^2:</dt>
+<dd>R2 = 1 - sum_{i=1}^n (y_i - hat{y}_i)^2 / sum_{i=1}^n (y_i - avg(Y))^2.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x0</strong> – First X value.</li>
+<li><strong>dx</strong> – Positive X increment.</li>
+<li><strong>y</strong> – Y vector with length not less than 2.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Instance of <cite>UnivariateOLSResult</cite>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cppyml.linear_regression.univariate_without_intercept">
+<code class="descclassname">cppyml.linear_regression.</code><code class="descname">univariate_without_intercept</code><span class="sig-paren">(</span><em>x: numpy.ndarray[float64[m, 1]], y: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; cppyml.linear_regression.UnivariateOLSResult<a class="headerlink" href="#cppyml.linear_regression.univariate_without_intercept" title="Permalink to this definition">¶</a></dt>
+<dd><p>Carries out univariate (aka simple) linear regression without intercept.</p>
+<dl class="docutils">
+<dt>The R2 coefficient is calculated w/r to a model returning average Y:</dt>
+<dd>R2 = 1 - sum_{i=1}^n (y_i - hat{y}_i)^2 / sum_{i=1}^n (y_i - avg(Y))^2.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – X vector.</li>
+<li><strong>y</strong> – Y vector. <cite>x</cite> and <cite>y</cite> must have same length not less than 1.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Instance of <cite>UnivariateOLSResult</cite> with <cite>intercept</cite>, <cite>var_intercept</cite> and <cite>cov_slope_intercept</cite> set to 0.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
-<div class="section" id="logistic-regression">
-<h2>Logistic regression<a class="headerlink" href="#logistic-regression" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cppyml.logistic_regression">
+<span id="logistic-regression"></span><h2>Logistic regression<a class="headerlink" href="#module-cppyml.logistic_regression" title="Permalink to this headline">¶</a></h2>
+<p>Logistic regression algorithms.</p>
+<dl class="class">
+<dt id="cppyml.logistic_regression.ConjugateGradientLogisticRegression">
+<em class="property">class </em><code class="descclassname">cppyml.logistic_regression.</code><code class="descname">ConjugateGradientLogisticRegression</code><a class="headerlink" href="#cppyml.logistic_regression.ConjugateGradientLogisticRegression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cppyml.logistic_regression.LogisticRegression" title="cppyml.logistic_regression.LogisticRegression"><code class="xref py py-class docutils literal notranslate"><span class="pre">cppyml.logistic_regression.LogisticRegression</span></code></a></p>
+<p>Binomial logistic regression algorithm.</p>
+<p>Implemented the conjugate gradient algorithm described in Thomas P. Minka, “A comparison of numerical optimizers for logistic regression”.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.logistic_regression.LogisticRegression">
+<em class="property">class </em><code class="descclassname">cppyml.logistic_regression.</code><code class="descname">LogisticRegression</code><a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
+<dl class="method">
+<dt id="cppyml.logistic_regression.LogisticRegression.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>self: cppyml.logistic_regression.LogisticRegression, X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; cppyml.logistic_regression.Result<a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits the model and returns the result.</p>
+<p>If fitting with intercept is desired, include a column of 1’s in the X values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> – N x D matrix of X values, with data points in rows.</li>
+<li><strong>y</strong> – Y vector with length N. Values should be -1 or 1.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Instance of <cite>Result</cite>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.logistic_regression.LogisticRegression.lam">
+<code class="descname">lam</code><a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.lam" title="Permalink to this definition">¶</a></dt>
+<dd><p>inverse variance of the Gaussian prior for <cite>w</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Regularisation parameter</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.logistic_regression.LogisticRegression.maximum_steps">
+<code class="descname">maximum_steps</code><a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.maximum_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum number of steps allowed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.logistic_regression.LogisticRegression.set_lam">
+<code class="descname">set_lam</code><span class="sig-paren">(</span><em>self: cppyml.logistic_regression.LogisticRegression</em>, <em>lam: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.set_lam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the regularisation parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.logistic_regression.LogisticRegression.set_maximum_steps">
+<code class="descname">set_maximum_steps</code><span class="sig-paren">(</span><em>self: cppyml.logistic_regression.LogisticRegression</em>, <em>maximum_steps: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.set_maximum_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets maximum number of steps.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.logistic_regression.LogisticRegression.set_weight_absolute_tolerance">
+<code class="descname">set_weight_absolute_tolerance</code><span class="sig-paren">(</span><em>self: cppyml.logistic_regression.LogisticRegression</em>, <em>weight_absolute_tolerance: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.set_weight_absolute_tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets absolute tolerance for weight convergence.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.logistic_regression.LogisticRegression.set_weight_relative_tolerance">
+<code class="descname">set_weight_relative_tolerance</code><span class="sig-paren">(</span><em>self: cppyml.logistic_regression.LogisticRegression</em>, <em>weight_relative_tolerance: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.set_weight_relative_tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets relative tolerance for weight convergence.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.logistic_regression.LogisticRegression.weight_absolute_tolerance">
+<code class="descname">weight_absolute_tolerance</code><a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.weight_absolute_tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Absolute tolerance for fitted weights</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.logistic_regression.LogisticRegression.weight_relative_tolerance">
+<code class="descname">weight_relative_tolerance</code><a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.weight_relative_tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relative tolerance for fitted weights</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cppyml.logistic_regression.Result">
+<em class="property">class </em><code class="descclassname">cppyml.logistic_regression.</code><code class="descname">Result</code><a class="headerlink" href="#cppyml.logistic_regression.Result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
+<dl class="attribute">
+<dt id="cppyml.logistic_regression.Result.converged">
+<code class="descname">converged</code><a class="headerlink" href="#cppyml.logistic_regression.Result.converged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Did it converge?</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.logistic_regression.Result.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>self: cppyml.logistic_regression.Result, X: numpy.ndarray[float64[m, n], flags.c_contiguous]</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray[float64[m, 1]]<a class="headerlink" href="#cppyml.logistic_regression.Result.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predicts labels for features X given w. Returns the predicted label vector.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.logistic_regression.Result.steps_taken">
+<code class="descname">steps_taken</code><a class="headerlink" href="#cppyml.logistic_regression.Result.steps_taken" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of steps taken to converge.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cppyml.logistic_regression.Result.w">
+<code class="descname">w</code><a class="headerlink" href="#cppyml.logistic_regression.Result.w" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fitted coefficients of the LR model.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -68,10 +1127,10 @@
   <h3><a href="#">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Welcome to cppyml’s documentation!</a><ul>
-<li><a class="reference internal" href="#clustering">Clustering</a></li>
-<li><a class="reference internal" href="#decision-trees">Decision trees</a></li>
-<li><a class="reference internal" href="#linear-regression">Linear regression</a></li>
-<li><a class="reference internal" href="#logistic-regression">Logistic regression</a></li>
+<li><a class="reference internal" href="#module-cppyml.clustering">Clustering</a></li>
+<li><a class="reference internal" href="#module-cppyml.decision_trees">Decision trees</a></li>
+<li><a class="reference internal" href="#module-cppyml.linear_regression">Linear regression</a></li>
+<li><a class="reference internal" href="#module-cppyml.logistic_regression">Logistic regression</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
@@ -106,6 +1165,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">cppyml 0.7.0 documentation</a> &#187;</li> 
       </ul>
     </div>

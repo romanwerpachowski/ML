@@ -1,8 +1,8 @@
 <map id="ml::Kernels::Kernel" name="ml::Kernels::Kernel">
 <area shape="rect" id="node1" title="Abstract R^D kernel interface." alt="" coords="5,78,149,105"/>
-<area shape="rect" id="node2" href="$classml_1_1Kernels_1_1DifferentiableKernel.html" title="Abstract differentiable R^D kernel interface." alt="" coords="237,5,429,47"/>
-<area shape="rect" id="node5" href="$classml_1_1Kernels_1_1RBFKernel.html" title="Radial basis function kernel." alt="" coords="248,71,419,112"/>
-<area shape="rect" id="node6" href="$classml_1_1Kernels_1_1RBFKernel.html" title=" " alt="" coords="197,136,469,177"/>
-<area shape="rect" id="node3" href="$classml_1_1Kernels_1_1DifferentiableRBFKernel.html" title="Differentiable radial basis function kernel." alt="" coords="541,103,733,144"/>
-<area shape="rect" id="node4" href="$classml_1_1Kernels_1_1DoubleDifferentiableKernel.html" title="Abstract double differentiable R^D kernel interface." alt="" coords="517,5,756,47"/>
+<area shape="rect" id="node2" href="$classml_1_1Kernels_1_1DifferentiableKernel.html" title="Abstract differentiable R^D kernel interface." alt="" coords="237,5,431,47"/>
+<area shape="rect" id="node5" href="$classml_1_1Kernels_1_1RBFKernel.html" title="Radial basis function kernel." alt="" coords="249,71,419,112"/>
+<area shape="rect" id="node6" href="$classml_1_1Kernels_1_1RBFKernel.html" title=" " alt="" coords="197,136,471,177"/>
+<area shape="rect" id="node3" href="$classml_1_1Kernels_1_1DifferentiableRBFKernel.html" title="Differentiable radial basis function kernel." alt="" coords="541,103,735,144"/>
+<area shape="rect" id="node4" href="$classml_1_1Kernels_1_1DoubleDifferentiableKernel.html" title="Abstract double differentiable R^D kernel interface." alt="" coords="519,5,757,47"/>
 </map>

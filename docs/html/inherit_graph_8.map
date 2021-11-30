@@ -1,6 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
 <area shape="rect" id="node1" href="$classml_1_1Kernels_1_1RadialBasisFunction.html" title="Radial basis function." alt="" coords="5,5,184,47"/>
-<area shape="rect" id="node2" href="$classml_1_1Kernels_1_1DifferentiableRadialBasisFunction.html" title="Differentiable radial basis function kernel." alt="" coords="232,5,424,47"/>
-<area shape="rect" id="node3" href="$classml_1_1Kernels_1_1DoubleDifferentiableRadialBasisFunction.html" title="Double differentiable radial basis function kernel." alt="" coords="472,5,711,47"/>
-<area shape="rect" id="node4" href="$classml_1_1Kernels_1_1GaussianRBF.html" title="Gaussian radial basis function." alt="" coords="759,13,948,39"/>
+<area shape="rect" id="node2" href="$classml_1_1Kernels_1_1DifferentiableRadialBasisFunction.html" title="Differentiable radial basis function kernel." alt="" coords="232,5,425,47"/>
+<area shape="rect" id="node3" href="$classml_1_1Kernels_1_1DoubleDifferentiableRadialBasisFunction.html" title="Double differentiable radial basis function kernel." alt="" coords="473,5,712,47"/>
+<area shape="rect" id="node4" href="$classml_1_1Kernels_1_1GaussianRBF.html" title="Gaussian radial basis function." alt="" coords="760,13,949,39"/>
 </map>
