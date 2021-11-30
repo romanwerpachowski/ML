@@ -27,7 +27,7 @@ var NAVTREE =
       [ "Clustering", "index.html#Clustering", null ],
       [ "Decision trees", "index.html#decision_trees", null ],
       [ "Linear regression", "index.html#linreg", null ],
-      [ "regression", "index.html#Logistic", null ],
+      [ "Logistic regression", "index.html#logreg", null ],
       [ "Cross-validation", "index.html#Cross-validation", null ],
       [ "Statistics", "index.html#Statistics", null ]
     ] ],
