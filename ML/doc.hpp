@@ -39,7 +39,7 @@ Only Ordinary Least Squares for now:
 
 Implemented in ml::LinearRegression namespace.
 
-@subsection Logistic regression
+@subsection logreg Logistic regression
 
 Conjugate gradient logistic regression algorithm. See class ml::ConjugateGradientLogisticRegression.
 
