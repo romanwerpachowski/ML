@@ -1,4 +1,4 @@
 <map id="ml::Clustering::RandomPartition" name="ml::Clustering::RandomPartition">
-<area shape="rect" id="node1" title="Assigns points to clusters randomly and then returns cluster means." alt="" coords="5,95,235,121"/>
-<area shape="rect" id="node2" href="$classml_1_1Clustering_1_1CentroidsInitialiser.html" title="Chooses initial locations of centroids." alt="" coords="29,5,211,47"/>
+<area shape="rect" id="node1" title="Assigns points to clusters randomly and then returns cluster means." alt="" coords="5,95,236,121"/>
+<area shape="rect" id="node2" href="$classml_1_1Clustering_1_1CentroidsInitialiser.html" title="Chooses initial locations of centroids." alt="" coords="29,5,212,47"/>
 </map>

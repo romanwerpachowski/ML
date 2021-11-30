@@ -2,5 +2,5 @@
 <area shape="rect" id="node1" title="Chooses initial locations of centroids." alt="" coords="169,5,351,47"/>
 <area shape="rect" id="node2" href="$classml_1_1Clustering_1_1Forgy.html" title="Chooses random points as new centroids." alt="" coords="5,95,163,121"/>
 <area shape="rect" id="node3" href="$classml_1_1Clustering_1_1KPP.html" title="Implements the K++ algorithm." alt="" coords="187,95,333,121"/>
-<area shape="rect" id="node4" href="$classml_1_1Clustering_1_1RandomPartition.html" title="Assigns points to clusters randomly and then returns cluster means." alt="" coords="357,95,587,121"/>
+<area shape="rect" id="node4" href="$classml_1_1Clustering_1_1RandomPartition.html" title="Assigns points to clusters randomly and then returns cluster means." alt="" coords="358,95,589,121"/>
 </map>
