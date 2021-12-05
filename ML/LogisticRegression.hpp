@@ -145,17 +145,17 @@ namespace ml
         /**
          * @brief Returns absolute tolerance for fitted weights.
         */
-        double weight_absolute_tolerance() const
+        double absolute_tolerance() const
         {
-            return weight_absolute_tolerance_;
+            return absolute_tolerance_;
         }
 
         /**
          * @brief Returns relative tolerance for fitted weights.
         */
-        double weight_relative_tolerance() const
+        double relative_tolerance() const
         {
-            return weight_relative_tolerance_;
+            return relative_tolerance_;
         }
 
         /**
@@ -175,17 +175,17 @@ namespace ml
 
         /**
          * @brief Sets absolute tolerance for weight convergence.
-         * @param weight_absolute_tolerance Weight absolute tolerance. Cannot be negative.
+         * @param absolute_tolerance Cannot be negative.
          * @throw std::domain_error If negative.
         */
-        DLL_DECLSPEC void set_weight_absolute_tolerance(double weight_absolute_tolerance);
+        DLL_DECLSPEC void set_absolute_tolerance(double absolute_tolerance);
 
         /**
          * @brief Sets relative tolerance for weight convergence.
-         * @param weight_relative_tolerance Weight relative tolerance. Cannot be negative.
+         * @param relative_tolerance Cannot be negative.
          * @throw std::domain_error If negative.
         */
-        DLL_DECLSPEC void set_weight_relative_tolerance(double weight_relative_tolerance);
+        DLL_DECLSPEC void set_relative_tolerance(double relative_tolerance);
 
         /**
          * @brief Sets maximum number of steps.
@@ -201,8 +201,8 @@ namespace ml
         bool weights_converged(Eigen::Ref<const Eigen::VectorXd> old_weights, Eigen::Ref<const Eigen::VectorXd> new_weights) const;
     private:        
         double lam_;
-        double weight_relative_tolerance_;
-        double weight_absolute_tolerance_;
+        double relative_tolerance_;
+        double absolute_tolerance_;
         unsigned int maximum_steps_;
     };
 

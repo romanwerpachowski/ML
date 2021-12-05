@@ -29,8 +29,8 @@ class TestConjugateGradientLogisticRegression(unittest.TestCase):
         lam = 0.2
         tol = 1e-15
         tested.set_lam(lam)
-        tested.set_weight_absolute_tolerance(tol)
-        tested.set_weight_relative_tolerance(tol)
+        tested.set_absolute_tolerance(tol)
+        tested.set_relative_tolerance(tol)
         actual = tested.fit(X, y)
         self.assertTrue(actual.converged)
         benchmark = linear_model.LogisticRegression(tol=tol, C=1/lam)
@@ -44,12 +44,12 @@ class TestConjugateGradientLogisticRegression(unittest.TestCase):
         atol = 1e-14
         max_steps = 100
         lr.set_lam(lam)
-        lr.set_weight_absolute_tolerance(atol)
-        lr.set_weight_relative_tolerance(rtol)
+        lr.set_absolute_tolerance(atol)
+        lr.set_relative_tolerance(rtol)
         lr.set_maximum_steps(max_steps)
         self.assertEqual(lam, lr.lam)
-        self.assertEqual(rtol, lr.weight_relative_tolerance)
-        self.assertEqual(atol, lr.weight_absolute_tolerance)
+        self.assertEqual(rtol, lr.relative_tolerance)
+        self.assertEqual(atol, lr.absolute_tolerance)
         self.assertEqual(max_steps, lr.maximum_steps)
 
 

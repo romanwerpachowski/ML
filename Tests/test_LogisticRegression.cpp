@@ -145,7 +145,7 @@ TEST(ConjugateGradientLogisticRegression, separable)
         y[i] = score >= 0 ? 1 : -1;
     }
     ConjugateGradientLogisticRegression cglr;
-    cglr.set_weight_relative_tolerance(1e-6);
+    cglr.set_relative_tolerance(1e-6);
     cglr.set_maximum_steps(100);
     const auto result = cglr.fit(X, y);
     ASSERT_TRUE(result.converged);
@@ -179,7 +179,7 @@ TEST(ConjugateGradientLogisticRegression, non_separable)
     }
     ConjugateGradientLogisticRegression cglr;
     cglr.set_lam(0);
-    cglr.set_weight_relative_tolerance(1e-15);
+    cglr.set_relative_tolerance(1e-15);
     cglr.set_maximum_steps(100);
     const auto result = cglr.fit(X, y);
     ASSERT_TRUE(result.converged);

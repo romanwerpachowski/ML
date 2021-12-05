@@ -35,8 +35,8 @@ Times logistic regression against sklearn.
     lam = 0.2
     tol = 1e-7
     cglr .set_lam(lam)
-    cglr .set_weight_absolute_tolerance(tol)
-    cglr .set_weight_relative_tolerance(tol)    
+    cglr .set_absolute_tolerance(tol)
+    cglr .set_relative_tolerance(tol)    
 
     t0 = time.perf_counter()
     for _ in range(n_timing_iters):
