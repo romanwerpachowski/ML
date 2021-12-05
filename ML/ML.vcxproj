@@ -195,6 +195,7 @@
     <ClInclude Include="LinearAlgebra.hpp" />
     <ClInclude Include="LinearRegression.hpp" />
     <ClInclude Include="LogisticRegression.hpp" />
+    <ClInclude Include="MeanShift.hpp" />
     <ClInclude Include="RecursiveMultivariateOLS.hpp" />
     <ClInclude Include="Statistics.hpp" />
     <ClInclude Include="Version.hpp" />
