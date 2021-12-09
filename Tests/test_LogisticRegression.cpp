@@ -120,6 +120,7 @@ TEST(LogisticRegression, predict)
         const double p1 = LogisticRegression::probability(X.col(i), 1, result.w);
         const double expected = p1 > 0.5 ? 1 : -1;
         ASSERT_EQ(expected, y[i]) << i;
+        ASSERT_EQ(expected, result.predict_single(X.col(i))) << i;
     }
     const Eigen::VectorXd y2 = result.predict(X);
     ASSERT_EQ(0, (y - y2).norm());
