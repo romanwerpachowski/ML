@@ -93,11 +93,16 @@ namespace ml
             throw std::invalid_argument("Size mismatch: X.cols() != y.size()");
         }
         for (Eigen::Index i = 0; i < n; ++i) {
-            if (w.dot(X.col(i)) > 0) {
-                y[i] = 1;
-            } else {
-                y[i] = -1;
-            }
+            y[i] = predict_single(X.col(i));
+        }
+    }
+
+    double LogisticRegression::Result::predict_single(Eigen::Ref<const Eigen::VectorXd> x) const
+    {
+        if (w.dot(x) > 0) {
+            return 1;
+        } else {
+            return -1;
         }
     }
 
@@ -111,8 +116,8 @@ namespace ml
     AbstractLogisticRegression::AbstractLogisticRegression()
     {
         lam_ = 1e-3;
-        weight_absolute_tolerance_ = 0;
-        weight_relative_tolerance_ = 1e-8;
+        absolute_tolerance_ = 0;
+        relative_tolerance_ = 1e-8;
         maximum_steps_ = 100;
     }
 
@@ -124,20 +129,20 @@ namespace ml
         lam_ = lam;
     }
 
-    void AbstractLogisticRegression::set_weight_absolute_tolerance(double weight_absolute_tolerance)
+    void AbstractLogisticRegression::set_absolute_tolerance(double absolute_tolerance)
     {
-        if (!(weight_absolute_tolerance >= 0)) {
+        if (!(absolute_tolerance >= 0)) {
             throw std::domain_error("Absolute weight tolerance must be non-negative");
         }
-        weight_absolute_tolerance_ = weight_absolute_tolerance;
+        absolute_tolerance_ = absolute_tolerance;
     }
 
-    void AbstractLogisticRegression::set_weight_relative_tolerance(double weight_relative_tolerance)
+    void AbstractLogisticRegression::set_relative_tolerance(double relative_tolerance)
     {
-        if (!(weight_relative_tolerance >= 0)) {
+        if (!(relative_tolerance >= 0)) {
             throw std::domain_error("Relative weight tolerance must be non-negative");
         }
-        weight_relative_tolerance_ = weight_relative_tolerance;
+        relative_tolerance_ = relative_tolerance;
     }
 
     void AbstractLogisticRegression::set_maximum_steps(unsigned int maximum_steps)
@@ -150,7 +155,7 @@ namespace ml
         const double old_weights_norm = old_weights.norm();
         const double new_weights_norm = new_weights.norm();
         const double weights_diff_norm = (old_weights - new_weights).norm();
-        return weights_diff_norm <= weight_absolute_tolerance_ + std::max(old_weights_norm, new_weights_norm) * weight_relative_tolerance_;
+        return weights_diff_norm <= absolute_tolerance_ + std::max(old_weights_norm, new_weights_norm) * relative_tolerance_;
     }
 
     LogisticRegression::Result ConjugateGradientLogisticRegression::fit(Eigen::Ref<const Eigen::MatrixXd> X, Eigen::Ref<const Eigen::VectorXd> y) const

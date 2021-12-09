@@ -94,6 +94,11 @@ namespace ml
             {
                 return inertia_;
             }
+
+            bool converged() const override
+            {
+                return converged_;
+            }
         private:
             std::vector<unsigned int> labels_;
             std::vector<unsigned int> old_labels_;
@@ -108,6 +113,7 @@ namespace ml
             unsigned int num_inits_;
             unsigned int num_clusters_;
             bool verbose_;
+            bool converged_;
 
             bool fit_once(Eigen::Ref<const Eigen::MatrixXd> data);
 

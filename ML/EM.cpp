@@ -29,6 +29,7 @@ namespace ml
 		, maximum_steps_(1000)
 		, verbose_(false)
 		, maximise_first_(false)
+		, converged_(false)
 	{
 		if (!number_components) {
 			throw std::invalid_argument("EM: At least one component required");
@@ -89,6 +90,7 @@ namespace ml
 
 	bool EM::fit(const Eigen::Ref<const Eigen::MatrixXd> data)
 	{
+		converged_ = false;
 		const auto number_dimensions = static_cast<unsigned int>(data.rows());
 		const auto sample_size = static_cast<unsigned int>(data.cols());
 		if (!number_dimensions) {
@@ -113,61 +115,62 @@ namespace ml
 				log_likelihood_ = std::numeric_limits<double>::infinity();
 				labels_[i] = i;
 			}
-			return true;
-		}
-
-		if (maximise_first_) {
-			responsibilities_initialiser_->init(data, prng_, number_components_, responsibilities_);
-			for (unsigned int k = 0; k < number_components_; ++k) {
-				covariances_[k].resize(number_dimensions, number_dimensions);
-			}
-			maximisation_step(data);			
+			converged_ = true;
 		} else {
-			// Initialise means and covariances to sensible guesses.
-			means_initialiser_->init(data, prng_, number_components_, means_);
-			const Eigen::MatrixXd sample_covariance(calculate_sample_covariance(data));
-			assert(static_cast<unsigned int>(sample_covariance.rows()) == number_dimensions);
-			assert(static_cast<unsigned int>(sample_covariance.cols()) == number_dimensions);
-			for (unsigned int k = 0; k < number_components_; ++k) {
-				covariances_[k] = sample_covariance;
-			}
-			process_covariances(number_dimensions);
-		}
-
-		// Work variables.
-		work_vector_.resize(number_dimensions);
-		double old_log_likelihood = -std::numeric_limits<double>::infinity();
-		
-		// Main iteration loop.
-		for (unsigned int step = 0; step < maximum_steps_; ++step) {			
-
-			expectation_step(data);			
-
-			maximisation_step(data);
-
-			if (verbose_) {
-				std::cout << "Step " << step << "\n";
-				std::cout << "Log-likelihood == " << log_likelihood_ << "\n";
-				std::cout << "Mixing probabilities == " << mixing_probabilities_.transpose() << "\n";
+			if (maximise_first_) {
+				responsibilities_initialiser_->init(data, prng_, number_components_, responsibilities_);
 				for (unsigned int k = 0; k < number_components_; ++k) {
-					std::cout << "Mean[" << k << "] == " << means_.col(k).transpose() << "\n";
+					covariances_[k].resize(number_dimensions, number_dimensions);
 				}
-				std::cout << "Responsibilities (first 10 rows):\n";
-				std::cout << responsibilities_.topRows(std::min(sample_size, 10u));
-				std::cout << std::endl;
+				maximisation_step(data);
+			} else {
+				// Initialise means and covariances to sensible guesses.
+				means_initialiser_->init(data, prng_, number_components_, means_);
+				const Eigen::MatrixXd sample_covariance(calculate_sample_covariance(data));
+				assert(static_cast<unsigned int>(sample_covariance.rows()) == number_dimensions);
+				assert(static_cast<unsigned int>(sample_covariance.cols()) == number_dimensions);
+				for (unsigned int k = 0; k < number_components_; ++k) {
+					covariances_[k] = sample_covariance;
+				}
+				process_covariances(number_dimensions);
 			}
 
-			if (step > 0) {
-				const double ll_change = std::abs(log_likelihood_ - old_log_likelihood);
-				if (ll_change < absolute_tolerance_ + relative_tolerance_ * std::max(std::abs(old_log_likelihood), std::abs(log_likelihood_))) {
-					calculate_labels();
-					return true;
+			// Work variables.
+			work_vector_.resize(number_dimensions);
+			double old_log_likelihood = -std::numeric_limits<double>::infinity();
+
+			// Main iteration loop.
+			for (unsigned int step = 0; step < maximum_steps_; ++step) {
+
+				expectation_step(data);
+
+				maximisation_step(data);
+
+				if (verbose_) {
+					std::cout << "Step " << step << "\n";
+					std::cout << "Log-likelihood == " << log_likelihood_ << "\n";
+					std::cout << "Mixing probabilities == " << mixing_probabilities_.transpose() << "\n";
+					for (unsigned int k = 0; k < number_components_; ++k) {
+						std::cout << "Mean[" << k << "] == " << means_.col(k).transpose() << "\n";
+					}
+					std::cout << "Responsibilities (first 10 rows):\n";
+					std::cout << responsibilities_.topRows(std::min(sample_size, 10u));
+					std::cout << std::endl;
 				}
+
+				if (step > 0) {
+					const double ll_change = std::abs(log_likelihood_ - old_log_likelihood);
+					if (ll_change < absolute_tolerance_ + relative_tolerance_ * std::max(std::abs(old_log_likelihood), std::abs(log_likelihood_))) {
+						calculate_labels();
+						converged_ = true;
+						break;
+					}
+				}
+				old_log_likelihood = log_likelihood_;
 			}
-			old_log_likelihood = log_likelihood_;
 		}
 
-		return false;
+		return converged_;
 	}
 
 	void EM::assign_responsibilities(Eigen::Ref<const Eigen::VectorXd> x, Eigen::Ref<Eigen::VectorXd> u) const

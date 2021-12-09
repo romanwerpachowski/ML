@@ -81,14 +81,15 @@ namespace ml
 		*/
 		DLL_DECLSPEC bool fit(Eigen::Ref<const Eigen::MatrixXd> data) override;
 
-		/** @brief Returns the number of components. */
+		/** @brief Returns the number of components. 
+		*/
 		auto number_components() const
 		{
 			return number_components_;
 		}
 
 		unsigned int number_clusters() const override
-		{
+		{			
 			return number_components();
 		}
 
@@ -101,7 +102,7 @@ namespace ml
 		}
 
 		const Eigen::MatrixXd& centroids() const override
-		{
+		{			
 			return means();
 		}
 
@@ -158,6 +159,11 @@ namespace ml
 		{
 			return labels_;
 		}
+
+		bool converged() const override
+		{
+			return converged_;
+		}
 	private:
 		std::default_random_engine prng_;
 		std::shared_ptr<const Clustering::CentroidsInitialiser> means_initialiser_;
@@ -178,6 +184,7 @@ namespace ml
 		unsigned int maximum_steps_;
 		bool verbose_;
 		bool maximise_first_;
+		bool converged_;
 
 		static Eigen::MatrixXd calculate_sample_covariance(Eigen::Ref<const Eigen::MatrixXd> data);
 

@@ -36,6 +36,7 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsIn
 	}
 
 	ml::Clustering::KMeans km(num_clusters);
+	ASSERT_FALSE(km.converged());
 	ASSERT_EQ(num_clusters, km.number_clusters());
 	km.set_absolute_tolerance(1e-8);
 	km.set_maximum_steps(100);
@@ -45,6 +46,7 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsIn
 	const unsigned int seed = 63413131;
 	km.set_seed(seed);
 	ASSERT_TRUE(km.fit(data)) << "KMeans::fit did not converge";
+	ASSERT_TRUE(km.converged());
 	ASSERT_EQ(num_clusters, static_cast<unsigned int>(km.centroids().cols()));
 	ASSERT_EQ(num_dimensions, static_cast<unsigned int>(km.centroids().rows()));
 	ASSERT_EQ(sample_size, static_cast<unsigned int>(km.labels().size()));	

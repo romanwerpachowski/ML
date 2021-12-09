@@ -120,6 +120,7 @@ TEST(LogisticRegression, predict)
         const double p1 = LogisticRegression::probability(X.col(i), 1, result.w);
         const double expected = p1 > 0.5 ? 1 : -1;
         ASSERT_EQ(expected, y[i]) << i;
+        ASSERT_EQ(expected, result.predict_single(X.col(i))) << i;
     }
     const Eigen::VectorXd y2 = result.predict(X);
     ASSERT_EQ(0, (y - y2).norm());
@@ -145,7 +146,7 @@ TEST(ConjugateGradientLogisticRegression, separable)
         y[i] = score >= 0 ? 1 : -1;
     }
     ConjugateGradientLogisticRegression cglr;
-    cglr.set_weight_relative_tolerance(1e-6);
+    cglr.set_relative_tolerance(1e-6);
     cglr.set_maximum_steps(100);
     const auto result = cglr.fit(X, y);
     ASSERT_TRUE(result.converged);
@@ -179,7 +180,7 @@ TEST(ConjugateGradientLogisticRegression, non_separable)
     }
     ConjugateGradientLogisticRegression cglr;
     cglr.set_lam(0);
-    cglr.set_weight_relative_tolerance(1e-15);
+    cglr.set_relative_tolerance(1e-15);
     cglr.set_maximum_steps(100);
     const auto result = cglr.fit(X, y);
     ASSERT_TRUE(result.converged);

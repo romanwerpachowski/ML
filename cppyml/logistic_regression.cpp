@@ -118,12 +118,12 @@ Returns:
     Instance of `Result`.
 )")
         .def_property_readonly("lam", &WrappedAbstractLogisticRegression::lam, "Regularisation parameter: inverse variance of the Gaussian prior for `w`")
-        .def_property_readonly("weight_absolute_tolerance", &WrappedAbstractLogisticRegression::weight_absolute_tolerance, "Absolute tolerance for fitted weights")
-        .def_property_readonly("weight_relative_tolerance", &WrappedAbstractLogisticRegression::weight_relative_tolerance, "Relative tolerance for fitted weights")
+        .def_property_readonly("absolute_tolerance", &WrappedAbstractLogisticRegression::absolute_tolerance, "Absolute tolerance for fitted weights")
+        .def_property_readonly("relative_tolerance", &WrappedAbstractLogisticRegression::relative_tolerance, "Relative tolerance for fitted weights")
         .def_property_readonly("maximum_steps", &WrappedAbstractLogisticRegression::maximum_steps, "Maximum number of steps allowed")
         .def("set_lam", &WrappedAbstractLogisticRegression::set_lam, py::arg("lam"), "Sets the regularisation parameter.")
-        .def("set_weight_absolute_tolerance", &WrappedAbstractLogisticRegression::set_weight_absolute_tolerance, py::arg("weight_absolute_tolerance"), "Sets absolute tolerance for weight convergence.")
-        .def("set_weight_relative_tolerance", &WrappedAbstractLogisticRegression::set_weight_relative_tolerance, py::arg("weight_relative_tolerance"), "Sets relative tolerance for weight convergence.")
+        .def("set_absolute_tolerance", &WrappedAbstractLogisticRegression::set_absolute_tolerance, py::arg("absolute_tolerance"), "Sets absolute tolerance for weight convergence.")
+        .def("set_relative_tolerance", &WrappedAbstractLogisticRegression::set_relative_tolerance, py::arg("relative_tolerance"), "Sets relative tolerance for weight convergence.")
         .def("set_maximum_steps", &WrappedAbstractLogisticRegression::set_maximum_steps, py::arg("maximum_steps"), "Sets maximum number of steps.");
 
     typedef ml::LogisticRegressionPython::Model<ml::ConjugateGradientLogisticRegression, ml::LogisticRegression::Result> WrappedConjugateGradientLogisticRegression;

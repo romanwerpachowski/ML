@@ -60,12 +60,29 @@ namespace ml
 			return X.transpose() * beta;
 		}		
 
+		double MultivariateOLSResult::predict_single(Eigen::Ref<const Eigen::VectorXd> x) const
+		{
+			if (x.size() != beta.size()) {
+				throw std::invalid_argument("x has wrong size");
+			}
+			return x.dot(beta);
+		}
+
 		Eigen::VectorXd RegularisedRegressionResult::predict(Eigen::Ref<const Eigen::MatrixXd> X) const
 		{
 			if (X.rows() + 1 != beta.size()) {
 				throw std::invalid_argument("X has wrong number of rows");
 			}
 			return X.transpose() * beta.head(beta.size() - 1) + Eigen::VectorXd::Constant(X.cols(), beta[beta.size() - 1]);
+		}
+
+		double RegularisedRegressionResult::predict_single(Eigen::Ref<const Eigen::VectorXd> x) const
+		{
+			if (x.size() + 1 != beta.size()) {
+				throw std::invalid_argument("X has wrong number of rows");
+			}
+			const auto i = beta.size() - 1;
+			return x.dot(beta.head(i)) + beta[i];
 		}
 
 		std::string RidgeRegressionResult::to_string() const
