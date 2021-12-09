@@ -34,6 +34,7 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsIn
 	}
 
 	ml::EM em(num_components);
+	ASSERT_FALSE(em.converged());
 	ASSERT_EQ(num_components, em.number_components());
 	em.set_absolute_tolerance(1e-8);
 	em.set_relative_tolerance(1e-8);
@@ -45,6 +46,7 @@ static void test_two_gaussians(std::shared_ptr<const ml::Clustering::CentroidsIn
 	const unsigned int seed = 63413131;
 	em.set_seed(seed);
 	ASSERT_TRUE(em.fit(data)) << "EM::fit did not converge";
+	ASSERT_TRUE(em.converged());
 	ASSERT_EQ(num_components, static_cast<unsigned int>(em.mixing_probabilities().size()));
 	ASSERT_EQ(sample_size, static_cast<unsigned int>(em.labels().size()));
 	ASSERT_EQ(num_components, static_cast<unsigned int>(em.means().cols()));

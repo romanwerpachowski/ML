@@ -15,6 +15,7 @@ namespace ml
 			, num_inits_(1)
 			, num_clusters_(number_clusters)
 			, verbose_(false)
+			, converged_(false)
 		{
 			if (!number_clusters) {
 				throw std::invalid_argument("KMeans: number of clusters cannot be zero");
@@ -26,28 +27,29 @@ namespace ml
 			if (num_inits_ == 1) {
 				return fit_once(data);
 			} else {
+				converged_ = false;
 				double min_inertia = std::numeric_limits<double>::infinity();
-				Eigen::MatrixXd best_centroids;
-				bool converged = false;
+				Eigen::MatrixXd best_centroids;				
 				for (unsigned int i = 0; i < num_inits_; ++i) {
 					if (fit_once(data)) {
 						if (inertia_ < min_inertia) {
 							min_inertia = inertia_;
 							best_centroids = centroids_;
 						}
-						converged = true;
+						converged_ = true;
 					}
 				}
-				if (converged) {
+				if (converged_) {
 					centroids_ = best_centroids;
 					assignment_step(data);
 				}
-				return converged;
+				return converged_;
 			}
 		}
 
 		bool KMeans::fit_once(Eigen::Ref<const Eigen::MatrixXd> data)
 		{
+			converged_ = false;
 			const auto number_dimensions = static_cast<unsigned int>(data.rows());
 			const auto sample_size = static_cast<unsigned int>(data.cols());
 			if (!number_dimensions) {
@@ -70,43 +72,45 @@ namespace ml
 					labels_[i] = i;
 				}
 				inertia_ = 0;
-				return true;
+				converged_ = true;				
+			} else {
+				centroids_initialiser_->init(data, prng_, num_clusters_, centroids_);
+
+				// Main iteration loop.
+				for (unsigned int step = 0; step < maximum_steps_; ++step) {
+					// Aka "expectation step" in the E-M terminology.
+					assignment_step(data);
+
+					if (step > 0) {
+						if (old_labels_ == labels_) {
+							converged_ = true;
+							break;
+						}
+					}
+
+					// Aka "maximisation step" in the E-M terminology.
+					update_step(data);
+
+					if (verbose_) {
+						std::cout << "Step " << step << "\n";
+						for (unsigned int k = 0; k < num_clusters_; ++k) {
+							std::cout << "Centroid[" << k << "] == " << centroids_.col(k).transpose() << "\n";
+						}
+						std::cout << std::endl;
+					}
+
+					if (step > 0) {
+						const double centroid_shift = (centroids_ - old_centroids_).squaredNorm();
+						if (centroid_shift < absolute_tolerance_) {
+							assignment_step(data);
+							converged_ = true;
+							break;
+						}
+					}
+				}
 			}
 
-			centroids_initialiser_->init(data, prng_, num_clusters_, centroids_);
-
-			// Main iteration loop.
-			for (unsigned int step = 0; step < maximum_steps_; ++step) {
-				// Aka "expectation step" in the E-M terminology.
-				assignment_step(data);
-
-				if (step > 0) {
-					if (old_labels_ == labels_) {
-						return true;
-					}
-				}
-
-				// Aka "maximisation step" in the E-M terminology.
-				update_step(data);
-
-				if (verbose_) {
-					std::cout << "Step " << step << "\n";
-					for (unsigned int k = 0; k < num_clusters_; ++k) {
-						std::cout << "Centroid[" << k << "] == " << centroids_.col(k).transpose() << "\n";
-					}
-					std::cout << std::endl;
-				}
-
-				if (step > 0) {					
-					const double centroid_shift = (centroids_ - old_centroids_).squaredNorm();
-					if (centroid_shift < absolute_tolerance_) {
-						assignment_step(data);
-						return true;
-					}
-				}
-			}
-
-			return false;
+			return converged_;
 		}
 
         void KMeans::set_seed(unsigned int seed)

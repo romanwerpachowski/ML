@@ -35,18 +35,23 @@ namespace ml
 			*/
 			virtual unsigned int number_clusters() const = 0;
 
-			/** @brief Returns a const reference to resulting cluster labels for each datapoint.
-			
-			Values make sense only if fitting converged successfully.
+			/** @brief Returns a const reference to resulting cluster labels for each datapoint. 
+			* Value make sense only if fitting converged successfully.
 			*/
 			virtual const std::vector<unsigned int>& labels() const = 0;
 
 			/**
 			 * @brief Returns a const reference to the matrix of cluster centroids (in columns). 
 			 * 
-			 * Values make sense only if fitting converged successfully.
+			 * A centroid represent the central location of the cluster. It is e.g. a mean of all points in the cluster.
+			 * Value make sense only if fitting converged successfully.			 
 			*/
 			virtual const Eigen::MatrixXd& centroids() const = 0;
+
+			/**
+			 * @brief Reports if the model converged.
+			*/
+			virtual bool converged() const = 0;
 		};
 
 		/** @brief Chooses initial locations of centroids. */
