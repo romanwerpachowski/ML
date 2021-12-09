@@ -21,5 +21,6 @@ var classml_1_1EM =
     [ "log_likelihood", "classml_1_1EM.html#aedac3544c55121d270e6d3bdca67b6a5", null ],
     [ "means_initialiser", "classml_1_1EM.html#a5df516d211f0230d006fb4146aa7773e", null ],
     [ "assign_responsibilities", "classml_1_1EM.html#a18e66d65c816c2ff41aaadb670864ac9", null ],
-    [ "labels", "classml_1_1EM.html#aba8eb164484a8253e15beb04fae5aee0", null ]
+    [ "labels", "classml_1_1EM.html#aba8eb164484a8253e15beb04fae5aee0", null ],
+    [ "converged", "classml_1_1EM.html#a90e30c3d6e67085c6fb1c48b6b4a1bc7", null ]
 ];

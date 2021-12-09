@@ -120,6 +120,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a402091432a99faf7ddcffc6e3b6c7f91"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LogisticRegression_1_1Result.html#a402091432a99faf7ddcffc6e3b6c7f91">predict</a> (Eigen::Ref&lt; const Eigen::MatrixXd &gt; X) const</td></tr>
 <tr class="memdesc:a402091432a99faf7ddcffc6e3b6c7f91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Predicts labels for features X given w. Version which returns a new vector.  <a href="structml_1_1LogisticRegression_1_1Result.html#a402091432a99faf7ddcffc6e3b6c7f91">More...</a><br /></td></tr>
 <tr class="separator:a402091432a99faf7ddcffc6e3b6c7f91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a39041d1fa03bc163af1cdf6d198416"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LogisticRegression_1_1Result.html#a7a39041d1fa03bc163af1cdf6d198416">predict_single</a> (Eigen::Ref&lt; const Eigen::VectorXd &gt; x) const</td></tr>
+<tr class="memdesc:a7a39041d1fa03bc163af1cdf6d198416"><td class="mdescLeft">&#160;</td><td class="mdescRight">Predicts label for feature x given w.  <a href="structml_1_1LogisticRegression_1_1Result.html#a7a39041d1fa03bc163af1cdf6d198416">More...</a><br /></td></tr>
+<tr class="separator:a7a39041d1fa03bc163af1cdf6d198416"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a623bb6353336b40778740c0199796600"><td class="memItemLeft" align="right" valign="top"><a id="a623bb6353336b40778740c0199796600"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LogisticRegression_1_1Result.html#a623bb6353336b40778740c0199796600">to_string</a> () const</td></tr>
 <tr class="memdesc:a623bb6353336b40778740c0199796600"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats the result as string. <br /></td></tr>
@@ -216,6 +219,39 @@ Public Attributes</h2></td></tr>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::invalid_argument</td><td>If matrix or vector dimensions do not match. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7a39041d1fa03bc163af1cdf6d198416"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a39041d1fa03bc163af1cdf6d198416">&#9670;&nbsp;</a></span>predict_single()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double ml::LogisticRegression::Result::predict_single </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Ref&lt; const Eigen::VectorXd &gt;&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Predicts label for feature x given w. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>D-dimensional vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>-1 or 1. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If vector dimensions do not match. </td></tr>
   </table>
   </dd>
 </dl>

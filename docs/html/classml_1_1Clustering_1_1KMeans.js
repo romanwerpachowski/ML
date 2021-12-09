@@ -12,5 +12,6 @@ var classml_1_1Clustering_1_1KMeans =
     [ "set_centroids_initialiser", "classml_1_1Clustering_1_1KMeans.html#ad1433f70bb158d9aa8dd07289486aa62", null ],
     [ "set_verbose", "classml_1_1Clustering_1_1KMeans.html#aa48c985005b00f75573b957367175ff6", null ],
     [ "assign_label", "classml_1_1Clustering_1_1KMeans.html#a08166e8db38f7e1fa889c20d3ce74b19", null ],
-    [ "inertia", "classml_1_1Clustering_1_1KMeans.html#ad34b2ddda82bb753f57c89cc5bb45962", null ]
+    [ "inertia", "classml_1_1Clustering_1_1KMeans.html#ad34b2ddda82bb753f57c89cc5bb45962", null ],
+    [ "converged", "classml_1_1Clustering_1_1KMeans.html#a5f640eecc83da7abd5bfb18845d7c540", null ]
 ];

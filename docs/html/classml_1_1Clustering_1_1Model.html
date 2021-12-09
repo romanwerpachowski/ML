@@ -133,12 +133,17 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <tr class="memitem:a5d8308c4ef808c2714dde56401f96cf8"><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1Clustering_1_1Model.html#a5d8308c4ef808c2714dde56401f96cf8">number_clusters</a> () const =0</td></tr>
 <tr class="memdesc:a5d8308c4ef808c2714dde56401f96cf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of clusters.  <a href="classml_1_1Clustering_1_1Model.html#a5d8308c4ef808c2714dde56401f96cf8">More...</a><br /></td></tr>
 <tr class="separator:a5d8308c4ef808c2714dde56401f96cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac530cb6d52c5816a0863718a10a1db9a"><td class="memItemLeft" align="right" valign="top">virtual const std::vector&lt; unsigned int &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1Clustering_1_1Model.html#ac530cb6d52c5816a0863718a10a1db9a">labels</a> () const =0</td></tr>
-<tr class="memdesc:ac530cb6d52c5816a0863718a10a1db9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a const reference to resulting cluster labels for each datapoint.  <a href="classml_1_1Clustering_1_1Model.html#ac530cb6d52c5816a0863718a10a1db9a">More...</a><br /></td></tr>
+<tr class="memitem:ac530cb6d52c5816a0863718a10a1db9a"><td class="memItemLeft" align="right" valign="top"><a id="ac530cb6d52c5816a0863718a10a1db9a"></a>
+virtual const std::vector&lt; unsigned int &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1Clustering_1_1Model.html#ac530cb6d52c5816a0863718a10a1db9a">labels</a> () const =0</td></tr>
+<tr class="memdesc:ac530cb6d52c5816a0863718a10a1db9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a const reference to resulting cluster labels for each datapoint. Value make sense only if fitting converged successfully. <br /></td></tr>
 <tr class="separator:ac530cb6d52c5816a0863718a10a1db9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1e8c87185a73e37ddcebdd9fbdab31b"><td class="memItemLeft" align="right" valign="top">virtual const Eigen::MatrixXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1Clustering_1_1Model.html#ac1e8c87185a73e37ddcebdd9fbdab31b">centroids</a> () const =0</td></tr>
 <tr class="memdesc:ac1e8c87185a73e37ddcebdd9fbdab31b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a const reference to the matrix of cluster centroids (in columns).  <a href="classml_1_1Clustering_1_1Model.html#ac1e8c87185a73e37ddcebdd9fbdab31b">More...</a><br /></td></tr>
 <tr class="separator:ac1e8c87185a73e37ddcebdd9fbdab31b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2782e2a8361344a0d8ebe216b98d5c6d"><td class="memItemLeft" align="right" valign="top"><a id="a2782e2a8361344a0d8ebe216b98d5c6d"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classml_1_1Clustering_1_1Model.html#a2782e2a8361344a0d8ebe216b98d5c6d">converged</a> () const =0</td></tr>
+<tr class="memdesc:a2782e2a8361344a0d8ebe216b98d5c6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports if the model converged. <br /></td></tr>
+<tr class="separator:a2782e2a8361344a0d8ebe216b98d5c6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Abstract clustering model. </p>
@@ -216,36 +221,6 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 
 </div>
 </div>
-<a id="ac530cb6d52c5816a0863718a10a1db9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac530cb6d52c5816a0863718a10a1db9a">&#9670;&nbsp;</a></span>labels()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual const std::vector&lt;unsigned int&gt;&amp; ml::Clustering::Model::labels </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns a const reference to resulting cluster labels for each datapoint. </p>
-<p>Values make sense only if fitting converged successfully. </p>
-
-<p>Implemented in <a class="el" href="classml_1_1EM.html#aba8eb164484a8253e15beb04fae5aee0">ml::EM</a>, and <a class="el" href="classml_1_1Clustering_1_1KMeans.html#ae33a8f30f5846de7ddddd75fbed2edcf">ml::Clustering::KMeans</a>.</p>
-
-</div>
-</div>
 <a id="ac1e8c87185a73e37ddcebdd9fbdab31b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac1e8c87185a73e37ddcebdd9fbdab31b">&#9670;&nbsp;</a></span>centroids()</h2>
 
@@ -270,7 +245,8 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 </div><div class="memdoc">
 
 <p>Returns a const reference to the matrix of cluster centroids (in columns). </p>
-<p>Values make sense only if fitting converged successfully. </p>
+<p>A centroid represent the central location of the cluster. It is e.g. a mean of all points in the cluster. Value make sense only if fitting converged successfully. <br  />
+ </p>
 
 <p>Implemented in <a class="el" href="classml_1_1EM.html#aecd3d79c8aa9a09e546a80d4fdb8d352">ml::EM</a>, and <a class="el" href="classml_1_1Clustering_1_1KMeans.html#a4461fec5deaeb83b9b8f53146098e3c2">ml::Clustering::KMeans</a>.</p>
 

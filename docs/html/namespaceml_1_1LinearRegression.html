@@ -112,7 +112,7 @@ $(document).ready(function(){initNavTree('namespaceml_1_1LinearRegression.html',
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LinearRegression_1_1LassoRegressionResult.html">LassoRegressionResult</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression.">Result</a> of a (multivariate) Lasso regression with intercept. <br  />
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression.">Result</a> of a multivariate Lasso regression with intercept. <br  />
   <a href="structml_1_1LinearRegression_1_1LassoRegressionResult.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LinearRegression_1_1MultivariateOLSResult.html">MultivariateOLSResult</a></td></tr>
@@ -123,13 +123,13 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursive multivariate Ordinary Least Squares.  <a href="classml_1_1LinearRegression_1_1RecursiveMultivariateOLS.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LinearRegression_1_1RegularisedRegressionResult.html">RegularisedRegressionResult</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression.">Result</a> of a regularised regression with intercept.  <a href="structml_1_1LinearRegression_1_1RegularisedRegressionResult.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression.">Result</a> of a multivariate regularised regression with intercept.  <a href="structml_1_1LinearRegression_1_1RegularisedRegressionResult.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LinearRegression_1_1Result.html">Result</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression.">Result</a> of linear regression.  <a href="structml_1_1LinearRegression_1_1Result.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html">RidgeRegressionResult</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression.">Result</a> of a (multivariate) ridge regression with intercept. <br  />
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression.">Result</a> of a multivariate ridge regression with intercept. <br  />
   <a href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structml_1_1LinearRegression_1_1UnivariateOLSResult.html">UnivariateOLSResult</a></td></tr>
@@ -427,7 +427,7 @@ template&lt;bool DoStandardise&gt; </div>
 </div><div class="memdoc">
 
 <p>Carries out multivariate ridge regression with intercept. </p>
-<p>Given X and y, finds \( \vec{\beta&#39;} \) and \( \beta_0 \) minimising \( \lVert \vec{y} - X^T \vec{\beta&#39;} - \beta_0 \rVert^2 + \lambda \lVert \vec{\beta&#39;} \rVert^2 \), where \( \vec{\beta&#39;} \) and \( \beta_0 \) are concatenated as <a class="el" href="structml_1_1LinearRegression_1_1RegularisedRegressionResult.html#a3d1b244577e256ae2168e68e12b93677">RidgeRegressionResult::beta</a> in the returned <a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html" title="Result of a (multivariate) ridge regression with intercept.">RidgeRegressionResult</a> object.</p>
+<p>Given X and y, finds \( \vec{\beta&#39;} \) and \( \beta_0 \) minimising \( \lVert \vec{y} - X^T \vec{\beta&#39;} - \beta_0 \rVert^2 + \lambda \lVert \vec{\beta&#39;} \rVert^2 \), where \( \vec{\beta&#39;} \) and \( \beta_0 \) are concatenated as <a class="el" href="structml_1_1LinearRegression_1_1RegularisedRegressionResult.html#a3d1b244577e256ae2168e68e12b93677">RidgeRegressionResult::beta</a> in the returned <a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html" title="Result of a multivariate ridge regression with intercept.">RidgeRegressionResult</a> object.</p>
 <p>The matrix <code>X</code> is either assumed to be standardised (<code>DoStandardise == false</code>) or is standardised internally (<code>DoStandardise == true</code>; requires a matrix copy).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -443,7 +443,7 @@ template&lt;bool DoStandardise&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html" title="Result of a (multivariate) ridge regression with intercept.">RidgeRegressionResult</a> object with <code>beta.size() == X.rows() + 1</code>. If <code>DoStandardise == true</code>, <code>beta</code> will be rescaled and shifted to original <code>X</code> units and origins, and <code>cov</code> will be transformed accordingly. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html" title="Result of a multivariate ridge regression with intercept.">RidgeRegressionResult</a> object with <code>beta.size() == X.rows() + 1</code>. If <code>DoStandardise == true</code>, <code>beta</code> will be rescaled and shifted to original <code>X</code> units and origins, and <code>cov</code> will be transformed accordingly. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::invalid_argument</td><td>If <code>y.size() != X.cols()</code> or <code>X.cols() &lt; X.rows()</code>. </td></tr>
@@ -619,7 +619,7 @@ template&lt;bool DoStandardise&gt; </div>
 </div><div class="memdoc">
 
 <p>Carries out multivariate Lasso regression with intercept. </p>
-<p>Given X and y, finds \( \vec{\beta&#39;} \) and \( \beta_0 \) minimising \( \lVert \vec{y} - X^T \vec{\beta&#39;} - \beta_0 \rVert^2 + \lambda \lVert \vec{\beta&#39;} \rVert^1 \), where \( \vec{\beta&#39;} \) and \( \beta_0 \) are concatenated as <a class="el" href="structml_1_1LinearRegression_1_1RegularisedRegressionResult.html#a3d1b244577e256ae2168e68e12b93677">LassoRegressionResult::beta</a> in the returned <a class="el" href="structml_1_1LinearRegression_1_1LassoRegressionResult.html" title="Result of a (multivariate) Lasso regression with intercept.">LassoRegressionResult</a> object.</p>
+<p>Given X and y, finds \( \vec{\beta&#39;} \) and \( \beta_0 \) minimising \( \lVert \vec{y} - X^T \vec{\beta&#39;} - \beta_0 \rVert^2 + \lambda \lVert \vec{\beta&#39;} \rVert^1 \), where \( \vec{\beta&#39;} \) and \( \beta_0 \) are concatenated as <a class="el" href="structml_1_1LinearRegression_1_1RegularisedRegressionResult.html#a3d1b244577e256ae2168e68e12b93677">LassoRegressionResult::beta</a> in the returned <a class="el" href="structml_1_1LinearRegression_1_1LassoRegressionResult.html" title="Result of a multivariate Lasso regression with intercept.">LassoRegressionResult</a> object.</p>
 <p>The matrix <code>X</code> is either assumed to be standardised (<code>DoStandardise == false</code>) or is standardised internally (<code>DoStandardise == true</code>; requires a matrix copy).</p>
 <p>Uses the iterated ridge regression method of Fan and Li (2001).</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -636,7 +636,7 @@ template&lt;bool DoStandardise&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structml_1_1LinearRegression_1_1LassoRegressionResult.html" title="Result of a (multivariate) Lasso regression with intercept.">LassoRegressionResult</a> object with <code>beta.size() == X.rows() + 1</code>. If <code>DoStandardise == true</code>, <code>beta</code> will be rescaled and shifted to original <code>X</code> units and origins, and <code>cov</code> will be transformed accordingly. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structml_1_1LinearRegression_1_1LassoRegressionResult.html" title="Result of a multivariate Lasso regression with intercept.">LassoRegressionResult</a> object with <code>beta.size() == X.rows() + 1</code>. If <code>DoStandardise == true</code>, <code>beta</code> will be rescaled and shifted to original <code>X</code> units and origins, and <code>cov</code> will be transformed accordingly. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::invalid_argument</td><td>If <code>y.size() != X.cols()</code> or <code>X.cols() &lt; X.rows()</code>. </td></tr>

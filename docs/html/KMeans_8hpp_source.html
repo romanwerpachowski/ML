@@ -157,29 +157,35 @@ $(document).ready(function(){initNavTree('KMeans_8hpp_source.html',''); initResi
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keyword">            </span>{</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                <span class="keywordflow">return</span> inertia_;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            std::vector&lt;unsigned int&gt; labels_;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            std::vector&lt;unsigned int&gt; old_labels_;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            Eigen::MatrixXd centroids_;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            Eigen::MatrixXd old_centroids_;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            Eigen::VectorXd work_vector_;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            std::default_random_engine prng_;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            std::shared_ptr&lt;const CentroidsInitialiser&gt; centroids_initialiser_;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <span class="keywordtype">double</span> absolute_tolerance_;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            <span class="keywordtype">double</span> inertia_;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> maximum_steps_;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num_inits_;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num_clusters_;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            <span class="keywordtype">bool</span> verbose_;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            <span class="keywordtype">bool</span> fit_once(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            <span class="keywordtype">void</span> assignment_step(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            <span class="keywordtype">void</span> update_step(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        };</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    }</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;}</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="classml_1_1Clustering_1_1KMeans.html#a5f640eecc83da7abd5bfb18845d7c540">   98</a></span>&#160;            <span class="keywordtype">bool</span> <a class="code" href="classml_1_1Clustering_1_1KMeans.html#a5f640eecc83da7abd5bfb18845d7c540">converged</a>()<span class="keyword"> const override</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="keyword">            </span>{</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                <span class="keywordflow">return</span> converged_;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            }</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            std::vector&lt;unsigned int&gt; labels_;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            std::vector&lt;unsigned int&gt; old_labels_;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            Eigen::MatrixXd centroids_;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            Eigen::MatrixXd old_centroids_;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            Eigen::VectorXd work_vector_;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            std::default_random_engine prng_;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            std::shared_ptr&lt;const CentroidsInitialiser&gt; centroids_initialiser_;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            <span class="keywordtype">double</span> absolute_tolerance_;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            <span class="keywordtype">double</span> inertia_;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> maximum_steps_;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num_inits_;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num_clusters_;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            <span class="keywordtype">bool</span> verbose_;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <span class="keywordtype">bool</span> converged_;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            <span class="keywordtype">bool</span> fit_once(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <span class="keywordtype">void</span> assignment_step(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            <span class="keywordtype">void</span> update_step(Eigen::Ref&lt;const Eigen::MatrixXd&gt; data);</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        };</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    }</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassml_1_1Clustering_1_1KMeans_html"><div class="ttname"><a href="classml_1_1Clustering_1_1KMeans.html">ml::Clustering::KMeans</a></div><div class="ttdoc">Naive K-means clustering method.</div><div class="ttdef"><b>Definition:</b> KMeans.hpp:18</div></div>
@@ -188,7 +194,7 @@ $(document).ready(function(){initNavTree('KMeans_8hpp_source.html',''); initResi
 <div class="ttc" id="aclassml_1_1Clustering_1_1KMeans_html_a18160e61b93c0d36b46418fcc2cd6128"><div class="ttname"><a href="classml_1_1Clustering_1_1KMeans.html#a18160e61b93c0d36b46418fcc2cd6128">ml::Clustering::KMeans::set_absolute_tolerance</a></div><div class="ttdeci">void set_absolute_tolerance(double absolute_tolerance)</div><div class="ttdoc">Sets absolute tolerance for convergence test: || old centroids - new centroids ||^2 &lt; absolute tolera...</div></div>
 <div class="ttc" id="aclassml_1_1Clustering_1_1KMeans_html_ae88d0a2d817f991348b110dd01e1673b"><div class="ttname"><a href="classml_1_1Clustering_1_1KMeans.html#ae88d0a2d817f991348b110dd01e1673b">ml::Clustering::KMeans::set_number_initialisations</a></div><div class="ttdeci">void set_number_initialisations(unsigned int number_initialisations)</div><div class="ttdoc">Sets number of initialisations to try, to find the clusters with lowest inertia.</div></div>
 <div class="ttc" id="anamespaceml_html"><div class="ttname"><a href="namespaceml.html">ml</a></div><div class="ttdef"><b>Definition:</b> BallTree.hpp:10</div></div>
-<div class="ttc" id="aclassml_1_1Clustering_1_1KMeans_html_ae33a8f30f5846de7ddddd75fbed2edcf"><div class="ttname"><a href="classml_1_1Clustering_1_1KMeans.html#ae33a8f30f5846de7ddddd75fbed2edcf">ml::Clustering::KMeans::labels</a></div><div class="ttdeci">const std::vector&lt; unsigned int &gt; &amp; labels() const override</div><div class="ttdoc">Returns a const reference to resulting cluster labels for each datapoint.</div><div class="ttdef"><b>Definition:</b> KMeans.hpp:34</div></div>
+<div class="ttc" id="aclassml_1_1Clustering_1_1KMeans_html_ae33a8f30f5846de7ddddd75fbed2edcf"><div class="ttname"><a href="classml_1_1Clustering_1_1KMeans.html#ae33a8f30f5846de7ddddd75fbed2edcf">ml::Clustering::KMeans::labels</a></div><div class="ttdeci">const std::vector&lt; unsigned int &gt; &amp; labels() const override</div><div class="ttdoc">Returns a const reference to resulting cluster labels for each datapoint. Value make sense only if fi...</div><div class="ttdef"><b>Definition:</b> KMeans.hpp:34</div></div>
 <div class="ttc" id="aclassml_1_1Clustering_1_1KMeans_html_ad49f5e4542fd7a7ac031e3a08f236d82"><div class="ttname"><a href="classml_1_1Clustering_1_1KMeans.html#ad49f5e4542fd7a7ac031e3a08f236d82">ml::Clustering::KMeans::number_clusters</a></div><div class="ttdeci">unsigned int number_clusters() const override</div><div class="ttdoc">Returns the number of clusters.</div><div class="ttdef"><b>Definition:</b> KMeans.hpp:29</div></div>
 <div class="ttc" id="aclassml_1_1Clustering_1_1KMeans_html_a4461fec5deaeb83b9b8f53146098e3c2"><div class="ttname"><a href="classml_1_1Clustering_1_1KMeans.html#a4461fec5deaeb83b9b8f53146098e3c2">ml::Clustering::KMeans::centroids</a></div><div class="ttdeci">const Eigen::MatrixXd &amp; centroids() const override</div><div class="ttdoc">Returns a const reference to the matrix of cluster centroids (in columns).</div><div class="ttdef"><b>Definition:</b> KMeans.hpp:39</div></div>
 <div class="ttc" id="adll_8hpp_html"><div class="ttname"><a href="dll_8hpp.html">dll.hpp</a></div></div>
@@ -197,6 +203,7 @@ $(document).ready(function(){initNavTree('KMeans_8hpp_source.html',''); initResi
 <div class="ttc" id="aclassml_1_1Clustering_1_1Model_html"><div class="ttname"><a href="classml_1_1Clustering_1_1Model.html">ml::Clustering::Model</a></div><div class="ttdoc">Abstract clustering model.</div><div class="ttdef"><b>Definition:</b> Clustering.hpp:17</div></div>
 <div class="ttc" id="aclassml_1_1Clustering_1_1KMeans_html_ad1433f70bb158d9aa8dd07289486aa62"><div class="ttname"><a href="classml_1_1Clustering_1_1KMeans.html#ad1433f70bb158d9aa8dd07289486aa62">ml::Clustering::KMeans::set_centroids_initialiser</a></div><div class="ttdeci">void set_centroids_initialiser(std::shared_ptr&lt; const CentroidsInitialiser &gt; centroids_initialiser)</div><div class="ttdoc">Sets centroids initialiser.</div></div>
 <div class="ttc" id="aclassml_1_1Clustering_1_1KMeans_html_aa48c985005b00f75573b957367175ff6"><div class="ttname"><a href="classml_1_1Clustering_1_1KMeans.html#aa48c985005b00f75573b957367175ff6">ml::Clustering::KMeans::set_verbose</a></div><div class="ttdeci">void set_verbose(bool verbose)</div><div class="ttdoc">Switches between verbose and quiet mode.</div><div class="ttdef"><b>Definition:</b> KMeans.hpp:77</div></div>
+<div class="ttc" id="aclassml_1_1Clustering_1_1KMeans_html_a5f640eecc83da7abd5bfb18845d7c540"><div class="ttname"><a href="classml_1_1Clustering_1_1KMeans.html#a5f640eecc83da7abd5bfb18845d7c540">ml::Clustering::KMeans::converged</a></div><div class="ttdeci">bool converged() const override</div><div class="ttdoc">Reports if the model converged.</div><div class="ttdef"><b>Definition:</b> KMeans.hpp:98</div></div>
 <div class="ttc" id="aclassml_1_1Clustering_1_1KMeans_html_afc96a5f6b066d781a78d9886f71e5c8d"><div class="ttname"><a href="classml_1_1Clustering_1_1KMeans.html#afc96a5f6b066d781a78d9886f71e5c8d">ml::Clustering::KMeans::KMeans</a></div><div class="ttdeci">KMeans(unsigned int number_clusters)</div><div class="ttdoc">Constructs a K-means model ready to fit.</div></div>
 <div class="ttc" id="aclassml_1_1Clustering_1_1KMeans_html_ae264776a0baf426a6ba38836bf1a2279"><div class="ttname"><a href="classml_1_1Clustering_1_1KMeans.html#ae264776a0baf426a6ba38836bf1a2279">ml::Clustering::KMeans::fit</a></div><div class="ttdeci">bool fit(Eigen::Ref&lt; const Eigen::MatrixXd &gt; data) override</div><div class="ttdoc">Fits the model.</div></div>
 <!-- start footer part -->

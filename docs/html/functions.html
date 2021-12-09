@@ -101,6 +101,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <div class="textblock">Here is a list of all documented class members with links to the class documentation for each member:</div>
 
 <h3><a id="index_a"></a>- a -</h3><ul>
+<li>absolute_tolerance()
+: <a class="el" href="classml_1_1AbstractLogisticRegression.html#acc4700a76807d4aecf121941a93dc5d5">ml::AbstractLogisticRegression</a>
+</li>
 <li>AbstractLogisticRegression()
 : <a class="el" href="classml_1_1AbstractLogisticRegression.html#a8456e83858b807ea01a49f29ac9e72ee">ml::AbstractLogisticRegression</a>
 </li>
@@ -153,8 +156,11 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 , <a class="el" href="structml_1_1DecisionTrees_1_1Node.html#ac8df12f2427456553f18de872dcac6ac">ml::DecisionTrees::Node&lt; Y &gt;</a>
 , <a class="el" href="structml_1_1DecisionTrees_1_1SplitNode.html#a6bef2022e7c5487bd6739526909f4012">ml::DecisionTrees::SplitNode&lt; Y &gt;</a>
 </li>
-<li>converged
-: <a class="el" href="structml_1_1LogisticRegression_1_1Result.html#aee5e00967a5ee9f3d729ab10b8058cbf">ml::LogisticRegression::Result</a>
+<li>converged()
+: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#a5f640eecc83da7abd5bfb18845d7c540">ml::Clustering::KMeans</a>
+, <a class="el" href="classml_1_1Clustering_1_1Model.html#a2782e2a8361344a0d8ebe216b98d5c6d">ml::Clustering::Model</a>
+, <a class="el" href="classml_1_1EM.html#a90e30c3d6e67085c6fb1c48b6b4a1bc7">ml::EM</a>
+, <a class="el" href="structml_1_1LogisticRegression_1_1Result.html#aee5e00967a5ee9f3d729ab10b8058cbf">ml::LogisticRegression::Result</a>
 </li>
 <li>cost_complexity()
 : <a class="el" href="classml_1_1DecisionTree.html#a44957cedd756fd57dc4e5f03622a8984">ml::DecisionTree&lt; Y &gt;</a>
@@ -379,12 +385,15 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="structml_1_1DecisionTrees_1_1Node.html#afa17b4af6f47a0ca7890dd056f7fc7ba">ml::DecisionTrees::Node&lt; Y &gt;</a>
 </li>
 <li>predict()
-: <a class="el" href="structml_1_1LinearRegression_1_1LassoRegressionResult.html#a85acc4f53f62eb0486a210658aa12e11">ml::LinearRegression::LassoRegressionResult</a>
-, <a class="el" href="structml_1_1LinearRegression_1_1MultivariateOLSResult.html#aeaf39482864e6d5ef206e74461644aa5">ml::LinearRegression::MultivariateOLSResult</a>
+: <a class="el" href="structml_1_1LinearRegression_1_1MultivariateOLSResult.html#aeaf39482864e6d5ef206e74461644aa5">ml::LinearRegression::MultivariateOLSResult</a>
 , <a class="el" href="structml_1_1LinearRegression_1_1RegularisedRegressionResult.html#a1d704545b8812116e8d84587e86734bf">ml::LinearRegression::RegularisedRegressionResult</a>
-, <a class="el" href="structml_1_1LinearRegression_1_1RidgeRegressionResult.html#a56f0315afd151d804f8335452f2b0f53">ml::LinearRegression::RidgeRegressionResult</a>
 , <a class="el" href="structml_1_1LinearRegression_1_1UnivariateOLSResult.html#ae05bfacb8951f992a065ce64d963686e">ml::LinearRegression::UnivariateOLSResult</a>
-, <a class="el" href="structml_1_1LogisticRegression_1_1Result.html#a402091432a99faf7ddcffc6e3b6c7f91">ml::LogisticRegression::Result</a>
+, <a class="el" href="structml_1_1LogisticRegression_1_1Result.html#a980ac636e2d5493597a333acddcbd266">ml::LogisticRegression::Result</a>
+</li>
+<li>predict_single()
+: <a class="el" href="structml_1_1LinearRegression_1_1MultivariateOLSResult.html#a1247913b90fdb0dff6658899944a3a41">ml::LinearRegression::MultivariateOLSResult</a>
+, <a class="el" href="structml_1_1LinearRegression_1_1RegularisedRegressionResult.html#ad267561729ca5ec026bfc816c19c2bf9">ml::LinearRegression::RegularisedRegressionResult</a>
+, <a class="el" href="structml_1_1LogisticRegression_1_1Result.html#a7a39041d1fa03bc163af1cdf6d198416">ml::LogisticRegression::Result</a>
 </li>
 <li>probability()
 : <a class="el" href="classml_1_1LogisticRegression.html#af3becc4a5e3334052d0b3ffdc42e24d6">ml::LogisticRegression</a>
@@ -401,6 +410,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 </li>
 <li>RecursiveMultivariateOLS()
 : <a class="el" href="classml_1_1LinearRegression_1_1RecursiveMultivariateOLS.html#abeef4f383bd42d1c42aa455512f3c471">ml::LinearRegression::RecursiveMultivariateOLS</a>
+</li>
+<li>relative_tolerance()
+: <a class="el" href="classml_1_1AbstractLogisticRegression.html#ab41092b21ea6c633229216ec97df50b8">ml::AbstractLogisticRegression</a>
 </li>
 <li>remove_weakest_link()
 : <a class="el" href="classml_1_1DecisionTree.html#a978b18656760bc602a601e00fc78bf2f">ml::DecisionTree&lt; Y &gt;</a>
@@ -420,7 +432,8 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 , <a class="el" href="classml_1_1Kernels_1_1GaussianRBF.html#a3e28b1d3fb2a90bec29b29ea50398477">ml::Kernels::GaussianRBF</a>
 </li>
 <li>set_absolute_tolerance()
-: <a class="el" href="classml_1_1Clustering_1_1KMeans.html#a18160e61b93c0d36b46418fcc2cd6128">ml::Clustering::KMeans</a>
+: <a class="el" href="classml_1_1AbstractLogisticRegression.html#a8139deb90d1e553ce66a1f10945879eb">ml::AbstractLogisticRegression</a>
+, <a class="el" href="classml_1_1Clustering_1_1KMeans.html#a18160e61b93c0d36b46418fcc2cd6128">ml::Clustering::KMeans</a>
 , <a class="el" href="classml_1_1EM.html#aa96ca693fe035199c1a96b294f55d41b">ml::EM</a>
 </li>
 <li>set_centroids_initialiser()
@@ -444,7 +457,8 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="classml_1_1Clustering_1_1KMeans.html#ae88d0a2d817f991348b110dd01e1673b">ml::Clustering::KMeans</a>
 </li>
 <li>set_relative_tolerance()
-: <a class="el" href="classml_1_1EM.html#a0e486bd2ab7e9355dd3bbf5eca2faa9a">ml::EM</a>
+: <a class="el" href="classml_1_1AbstractLogisticRegression.html#a36ecc015c143bf4bfe24e48826b2ac79">ml::AbstractLogisticRegression</a>
+, <a class="el" href="classml_1_1EM.html#a0e486bd2ab7e9355dd3bbf5eca2faa9a">ml::EM</a>
 </li>
 <li>set_responsibilities_initialiser()
 : <a class="el" href="classml_1_1EM.html#ae8601fa4215df8e4fd3bc0f4bc294bc5">ml::EM</a>
@@ -456,12 +470,6 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>set_verbose()
 : <a class="el" href="classml_1_1Clustering_1_1KMeans.html#aa48c985005b00f75573b957367175ff6">ml::Clustering::KMeans</a>
 , <a class="el" href="classml_1_1EM.html#a6a7245e3d8c316af1846892ec35bbc89">ml::EM</a>
-</li>
-<li>set_weight_absolute_tolerance()
-: <a class="el" href="classml_1_1AbstractLogisticRegression.html#aae2e59e018f49023a63bbb0ca1e7c671">ml::AbstractLogisticRegression</a>
-</li>
-<li>set_weight_relative_tolerance()
-: <a class="el" href="classml_1_1AbstractLogisticRegression.html#a1223feebfa3926c67eec4a6d670cc00f">ml::AbstractLogisticRegression</a>
 </li>
 <li>size()
 : <a class="el" href="classml_1_1BallTree.html#af0ac94d365074e5ac01ebc53265967a9">ml::BallTree</a>
@@ -535,12 +543,6 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <h3><a id="index_w"></a>- w -</h3><ul>
 <li>w
 : <a class="el" href="structml_1_1LogisticRegression_1_1Result.html#a6c2dc4e52cd8b41f6dae2bd1b4ef98a9">ml::LogisticRegression::Result</a>
-</li>
-<li>weight_absolute_tolerance()
-: <a class="el" href="classml_1_1AbstractLogisticRegression.html#aa885ccbda65eb094f80706d12beec868">ml::AbstractLogisticRegression</a>
-</li>
-<li>weight_relative_tolerance()
-: <a class="el" href="classml_1_1AbstractLogisticRegression.html#ace82df01a79f5bb5fcaab9d6d237aa5b">ml::AbstractLogisticRegression</a>
 </li>
 <li>weights_converged()
 : <a class="el" href="classml_1_1AbstractLogisticRegression.html#a115046c306766e9111aee6b1edcc3a9a">ml::AbstractLogisticRegression</a>

@@ -1,6 +1,6 @@
 <map id="ml::LinearRegression::RegularisedRegressionResult" name="ml::LinearRegression::RegularisedRegressionResult">
-<area shape="rect" id="node1" title="Result of a regularised regression with intercept." alt="" coords="212,39,432,80"/>
-<area shape="rect" id="node3" href="$structml_1_1LinearRegression_1_1LassoRegressionResult.html" title="Result of a (multivariate) Lasso regression with intercept." alt="" coords="480,5,660,47"/>
-<area shape="rect" id="node4" href="$structml_1_1LinearRegression_1_1RidgeRegressionResult.html" title="Result of a (multivariate) ridge regression with intercept." alt="" coords="480,71,660,112"/>
+<area shape="rect" id="node1" title="Result of a multivariate regularised regression with intercept." alt="" coords="212,39,432,80"/>
+<area shape="rect" id="node3" href="$structml_1_1LinearRegression_1_1LassoRegressionResult.html" title="Result of a multivariate Lasso regression with intercept." alt="" coords="480,5,660,47"/>
+<area shape="rect" id="node4" href="$structml_1_1LinearRegression_1_1RidgeRegressionResult.html" title="Result of a multivariate ridge regression with intercept." alt="" coords="480,71,660,112"/>
 <area shape="rect" id="node2" href="$structml_1_1LinearRegression_1_1Result.html" title="Result of linear regression." alt="" coords="5,39,164,80"/>
 </map>

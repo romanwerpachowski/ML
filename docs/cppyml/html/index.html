@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Welcome to cppyml’s documentation! &#8212; cppyml 0.7.0 documentation</title>
+    <title>Welcome to cppyml’s documentation! &#8212; cppyml 0.8.0 documentation</title>
     <link rel="stylesheet" href="static/classic.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     
@@ -28,7 +28,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">cppyml 0.7.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">cppyml 0.8.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -997,6 +997,12 @@ to original <cite>X</cite> units and origins, and the <cite>cov</cite> matrix wi
 <dt id="cppyml.logistic_regression.LogisticRegression">
 <em class="property">class </em><code class="descclassname">cppyml.logistic_regression.</code><code class="descname">LogisticRegression</code><a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
+<dl class="attribute">
+<dt id="cppyml.logistic_regression.LogisticRegression.absolute_tolerance">
+<code class="descname">absolute_tolerance</code><a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.absolute_tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Absolute tolerance for fitted weights</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="cppyml.logistic_regression.LogisticRegression.fit">
 <code class="descname">fit</code><span class="sig-paren">(</span><em>self: cppyml.logistic_regression.LogisticRegression, X: numpy.ndarray[float64[m, n], flags.c_contiguous], y: numpy.ndarray[float64[m, 1]]</em><span class="sig-paren">)</span> &#x2192; cppyml.logistic_regression.Result<a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.fit" title="Permalink to this definition">¶</a></dt>
@@ -1039,6 +1045,18 @@ to original <cite>X</cite> units and origins, and the <cite>cov</cite> matrix wi
 <dd><p>Maximum number of steps allowed</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="cppyml.logistic_regression.LogisticRegression.relative_tolerance">
+<code class="descname">relative_tolerance</code><a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.relative_tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relative tolerance for fitted weights</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cppyml.logistic_regression.LogisticRegression.set_absolute_tolerance">
+<code class="descname">set_absolute_tolerance</code><span class="sig-paren">(</span><em>self: cppyml.logistic_regression.LogisticRegression</em>, <em>absolute_tolerance: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.set_absolute_tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets absolute tolerance for weight convergence.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="cppyml.logistic_regression.LogisticRegression.set_lam">
 <code class="descname">set_lam</code><span class="sig-paren">(</span><em>self: cppyml.logistic_regression.LogisticRegression</em>, <em>lam: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.set_lam" title="Permalink to this definition">¶</a></dt>
@@ -1052,27 +1070,9 @@ to original <cite>X</cite> units and origins, and the <cite>cov</cite> matrix wi
 </dd></dl>
 
 <dl class="method">
-<dt id="cppyml.logistic_regression.LogisticRegression.set_weight_absolute_tolerance">
-<code class="descname">set_weight_absolute_tolerance</code><span class="sig-paren">(</span><em>self: cppyml.logistic_regression.LogisticRegression</em>, <em>weight_absolute_tolerance: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.set_weight_absolute_tolerance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets absolute tolerance for weight convergence.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cppyml.logistic_regression.LogisticRegression.set_weight_relative_tolerance">
-<code class="descname">set_weight_relative_tolerance</code><span class="sig-paren">(</span><em>self: cppyml.logistic_regression.LogisticRegression</em>, <em>weight_relative_tolerance: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.set_weight_relative_tolerance" title="Permalink to this definition">¶</a></dt>
+<dt id="cppyml.logistic_regression.LogisticRegression.set_relative_tolerance">
+<code class="descname">set_relative_tolerance</code><span class="sig-paren">(</span><em>self: cppyml.logistic_regression.LogisticRegression</em>, <em>relative_tolerance: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.set_relative_tolerance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets relative tolerance for weight convergence.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cppyml.logistic_regression.LogisticRegression.weight_absolute_tolerance">
-<code class="descname">weight_absolute_tolerance</code><a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.weight_absolute_tolerance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Absolute tolerance for fitted weights</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cppyml.logistic_regression.LogisticRegression.weight_relative_tolerance">
-<code class="descname">weight_relative_tolerance</code><a class="headerlink" href="#cppyml.logistic_regression.LogisticRegression.weight_relative_tolerance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Relative tolerance for fitted weights</p>
 </dd></dl>
 
 </dd></dl>
@@ -1168,7 +1168,7 @@ to original <cite>X</cite> units and origins, and the <cite>cov</cite> matrix wi
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">cppyml 0.7.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">cppyml 0.8.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
