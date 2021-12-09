@@ -93,11 +93,16 @@ namespace ml
             throw std::invalid_argument("Size mismatch: X.cols() != y.size()");
         }
         for (Eigen::Index i = 0; i < n; ++i) {
-            if (w.dot(X.col(i)) > 0) {
-                y[i] = 1;
-            } else {
-                y[i] = -1;
-            }
+            y[i] = predict_single(X.col(i));
+        }
+    }
+
+    double LogisticRegression::Result::predict_single(Eigen::Ref<const Eigen::VectorXd> x) const
+    {
+        if (w.dot(x) > 0) {
+            return 1;
+        } else {
+            return -1;
         }
     }
 

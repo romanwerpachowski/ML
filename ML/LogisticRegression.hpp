@@ -53,6 +53,14 @@ namespace ml
                 return y;
             }
 
+            /**
+             * @brief Predicts label for feature x given w.
+             * @param x D-dimensional vector.
+             * @return -1 or 1.
+             * @throw std::invalid_argument If vector dimensions do not match.
+            */
+            DLL_DECLSPEC double predict_single(Eigen::Ref<const Eigen::VectorXd> x) const;
+
             /** @brief Formats the result as string. */
             DLL_DECLSPEC std::string to_string() const;
         };
