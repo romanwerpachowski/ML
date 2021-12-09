@@ -5,4 +5,4 @@
 Defines the current version of the library.
 */
 
-#define MLPP_VERSION "0.7.0" /**< Version string. */
+#define MLPP_VERSION "0.8.0" /**< Version string. */

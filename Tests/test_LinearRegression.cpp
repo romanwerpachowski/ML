@@ -158,6 +158,14 @@ static void test_result(const UnivariateOLSResult& result, double tol = 1e-15)
 			ASSERT_TRUE(std::isnan(result.cov_slope_intercept)) << result.cov_slope_intercept;
 		}
 	}
+	const double x = 0.5;
+	const double expected_y = x * result.slope + result.intercept;
+	ASSERT_NEAR(expected_y, result.predict(x), 1e-16);
+	Eigen::VectorXd vec_x(1);
+	vec_x << x;
+	const auto vec_y = result.predict(vec_x);
+	ASSERT_EQ(1, vec_y.size());
+	ASSERT_NEAR(expected_y, vec_y[0], 1e-16);
 }
 
 template <class R> static void test_beta_and_cov(const R& result, double tol)
@@ -1394,4 +1402,33 @@ TEST_F(LinearRegressionTest, lasso_without_standardisation_polynomial)
 	Eigen::VectorXd expected_beta(4);
 	expected_beta << 0.0551505195043211, 0.232317428372784, 0, 1.5049504950495;
 	ASSERT_NEAR(0, (result.beta - expected_beta).norm(), 2e-14) << result.beta;
+}
+
+TEST_F(LinearRegressionTest, multivariate_predict)
+{
+	MultivariateOLSResult result;
+	result.beta.resize(3);
+	result.beta << 1, 0, -1;
+	Eigen::MatrixXd X(3, 2);
+	X << 0.5, 0.5,
+		0.5, 0.5,
+		-0.5, 0.5;
+	const Eigen::VectorXd y(result.predict(X));
+	ASSERT_EQ(2, y.size());
+	ASSERT_EQ(1, y[0]);
+	ASSERT_EQ(0, y[1]);
+}
+
+TEST_F(LinearRegressionTest, regularised_predict)
+{
+	RegularisedRegressionResult result;
+	result.beta.resize(3);
+	result.beta << 1, -1, 0.5;
+	Eigen::MatrixXd X(2, 2);
+	X << 0.5, 0.5,
+		-0.5, 0.5;
+	const Eigen::VectorXd y(result.predict(X));
+	ASSERT_EQ(2, y.size());
+	ASSERT_EQ(1.5, y[0]);
+	ASSERT_EQ(0.5, y[1]);
 }

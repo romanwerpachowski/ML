@@ -89,6 +89,15 @@ namespace ml
 			 @return Vector of predicted Y(X) with size `X.cols()`.
 			*/
 			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::VectorXd> x) const;
+
+			/** @brief Predicts Y given X.
+			 @param x Independent variable value.
+			 @return Predicted Y(X).
+			*/
+			double predict(double x) const
+			{
+				return x * slope + intercept;
+			}
 		};
 
 		/** @brief Result of multivariate Ordinary Least Squares regression.		
@@ -111,9 +120,11 @@ namespace ml
 			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;
 		};
 
-		/** @brief Result of a regularised regression with intercept.
+		/** @brief Result of a multivariate regularised regression with intercept.
 		 
 		Regularisation is applied to everything except the intercept, which is the last coefficient in `beta`.
+
+		Contrary to MultivariateOLSResult, it does not assume that inputs `X` contain a row of 1s.
 
 		#var_y is calculated using #dof as the denominator.
 		*/
@@ -127,10 +138,10 @@ namespace ml
 			 @return Vector of predicted Y(X) with size `X.cols()`.
 			 @throw std::invalid_argument If `X.rows() + 1 != beta.size()`.
 			*/
-			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;
+			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;			
 		};
 
-		/** @brief Result of a (multivariate) ridge regression with intercept.		*/
+		/** @brief Result of a multivariate ridge regression with intercept.		*/
 		struct RidgeRegressionResult : public RegularisedRegressionResult
 		{
 			Eigen::MatrixXd cov;  /**< Covariance matrix of beta coefficients. */
@@ -138,24 +149,16 @@ namespace ml
 			/** @brief Formats the result as string. */
 			DLL_DECLSPEC std::string to_string() const;
 
-			/** @see RegularisedRegressionResult::predict(). */
-			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const
-			{
-				return RegularisedRegressionResult::predict(X);
-			}
+			using RegularisedRegressionResult::predict;			
 		};
 
-		/** @brief Result of a (multivariate) Lasso regression with intercept.		*/
+		/** @brief Result of a multivariate Lasso regression with intercept.		*/
 		struct LassoRegressionResult : public RegularisedRegressionResult
 		{
 			/** @brief Formats the result as string. */
 			DLL_DECLSPEC std::string to_string() const;
 
-			/** @see LassoRegressionResult::predict(). */
-			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const
-			{
-				return RegularisedRegressionResult::predict(X);
-			}
+			using RegularisedRegressionResult::predict;			
 		};
 
 		/** @brief Carries out univariate (aka simple) linear regression with intercept.
