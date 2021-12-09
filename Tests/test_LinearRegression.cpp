@@ -1417,6 +1417,8 @@ TEST_F(LinearRegressionTest, multivariate_predict)
 	ASSERT_EQ(2, y.size());
 	ASSERT_EQ(1, y[0]);
 	ASSERT_EQ(0, y[1]);
+	ASSERT_EQ(1, result.predict_single(X.col(0)));
+	ASSERT_EQ(0, result.predict_single(X.col(1)));
 }
 
 TEST_F(LinearRegressionTest, regularised_predict)
@@ -1431,4 +1433,6 @@ TEST_F(LinearRegressionTest, regularised_predict)
 	ASSERT_EQ(2, y.size());
 	ASSERT_EQ(1.5, y[0]);
 	ASSERT_EQ(0.5, y[1]);
+	ASSERT_EQ(1.5, result.predict_single(X.col(0)));
+	ASSERT_EQ(0.5, result.predict_single(X.col(1)));
 }

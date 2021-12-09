@@ -118,6 +118,13 @@ namespace ml
 			 @throw std::invalid_argument If `X.rows() != beta.size()`.
 			*/
 			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;
+
+			/** @brief Predicts Y given X.
+			 @param x Vector of independent variables.
+			 @return Predicted Y(X).
+			 @throw std::invalid_argument If `X.size() != beta.size()`.
+			*/
+			DLL_DECLSPEC double predict_single(Eigen::Ref<const Eigen::VectorXd> x) const;
 		};
 
 		/** @brief Result of a multivariate regularised regression with intercept.
@@ -138,7 +145,14 @@ namespace ml
 			 @return Vector of predicted Y(X) with size `X.cols()`.
 			 @throw std::invalid_argument If `X.rows() + 1 != beta.size()`.
 			*/
-			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;			
+			DLL_DECLSPEC Eigen::VectorXd predict(Eigen::Ref<const Eigen::MatrixXd> X) const;
+
+			/** @brief Predicts Y given X.
+			 @param x Vector of independent variables.
+			 @return Predicted Y(X).
+			 @throw std::invalid_argument If `X.size() + 1 != beta.size()`.
+			*/
+			DLL_DECLSPEC double predict_single(Eigen::Ref<const Eigen::VectorXd> x) const;
 		};
 
 		/** @brief Result of a multivariate ridge regression with intercept.		*/
